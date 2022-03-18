@@ -10,6 +10,8 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 * [Features](#features)
 * [Game Rules](#game-rules)
 
+---
+
 ## Features
 
 | Functionality | Status |
