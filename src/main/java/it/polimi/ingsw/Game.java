@@ -1,4 +1,4 @@
-package Eryantis;
+package it.polimi.ingsw;
 
 import java.util.HashMap;
 
@@ -25,7 +25,7 @@ public class Game {
     /** Initialize students bag, 26 for each color.
      */
     private void initializeStudents() {
-        for(studentColors color : studentColors.values()) {
+        for(StudentColors color : StudentColors.values()) {
             students.put(color, 26);
         }
     }
@@ -94,7 +94,7 @@ public class Game {
     /**
      * The hashmap is used to memorize number of students of each color in bag.
      */
-    private HashMap<studentColors, Integer> students;
+    private HashMap<StudentColors, Integer> students;
 
 
 

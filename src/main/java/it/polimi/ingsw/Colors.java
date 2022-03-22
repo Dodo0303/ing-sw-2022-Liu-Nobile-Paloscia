@@ -1,4 +1,4 @@
-package Eryantis;
+package it.polimi.ingsw;
 
 public enum Colors {
 
