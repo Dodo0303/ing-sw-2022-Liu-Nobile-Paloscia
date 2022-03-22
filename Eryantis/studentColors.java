@@ -1,6 +1,6 @@
 package Eryantis;
 
 public enum studentColors {
-    /** Possible player or tower colors. */
+    /** Possible student colors. */
     GREEN, BLUE, YELLOW, RED, PINK;
 }
