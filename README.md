@@ -8,7 +8,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 
 * [Features](#features)
-* [Game Rules](#game-rules)
+* [Eryantis.Game Rules](#game-rules)
 
 ---
 
@@ -22,11 +22,11 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 | CLI | N |
 | GUI | N |
 | All character cards | N |
-| 4 Player Game | N |
+| 4 Eryantis.Player Eryantis.Game | N |
 | Persistence | N |
 | Resilience to disconnections | N |
 
-## Game Rules
+## Eryantis.Game Rules
 
 * The game is played over a number of rounds until 
   * one player has placed all of their towers (thus win the game);

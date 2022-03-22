@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package Eryantis;
 
 public class Main {
     
