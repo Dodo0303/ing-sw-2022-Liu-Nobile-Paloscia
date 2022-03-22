@@ -28,7 +28,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 ## Eriantys.Game Rules
 
-* Th game is played over a number of rounds until 
+* The game is played over a number of rounds until 
   * one player has placed all of their towers (thus win the game);
   * there are no more students left;
   * only 3 groups of Islands remain on the table.
