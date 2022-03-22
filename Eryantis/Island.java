@@ -9,10 +9,11 @@ public class Island {
     }
 
     /** Copy information of island x to this island.
+     * @param x index of the island.
      */
     void copyFrom(int x) {
         _numMerge++;
-
+        // and other things....
     }
 
 

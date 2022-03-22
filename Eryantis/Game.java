@@ -47,11 +47,10 @@ public class Game {
                 _motherNature = x;
             }
             for (int i = y; i < _numIslands - 1; i++) {
-                islands.put(i, islands.get(i + 1)); // move islands after yth island forward.
+                islands.put(i, islands.get(i + 1)); // move islands after the yth forward by 1.
             }
         }
         islands.remove(_numIslands--);
-
     }
 
 
