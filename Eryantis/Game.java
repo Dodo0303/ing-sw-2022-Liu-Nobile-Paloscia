@@ -5,13 +5,15 @@ import java.util.HashMap;
 public class Game {
 
     /**
-     * @param motherNature index of the island with the mother nature.
+     * @param motherNature index of the island with mother nature.
      */
     Game(int motherNature) {
         initializeIslands();
+        initializeStudents();
         _spareCoins = 20;
         _motherNature = motherNature;
         _numIslands = 12;
+
     }
     /** Initialize 12 empty islands.
      */
@@ -20,16 +22,27 @@ public class Game {
             islands.put(i, new Island());
         }
     }
-    /** In the case that x > y (ex. x = 11, y = 1), use the yth island to merge the xth island.
+    /** Initialize students bag.
+     */
+    private void initializeStudents() {
+        for(studentColors color : studentColors.values()) {
+            students.put(color, 26);
+        }
+    }
+
+    /** In the case that x > y (ex. x = 11, y = 1), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
      */
     private void mergeIslands(int x, int y) {
         if (x > y) {
             islands.get(y).copyIsland(x);
+            islands.remove(x);
         }
         else {
             islands.get(x).copyIsland(y);
+            islands.remove(y);
+
         }
         _numIslands--;
 
@@ -72,6 +85,11 @@ public class Game {
     private Player _winner;
 
     private int _numIslands;
+
+    /**
+     * The hashmap is used to memorize number of students of each color in bag.
+     */
+    private HashMap<studentColors, Integer> students;
 
 
 
