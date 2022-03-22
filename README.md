@@ -2,13 +2,13 @@
 
 <div style="text-align: center;">
   
-The repository is dedicated to the final project of "Ingegneria del Software (2021/2022)", which requires a java implementation of the game [Eryantis](https://www.craniocreations.it/prodotto/eriantys/).
+The repository is dedicated to the final project of "Ingegneria del Software (2021/2022)", which requires a java implementation of the game [Eriantys](https://www.craniocreations.it/prodotto/eriantys/).
   
 </div>
 
 
 * [Features](#features)
-* [Eryantis.Game Rules](#game-rules)
+* [Eriantys.Game Rules](#Eriantys.Game-rules)
 
 ---
 
@@ -22,13 +22,13 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 | CLI | N |
 | GUI | N |
 | All character cards | N |
-| 4 Eryantis.Player Eryantis.Game | N |
+| 4 Eriantys.Player Eriantys.Game | N |
 | Persistence | N |
 | Resilience to disconnections | N |
 
-## Eryantis.Game Rules
+## Eriantys.Game Rules
 
-* The game is played over a number of rounds until 
+* Th game is played over a number of rounds until 
   * one player has placed all of their towers (thus win the game);
   * there are no more students left;
   * only 3 groups of Islands remain on the table.
