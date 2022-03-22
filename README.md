@@ -8,7 +8,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 
 * [Features](#features)
-* [Eriantys.Game Rules](#Eriantys.Game-rules)
+* [Game Rules](#Game-Rules)
 
 ---
 
@@ -26,7 +26,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 | Persistence | N |
 | Resilience to disconnections | N |
 
-## Eriantys.Game Rules
+## Game Rules
 
 * The game is played over a number of rounds until 
   * one player has placed all of their towers (thus win the game);
