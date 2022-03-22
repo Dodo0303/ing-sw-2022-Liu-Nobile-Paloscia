@@ -8,7 +8,9 @@ public class Island {
         _numMerge = 0;
     }
 
-    void copyIsland(int x) {
+    /** Copy information of island x to this island.
+     */
+    void copyFrom(int x) {
         _numMerge++;
 
     }

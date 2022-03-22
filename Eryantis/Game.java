@@ -22,7 +22,7 @@ public class Game {
             islands.put(i, new Island());
         }
     }
-    /** Initialize students bag.
+    /** Initialize students bag, 26 for each color.
      */
     private void initializeStudents() {
         for(studentColors color : studentColors.values()) {
@@ -30,21 +30,27 @@ public class Game {
         }
     }
 
-    /** In the case that x > y (ex. x = 11, y = 1), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
+    /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
      */
     private void mergeIslands(int x, int y) {
-        if (x > y) {
-            islands.get(y).copyIsland(x);
-            islands.remove(x);
+        if (x == _numIslands - 1) {
+            islands.get(y).copyFrom(x);
+            if (x == _motherNature) {
+                _motherNature = y;
+            }
         }
         else {
-            islands.get(x).copyIsland(y);
-            islands.remove(y);
-
+            islands.get(x).copyFrom(y);
+            if (y == _motherNature) {
+                _motherNature = x;
+            }
+            for (int i = y; i < _numIslands - 1; i++) {
+                islands.put(i, islands.get(i + 1)); // move islands after yth island forward.
+            }
         }
-        _numIslands--;
+        islands.remove(_numIslands--);
 
     }
 
