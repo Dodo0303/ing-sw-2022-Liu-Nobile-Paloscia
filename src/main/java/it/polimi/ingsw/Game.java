@@ -74,15 +74,6 @@ public class Game {
         return this._winner;
     }
 
-    public String estraiStudente(){
-        try {
-            return _bag.extractStudent();
-        } catch (EmptyBagException e) {
-            e.printStackTrace();
-            return "Eh volevi";
-        }
-    }
-
     private HashMap<Integer, Island> islands;
 
     private int _spareCoins;

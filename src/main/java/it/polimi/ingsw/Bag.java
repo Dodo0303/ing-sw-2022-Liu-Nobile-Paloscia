@@ -43,4 +43,20 @@ public class Bag {
 
         return true;
     }
+
+
+    /**
+     *
+     * @return how many students are still in the bag
+     */
+    public int getRemainingNum() {
+        if (isEmpty()) return 0;
+        int totalNumber = 0;
+        for (int numberOfOneColor :
+                students.values()) {
+            totalNumber += numberOfOneColor;
+        }
+
+        return totalNumber;
+    }
 }
