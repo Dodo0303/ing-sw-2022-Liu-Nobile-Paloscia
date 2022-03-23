@@ -9,7 +9,7 @@ public class Game {
      */
     Game(int motherNature) {
         initializeIslands();
-        initializeStudents();
+        _bag = new Bag();
         _spareCoins = 20;
         _motherNature = motherNature;
         _numIslands = 12;
@@ -18,17 +18,12 @@ public class Game {
     /** Initialize 12 empty islands.
      */
     private void initializeIslands() {
+        islands = new HashMap<>();
         for(int i = 0; i < 12; i++) {
             islands.put(i, new Island());
         }
     }
-    /** Initialize students bag, 26 for each color.
-     */
-    private void initializeStudents() {
-        for(StudentColors color : StudentColors.values()) {
-            students.put(color, 26);
-        }
-    }
+
 
     /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
@@ -79,6 +74,15 @@ public class Game {
         return this._winner;
     }
 
+    public String estraiStudente(){
+        try {
+            return _bag.extractStudent();
+        } catch (EmptyBagException e) {
+            e.printStackTrace();
+            return "Eh volevi";
+        }
+    }
+
     private HashMap<Integer, Island> islands;
 
     private int _spareCoins;
@@ -91,10 +95,7 @@ public class Game {
 
     private int _numIslands;
 
-    /**
-     * The hashmap is used to memorize number of students of each color in bag.
-     */
-    private HashMap<StudentColors, Integer> students;
+    private Bag _bag;
 
 
 
