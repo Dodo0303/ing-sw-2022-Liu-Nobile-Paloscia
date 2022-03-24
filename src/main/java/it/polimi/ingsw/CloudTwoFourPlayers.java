@@ -8,7 +8,7 @@ public class CloudTwoFourPlayers extends Cloud {
         this.students = new ArrayList<>();
     }
 
-    public void addStudents(StudentColors student) throws FullCloudException {
+    public void addStudent(StudentColors student) throws FullCloudException {
         if (getStudents().size() >= 3) throw new FullCloudException();
         else super.students.add(student);
     }

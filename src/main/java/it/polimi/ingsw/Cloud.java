@@ -19,7 +19,7 @@ public abstract class Cloud {
      * @throws FullCloudException when the cloud is full and no student can be added
      */
 
-    public abstract void addStudents(StudentColors student) throws FullCloudException;
+    public abstract void addStudent(StudentColors student) throws FullCloudException;
 
     /**
      * @return the student that was removed
