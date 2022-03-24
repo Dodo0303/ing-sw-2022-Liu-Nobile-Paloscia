@@ -1,4 +1,4 @@
 package it.polimi.ingsw;
 
-public class SchoolBoard {
+public class DiningTable {
 }
