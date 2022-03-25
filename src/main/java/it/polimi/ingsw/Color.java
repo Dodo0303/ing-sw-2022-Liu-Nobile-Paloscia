@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-public enum Colors {
+public enum Color {
 
     /** Possible player or tower colors. */
     WHITE, BLACK, GRAY, VOID

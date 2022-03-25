@@ -8,11 +8,11 @@ public class Bag {
      * The hashmap is used to memorize number of students of each color in bag.
      * Students are 24 because the other 2 of each color should be already on the islands.
      */
-    private HashMap<StudentColors, Integer> students;
+    private HashMap<StudentColor, Integer> students;
 
     public Bag() {
         students = new HashMap<>();
-        for(StudentColors color : StudentColors.values()) {
+        for(StudentColor color : StudentColor.values()) {
             students.put(color, 24);
         }
     }
@@ -24,7 +24,7 @@ public class Bag {
     public String extractStudent() throws EmptyBagException{
         if (isEmpty()) throw new EmptyBagException();
         else {
-            StudentColors[] colors = StudentColors.values();
+            StudentColor[] colors = StudentColor.values();
             int choice = new Random().nextInt(colors.length);
             while (students.get(colors[choice]) == 0) {
                 choice = new Random().nextInt(colors.length);

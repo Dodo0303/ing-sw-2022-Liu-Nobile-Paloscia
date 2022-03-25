@@ -12,20 +12,20 @@ public abstract class Cloud {
     /**
      * ArrayList of StudentColors that represent the students lying on the cloud tile
      */
-    protected ArrayList<StudentColors> students;
+    protected ArrayList<StudentColor> students;
 
     /**
      * @param student the student that needs to be added (extracted from bag)
      * @throws FullCloudException when the cloud is full and no student can be added
      */
 
-    public abstract void addStudent(StudentColors student) throws FullCloudException;
+    public abstract void addStudent(StudentColor student) throws FullCloudException;
 
     /**
      * @return the student that was removed
      * @throws EmptyCloudException when the cloud is empty and no student can be extracted
      */
-    public StudentColors extractStudent() throws EmptyCloudException {
+    public StudentColor extractStudent() throws EmptyCloudException {
         if (students.size()==0) throw new EmptyCloudException();
         else return students.remove(0);
     }
@@ -34,7 +34,7 @@ public abstract class Cloud {
      *
      * @return the list of students on the cloud
      */
-    public ArrayList<StudentColors> getStudents() {
+    public ArrayList<StudentColor> getStudents() {
         return new ArrayList<>(students);
     }      //REP EXPOSED?
 

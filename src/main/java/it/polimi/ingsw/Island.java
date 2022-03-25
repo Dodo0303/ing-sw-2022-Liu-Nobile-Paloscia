@@ -4,7 +4,7 @@ public class Island {
 
 
     Island() {
-        _towerColor = Colors.VOID;
+        _towerColor = Color.VOID;
         _noEntries = 0;
         _numMerge = 0;
     }
@@ -22,7 +22,7 @@ public class Island {
 
     private int[] _influences;
 
-    private Colors _towerColor;
+    private Color _towerColor;
 
     private int _noEntries;
 

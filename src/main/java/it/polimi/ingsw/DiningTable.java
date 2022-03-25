@@ -1,11 +1,11 @@
 package it.polimi.ingsw;
 
 public class DiningTable {
-    private final StudentColors color;
+    private final StudentColor color;
     private int numOfStudents;
     private int availableCoins;
 
-    public DiningTable(StudentColors color) {
+    public DiningTable(StudentColor color) {
         this.color = color;
         this.numOfStudents = 0;
         this.availableCoins = 3;
@@ -28,7 +28,7 @@ public class DiningTable {
         return numOfStudents == 3*(4-availableCoins);
     }
 
-    public StudentColors getColor() {
+    public StudentColor getColor() {
         return color;
     }
 
