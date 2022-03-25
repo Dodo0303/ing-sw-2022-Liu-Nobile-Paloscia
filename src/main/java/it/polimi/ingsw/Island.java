@@ -7,6 +7,7 @@ public class Island {
         _towerColor = Color.VOID;
         _noEntries = 0;
         _numMerge = 0;
+
     }
 
     /** Copy information of island x to this island.

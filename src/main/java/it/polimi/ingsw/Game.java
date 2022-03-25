@@ -48,46 +48,77 @@ public class Game {
         islands.remove(_numIslands--);
     }
 
-
+    /**
+     * @return number of coins not obtained by any player.*/
     private int getSpareCoins() {
         return this._spareCoins;
     }
 
+    /**
+     * @return the island with mothernature.*/
     private Island getMotherNature() {
         return islands.get(_motherNature);
     }
 
+    /**
+     * Move mothernature to xth island.*/
     private void moveMotherNature(int x) {
-        return;
+        if (_motherNature == x || x > _numIslands - 1) {
+            throw new GameException("Illegal movement.");
+        } else {
+            _motherNature = x;
+        }
     }
 
+    /**
+     * @return the current player.*/
     private Player getCurrentPlayer() {
         return this._currentPlayer;
     }
 
+    /**
+     * Set current player to PLAYER.*/
     private void setCurrentPlayer(Player player) {
-        return;
+        try {
+            _currentPlayer = player;
+        } catch (IndexOutOfBoundsException) {
+            //TODO
+        }
     }
 
-
+    /**
+     * @return the winner of current game.*/
     private Player getWinner() {
         return this._winner;
     }
 
+    /** @Return true iff it would currently be legal for PLAYER to move.*/
+    boolean isLegal(Player player) {
+        if (!_currentPlayer.equals(player)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /** All islands.*/
     private HashMap<Integer, Island> islands;
 
+    /** Coins not obtained by any player. Initially set to 20.*/
     private int _spareCoins;
 
+    /** the index of the island with mothernature.*/
     private int _motherNature;
 
+    /** current player. */
     private Player _currentPlayer;
 
+    /** the winner of current game.*/
     private Player _winner;
 
+    /** number of islands. (merged islands count as 1) */
     private int _numIslands;
 
+    /** students bag*/
     private Bag _bag;
-
-
-
 }
