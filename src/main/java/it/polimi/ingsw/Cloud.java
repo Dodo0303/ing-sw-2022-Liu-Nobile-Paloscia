@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public abstract class Cloud {
     /**
-     * ArrayList of StudentColors that represent the students lying on the cloud tile
+     * ArrayList of StudentColor that represent the students lying on the cloud tile
      */
     protected ArrayList<StudentColor> students;
 
