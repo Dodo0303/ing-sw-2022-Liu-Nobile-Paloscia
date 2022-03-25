@@ -28,6 +28,15 @@ public class DiningTable {
         return numOfStudents == 3*(4-availableCoins);
     }
 
+    /**
+     * Decreases availableCoins, if possible
+     * @throws NoCoinsException when all the coins were already claimed
+     */
+    public void claimCoin() throws NoCoinsException {
+        if (availableCoins == 0) throw new NoCoinsException();
+        else availableCoins--;
+    }
+
     public StudentColor getColor() {
         return color;
     }
