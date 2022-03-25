@@ -81,7 +81,7 @@ public class Game {
     private void setCurrentPlayer(Player player) {
         try {
             _currentPlayer = player;
-        } catch (IndexOutOfBoundsException) {
+        } catch (IndexOutOfBoundsException excp) {
             //TODO
         }
     }
