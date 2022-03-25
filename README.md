@@ -22,7 +22,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 | CLI | N |
 | GUI | N |
 | All character cards | N |
-| 4 Eriantys.Player Eriantys.Game | N |
+| 4 Player Game | N |
 | Persistence | N |
 | Resilience to disconnections | N |
 
