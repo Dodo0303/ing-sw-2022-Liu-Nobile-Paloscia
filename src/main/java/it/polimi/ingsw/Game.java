@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class Game {
 
-    /** A new 2-person game.
+    /** A new 2-person game. //TODO Wizard(assistant card objects)
      */
     Game(Wizard[] wizards) {
         initializeIslands();
