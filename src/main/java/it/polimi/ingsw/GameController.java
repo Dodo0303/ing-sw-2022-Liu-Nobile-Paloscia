@@ -18,7 +18,7 @@ public class GameController {
         return _board.getWinner() == null;
     }
 
-    /** Play a session of Eriantis.
+    /** Play a session of Eriantys.
      */
     int play() {
         boolean winnerAnnounced = false;
@@ -33,12 +33,14 @@ public class GameController {
                     throw excp;
                 }
             } else if (!winnerAnnounced){
-                //TODO
+                winnerAnnounced = true;
             }
         }
 
         return _exit;
     }
+
+
 
     private void executeCommand(String cmnd) {
 
