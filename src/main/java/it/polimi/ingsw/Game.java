@@ -4,17 +4,15 @@ import java.util.HashMap;
 
 public class Game {
 
-    /**
-     * @param motherNature index of the island with mother nature.
+    /** A new game.
      */
-    Game(int motherNature) {
+    Game() {
         initializeIslands();
         _bag = new Bag();
         _spareCoins = 20;
-        _motherNature = motherNature;
         _numIslands = 12;
-
     }
+
     /** Initialize 12 empty islands.
      */
     private void initializeIslands() {
@@ -49,19 +47,19 @@ public class Game {
 
     /**
      * @return number of coins not obtained by any player.*/
-    private int getSpareCoins() {
+    int getSpareCoins() {
         return this._spareCoins;
     }
 
     /**
      * @return the island with mothernature.*/
-    private Island getMotherNature() {
+    Island getMotherNature() {
         return islands.get(_motherNature);
     }
 
     /**
      * Move mothernature to xth island.*/
-    private void moveMotherNature(int x) {
+    void moveMotherNature(int x) {
         if (_motherNature == x || x > _numIslands - 1) {
             throw new GameException("Illegal movement.");
         } else {
@@ -71,23 +69,23 @@ public class Game {
 
     /**
      * @return the current player.*/
-    private Player getCurrentPlayer() {
+    Player getCurrentPlayer() {
         return this._currentPlayer;
     }
 
     /**
      * Set current player to PLAYER.*/
-    private void setCurrentPlayer(Player player) {
+    void setCurrentPlayer(Player player) {
         try {
             _currentPlayer = player;
         } catch (IndexOutOfBoundsException excp) {
-            //TODO
+            throw excp;
         }
     }
 
     /**
      * @return the winner of current game.*/
-    private Player getWinner() {
+    Player getWinner() {
         return this._winner;
     }
 
