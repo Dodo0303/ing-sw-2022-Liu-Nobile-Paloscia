@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/** This is an abstract class in order to accommodate different game modes.
+/** This COULE BE an abstract class in order to accommodate different game modes.
  * ALL methods implemented here is based on TWO-PERSON games, future adjustment/override is advised. */
 
-public abstract class Player {
+public class Player {
     //TODO
     //TODO
     //TODO
@@ -15,19 +15,20 @@ public abstract class Player {
     /** A Player in GAME, initially playing COLOR. */
     Player(Color color) {
         _color = color;
+        _towerNum = 8;
         initEntranceStudents();
         initProfessors();
     }
 
     /** Initialize _entranceStudents */
-    void initEntranceStudents() {
+    private void initEntranceStudents() {
         _entranceStudents = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
             _entranceStudents.put(color, 0);
         }
     }
     /** Initialize _professors */
-    void initProfessors() {
+    private void initProfessors() {
         _professors = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
             _professors.put(color, 0);

@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.util.HashMap;
+
 public class Island {
 
 
@@ -7,7 +9,10 @@ public class Island {
         _towerColor = Color.VOID;
         _noEntries = 0;
         _numMerge = 0;
-
+        students = new HashMap<>();
+        for(StudentColor color : StudentColor.values()) {
+            students.put(color, 0);
+        }
     }
 
     /** Copy information of island x to this island.
@@ -18,7 +23,9 @@ public class Island {
         // and other things....
     }
 
-
+    void addStudent(StudentColor color) {
+        students.put(color, students.get(color) + 1);
+    }
 
 
     private int[] _influences;
@@ -28,5 +35,7 @@ public class Island {
     private int _noEntries;
 
     private int _numMerge;
+
+    private HashMap<StudentColor, Integer> students;
 
 }

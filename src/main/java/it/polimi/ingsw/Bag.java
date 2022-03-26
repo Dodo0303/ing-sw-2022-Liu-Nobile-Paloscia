@@ -21,7 +21,7 @@ public class Bag {
      * @throws EmptyBagException when the bag is empty and no student can be extracted
      * @return string value of the student's color
      */
-    public String extractStudent() throws EmptyBagException{
+    public StudentColor extractStudent() throws EmptyBagException{
         if (isEmpty()) throw new EmptyBagException();
         else {
             StudentColor[] colors = StudentColor.values();
@@ -31,7 +31,7 @@ public class Bag {
             }
             int updatedValue = students.get(colors[choice]) - 1;
             students.replace(colors[choice], updatedValue);
-            return colors[choice].toString();
+            return colors[choice];
         }
     }
 

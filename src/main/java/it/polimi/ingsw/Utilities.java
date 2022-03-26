@@ -4,7 +4,6 @@ import java.io.*;
 
 public class Utilities {
     /** Print the contents of the resource named NAME on System.out.
-     *  @arg name is the path of file Usage.txt
      *  */
     static void printUsage(String name) {
         try {
