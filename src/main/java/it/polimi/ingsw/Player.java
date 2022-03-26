@@ -1,9 +1,9 @@
 package it.polimi.ingsw;
 
 public abstract class Player {
+
     /** A Player in GAME, initially playing COLOR. */
-    Player(Game game, Color color) {
-        _game = game;
+    Player(Color color) {
         _color = color;
         //TODO
     }
@@ -13,14 +13,7 @@ public abstract class Player {
         return _color;
     }
 
-    /** Return the Game I am currently playing in. */
-    final Game getGame() {
-        return _game;
-    }
-
     /** My current color. */
     private Color _color;
 
-    /** The game I'm in. */
-    private final Game _game;
 }
