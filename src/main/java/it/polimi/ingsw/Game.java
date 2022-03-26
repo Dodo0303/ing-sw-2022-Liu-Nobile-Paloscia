@@ -23,7 +23,7 @@ public class Game {
             islands.put(i, new Island());
         }
     }
-    
+
     /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
@@ -96,7 +96,6 @@ public class Game {
         if (!_currentPlayer.equals(player)) {
             return true;
         }
-
         return false;
     }
 
