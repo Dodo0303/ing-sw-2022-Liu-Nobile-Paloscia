@@ -32,8 +32,11 @@ public class GameController {
                 } catch (GameException excp) {
                     throw excp;
                 }
-            } else if (!winnerAnnounced){
-                winnerAnnounced = true;
+            } else if (!gameInProgress()){
+                if (!winnerAnnounced) {
+                    winnerAnnounced = true;
+                }
+                //executeCommand();
             }
         }
 
