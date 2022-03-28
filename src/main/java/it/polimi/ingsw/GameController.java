@@ -50,7 +50,7 @@ public class GameController {
     }
 
     /** The board on which I record all moves. */
-    private final Game _board;
+    private final GameModel _board;
 
     /** The number of players. */
     private final int _numPlayers;
