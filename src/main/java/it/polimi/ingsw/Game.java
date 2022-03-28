@@ -11,22 +11,32 @@ public class Game {
 
     /** A new 2-person game. //TODO Wizard(assistant card objects)
      */
-    Game(Wizard[] wizards) {
+    Game(Wizard[] wizards, int numOfPlayers) {
+
         initializeIslands();
-        initializePlayers(wizards);
-        initializeClouds();
-        setSevenStudents(_players[0]);
-        setSevenStudents(_players[1]);
+
+        try {
+            initializePlayers(wizards, numOfPlayers);
+            initializeClouds(numOfPlayers);
+        } catch (IndexOutOfBoundsException | GameException indx) {
+            indx.printStackTrace();
+        }
+
+        setSevenStudents(_players.get(0));      //TODO: should we move this to Player.java?
+        setSevenStudents(_players.get(1));
+
         _bag = new Bag();
         _spareCoins = 20;
         _numIslands = 12;
+
         Random randomMothernature = new Random();
         _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature. OR let players choose it manually?//TODO
+
         Random randomPlayer = new Random();
-        _currentPlayer = _players[randomPlayer.nextInt(2)]; //Determine the first player at random.
+        _currentPlayer = _players.get(randomPlayer.nextInt(2)); //Determine the first player at random.
     }
 
-    /** Initialize 12 islands with 2 students.
+    /** Initialize 12 islands with 2 students each.
      */
     private void initializeIslands() {
         islands = new HashMap<>();
@@ -45,18 +55,35 @@ public class Game {
         }
     }
 
-    /** Initialize 2 players. COULD BE ABSTRACT. //TODO
-     * player 0 is me, player 1 is the opponent.
+    /**
+     * Creates instances of class Player.
+     * @param wizards, the array of Wizards chosen by each player.
+     * @param numOfPlayers number of player, to decide how many objects must be created.
+     * @throws IndexOutOfBoundsException in case  array wizards is not of length numOfPlayers
      */
-    private void initializePlayers(Wizard[] wizards) {
-        //_players[0] = new Player(Color.WHITE, wizards[0]);
-        //_players[1] = new Player(Color.BLACK, wizards[1]);
+    private void initializePlayers(Wizard[] wizards, int numOfPlayers) throws IndexOutOfBoundsException, GameException {
+        if (numOfPlayers == 2) {
+            _players.add(new Player(Color.WHITE, wizards[0]));
+            _players.add(new Player(Color.BLACK, wizards[1]));
+        } else if (numOfPlayers == 3) {
+            _players.add(new Player(Color.WHITE, wizards[0]));
+            _players.add(new Player(Color.BLACK, wizards[1]));
+            _players.add(new Player(Color.GRAY, wizards[2]));
+        } else if (numOfPlayers == 4) {
+            _players.add(new Player(Color.WHITE, wizards[0]));
+            _players.add(new Player(Color.WHITE, wizards[1]));
+            _players.add(new Player(Color.BLACK, wizards[2]));
+            _players.add(new Player(Color.BLACK, wizards[3]));
+        } else {
+            throw new GameException();
+        }
     }
 
     /** Initialize clouds.
+     * @param numOfPlayers
      */
-    private void initializeClouds(){
-
+    private void initializeClouds(int numOfPlayers){
+        //TODO
     }
 
     /** Extract 7 students from bag and add to the entrance of player PLAYER.
@@ -96,19 +123,19 @@ public class Game {
     }
 
     /**
-     * @return number of coins not obtained by any player.*/
+     * @return number of coins not obtained by any player */
     int getSpareCoins() {
         return this._spareCoins;
     }
 
     /**
-     * @return the island with mothernature.*/
+     * @return the island with mothernature */
     Island getMotherNature() {
         return islands.get(_motherNature);
     }
 
     /**
-     * Move mothernature to xth island.*/
+     * Move mothernature to xth island */
     void moveMotherNature(int x) {
         if (_motherNature == x || x > _numIslands - 1) {
             throw new GameException("Illegal movement.");
@@ -118,52 +145,52 @@ public class Game {
     }
 
     /**
-     * @return the current player.*/
+     * @return the current player */
     Player getCurrentPlayer() {
         return this._currentPlayer;
     }
 
     /**
-     * Set current player to PLAYER.*/
+     * Set current player to PLAYER */
     void setCurrentPlayer(Player player) {
         _currentPlayer = player; //TODO Why did you put a try catch IndexOutOfBoundExcp?
     }
 
     /**
-     * @return the winner of current game.*/
+     * @return the winner of current game */
     Player getWinner() {
         return this._winner;
     }
 
-    /** @return true iff it would currently be legal for PLAYER to move.*/
+    /** @return true iff it would currently be legal for PLAYER to move */
     boolean isLegal(Player player) {
         return !_currentPlayer.equals(player);
     }
 
-    /** All islands.*/
+    /** All islands */
     private HashMap<Integer, Island> islands;
 
-    /** Coins not obtained by any player. Initially set to 20.*/
+    /** Coins not obtained by any player. Initially set to 20 */
     private int _spareCoins;
 
-    /** the index of the island with mothernature.*/
+    /** The index of the island with mothernature */
     private int _motherNature;
 
-    /** current player. */
+    /** Current player */
     private Player _currentPlayer;
 
-    /** the winner of current game.*/
+    /** The winner of current game */
     private Player _winner;
 
-    /** number of islands. (merged islands count as 1) */
+    /** Number of islands (merged islands count as 1) */
     private int _numIslands;
 
-    /** students bag*/
-    private Bag _bag;
+    /** Students bag */
+    private final Bag _bag;
 
-    /** currrent players. 2-PERSON GAME RESTRICTED! //TODO */
-    private Player[] _players = new Player[2];
+    /** Current players */
+    private ArrayList<Player> _players;
 
-    /** clouds on board. 2-PERSON GAME RESTRICTED! //TODO */
-    private CloudTwoFourPlayers[] _clouds = new CloudTwoFourPlayers[2];
+    /** Clouds on board */
+    private ArrayList<Cloud> _clouds;
 }

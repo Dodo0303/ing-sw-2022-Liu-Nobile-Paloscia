@@ -7,7 +7,7 @@ import java.util.List;
 /** This COULD BE an abstract class in order to accommodate different game modes.
  * ALL methods implemented here is based on TWO-PERSON games, future adjustment/override is advised. */
 
-public abstract class Player {
+public class Player {
     //TODO
     //TODO
     //TODO
