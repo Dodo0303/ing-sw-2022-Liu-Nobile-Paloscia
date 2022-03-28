@@ -1,8 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /** This COULD BE an abstract class in order to accommodate different game modes.
  * ALL methods implemented here is based on TWO-PERSON games, future adjustment/override is advised. */

@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,7 +169,7 @@ public class GameModel {
 
     /**
      * @return the winner of current game */
-    Player getWinner() {
+    public Player getWinner() {
         return this._winner;
     }
 

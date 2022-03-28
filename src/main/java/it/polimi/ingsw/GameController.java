@@ -1,5 +1,8 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Model.GameException;
+import it.polimi.ingsw.Model.GameModel;
+
 /** The Eriantys game. FOR NOW, ONLY 2-PERSON GAME IS IMPLEMENTED.
  */
 
