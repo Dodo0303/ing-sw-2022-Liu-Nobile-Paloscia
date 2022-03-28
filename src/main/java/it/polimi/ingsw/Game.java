@@ -13,10 +13,8 @@ public class Game {
      */
     Game(Wizard[] wizards) {
         initializeIslands();
-        initializePlayers();
+        initializePlayers(wizards);
         initializeClouds();
-        setWizard(_players[0], wizards[0]);
-        setWizard(_players[1], wizards[1]);
         setSevenStudents(_players[0]);
         setSevenStudents(_players[1]);
         _bag = new Bag();
@@ -50,9 +48,9 @@ public class Game {
     /** Initialize 2 players. COULD BE ABSTRACT. //TODO
      * player 0 is me, player 1 is the opponent.
      */
-    private void initializePlayers() {
-        _players[0] = new Player(Color.WHITE);
-        _players[1] = new Player(Color.BLACK);
+    private void initializePlayers(Wizard[] wizards) {
+        //_players[0] = new Player(Color.WHITE, wizards[0]);
+        //_players[1] = new Player(Color.BLACK, wizards[1]);
     }
 
     /** Initialize clouds.
@@ -61,20 +59,12 @@ public class Game {
 
     }
 
-    /** Set assistant cards of wizard WIZARD to player PLAYER. //TODO
-     * @param wizard Assistant cards of wizard WIZARD.
-     * @param player The player to get assistant cards of wizard WIZARD.
-     */
-    void setWizard(Player player, Wizard wizard) {
-
-    }
-
     /** Extract 7 students from bag and add to the entrance of player PLAYER.
      */
     private void setSevenStudents(Player player){
         for(int i = 0; i < 7; i++) {
             try {
-                player.addStudentToEntrance(_bag.extractStudent()); //TODO Why does the caller have to handle excp?
+                player.addStudentToEntrance(_bag.extractStudent());
             } catch (EmptyBagException e) {
                 e.printStackTrace();
             }
@@ -136,11 +126,7 @@ public class Game {
     /**
      * Set current player to PLAYER.*/
     void setCurrentPlayer(Player player) {
-        try {
-            _currentPlayer = player;
-        } catch (IndexOutOfBoundsException excp) {
-            throw excp;
-        }
+        _currentPlayer = player; //TODO Why did you put a try catch IndexOutOfBoundExcp?
     }
 
     /**
@@ -149,12 +135,9 @@ public class Game {
         return this._winner;
     }
 
-    /** @Return true iff it would currently be legal for PLAYER to move.*/
+    /** @return true iff it would currently be legal for PLAYER to move.*/
     boolean isLegal(Player player) {
-        if (!_currentPlayer.equals(player)) {
-            return true;
-        }
-        return false;
+        return !_currentPlayer.equals(player);
     }
 
     /** All islands.*/
