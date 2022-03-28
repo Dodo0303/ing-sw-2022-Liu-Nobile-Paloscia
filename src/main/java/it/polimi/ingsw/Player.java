@@ -13,7 +13,7 @@ public abstract class Player {
     //TODO
 
     /** A Player in GAME, initially playing COLOR. */
-    Player(Color color) {
+    Player(Color color, Wizard wizard) {
         _color = color;
         _towerNum = 8;
         initEntranceStudents();
