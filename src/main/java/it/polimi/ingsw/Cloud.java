@@ -5,20 +5,21 @@ import java.util.ArrayList;
 
 
 /**
- * Abstract class for cloud tile. It has two concrete classes, CloudTwoFourPlayer and CloudThreePlayer, depending on
- * number of players.
+ * Class for cloud tile. It can have a maximum of 3 or 4 students, depending on number of players (given to constructor).
  */
 public class Cloud {
     /**
-     * ArrayList of StudentColor that represent the students lying on the cloud tile
+     * ArrayList of StudentColor that represent the students lying on the cloud tile.
      */
-    protected StudentColor[] students;
+    private ArrayList<StudentColor> students;
+    private int fullLength;
 
-    public Cloud(int numberOfStudents) {
-        if (numberOfStudents == 3) {
-            this.students = new StudentColor[3];
-        } else if (numberOfStudents == 4) {
-            this.students = new StudentColor[4];
+    public Cloud(int numberOfPlayers) {
+        if (numberOfPlayers >= 2 && numberOfPlayers <= 4) {
+            this.students = new ArrayList<>(4);
+            this.fullLength = numberOfPlayers;
+        } else {
+            //TODO exception
         }
     }
 
@@ -28,7 +29,11 @@ public class Cloud {
      */
 
     public void addStudent(StudentColor student) throws FullCloudException {
-
+        if (students.size() ==  fullLength) {
+            throw new FullCloudException();
+        } else {
+            students.add(student);
+        }
     }
 
     /**
@@ -36,7 +41,7 @@ public class Cloud {
      * @throws EmptyCloudException when the cloud is empty and no student can be extracted
      */
     public StudentColor extractStudent() throws EmptyCloudException {
-        if (students.length==0) throw new EmptyCloudException();
+        if (students.size()==0) throw new EmptyCloudException();
         else return students.remove(0);
     }
 
@@ -46,8 +51,8 @@ public class Cloud {
      */
     public ArrayList<StudentColor> getStudents() {
         return new ArrayList<>(students);
-    }      //REP EXPOSED?
+    }
 
-    public boolean isEmpty() { return students.length==0; }
+    public boolean isEmpty() { return students.size()==0; }
 
 }

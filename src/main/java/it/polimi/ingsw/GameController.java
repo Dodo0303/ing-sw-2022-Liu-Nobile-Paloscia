@@ -10,7 +10,7 @@ public class GameController {
 
     GameController(int numPlayers) {
         _numPlayers = numPlayers;
-        _board = new Game(); //or new Game_two_person, Game_three_person...
+        _board = null; //TODO
     }
 
     /** Return true iff the current game is not over. */

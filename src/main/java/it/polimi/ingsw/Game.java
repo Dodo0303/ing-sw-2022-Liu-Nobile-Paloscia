@@ -4,23 +4,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-/** A new game. FOR NOW, THIS WORKS ONLY FOR 2-PERSON GAMES. MAKE GAME CLASS AN ABSTRACT ONE?//TODO
+/** A new game. //TODO
  */
 
 public class Game {
 
-    /** A new 2-person game. //TODO Wizard(assistant card objects)
+    /**
+     * Constructor of Game.
+     * @param wizards the wizards chosen by each player.
+     * @param numOfPlayers number of players in game. Must be between 2 and 4.
      */
     Game(Wizard[] wizards, int numOfPlayers) {
+
+        if (numOfPlayers < 2 || numOfPlayers > 4) {
+            throw new GameException();
+        }
 
         initializeIslands();
 
         try {
             initializePlayers(wizards, numOfPlayers);
-            initializeClouds(numOfPlayers);
-        } catch (IndexOutOfBoundsException | GameException indx) {
+        } catch (IndexOutOfBoundsException indx) {
             indx.printStackTrace();
         }
+
+        initializeClouds(numOfPlayers);
 
         setSevenStudents(_players.get(0));      //TODO: should we move this to Player.java?
         setSevenStudents(_players.get(1));
@@ -80,10 +88,13 @@ public class Game {
     }
 
     /** Initialize clouds.
-     * @param numOfPlayers
+     * @param numOfPlayers number of players in the game, to decide number of students on each Cloud.
      */
     private void initializeClouds(int numOfPlayers){
-        //TODO
+        _clouds = new ArrayList<>();
+        for (int i=0; i<numOfPlayers; i++) {
+            _clouds.add(new Cloud(numOfPlayers));
+        }
     }
 
     /** Extract 7 students from bag and add to the entrance of player PLAYER.
