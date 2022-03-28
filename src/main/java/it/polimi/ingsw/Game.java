@@ -16,7 +16,7 @@ public class Game {
         initializePlayers();
         initializeClouds();
         setWizard(_players[0], wizards[0]);
-        setWizard(_players[1, wizards[1]);
+        setWizard(_players[1], wizards[1]);
         setSevenStudents(_players[0]);
         setSevenStudents(_players[1]);
         _bag = new Bag();
@@ -73,7 +73,11 @@ public class Game {
      */
     private void setSevenStudents(Player player){
         for(int i = 0; i < 7; i++) {
-            player.addStudentToEntrance(_bag.extractStudent()); //TODO Why String? Why does the caller have to handle excp?
+            try {
+                player.addStudentToEntrance(_bag.extractStudent()); //TODO Why does the caller have to handle excp?
+            } catch (EmptyBagException e) {
+                e.printStackTrace();
+            }
         }
     }
 
