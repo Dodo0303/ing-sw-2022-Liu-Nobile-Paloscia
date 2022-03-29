@@ -2,9 +2,10 @@ package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
-/** A new game. //TODO
+/** A new game.
  */
 
 public class GameModel {
@@ -107,6 +108,27 @@ public class GameModel {
                 e.printStackTrace();
             }
         }
+    }
+
+    /** This is a method for the Planning phase.
+     * Draw 3 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the 2nd and 3rd cloud tiles.
+     */
+    void addStudentsToCloud(Cloud cloud) throws EmptyBagException, FullCloudException {
+        for (int i = 0; i < 3; i++) {
+            cloud.addStudent(_bag.extractStudent());
+        }
+    }
+
+    /** This is a method for the Planning phase.
+     * Player PLAYER plays the assistant card when other players are playing the same card.
+     */
+    void playAssistant(Assistant assistant, Player player) {
+        for (Player p : _players) {
+            if (p != player && assistant.getMaxSteps() == p.getAssistant().getMaxSteps()) {
+                throw new GameException("The card is being used.");
+            }
+        }
+        player.useAssistant(assistant);
     }
 
 

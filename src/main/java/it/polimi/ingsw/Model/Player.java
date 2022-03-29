@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** This COULD BE an abstract class in order to accommodate different game modes.
@@ -12,30 +13,62 @@ public class Player {
 
     /** A Player in GAME, initially playing COLOR. */
     Player(Color color, Wizard wizard, int towerNum) {
-        _color = color;
-        _towerNum = towerNum;
+        this._color = color;
+        this._towerNum = towerNum;
         initEntranceStudents();
         initProfessors();
+        initAssistant(wizard);
     }
 
     /** Initialize _entranceStudents */
     private void initEntranceStudents() {
-        _entranceStudents = new HashMap<>();
+        this._entranceStudents = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
-            _entranceStudents.put(color, 0);
+            this._entranceStudents.put(color, 0);
         }
     }
     /** Initialize _professors */
     private void initProfessors() {
-        _professors = new HashMap<>();
+        this._professors = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
-            _professors.put(color, 0);
+            this._professors.put(color, 0);
         }
+    }
+
+    /** Initialize _assistant */
+    private void initAssistant(Wizard wizard) {
+        int step = 1; //TODO
+        for (int i = 1; i <= 5; i++) {
+            for(int j = 0; j < 2; j++) {
+                _assistant[step] = new Assistant(i, step++, wizard);
+            }
+        }
+    }
+
+    /** Use an assistant card.
+     * @return the assistant card chosen by THIS player. */
+    Assistant useAssistant(Assistant assistant) {
+        int index = assistant.getMaxSteps();
+        Assistant res = this._assistant[index];
+        _assistant[index] = null;
+        addUsedAssistant(assistant);
+        return res;
+    }
+
+
+    /** Add the assistant card to _usedAssistant */
+    void addUsedAssistant(Assistant assistant) {
+        _usedAssistant.add(assistant);
+    }
+
+    /** Return the Assistant card most recently used by THIS player. */
+    Assistant getAssistant() {
+        return _usedAssistant.get(_usedAssistant.size() - 1);
     }
 
     /** Return the color I am currently playing. */
     Color getColor() {
-        return _color;
+        return this._color;
     }
 
     /** The getter of coins.
@@ -137,5 +170,11 @@ public class Player {
 
     /** The numbers of students in entrance of each color. */
     private HashMap<StudentColor, Integer> _entranceStudents;
+
+    /** Assistant cards of THIS player*/
+    private Assistant[] _assistant;
+
+    /** Used assistant cards of THIS player */
+    private ArrayList<Assistant> _usedAssistant;
 
 }
