@@ -71,17 +71,17 @@ public class GameModel {
      */
     private void initializePlayers(Wizard[] wizards, int numOfPlayers) throws IndexOutOfBoundsException, GameException {
         if (numOfPlayers == 2) {
-            _players.add(new Player(Color.WHITE, wizards[0]));
-            _players.add(new Player(Color.BLACK, wizards[1]));
+            _players.add(new Player(Color.WHITE, wizards[0], 8));
+            _players.add(new Player(Color.BLACK, wizards[1], 8));
         } else if (numOfPlayers == 3) {
-            _players.add(new Player(Color.WHITE, wizards[0]));
-            _players.add(new Player(Color.BLACK, wizards[1]));
-            _players.add(new Player(Color.GRAY, wizards[2]));
+            _players.add(new Player(Color.WHITE, wizards[0], 6));
+            _players.add(new Player(Color.BLACK, wizards[1], 6));
+            _players.add(new Player(Color.GRAY, wizards[2], 6));
         } else if (numOfPlayers == 4) {
-            _players.add(new Player(Color.WHITE, wizards[0]));
-            _players.add(new Player(Color.WHITE, wizards[1]));
-            _players.add(new Player(Color.BLACK, wizards[2]));
-            _players.add(new Player(Color.BLACK, wizards[3]));
+            _players.add(new Player(Color.WHITE, wizards[0], 8));
+            _players.add(new Player(Color.WHITE, wizards[1], 0));
+            _players.add(new Player(Color.BLACK, wizards[2], 8));
+            _players.add(new Player(Color.BLACK, wizards[3], 0));
         } else {
             throw new GameException();
         }
@@ -116,13 +116,13 @@ public class GameModel {
      */
     private void mergeIslands(int x, int y) {
         if (x == _numIslands - 1) {
-            islands.get(y).copyFrom(x);
+            islands.get(y).copyFrom(islands.get(x));
             if (x == _motherNature) {
                 _motherNature = y;
             }
         }
         else {
-            islands.get(x).copyFrom(y);
+            islands.get(x).copyFrom(islands.get(y));
             if (y == _motherNature) {
                 _motherNature = x;
             }

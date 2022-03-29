@@ -11,9 +11,9 @@ public class Player {
     //TODO
 
     /** A Player in GAME, initially playing COLOR. */
-    Player(Color color, Wizard wizard) {
+    Player(Color color, Wizard wizard, int towerNum) {
         _color = color;
-        _towerNum = 8;
+        _towerNum = towerNum;
         initEntranceStudents();
         initProfessors();
     }
