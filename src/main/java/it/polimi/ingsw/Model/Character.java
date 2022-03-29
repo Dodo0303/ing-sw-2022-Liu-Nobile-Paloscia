@@ -32,8 +32,9 @@ public abstract class Character {
     /**
      * Activates the effect of the character and increments currentPrice by 1
      * @throws WrongEffectException if the character needs to manage students
+     * @throws NotEnoughNoEntriesException if the character doesn't have any No Entry tile
      */
-    public void useEffect() throws WrongEffectException {
+    public void useEffect() throws WrongEffectException, NotEnoughNoEntriesException {
         _currentPrice++;
     }
 

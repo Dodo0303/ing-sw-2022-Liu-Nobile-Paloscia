@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Character1 extends Character{
+public class Character11 extends Character{
 
-    public Character1(StudentColor[] students) {
-        super(1, 1);
+    public Character11(StudentColor[] students) {
+        super(11, 2);
         super.students = new ArrayList<>();
         Collections.addAll(super.students, students);
     }
