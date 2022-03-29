@@ -1,13 +1,16 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Model.Character;
+
+import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Model.WrongEffectException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Character11 extends Character{
+public class Character1 extends Character{
 
-    public Character11(StudentColor[] students) {
-        super(11, 2);
+    public Character1(StudentColor[] students) {
+        super(1, 1);
         super.students = new ArrayList<>();
         Collections.addAll(super.students, students);
     }

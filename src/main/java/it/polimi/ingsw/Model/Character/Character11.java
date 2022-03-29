@@ -1,33 +1,37 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Model.Character;
+
+import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Model.WrongEffectException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Character7 extends Character{
+public class Character11 extends Character{
 
-    public Character7(StudentColor[] students) {
-        super(7, 1);
+    public Character11(StudentColor[] students) {
+        super(11, 2);
         super.students = new ArrayList<>();
         Collections.addAll(super.students, students);
     }
 
     @Override
-    public void useEffect() throws WrongEffectException, NotEnoughNoEntriesException {
+    public void useEffect() throws WrongEffectException {
         throw new WrongEffectException();
     }
 
-    //! Il prezzo non deve aumentare di 1 ogni volta! Va fatto un altro metodo? TODO
     @Override
-    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
+    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd){
         StudentColor result = students.get(studentIndex);
         students.set(studentIndex, studentToAdd);
         _currentPrice++;
         return result;
+
     }
 
     @Override
-    public List<StudentColor> getStudents() throws WrongEffectException {
+    public List<StudentColor> getStudents(){
+
         return new ArrayList<>(students);
     }
 

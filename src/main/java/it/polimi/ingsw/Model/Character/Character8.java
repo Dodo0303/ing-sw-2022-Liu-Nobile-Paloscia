@@ -1,11 +1,14 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Model.Character;
+
+import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Model.WrongEffectException;
 
 import java.util.List;
 
-public class Character3 extends Character{
+public class Character8 extends Character{
 
-    public Character3() {
-        super(3, 3);
+    public Character8() {
+        super(8, 2);
     }
 
     @Override
