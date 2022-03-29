@@ -30,7 +30,7 @@ public class GameModel {
 
         initializeClouds(numOfPlayers);
 
-        setSevenStudents(_players.get(0));      //TODO: should we move this to Player.java?
+        setSevenStudents(_players.get(0));
         setSevenStudents(_players.get(1));
 
         _bag = new Bag();
@@ -38,7 +38,7 @@ public class GameModel {
         _numIslands = 12;
 
         Random randomMothernature = new Random();
-        _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature. OR let players choose it manually?//TODO
+        _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature.
 
         Random randomPlayer = new Random();
         _currentPlayer = _players.get(randomPlayer.nextInt(2)); //Determine the first player at random.
@@ -164,7 +164,7 @@ public class GameModel {
     /**
      * Set current player to PLAYER */
     void setCurrentPlayer(Player player) {
-        _currentPlayer = player; //TODO Why did you put a try catch IndexOutOfBoundExcp?
+        _currentPlayer = player;
     }
 
     /**
