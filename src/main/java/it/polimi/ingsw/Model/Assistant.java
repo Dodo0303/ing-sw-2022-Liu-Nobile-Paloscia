@@ -14,15 +14,6 @@ public class Assistant {
         this.wizard = wizard;
     }
 
-    /**
-     * THIS = assistant.
-     */
-    public Assistant(Assistant assistant) {
-        this.value = assistant.getValue();
-        this.maxSteps = assistant.getMaxSteps();
-        this.wizard = assistant.getWizard();
-    }
-
     public int getValue() {
         return value;
     }
