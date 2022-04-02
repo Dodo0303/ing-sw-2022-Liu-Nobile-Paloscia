@@ -11,9 +11,14 @@ public class Character2 extends Character{
         super(2,2);
     }
 
+    @Override
+    public void addNoEntries() throws WrongEffectException{
+        throw new WrongEffectException();
+    }
+
 
     @Override
-    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
+    public List<StudentColor> useEffect(List<Integer> studentIndex, List<StudentColor> studentToAdd) throws WrongEffectException {
         throw new WrongEffectException();
     }
 

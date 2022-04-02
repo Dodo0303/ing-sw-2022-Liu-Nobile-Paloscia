@@ -15,6 +15,8 @@ public abstract class Character {
     protected int noEntries = 0;
     //!students, noEntries and currentPrice are protected because some concrete characters should be able to directly access them, for example in the initializer and in useEffect()
 
+    //TODO Aggiungi stringhe alle exception che spieghino quali sono i problemi incontrati
+
     public Character(int ID, int initialPrice){
         _ID = ID;
         _initialPrice = initialPrice;
@@ -34,6 +36,12 @@ public abstract class Character {
     }
 
     /**
+     * Add a new-entry tile if the character allows it
+     * @throws WrongEffectException the character doesn't expect to have no-entry tiles
+     */
+    public abstract void addNoEntries() throws WrongEffectException;
+
+    /**
      * Activates the effect of the character and increments currentPrice by 1
      * @throws WrongEffectException if the character needs to manage students
      * @throws NotEnoughNoEntriesException if the character doesn't have any No Entry tile
@@ -44,12 +52,12 @@ public abstract class Character {
 
     /**
      * Method called when the character needs to manage students
-     * @param studentIndex student that has to be extracted from the card
-     * @param studentToAdd student that has to be added to the card
-     * @return the student extracted
+     * @param studentIndexes list of indexes of the students that has to be extracted from the card
+     * @param studentsToAdd students that has to be added to the card
+     * @return the students extracted
      * @throws WrongEffectException if the character doesn't expect students
      */
-    public abstract StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException;
+    public abstract List<StudentColor> useEffect(List<Integer> studentIndexes, List<StudentColor> studentsToAdd) throws WrongEffectException;
 
     /**
      * Could be unused if the card doesn't expect to have students

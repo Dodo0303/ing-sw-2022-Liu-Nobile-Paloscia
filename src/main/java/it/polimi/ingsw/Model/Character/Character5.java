@@ -13,7 +13,6 @@ public class Character5 extends Character{
         noEntries = 4;
     }
 
-    //TODO Manage the case of adding a no-entry tile
     @Override
     public void useEffect() throws WrongEffectException, NotEnoughNoEntriesException {
         if (noEntries > 0) {
@@ -24,8 +23,13 @@ public class Character5 extends Character{
         }
     }
 
+    public void addNoEntries() throws WrongEffectException{
+        if (noEntries < 4)
+            noEntries++;
+    }
+
     @Override
-    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
+    public List<StudentColor> useEffect(List<Integer> studentIndex, List<StudentColor> studentToAdd) throws WrongEffectException {
         throw new WrongEffectException();
     }
 
