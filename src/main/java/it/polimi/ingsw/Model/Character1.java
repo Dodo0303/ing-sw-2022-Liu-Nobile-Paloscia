@@ -19,9 +19,13 @@ public class Character1 extends Character{
     }
 
     @Override
-    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd){
-        StudentColor result = students.get(studentIndex);
-        students.set(studentIndex, studentToAdd);
+    public List<StudentColor> useEffect(List<Integer> studentIndex, List<StudentColor> studentToAdd) throws WrongEffectException {
+        if (studentIndex.size() != 1 || studentToAdd.size() != 1)
+            throw new WrongEffectException();
+        Integer index = studentIndex.get(0);
+        List<StudentColor> result = new ArrayList<>();
+        result.add(students.get(index));
+        students.set(index, studentToAdd.get(0));
         _currentPrice++;
         return result;
 

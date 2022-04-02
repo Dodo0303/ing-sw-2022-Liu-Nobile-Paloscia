@@ -10,7 +10,7 @@ public class Character2 extends Character{
 
 
     @Override
-    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
+    public List<StudentColor> useEffect(List<Integer> studentIndex, List<StudentColor> studentToAdd) throws WrongEffectException {
         throw new WrongEffectException();
     }
 
