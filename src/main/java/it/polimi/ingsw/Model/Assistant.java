@@ -5,9 +5,6 @@ public class Assistant {
     private int maxSteps;
     private Wizard wizard;
 
-    /**
-     * TODO Should we handle Assistant class as a singleton?
-     */
     public Assistant(int value, int maxSteps, Wizard wizard) {
         this.value = value;
         this.maxSteps = maxSteps;

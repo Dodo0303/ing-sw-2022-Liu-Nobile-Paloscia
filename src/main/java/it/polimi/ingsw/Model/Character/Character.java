@@ -1,4 +1,8 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Model.Character;
+
+import it.polimi.ingsw.Model.NotEnoughNoEntriesException;
+import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Model.WrongEffectException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +36,17 @@ public abstract class Character {
     }
 
     /**
+     * Add a new-entry tile if the character allows it
+     * @throws WrongEffectException the character doesn't expect to have no-entry tiles
+     */
+    public abstract void addNoEntries() throws WrongEffectException;
+
+    /**
      * Activates the effect of the character and increments currentPrice by 1
      * @throws WrongEffectException if the character needs to manage students
+     * @throws NotEnoughNoEntriesException if the character doesn't have any No Entry tile
      */
-    public void useEffect() throws WrongEffectException {
+    public void useEffect() throws WrongEffectException, NotEnoughNoEntriesException {
         _currentPrice++;
     }
 
