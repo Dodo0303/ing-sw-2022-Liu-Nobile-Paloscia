@@ -17,7 +17,7 @@ public class Character4 extends Character{
     }
 
     @Override
-    public List<StudentColor> useEffect(List<Integer> studentIndex, List<StudentColor> studentToAdd) throws WrongEffectException {
+    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
         throw new WrongEffectException();
     }
 

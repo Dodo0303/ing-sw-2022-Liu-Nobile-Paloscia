@@ -27,19 +27,16 @@ public class Character7 extends Character{
     }
 
     @Override
-    public List<StudentColor> useEffect(List<Integer> studentIndexes, List<StudentColor> studentsToAdd) throws WrongEffectException {
-        if (studentIndexes.size() > 3 || studentsToAdd.size() > 3 || studentsToAdd.size() != studentIndexes.size())
-            throw new WrongEffectException();
-        List<StudentColor> result = new ArrayList<>();
-        for (Integer index :
-                studentIndexes) {
-            result.add(students.get(index));
-            // Substitute the student in position 'index' with the last student of studentsToAdd
-            students.set(index, studentsToAdd.remove(studentsToAdd.size()-1));
+    public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
+        StudentColor result = students.get(studentIndex);
+        students.set(studentIndex, studentToAdd);
+        if (!used) {
+            _price++;
+            used = true;
         }
-        _currentPrice++;
         return result;
     }
+
 
     @Override
     public List<StudentColor> getStudents() throws WrongEffectException {

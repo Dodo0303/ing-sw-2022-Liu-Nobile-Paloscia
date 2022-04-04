@@ -4,37 +4,37 @@ import it.polimi.ingsw.Model.NotEnoughNoEntriesException;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Model.WrongEffectException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Character {
     private int _ID;
-    private int _initialPrice;
-    protected int _currentPrice;
+    protected int _price;
+    protected boolean used = false;
+    //protected int _currentPrice;
     protected List<StudentColor> students;
     protected int noEntries = 0;
-    //!students, noEntries and currentPrice are protected because some concrete characters should be able to directly access them, for example in the initializer and in useEffect()
+    //!students, noEntries and _price are protected because some concrete characters should be able to directly access them, for example in the initializer and in useEffect()
 
     //TODO Aggiungi stringhe alle exception che spieghino quali sono i problemi incontrati
 
     public Character(int ID, int initialPrice){
         _ID = ID;
-        _initialPrice = initialPrice;
-        _currentPrice = initialPrice;
+        _price = initialPrice;
     }
 
     public int getID() {
         return _ID;
     }
 
-    public int getInitialPrice() {
-        return _initialPrice;
+    public int getPrice() {
+        return _price;
     }
 
+    /*
     public int getCurrentPrice() {
         return _currentPrice;
     }
-
+    */
     /**
      * Add a new-entry tile if the character allows it
      * @throws WrongEffectException the character doesn't expect to have no-entry tiles
@@ -47,17 +47,20 @@ public abstract class Character {
      * @throws NotEnoughNoEntriesException if the character doesn't have any No Entry tile
      */
     public void useEffect() throws WrongEffectException, NotEnoughNoEntriesException {
-        _currentPrice++;
+        if (!used) {
+            _price++;
+            used = true;
+        }
     }
 
     /**
      * Method called when the character needs to manage students
-     * @param studentIndexes list of indexes of the students that has to be extracted from the card
-     * @param studentsToAdd students that has to be added to the card
+     * @param studentIndex index of the student that has to be extracted from the card
+     * @param studentToAdd student that has to be added to the card
      * @return the students extracted
      * @throws WrongEffectException if the character doesn't expect students
      */
-    public abstract List<StudentColor> useEffect(List<Integer> studentIndexes, List<StudentColor> studentsToAdd) throws WrongEffectException;
+    public abstract StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException;
 
     /**
      * Could be unused if the card doesn't expect to have students
