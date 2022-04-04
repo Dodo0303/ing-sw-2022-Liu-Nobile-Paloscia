@@ -19,7 +19,7 @@ public class Bag {
 
     /**
      * @throws EmptyBagException when the bag is empty and no student can be extracted
-     * @return string value of the student's color
+     * @return color of the student extracted
      */
     public StudentColor extractStudent() throws EmptyBagException{
         if (isEmpty()) throw new EmptyBagException();
@@ -58,5 +58,23 @@ public class Bag {
         }
 
         return totalNumber;
+    }
+
+    /**
+     * Add a student to the bag. May be useful for implementing some card effect
+     * @param student student to be added
+     * @throws TooManyStudentsException if in the bag there are already 26 students of that color
+     */
+    public void addStudent(StudentColor student) throws TooManyStudentsException{
+        if (students.get(student) == 26)
+            throw new TooManyStudentsException();
+        students.replace(student, students.get(student) + 1);
+    }
+
+    /**
+     * @return number of students with that color
+     */
+    public int getNumOfStudentsByColor(StudentColor color) {
+        return students.get(color);
     }
 }
