@@ -15,8 +15,6 @@ public abstract class Character {
     protected int noEntries = 0;
     //!students, noEntries and _price are protected because some concrete characters should be able to directly access them, for example in the initializer and in useEffect()
 
-    //TODO Aggiungi stringhe alle exception che spieghino quali sono i problemi incontrati
-
     public Character(int ID, int initialPrice){
         _ID = ID;
         _price = initialPrice;
@@ -75,4 +73,12 @@ public abstract class Character {
      * @return the number of no entries in the character
      */
     public abstract int getNumberOfNoEntries() throws WrongEffectException;
+
+    /**
+     *
+     * @return wether the card has already been used or not
+     */
+    public boolean isUsed() {
+        return used;
+    }
 }

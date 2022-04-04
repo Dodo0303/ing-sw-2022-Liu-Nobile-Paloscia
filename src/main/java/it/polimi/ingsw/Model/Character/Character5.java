@@ -30,12 +30,12 @@ public class Character5 extends Character{
 
     @Override
     public StudentColor useEffect(int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
-        throw new WrongEffectException();
+        throw new WrongEffectException("This card doesn't expect to have students");
     }
 
     @Override
     public List<StudentColor> getStudents() throws WrongEffectException {
-        throw new WrongEffectException();
+        throw new WrongEffectException("This card doesn't expect to have students");
     }
 
     @Override

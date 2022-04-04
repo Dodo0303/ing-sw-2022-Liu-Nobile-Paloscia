@@ -17,12 +17,12 @@ public class Character1 extends Character{
 
     @Override
     public void addNoEntries() throws WrongEffectException{
-        throw new WrongEffectException();
+        throw new WrongEffectException("This card can't have no-entries");
     }
 
     @Override
     public void useEffect() throws WrongEffectException {
-        throw new WrongEffectException();
+        throw new WrongEffectException("This card effect needs a student");
     }
 
     @Override
@@ -45,6 +45,6 @@ public class Character1 extends Character{
 
     @Override
     public int getNumberOfNoEntries() throws WrongEffectException {
-        throw new WrongEffectException();
+        throw new WrongEffectException("This card can't have no-entries");
     }
 }
