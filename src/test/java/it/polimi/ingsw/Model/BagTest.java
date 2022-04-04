@@ -23,7 +23,8 @@ class BagTest {
                 fail();
             }
         }
-
+        
+        assertEquals(0, bag.getRemainingNum());
         assertThrows(EmptyBagException.class, () -> {
             StudentColor test = bag.extractStudent();
         });
@@ -35,6 +36,10 @@ class BagTest {
         Bag bag = new Bag();
         int numOfStudents = bag.getRemainingNum();
         assertEquals(120, numOfStudents);
+        for (StudentColor color :
+                StudentColor.values()) {
+            assertEquals(24, bag.getNumOfStudentsByColor(color));
+        }
     }
 
     @ParameterizedTest
