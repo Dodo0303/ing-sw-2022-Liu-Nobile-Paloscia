@@ -21,20 +21,21 @@ public class DiningTable {
     }
 
     /**
-     * Checks whether the number of students on the table requires a new coin to be provided to the player
+     * Checks whether the number of students on the table requires a new coin to be given to the player
      * @return true if a new coin should be given, false if not
      */
-    public Boolean checkCoin() {
+    private Boolean checkCoin() {
         return numOfStudents == 3*(4-availableCoins);
     }
 
     /**
      * Decreases availableCoins, if possible
-     * @throws NoCoinsException when all the coins were already claimed
+     * @return true if a new coin could be claimed, false if not
      */
-    public void claimCoin() throws NoCoinsException {
-        if (availableCoins == 0) throw new NoCoinsException();
-        else availableCoins--;
+    public boolean claimCoin() {
+        if (!checkCoin()) return false;
+        availableCoins--;
+        return true;
     }
 
     public StudentColor getColor() {
