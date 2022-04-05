@@ -46,4 +46,18 @@ public class DiningTable {
         return numOfStudents;
     }
 
+    /**
+     * Remove a student from the table and adds an availableCoin if needed
+     * @throws EmptyTableException if the table doesn't have students
+     */
+    public void removeStudent() throws EmptyTableException{
+        if (numOfStudents == 0) {
+            throw new EmptyTableException();
+        }
+        availableCoins++;
+        if (!checkCoin())
+            availableCoins--;
+        numOfStudents--;
+    }
+
 }
