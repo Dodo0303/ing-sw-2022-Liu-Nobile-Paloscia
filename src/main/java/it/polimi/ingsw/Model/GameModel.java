@@ -120,11 +120,11 @@ public class GameModel {
     }
 
     /** This is a method for the Planning phase.
-     * Player PLAYER plays the assistant card when other players are playing the same card.
+     * Player PLAYER plays the assistant card ASSISTANT when other players are not playing the same card.
      */
     void playAssistant(Assistant assistant, Player player) {
         for (Player p : _players) {
-            if (p != player && assistant.getMaxSteps() == p.getAssistant().getMaxSteps()) {
+            if (p != player && assistant.getMaxSteps() == p.getMostRecentAssistant().getMaxSteps()) {
                 throw new GameException("The card is being used.");
             }
         }
