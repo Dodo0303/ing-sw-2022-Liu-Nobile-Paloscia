@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
+import static it.polimi.ingsw.Model.GameException.error;
+
 /** A new game.
  */
 
@@ -70,7 +72,7 @@ public class GameModel {
      * @param numOfPlayers number of player, to decide how many objects must be created.
      * @throws IndexOutOfBoundsException in case  array wizards is not of length numOfPlayers
      */
-    private void initializePlayers(Wizard[] wizards, int numOfPlayers) throws IndexOutOfBoundsException, GameException {
+    private void initializePlayers(Wizard[] wizards, int numOfPlayers) {
         if (numOfPlayers == 2) {
             _players.add(new Player(Color.WHITE, wizards[0], 8));
             _players.add(new Player(Color.BLACK, wizards[1], 8));
@@ -83,8 +85,6 @@ public class GameModel {
             _players.add(new Player(Color.WHITE, wizards[1], 0));
             _players.add(new Player(Color.BLACK, wizards[2], 8));
             _players.add(new Player(Color.BLACK, wizards[3], 0));
-        } else {
-            throw new GameException();
         }
     }
 
@@ -113,9 +113,15 @@ public class GameModel {
     /** This is a method for the Planning phase.
      * Draw 3 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the 2nd and 3rd cloud tiles.
      */
-    void addStudentsToCloud(Cloud cloud) throws EmptyBagException, FullCloudException {
-        for (int i = 0; i < 3; i++) {
-            cloud.addStudent(_bag.extractStudent());
+    void addStudentsToCloud(Cloud cloud){
+        try {
+            for (int i = 0; i < 3; i++) {
+                cloud.addStudent(_bag.extractStudent());
+            }
+        } catch (FullCloudException e1) {
+            throw error("the cloud is full.");
+        } catch (EmptyBagException e2) {
+            throw error("the bag is empty.");
         }
     }
 
@@ -129,6 +135,34 @@ public class GameModel {
             }
         }
         player.useAssistant(assistant);
+    }
+
+    /** This is a method for the Action phase.
+     * The player PLAYER moves a student to the correspondent dining room.
+     */
+    void moveStudentToDiningRoom(Player player, StudentColor student) {
+        try{
+            try{
+                player.removeStudentFromEntrance(student);
+            } catch (GameException e1) {
+                throw error(e1.getMessage());
+            }
+            player.addToDiningtable(student);
+        } catch (FullTableException e2) {
+            throw error("The dining table is full.");
+        }
+    }
+
+    /** This is a method for the Action phase.
+     * The player PLAYER moves a student to the island ISLAND.
+     */
+    void moveStudentToIsland(Player player, Island island, StudentColor student) {
+        try{
+            player.removeStudentFromEntrance(student);
+        } catch (GameException e1) {
+            throw error(e1.getMessage());
+        }
+        island.addStudent(student);
     }
 
 

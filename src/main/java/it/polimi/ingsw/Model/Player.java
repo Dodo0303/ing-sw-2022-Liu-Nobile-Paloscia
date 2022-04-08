@@ -3,6 +3,8 @@ package it.polimi.ingsw.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static it.polimi.ingsw.Model.GameException.error;
+
 /**  A new player. */
 
 public class Player {
@@ -49,62 +51,6 @@ public class Player {
         }
     }
 
-    /** Use an assistant card.
-     * @return the assistant card chosen by THIS player. */
-    Assistant useAssistant(Assistant assistant) {
-        int index = assistant.getMaxSteps();
-        Assistant res = this._assistant[index];
-        _assistant[index] = null;
-        addUsedAssistant(assistant);
-        return res;
-    }
-
-
-    /** Add the assistant card to _usedAssistant */
-    void addUsedAssistant(Assistant assistant) {
-        _usedAssistant.add(assistant);
-    }
-
-    /** Add 1 coin to THIS PLAYER. */
-    void addCoins() {
-        this._coins++;
-    }
-
-    /** Remove 1 coin from THIS PLAYER. */
-    void removeCoins(int x) {
-        this._coins -= x;
-    }
-
-
-    /** Add one student of StudentCOLOR color to THIS PLAYER. */
-    void addStudentToEntrance(StudentColor color) {
-        this._entranceStudents.put(color,  this._entranceStudents.get(color) + 1);
-    }
-
-    /** Remove one student of StudentCOLOR color from THIS PLAYER. */
-    void removeStudentToEntrance(StudentColor color) {
-        if (this._entranceStudents.get(color) > 0) {
-            this._entranceStudents.put(color,  this._entranceStudents.get(color) - 1);
-        } else {
-            throw new GameException("Invalid operation.");
-        }
-    }
-
-    /** 1 professor of StudentCOLOR color to THIS PLAYER. */
-    void addProfessor(StudentColor color) {
-        this._professors.put(color,  this._professors.get(color) + 1);
-    }
-
-    /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
-    void removeProfessor(StudentColor color) {
-        if (this._professors.get(color) > 0) {
-            this._professors.put(color,  this._professors.get(color) - 1);
-        } else {
-            throw new GameException("Invalid operation.");
-        }
-    }
-
-
     /** Add 1 tower to THIS PLAYER. */
     void addTower() {
         this._towerNum++;
@@ -118,6 +64,77 @@ public class Player {
             throw new GameException("Invalid operation.");
         }
     }
+
+    /** Add 1 coin to THIS PLAYER. */
+    void addCoins() {
+        this._coins++;
+    }
+
+    /** Remove 1 coin from THIS PLAYER. */
+    void removeCoins(int x) {
+        this._coins -= x;
+    }
+
+    /** 1 professor of StudentCOLOR color to THIS PLAYER. */
+    void addProfessor(StudentColor color) {
+        this._professors.put(color,  this._professors.get(color) + 1);
+    }
+
+    /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
+    void removeProfessor(StudentColor color) {
+        if (this._professors.get(color) > 0) {
+            this._professors.put(color,  this._professors.get(color) - 1);
+        } else {
+            throw error("Invalid operation.");
+        }
+    }
+
+    /** Add one student of StudentCOLOR color to THIS PLAYER. */
+    void addStudentToEntrance(StudentColor color) {
+        int num = 0;
+        for(StudentColor student : StudentColor.values()) {
+            num += this._entranceStudents.get(student);
+            if (num > 7) {
+                throw new GameException("Entrance is full.");
+            }
+        }
+        this._entranceStudents.put(color,  this._entranceStudents.get(color) + 1);
+    }
+
+    /** Remove one student of StudentCOLOR color from THIS PLAYER. */
+    void removeStudentFromEntrance(StudentColor color) {
+        if (this._entranceStudents.get(color) > 0) {
+            this._entranceStudents.put(color,  this._entranceStudents.get(color) - 1);
+        } else {
+            throw new GameException("Invalid operation.");
+        }
+    }
+
+    /** Use an assistant card.
+     * @return the assistant card chosen by THIS player. */
+    Assistant useAssistant(Assistant assistant) {
+        int index = assistant.getMaxSteps();
+        Assistant res = this._assistant[index];
+        _assistant[index] = null;
+        this.addUsedAssistant(assistant);
+        return res;
+    }
+
+    /** Add the assistant card to _usedAssistant. */
+    private void addUsedAssistant(Assistant assistant) {
+        _usedAssistant.add(assistant);
+    }
+
+    /** Add student to the correspondent dining table. */
+    void addToDiningtable(StudentColor student) throws FullTableException {
+        this._diningTable.get(student).addStudent();
+    }
+
+    /** Remove a student from the correspondent dining table. */
+    void removeFromDiningtable(StudentColor student) throws EmptyTableException {
+        this._diningTable.get(student).removeStudent();
+    }
+
 
     /** Return the color I am currently playing. */
     Color getColor() {

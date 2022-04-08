@@ -10,4 +10,8 @@ public class GameException extends RuntimeException{
     GameException(String msg) {
         super(msg);
     }
+
+    static GameException error(String format, Object... args) {
+        return new GameException(String.format(format, args));
+    }
 }
