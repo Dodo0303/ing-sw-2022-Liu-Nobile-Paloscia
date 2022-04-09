@@ -25,7 +25,7 @@ public class Island {
         if (this._towerColor == x._towerColor) {
             _numMerge = this._numMerge + x._numMerge + 1;
             for (StudentColor color : x._students.keySet()) {
-                this._students.put(color, x._students.get(color) + this._students.get(color));
+                this._students.put(color, x._students.get(color) + this._students.get(color)); //TODO Copy no entries. Update influences?
             }
         } else {
             throw new GameException("You cannot unify islands with different tower colors.");

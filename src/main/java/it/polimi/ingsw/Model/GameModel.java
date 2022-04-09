@@ -137,6 +137,7 @@ public class GameModel {
         player.useAssistant(assistant);
     }
 
+    //!The following two methods implement game logic, should we move them to GameController?
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the correspondent dining room.
      */

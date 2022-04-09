@@ -35,10 +35,10 @@ public class Player {
 
     /** Initialize _assistant */
     private void initAssistant(Wizard wizard) {
-        int step = 1;
-        for (int i = 1; i <= 5; i++) {
+        int index = 0;
+        for (int maxSteps = 1; maxSteps <= 5; maxSteps++) {
             for(int j = 0; j < 2; j++) {
-                _assistant[step] = new Assistant(i, step++, wizard);
+                _assistant[index] = new Assistant(++index, maxSteps, wizard);
             }
         }
     }
@@ -113,7 +113,7 @@ public class Player {
     /** Use an assistant card.
      * @return the assistant card chosen by THIS player. */
     Assistant useAssistant(Assistant assistant) {
-        int index = assistant.getMaxSteps();
+        int index = assistant.getValue()-1;
         Assistant res = this._assistant[index];
         _assistant[index] = null;
         this.addUsedAssistant(assistant);
@@ -219,7 +219,7 @@ public class Player {
     private HashMap<StudentColor, Integer> _entranceStudents;
 
     /** Assistant cards of THIS player. Assistant[] is being used because the index of each card represents their maxStep.*/
-    private Assistant[] _assistant;
+    private Assistant[] _assistant = new Assistant[10];
 
     /** Used assistant cards of THIS player. Arraylist is being used because _usedAssistant acts like a stack.*/
     private ArrayList<Assistant> _usedAssistant;
