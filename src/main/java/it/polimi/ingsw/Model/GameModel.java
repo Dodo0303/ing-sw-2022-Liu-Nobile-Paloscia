@@ -18,31 +18,19 @@ public class GameModel {
      * @param numOfPlayers number of players in game. Must be between 2 and 4.
      */
     GameModel(Wizard[] wizards, int numOfPlayers) {
-
         if (numOfPlayers < 2 || numOfPlayers > 4) {
             throw new GameException();
         }
-
         initializeIslands();
-
-        try {
-            initializePlayers(wizards, numOfPlayers);
-        } catch (IndexOutOfBoundsException indx) {
-            indx.printStackTrace();
-        }
-
+        initializePlayers(wizards, numOfPlayers);
         initializeClouds(numOfPlayers);
-
         setSevenStudents(_players.get(0));
         setSevenStudents(_players.get(1));
-
         _bag = new Bag();
         _spareCoins = 20;
         _numIslands = 12;
-
         Random randomMothernature = new Random();
         _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature.
-
         Random randomPlayer = new Random();
         _currentPlayer = _players.get(randomPlayer.nextInt(2)); //Determine the first player at random.
     }
@@ -50,6 +38,7 @@ public class GameModel {
     /** Initialize 12 islands with 2 students each.
      */
     private void initializeIslands() {
+        int rnd;
         islands = new HashMap<>();
         ArrayList<StudentColor> twoForEachColor = new ArrayList<>();
         for (StudentColor color : StudentColor.values()) {
@@ -57,8 +46,6 @@ public class GameModel {
                 twoForEachColor.add(color);
             }
         }
-
-        int rnd;
         for(int i = 0; i < 12; i++) {
             islands.put(i, new Island());
             rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
@@ -70,7 +57,6 @@ public class GameModel {
      * Creates instances of class Player.
      * @param wizards, the array of Wizards chosen by each player.
      * @param numOfPlayers number of player, to decide how many objects must be created.
-     * @throws IndexOutOfBoundsException in case  array wizards is not of length numOfPlayers
      */
     private void initializePlayers(Wizard[] wizards, int numOfPlayers) {
         if (numOfPlayers == 2) {
@@ -138,6 +124,11 @@ public class GameModel {
     }
 
     //!The following two methods implement game logic, should we move them to GameController?
+    // YL : My thought was that the Game controller calls these methods when needed,
+    // such as Game g = new Game()
+    // g.moveStudentTODiningRoom(player, student)
+    // etc...
+    // In this case, we dont need to pass Game g to them every time we use them like moveStudentTODiningRoom(g, g.player, g.student)
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the correspondent dining room.
      */
@@ -158,7 +149,7 @@ public class GameModel {
      * The player PLAYER moves a student to the island ISLAND.
      */
     void moveStudentToIsland(Player player, Island island, StudentColor student) {
-        try{
+        try {
             player.removeStudentFromEntrance(student);
         } catch (GameException e1) {
             throw error(e1.getMessage());
@@ -166,6 +157,25 @@ public class GameModel {
         island.addStudent(student);
     }
 
+    /** This is a method for the Action phase.
+     * Player PLAYER moves mothernature to xth island */
+    void moveMotherNature(int x, Player player) {
+        int distance;
+        if (x > _numIslands - 1) {
+            throw error("Illegal movement.");
+        } else if (x < _motherNature) {
+            distance = x + _numIslands - _motherNature;
+        } else if (x > _motherNature) {
+            distance = x - _motherNature;
+        } else {
+            distance = 0;
+        }
+        if (distance > player.getMostRecentAssistant().getMaxSteps()) {
+            throw error("Illegal movement.");
+        } else {
+            _motherNature = x;
+        }
+    }
 
     /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
@@ -200,16 +210,6 @@ public class GameModel {
      * @return the island with mothernature */
     Island getMotherNature() {
         return islands.get(_motherNature);
-    }
-
-    /**
-     * Move mothernature to xth island */
-    void moveMotherNature(int x) {
-        if (_motherNature == x || x > _numIslands - 1) {
-            throw new GameException("Illegal movement.");
-        } else {
-            _motherNature = x;
-        }
     }
 
     /**
