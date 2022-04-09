@@ -9,7 +9,8 @@ public class Island {
     Island() {
         _towerColor = Color.VOID;
         _noEntries = 0;
-        _numMerge = 0; //how many times THIS island has merged other islands into itself, also equals to the number of towers on THIS island.
+        _numMerge = 0; //how many times THIS island has merged other islands into itself.
+        _numTower = 0;
         _students = new HashMap<>();
         _influences = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
@@ -23,9 +24,12 @@ public class Island {
      */
     void copyFrom(Island x) {
         if (this._towerColor == x._towerColor) {
-            _numMerge = this._numMerge + x._numMerge + 1;
-            for (StudentColor color : x._students.keySet()) {
-                this._students.put(color, x._students.get(color) + this._students.get(color)); //TODO Copy no entries. Update influences?
+            _numMerge = this._numMerge + x.getNumMerge() + 1;
+            _numTower += x.getNumTower();
+            for (StudentColor color : x.getStudents().keySet()) {
+                this._students.put(color, x.getStudents().get(color) + this._students.get(color));
+                this._influences.put(color, x.getInfluences().get(color) + this._influences.get(color));
+                this._noEntries += x.getNoEntries();
             }
         } else {
             throw new GameException("You cannot unify islands with different tower colors.");
@@ -39,10 +43,39 @@ public class Island {
         _students.put(color, _students.get(color) + 1);
     }
 
-    /** Set color of the tower(s) on this island to color COLOR.
-     */
+    /** Set color of the tower(s) on this island to color COLOR. */
     void setTowerColor(Color color) {
         _towerColor = color;
+    }
+
+    /** Getter of _towercolor. */
+    Color getTowerColor() {
+        return this._towerColor;
+    }
+
+    /** Getter of _influences. */
+    HashMap<StudentColor, Integer> getInfluences() {
+        return this._influences;
+    }
+
+    /** Getter of _noEntries. */
+    int getNoEntries() {
+        return this._noEntries;
+    }
+
+    /** Getter of _numMerge. */
+    int getNumMerge() {
+        return this._numMerge;
+    }
+
+    /** Getter of _numTower. */
+    int getNumTower() {
+        return this._numTower;
+    }
+
+    /** Getter of _students. */
+    HashMap<StudentColor, Integer> getStudents() {
+        return this._students;
     }
 
 
@@ -55,8 +88,11 @@ public class Island {
     /** //TODO */
     private int _noEntries;
 
-    /** Represents how many times THIS island has merged other islands into itself, also equals to the number of towers on THIS island. */
+    /** Represents how many times THIS island has merged other islands into itself. */
     private int _numMerge;
+
+    /** the number of towers on THIS island. */
+    private int _numTower;
 
     /** Students on THIS island counted by color. */
     private HashMap<StudentColor, Integer> _students;

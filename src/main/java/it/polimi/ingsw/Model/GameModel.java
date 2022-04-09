@@ -158,7 +158,7 @@ public class GameModel {
     }
 
     /** This is a method for the Action phase.
-     * Player PLAYER moves mothernature to xth island */
+     * Player PLAYER moves mothernature to xth island and try to control/conquer the xth island. */
     void moveMotherNature(int x, Player player) {
         int distance;
         if (x > _numIslands - 1) {
@@ -170,11 +170,43 @@ public class GameModel {
         } else {
             distance = 0;
         }
-        if (distance > player.getMostRecentAssistant().getMaxSteps()) {
+        if (distance > player.getMostRecentAssistant().getMaxSteps() || distance == 0) {
             throw error("Illegal movement.");
         } else {
             _motherNature = x;
+            if (islands.get(x).getNumTower() == 0) {
+                controlIsland(islands.get(x));
+            } else {
+                conquerIsland(islands.get(x));
+            }
         }
+    }
+
+    /** First, check if the island ISLAND can be controlled by the Player PLAYER.
+     * If positive, then the color with most influence controls the island ISLAND.
+     * If negative, do nothing. */
+    private void controlIsland(Island island) {
+        int influence;
+        int maxInfluence = 0;
+        Player maxInfluencer = null;
+        for (int i = 0; i < _players.size(); i++) {
+            influence = 0;
+            for (StudentColor color : _players.get(i).getProfessors().keySet()) {
+                influence += island.getInfluences().get(color);
+            }
+            if (influence > maxInfluence) {
+                maxInfluencer = _players.get(i);
+                maxInfluence = influence;
+            }
+        }
+        if (maxInfluencer != null) {
+            island.setTowerColor(maxInfluencer.getColor());
+        }
+    }
+
+    /** Compare influences of diffenrent players on ISLAND, and then conquer the island for the player with more influence. */
+    private void conquerIsland(Island island) {
+        //TODO
     }
 
     /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.

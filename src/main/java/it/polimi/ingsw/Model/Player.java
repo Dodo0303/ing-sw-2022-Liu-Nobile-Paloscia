@@ -28,9 +28,6 @@ public class Player {
     /** Initialize _professors */
     private void initProfessors() {
         this._professors = new HashMap<>();
-        for(StudentColor color : StudentColor.values()) {
-            this._professors.put(color, 0);
-        }
     }
 
     /** Initialize _assistant */
@@ -77,13 +74,13 @@ public class Player {
 
     /** 1 professor of StudentCOLOR color to THIS PLAYER. */
     void addProfessor(StudentColor color) {
-        this._professors.put(color,  this._professors.get(color) + 1);
+        this._professors.put(color, 1);
     }
 
     /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
     void removeProfessor(StudentColor color) {
         if (this._professors.get(color) > 0) {
-            this._professors.put(color,  this._professors.get(color) - 1);
+            this._professors.remove(color);
         } else {
             throw error("Invalid operation.");
         }
