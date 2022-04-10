@@ -2,12 +2,16 @@ package it.polimi.ingsw.Model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
     @Test
-    public void testAssistant(){
+    public void createPlayer_CheckAssistants(){
         Player player = new Player(Color.BLACK, Wizard.WIZARD1, 8);
         Assistant[] ass = player.getAssistants();
         for (int i = 0; i < 10; i++) {
@@ -37,5 +41,38 @@ class PlayerTest {
             }
         }
     }
+
+    @Test
+    public void createPlayer_CheckEntranceStudents() {
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 8);
+        HashMap<StudentColor, Integer> students = p.getEntranceStudents();
+        for (StudentColor color :
+                StudentColor.values()) {
+            assertEquals(0, students.get(color));
+        }
+
+    }
+    
+    @Test
+    public void createPlayer_CheckProfessors() {
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 8);
+        List<StudentColor> professors = p.getProfessors();
+        assertTrue(professors.isEmpty());
+    }
+
+    @Test
+    public void createPlayer_CheckDiningTables(){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 8);
+        Map<StudentColor, DiningTable> tables = p.getDiningTables();
+        for (StudentColor color :
+                StudentColor.values()) {
+            DiningTable table = tables.get(color);
+            assertEquals(0, table.getNumOfStudents());
+            assertEquals(color, table.getColor());
+            assertFalse(table.claimCoin());
+        }
+    }
+
+
 
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static it.polimi.ingsw.Model.GameException.error;
 
@@ -27,7 +28,7 @@ public class Player {
     }
     /** Initialize _professors */
     private void initProfessors() {
-        this._professors = new HashMap<>();
+        this._professors = new ArrayList<>();
     }
 
     /** Initialize _assistant */
@@ -74,16 +75,13 @@ public class Player {
 
     /** 1 professor of StudentCOLOR color to THIS PLAYER. */
     void addProfessor(StudentColor color) {
-        this._professors.put(color, 1);
+        if (!this._professors.contains(color))
+            this._professors.add(color);
     }
 
     /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
     void removeProfessor(StudentColor color) {
-        if (this._professors.get(color) > 0) {
             this._professors.remove(color);
-        } else {
-            throw error("Invalid operation.");
-        }
     }
 
     /** Add one student of StudentCOLOR color to THIS PLAYER. */
@@ -156,16 +154,11 @@ public class Player {
         return this._nickName;
     }
 
-    /** The getter of professors.
-     * @return professors of THIS player. */
-    HashMap<StudentColor, Integer> getprofessors() {
-        return this._professors;
-    }
 
     /** The getter of _professors
      * @return the numbers of professors of each color. */
-    HashMap<StudentColor, Integer> getProfessors() {
-        return this._professors;
+    List<StudentColor> getProfessors() {
+        return new ArrayList<>(this._professors);
     }
 
     /** The getter of _entranceStudents
@@ -193,8 +186,8 @@ public class Player {
 
     /** The getter of DiningTables.
     * @return the dining tables. */
-    HashMap<StudentColor, DiningTable> getDiningTable() {
-        return _diningTable;
+    HashMap<StudentColor, DiningTable> getDiningTables() {
+        return new HashMap<>(this._diningTable);
     }
 
     /** My current color. */
@@ -210,7 +203,7 @@ public class Player {
     private String _nickName;
 
     /** The numbers of professors of each color. */
-    private HashMap<StudentColor, Integer> _professors;
+    private List<StudentColor> _professors;
 
     /** The numbers of students in entrance of each color. */
     private HashMap<StudentColor, Integer> _entranceStudents;
