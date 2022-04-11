@@ -3,6 +3,7 @@ package it.polimi.ingsw.Controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +19,11 @@ public class EriantysServer {
     private ArrayList<MatchController> currentMatches;
     private ArrayList<ClientHandler> clients;
 
-    private EriantysServer(int port) { this.port = port; }
+    private EriantysServer(int port) {
+        this.port = port;
+        currentMatches = new ArrayList<>();
+        clients = new ArrayList<>();
+    }
 
     public int getPort() { return this.port; }
 
@@ -82,7 +87,7 @@ public class EriantysServer {
         clients.remove(clientToRemove);
     }
 
-    public boolean nicknameAvailable(String nickname) {
+    public boolean isNicknameAvailable(String nickname) {
         for (ClientHandler client: clients) {
             if (nickname.equals(client.getNickname())) return false;
         }

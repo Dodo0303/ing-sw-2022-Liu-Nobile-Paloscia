@@ -24,13 +24,13 @@ public class MatchController implements Runnable {
 
     public Wizard[] getWizards() { return this.wizards.clone(); }
 
-    public void addPlayer(ClientHandler client) throws MatchMakingException {
+    public synchronized void addPlayer(ClientHandler client) throws MatchMakingException {
         if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException();
         clients[this.currentPlayersNumber] = client;
         this.currentPlayersNumber++;
         if (this.currentPlayersNumber == this.totalMatchPlayers) {
             this.matchStatus = MatchStatus.STARTED;
-            this.run();
+            notifyAll();
         }
 
     }
@@ -47,7 +47,7 @@ public class MatchController implements Runnable {
     private void gameSetup() {
 
         for (int i=0; i<this.totalMatchPlayers; i++) {
-            while (!clients[i].wizardAvailable());
+            while (!clients[i].wizardAvailable());//? Fare una wait?
             wizards[i] = clients[i].getWizard();
         }
 
@@ -57,7 +57,14 @@ public class MatchController implements Runnable {
     /**
      * This method handles the whole match, from initial setup to its end.
      */
-    public void run() {
+    public synchronized void run() {
+        while(matchStatus == MatchStatus.MATCHMAKING) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         gameSetup();
 
         //TODO
