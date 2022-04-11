@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Model.GameModel;
-import it.polimi.ingsw.Model.MatchStatus;
 import it.polimi.ingsw.Model.Wizard;
 
 public class MatchController implements Runnable {
@@ -37,7 +36,7 @@ public class MatchController implements Runnable {
     }
 
     public void removePlayer() throws MatchMakingException {
-        if (this.currentPlayersNumber == 1) throw new MatchMakingException(); //!Public invariant issue: should minimum number of players be 0 or 1?
+        if (this.currentPlayersNumber == 0) throw new MatchMakingException(); //!Public invariant issue: should minimum number of players be 0 or 1?
         this.currentPlayersNumber--;
         clients[this.currentPlayersNumber] = null; //TODO: replace with optional?
     }
