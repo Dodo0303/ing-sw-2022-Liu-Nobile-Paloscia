@@ -22,6 +22,18 @@ class PlayerTest {
     }
 
     @ParameterizedTest
+    @ValueSource( ints = {2,4})
+    public void createPlayer_IllegalColor_ShouldThrowException(int players){
+        assertThrows(IllegalArgumentException.class, () -> new Player(Color.GRAY, Wizard.WIZARD1, players));
+    }
+
+    @ParameterizedTest
+    @ValueSource( ints = {2,3,4})
+    public void createPlayer_VoidColor_ShouldThrowException(int players){
+        assertThrows(IllegalArgumentException.class, () -> new Player(Color.VOID, Wizard.WIZARD1, players));
+    }
+
+    @ParameterizedTest
     @ValueSource(ints={2,3,4})
     public void createPlayer_CheckAssistants(int players){
         Player player = new Player(Color.BLACK, Wizard.WIZARD1, players);
