@@ -2,15 +2,22 @@ package it.polimi.ingsw.Model;
 
 import java.net.Socket;
 
+//TODO
+
 public class ClientHandler implements Runnable {
-    Socket socket;
-    EriantysServer server;
-    MatchController match;
+    private Socket socket;
+    private EriantysServer server;
+    private MatchController match;
+
+    private String nickname;
+    private Wizard wizard;
 
     public ClientHandler(EriantysServer server, Socket socket) {
         this.server = server;
         this.socket = socket;
     }
+
+    public String getNickname() { return this.nickname; }
 
     /**
      * When an object implementing interface <code>Runnable</code> is used
@@ -27,4 +34,10 @@ public class ClientHandler implements Runnable {
     public void run() {
 
     }
+
+    public boolean wizardAvailable() {
+        //TODO
+    }
+
+    public Wizard getWizard() { return this.wizard; }
 }

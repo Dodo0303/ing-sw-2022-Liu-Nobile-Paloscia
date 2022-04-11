@@ -16,6 +16,7 @@ public class EriantysServer {
     private final int port;
     private static EriantysServer instance;
     private ArrayList<MatchController> currentMatches;
+    private ArrayList<ClientHandler> clients;
 
     private EriantysServer(int port) { this.port = port; }
 
@@ -23,6 +24,10 @@ public class EriantysServer {
 
     public ArrayList<MatchController> getCurrentMatches() {
         return new ArrayList<>(this.currentMatches);
+    }
+
+    public ArrayList<ClientHandler> getClients() {
+        return new ArrayList<>(this.clients);
     }
 
     public void addMatch(MatchController matchToAdd) {
@@ -62,13 +67,26 @@ public class EriantysServer {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                executor.submit(new ClientHandler(this, socket));
+                ClientHandler newClient = new ClientHandler(this, socket);
+                executor.submit(newClient);
+                clients.add(newClient);
             } catch (IOException e) {
                 break;
             }
         }
 
         executor.shutdown();
+    }
+
+    public void removeClient(ClientHandler clientToRemove) {
+        clients.remove(clientToRemove);
+    }
+
+    public boolean nicknameAvailable(String nickname) {
+        for (ClientHandler client: clients) {
+            if (nickname.equals(client.getNickname())) return false;
+        }
+        return true;
     }
 
 }
