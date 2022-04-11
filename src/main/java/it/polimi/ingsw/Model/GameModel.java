@@ -2,7 +2,6 @@ package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Random;
 
 import static it.polimi.ingsw.Model.GameException.error;
@@ -116,7 +115,7 @@ public class GameModel {
      */
     void playAssistant(Assistant assistant, Player player) {
         for (Player p : _players) {
-            if (p != player && assistant.getMaxSteps() == p.getMostRecentAssistant().getMaxSteps()) {
+            if (p != player && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps()) {
                 throw new GameException("The card is being used.");
             }
         }
@@ -139,7 +138,7 @@ public class GameModel {
             } catch (GameException e1) {
                 throw error(e1.getMessage());
             }
-            player.addToDiningtable(student);
+            player.addToDiningTable(student);
         } catch (FullTableException e2) {
             throw error("The dining table is full.");
         }
@@ -170,7 +169,7 @@ public class GameModel {
         } else {
             distance = 0;
         }
-        if (distance > player.getMostRecentAssistant().getMaxSteps() || distance == 0) {
+        if (distance > player.getUsedAssistant().getMaxSteps() || distance == 0) {
             throw error("Illegal movement.");
         } else {
             _motherNature = x;

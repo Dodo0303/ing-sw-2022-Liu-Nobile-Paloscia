@@ -10,6 +10,7 @@ import static it.polimi.ingsw.Model.GameException.error;
 
 public class Player {
     /** A Player in GAME, initially playing COLOR. */
+    //TODO If playing in 2 or 4, color can't be grey
     Player(Color color, Wizard wizard, int numOfPlayers) {
         this._color = color;
         if (numOfPlayers == 2 || numOfPlayers == 4) {
@@ -136,13 +137,13 @@ public class Player {
     }
 
     /** Add student to the correspondent dining table. */
-    void addToDiningtable(StudentColor student) throws FullTableException {
-        this._diningTable.get(student).addStudent();
+    void addToDiningTable(StudentColor color) throws FullTableException {
+        this._diningTable.get(color).addStudent();
     }
 
     /** Remove a student from the correspondent dining table. */
-    void removeFromDiningtable(StudentColor student) throws EmptyTableException {
-        this._diningTable.get(student).removeStudent();
+    void removeFromDiningTable(StudentColor color) throws EmptyTableException {
+        this._diningTable.get(color).removeStudent();
     }
 
 
@@ -161,6 +162,11 @@ public class Player {
      * @return number of coins owned by THIS PLAYER.*/
     int getCoins() {
         return this._coins;
+    }
+
+    public void setNickName(String nickname){
+        if (_nickName == null)
+            _nickName = nickname;
     }
 
     /** The getter of nickname.
@@ -194,10 +200,6 @@ public class Player {
         return this._lastUsedAssistant;
     }
 
-    /** Return the Assistant card most recently used by THIS player. */
-    Assistant getMostRecentAssistant() {
-        return _lastUsedAssistant;
-    }
 
     /** The getter of DiningTables.
     * @return the dining tables. */

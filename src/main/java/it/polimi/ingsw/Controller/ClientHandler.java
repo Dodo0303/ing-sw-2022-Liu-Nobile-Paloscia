@@ -39,6 +39,7 @@ public class ClientHandler implements Runnable {
 
     public boolean wizardAvailable() {
         //TODO
+        return true;
     }
 
     public Wizard getWizard() { return this.wizard; }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.Model;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
@@ -236,6 +235,7 @@ class PlayerTest {
         Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
         Assistant a = new Assistant(1,1,Wizard.WIZARD1);
         assertEquals(a, p.useAssistant(a));
+        assertEquals(a, p.getUsedAssistant());
     }
 
     @Test
@@ -244,6 +244,83 @@ class PlayerTest {
         Assistant a = new Assistant(1,1,Wizard.WIZARD1);
         p.useAssistant(a);
         assertThrows(GameException.class, () -> p.useAssistant(a));
+    }
+
+    @ParameterizedTest
+    @EnumSource(StudentColor.class)
+    public void testAddToDiningTable(StudentColor color){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        int oldNumOfStudents = p.getDiningTables().get(color).getNumOfStudents();
+        try {
+            p.addToDiningTable(color);
+        } catch (FullTableException e) {
+            fail();
+        }
+        assertEquals(oldNumOfStudents+1, p.getDiningTables().get(color).getNumOfStudents());
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(StudentColor.class)
+    public void addToDiningTable_TooManyStudents_ShouldThrowException(StudentColor color){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        for (int i = 0; i < 10; i++) {
+            try{
+                p.addToDiningTable(color);
+            } catch (FullTableException e) {
+                fail();
+            }
+        }
+        assertThrows(FullTableException.class, () -> p.addToDiningTable(color));
+    }
+
+    @ParameterizedTest
+    @EnumSource(StudentColor.class)
+    public void testRemoveFromDiningTable(StudentColor color){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        int expectedRes = p.getDiningTables().get(color).getNumOfStudents();
+        try {
+            p.addToDiningTable(color);
+        } catch (FullTableException e) {
+            fail();
+        }
+        try {
+            p.removeFromDiningTable(color);
+        } catch (EmptyTableException e) {
+            fail();
+        }
+        assertEquals(expectedRes, p.getDiningTables().get(color).getNumOfStudents());
+    }
+
+    @ParameterizedTest
+    @EnumSource(StudentColor.class)
+    public void removeStudentFromDiningTable_NotEnoughStudents_ShouldThrowException(StudentColor color){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        assertThrows(EmptyTableException.class, () -> p.removeFromDiningTable(color));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Color.class)
+    public void testColor(Color color){
+        Player p = new Player(color, Wizard.WIZARD1, 3);
+        assertEquals(color, p.getColor());
+    }
+
+    @Test
+    public void testNickname(){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        String nick = "Cla";
+        p.setNickName(nick);
+        assertEquals(nick, p.getNickName());
+    }
+
+    @Test
+    public void changeNickName_ShouldBeImpossible(){
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        String trueNickname = "Cla";
+        p.setNickName(trueNickname);
+        p.setNickName("Dodo");
+        assertEquals(trueNickname, p.getNickName());
     }
 
 }

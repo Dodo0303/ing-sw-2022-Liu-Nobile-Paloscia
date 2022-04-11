@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.Model.GameException;
 import it.polimi.ingsw.Model.GameModel;
 
-/** The Eryantis game. FOR NOW, ONLY 2-PERSON GAME IS IMPLEMENTED.
+/** The Eriantys game. FOR NOW, ONLY 2-PERSON GAME IS IMPLEMENTED.
  */
 
 public class GameController {
@@ -21,7 +21,7 @@ public class GameController {
         return _board.getWinner() == null;
     }
 
-    /** Play a session of Eryantis.
+    /** Play a session of Eriantys.
      */
     int play() {
         boolean winnerAnnounced = false;
