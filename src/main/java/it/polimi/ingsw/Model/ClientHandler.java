@@ -4,8 +4,11 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable {
     Socket socket;
+    EriantysServer server;
+    MatchController match;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(EriantysServer server, Socket socket) {
+        this.server = server;
         this.socket = socket;
     }
 
