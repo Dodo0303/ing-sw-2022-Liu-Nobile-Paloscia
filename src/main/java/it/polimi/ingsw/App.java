@@ -16,14 +16,21 @@ public class App {
         } else {
             GameController game;
             switch (args[0]) {
+                case "cli": {
+                    //TODO
+                }
                 case "GUI": {
                     //TODO
                     break;
+                }
+                case "server": {
+
                 }
                 case "help": {
                     usage();
                     break;
                 }
+
                 default: {
                     game = new GameController(2);
                     System.exit(game.play());
