@@ -17,7 +17,7 @@ public class GameModel {
      * @param wizards the wizards chosen by each player.
      * @param numOfPlayers number of players in game. Must be between 2 and 4.
      */
-    GameModel(Wizard[] wizards, int numOfPlayers) {
+    public GameModel(Wizard[] wizards, int numOfPlayers) {
         if (numOfPlayers < 2 || numOfPlayers > 4) {
             throw new GameException();
         }

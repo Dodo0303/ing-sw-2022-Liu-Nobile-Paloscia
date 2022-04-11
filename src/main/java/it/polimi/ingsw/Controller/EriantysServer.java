@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;

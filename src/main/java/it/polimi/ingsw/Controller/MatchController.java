@@ -1,6 +1,8 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Controller;
 
-import java.util.ArrayList;
+import it.polimi.ingsw.Model.GameModel;
+import it.polimi.ingsw.Model.MatchStatus;
+import it.polimi.ingsw.Model.Wizard;
 
 public class MatchController implements Runnable {
     private MatchStatus matchStatus;

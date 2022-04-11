@@ -1,4 +1,6 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Controller;
+
+import it.polimi.ingsw.Model.Wizard;
 
 import java.net.Socket;
 
