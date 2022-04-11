@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Model;
 
+import java.util.Objects;
+
 public class Assistant {
     private int value;
     private int maxSteps;
@@ -28,4 +30,13 @@ public class Assistant {
     public Wizard getWizard() {
         return wizard;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Assistant assistant = (Assistant) o;
+        return value == assistant.value && maxSteps == assistant.maxSteps && wizard == assistant.wizard;
+    }
+
 }

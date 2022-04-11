@@ -10,9 +10,19 @@ import static it.polimi.ingsw.Model.GameException.error;
 
 public class Player {
     /** A Player in GAME, initially playing COLOR. */
-    Player(Color color, Wizard wizard, int towerNum) {
+    Player(Color color, Wizard wizard, int numOfPlayers) {
         this._color = color;
-        this._towerNum = towerNum;
+        if (numOfPlayers == 2 || numOfPlayers == 4) {
+            this._towerNum = 0; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
+            this._maxTowerNum = 8;
+            this._maxEntranceStudents = 7;
+        } else if (numOfPlayers == 3) {
+            this._towerNum = 6;
+            this._maxTowerNum = 6;
+            this._maxEntranceStudents = 9;
+        } else {
+            throw new IllegalArgumentException("Illegal number of players");
+        }
         initEntranceStudents();
         initProfessors();
         initAssistant(wizard);
@@ -51,10 +61,13 @@ public class Player {
 
     /** Add 1 tower to THIS PLAYER. */
     void addTower() {
-        this._towerNum++;
+        if (_towerNum < _maxTowerNum)
+            this._towerNum++;
+        else
+            throw new GameException("Too many towers");
     }
 
-    /** Remove 1 coin from THIS PLAYER. */
+    /** Remove 1 tower from THIS PLAYER. */
     void removeTower() {
         if (this._towerNum > 0) {
             this._towerNum--;
@@ -64,13 +77,18 @@ public class Player {
     }
 
     /** Add 1 coin to THIS PLAYER. */
-    void addCoins() {
+    void addCoin() {
         this._coins++;
     }
 
-    /** Remove 1 coin from THIS PLAYER. */
+    /** Remove x coins from THIS PLAYER. */
     void removeCoins(int x) {
-        this._coins -= x;
+        if (x < 0)
+            throw new GameException("Can't remove a negative number of coins");
+        if (_coins >= x)
+            this._coins -= x;
+        else
+            throw new GameException("Not enough coins");
     }
 
     /** 1 professor of StudentCOLOR color to THIS PLAYER. */
@@ -89,7 +107,7 @@ public class Player {
         int num = 0;
         for(StudentColor student : StudentColor.values()) {
             num += this._entranceStudents.get(student);
-            if (num > 7) {
+            if (num >= _maxEntranceStudents) {
                 throw new GameException("Entrance is full.");
             }
         }
@@ -109,15 +127,12 @@ public class Player {
      * @return the assistant card chosen by THIS player. */
     Assistant useAssistant(Assistant assistant) {
         int index = assistant.getValue()-1;
-        Assistant res = this._assistant[index];
+        Assistant res = _assistant[index];
+        if (res == null)
+            throw new GameException("Assistant already used");
+        _lastUsedAssistant = res;
         _assistant[index] = null;
-        this.addUsedAssistant(assistant);
         return res;
-    }
-
-    /** Add the assistant card to _usedAssistant. */
-    private void addUsedAssistant(Assistant assistant) {
-        _usedAssistant.add(assistant);
     }
 
     /** Add student to the correspondent dining table. */
@@ -174,14 +189,14 @@ public class Player {
     }
 
     /** The getter of _usedAssistant.
-     * @return unused assistants of THIS player. */
-    ArrayList<Assistant> getUsedAssistants() {
-        return this._usedAssistant;
+     * @return last used assistant */
+    Assistant getUsedAssistant() {
+        return this._lastUsedAssistant;
     }
 
     /** Return the Assistant card most recently used by THIS player. */
     Assistant getMostRecentAssistant() {
-        return _usedAssistant.get(_usedAssistant.size() - 1);
+        return _lastUsedAssistant;
     }
 
     /** The getter of DiningTables.
@@ -190,11 +205,30 @@ public class Player {
         return new HashMap<>(this._diningTable);
     }
 
+    /**
+     *
+     * @return the maximum amount of students that can be in the entrance
+     */
+    public int getMaxEntranceStudents() {
+        return _maxEntranceStudents;
+    }
+
+    /**
+     *
+     * @return the maximum amount of towers that this player can have
+     */
+    public int getMaxTowerNum(){
+        return _maxTowerNum;
+    }
+
     /** My current color. */
     private Color _color;
 
     /** number of towers owned by THIS PLAYER. */
     private int _towerNum;
+
+    /** maximum amount of towers that the player can hold */
+    private int _maxTowerNum;
 
     /** number of coins owned by THIS PLAYER. */
     private int _coins;
@@ -208,11 +242,14 @@ public class Player {
     /** The numbers of students in entrance of each color. */
     private HashMap<StudentColor, Integer> _entranceStudents;
 
+    /** Max amount of students in the entrance */
+    private int _maxEntranceStudents;
+
     /** Assistant cards of THIS player. Assistant[] is being used because the index of each card represents their maxStep.*/
     private Assistant[] _assistant = new Assistant[10];
 
-    /** Used assistant cards of THIS player. Arraylist is being used because _usedAssistant acts like a stack.*/
-    private ArrayList<Assistant> _usedAssistant;
+    /** Last used assistant. */
+    private Assistant _lastUsedAssistant;
 
     /** Dining tables of THIS player. */
     private HashMap<StudentColor, DiningTable> _diningTable;
