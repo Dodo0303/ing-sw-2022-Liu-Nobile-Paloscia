@@ -42,6 +42,10 @@ public class EriantysServer {
         return instance;
     }
 
+    /**
+     * Starts the server by creating a new ServerSocket. For each incoming connection, it creates a new Socket
+     * and passes it to a new ClientHandler.
+     */
     public void startServer() {
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
