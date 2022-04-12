@@ -22,10 +22,10 @@ public class Island {
     /** Copy information of island x to this island.
      * @param x index of the island.
      */
-    void copyFrom(Island x) {
-        if (this._towerColor == x._towerColor) {
+    public void copyFrom(Island x) {
+        if (this._towerColor != Color.VOID && this._towerColor == x._towerColor) {
             _numMerge = this._numMerge + x.getNumMerge() + 1;
-            _numTower += x.getNumTower();
+            _numTower += x._numTower;
             for (StudentColor color : x.getStudents().keySet()) {
                 this._students.put(color, x.getStudents().get(color) + this._students.get(color));
                 this._influences.put(color, x.getInfluences().get(color) + this._influences.get(color));
@@ -39,56 +39,68 @@ public class Island {
     /** Add a student of color COLOR to THIS island.
      * @param color the color of the student to be added to THIS island.
      */
-    void addStudent(StudentColor color) {
+    public void addStudent(StudentColor color) {
         _students.put(color, _students.get(color) + 1);
     }
 
+    public void addNoEntry(){
+        _noEntries++;
+    }
+
+    public void removeNoEntry(){
+        if (_noEntries > 0)
+            _noEntries--;
+    }
+
     /** Set color of the tower(s) on this island to color COLOR. */
-    void setTowerColor(Color color) {
+    public void setTowerColor(Color color) {
         _towerColor = color;
     }
 
     /** Getter of _towercolor. */
-    Color getTowerColor() {
+    public Color getTowerColor() {
         return this._towerColor;
     }
 
     /** Getter of _influences. */
-    HashMap<StudentColor, Integer> getInfluences() {
+    public HashMap<StudentColor, Integer> getInfluences() {
         return this._influences;
     }
 
     /** Getter of _noEntries. */
-    int getNoEntries() {
+    public int getNoEntries() {
         return this._noEntries;
     }
 
     /** Getter of _numMerge. */
-    int getNumMerge() {
+    public int getNumMerge() {
         return this._numMerge;
     }
 
     /** Getter of _numTower. */
-    int getNumTower() {
+    public int getNumTower() {
         return this._numTower;
     }
 
     /** Getter of _students. */
-    HashMap<StudentColor, Integer> getStudents() {
-        return this._students;
+    public HashMap<StudentColor, Integer> getStudents() {
+        return new HashMap<>(_students);
     }
 
 
-    /** Influence of each color. */
+    /** Influence of each color. TODO*/
     private HashMap<StudentColor, Integer> _influences;
 
     /** The color of tower(s) on THIS island. */
     private Color _towerColor;
 
-    /** //TODO */
+    /** Number of no-entry tiles in the island */
     private int _noEntries;
 
-    /** Represents how many times THIS island has merged other islands into itself. */
+    /** Represents how many times THIS island has merged other islands into itself.
+     * The total number of islands merged is _numMerge+1
+     * TODO Could be replaced by numTower
+     */
     private int _numMerge;
 
     /** the number of towers on THIS island. */
