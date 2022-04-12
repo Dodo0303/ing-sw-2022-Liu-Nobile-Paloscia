@@ -12,15 +12,17 @@ public class Cloud {
      * ArrayList of StudentColor that represent the students lying on the cloud tile.
      */
     private ArrayList<StudentColor> students;
-    private int fullLength;
+    private final int fullLength;
 
-    public Cloud(int numberOfPlayers) {
-        if (numberOfPlayers >= 2 && numberOfPlayers <= 4) {
-            this.students = new ArrayList<>(4);
-            this.fullLength = numberOfPlayers;
+    public Cloud(int numberOfPlayers) throws IllegalArgumentException{
+        if (numberOfPlayers == 2 || numberOfPlayers == 4) {
+            this.fullLength = 3;
+        } else if (numberOfPlayers == 3){
+            this.fullLength = 4;
         } else {
-            //TODO exception
+            throw new IllegalArgumentException();
         }
+        this.students = new ArrayList<>();
     }
 
     /**
