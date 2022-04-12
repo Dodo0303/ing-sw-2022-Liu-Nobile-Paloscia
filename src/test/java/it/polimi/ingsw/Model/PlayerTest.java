@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import javax.imageio.stream.FileCacheImageOutputStream;
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -312,7 +314,7 @@ class PlayerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(Color.class)
+    @EnumSource(value = Color.class, names = {"VOID"}, mode = EnumSource.Mode.EXCLUDE)
     public void testColor(Color color){
         Player p = new Player(color, Wizard.WIZARD1, 3);
         assertEquals(color, p.getColor());
@@ -334,5 +336,7 @@ class PlayerTest {
         p.setNickName("Dodo");
         assertEquals(trueNickname, p.getNickName());
     }
+
+
 
 }
