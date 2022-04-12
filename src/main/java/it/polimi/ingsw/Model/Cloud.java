@@ -55,6 +55,14 @@ public class Cloud {
         return new ArrayList<>(students);
     }
 
+    /**
+     *
+     * @return maximum amount of students that this cloud can have
+     */
+    public int getFullLength() {
+        return fullLength;
+    }
+
     public boolean isEmpty() { return students.size()==0; }
 
 }
