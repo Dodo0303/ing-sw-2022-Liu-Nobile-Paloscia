@@ -23,8 +23,8 @@ public class GameModel {
         initializeIslands();
         initializePlayers(wizards, numOfPlayers);
         initializeClouds(numOfPlayers);
-        setSevenStudents(_players.get(0));
-        setSevenStudents(_players.get(1));
+        setEntranceStudents(_players.get(0), numOfPlayers);
+        setEntranceStudents(_players.get(1), numOfPlayers);
         _bag = new Bag();
         _spareCoins = 20;
         _numIslands = 12;
@@ -38,7 +38,7 @@ public class GameModel {
      */
     private void initializeIslands() {
         int rnd;
-        islands = new HashMap<>();
+        _islands = new HashMap<>();
         ArrayList<StudentColor> twoForEachColor = new ArrayList<>();
         for (StudentColor color : StudentColor.values()) {
             for(int i = 0; i < 2; i++) {
@@ -46,9 +46,9 @@ public class GameModel {
             }
         }
         for(int i = 0; i < 12; i++) {
-            islands.put(i, new Island());
+            _islands.put(i, new Island());
             rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
-            islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
+            _islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
         }
     }
 
@@ -83,10 +83,10 @@ public class GameModel {
         }
     }
 
-    /** Extract 7 students from bag and add to the entrance of player PLAYER.
+    /** Extract x students from bag and add to the entrance of player PLAYER.
      */
-    private void setSevenStudents(Player player){
-        for(int i = 0; i < 7; i++) {
+    void setEntranceStudents(Player player, int x){
+        for(int i = 0; i < x; i++) {
             try {
                 player.addStudentToEntrance(_bag.extractStudent());
             } catch (EmptyBagException e) {
@@ -173,18 +173,29 @@ public class GameModel {
             throw error("Illegal movement.");
         } else {
             _motherNature = x;
-            if (islands.get(x).getNumTower() == 0) {
-                controlIsland(islands.get(x));
-            } else {
-                conquerIsland(islands.get(x));
-            }
+            controlIsland(x);
+            unifyIslands(x);
         }
     }
 
-    /** First, check if the island ISLAND can be controlled by the Player PLAYER.
+    /** This is a method for the Action phase.
+     * The player PLAYER takes x students from the cloud CLOUD, and then place them on his entrance.
+     */
+    void takeStudentsFromCloud(Player player, Cloud cloud, int x) {
+        try {
+            for (int i = 0; i < x; i++) {
+                player.addStudentToEntrance(cloud.extractStudent());
+            }
+        } catch (EmptyCloudException e) {
+            throw error(e.getMessage());
+        }
+    }
+
+    /** First, check if the xth island can be controlled/conquered.
      * If positive, then the color with most influence controls the island ISLAND.
      * If negative, do nothing. */
-    private void controlIsland(Island island) {
+    private void controlIsland(int x) {
+        Island island = _islands.get(x);
         int influence;
         int maxInfluence = 0;
         Player maxInfluencer = null;
@@ -192,6 +203,9 @@ public class GameModel {
             influence = 0;
             for (StudentColor color : _players.get(i).getProfessors()) {
                 influence += island.getInfluences().get(color);
+            }
+            if (_players.get(i).getColor().equals(island.getTowerColor())) {
+                influence += island.getNumTower();
             }
             if (influence > maxInfluence) {
                 maxInfluencer = _players.get(i);
@@ -201,12 +215,24 @@ public class GameModel {
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
         }
+
     }
 
-    /** Compare influences of diffenrent players on ISLAND, and then conquer the island for the player with more influence. */
-    private void conquerIsland(Island island) {
-        //TODO
+    /** First, check if the xth island can merge any adjacent island.
+     * If positive, then call mergeIslands().
+     * If negative, do nothing. */
+    private void unifyIslands(int x) {
+        Island island = _islands.get(x);
+        int left = (x > 0) ? x - 1 : _numIslands - 1;
+        if (_islands.get(left).getTowerColor().equals(island.getTowerColor())) {
+            mergeIslands(left, x--);
+        }
+        int right = (x < _numIslands - 1) ? x + 1 : 0;
+        if (_islands.get(right).getTowerColor().equals(island.getTowerColor())) {
+            mergeIslands(x, right);
+        }
     }
+
 
     /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
@@ -214,21 +240,21 @@ public class GameModel {
      */
     private void mergeIslands(int x, int y) {
         if (x == _numIslands - 1) {
-            islands.get(y).copyFrom(islands.get(x));
+            _islands.get(y).copyFrom(_islands.get(x));
             if (x == _motherNature) {
                 _motherNature = y;
             }
         }
         else {
-            islands.get(x).copyFrom(islands.get(y));
+            _islands.get(x).copyFrom(_islands.get(y));
             if (y == _motherNature) {
                 _motherNature = x;
             }
             for (int i = y; i < _numIslands - 1; i++) {
-                islands.put(i, islands.get(i + 1)); // move islands after the yth forward by 1.
+                _islands.put(i, _islands.get(i + 1)); // move islands after the yth forward by 1.
             }
         }
-        islands.remove(_numIslands--);
+        _islands.remove(_numIslands--);
     }
 
     /**
@@ -240,7 +266,7 @@ public class GameModel {
     /**
      * @return the island with mothernature */
     Island getMotherNature() {
-        return islands.get(_motherNature);
+        return _islands.get(_motherNature);
     }
 
     /**
@@ -267,7 +293,7 @@ public class GameModel {
     }
 
     /** All islands */
-    private HashMap<Integer, Island> islands;
+    private HashMap<Integer, Island> _islands;
 
     /** Coins not obtained by any player. Initially set to 20 */
     private int _spareCoins;
