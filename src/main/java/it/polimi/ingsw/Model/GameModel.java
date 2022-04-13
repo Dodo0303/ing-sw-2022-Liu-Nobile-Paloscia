@@ -23,15 +23,14 @@ public class GameModel {
         initializeIslands();
         initializePlayers(wizards, numOfPlayers);
         initializeClouds(numOfPlayers);
-        setEntranceStudents(_players.get(0), numOfPlayers);
-        setEntranceStudents(_players.get(1), numOfPlayers);
+        setEntranceStudents(numOfPlayers);
         _bag = new Bag();
         _spareCoins = 20;
         _numIslands = 12;
         Random randomMothernature = new Random();
         _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature.
         Random randomPlayer = new Random();
-        _currentPlayer = _players.get(randomPlayer.nextInt(2)); //Determine the first player at random.
+        _currentPlayer = _players.get(randomPlayer.nextInt(numOfPlayers)); //Determine the first player at random.
     }
 
     /** Initialize 12 islands with 2 students each.
@@ -83,24 +82,28 @@ public class GameModel {
         }
     }
 
-    /** Extract x students from bag and add to the entrance of player PLAYER.
+    /** Extract 7/9 students from bag and add to the entrance of each player.
      */
-    void setEntranceStudents(Player player, int x){
-        for(int i = 0; i < x; i++) {
-            try {
-                player.addStudentToEntrance(_bag.extractStudent());
-            } catch (EmptyBagException e) {
-                e.printStackTrace();
+    void setEntranceStudents(int numOfPlayers){
+        int x = (numOfPlayers == 3)? 7 : 9;
+        for (Player player : _players) {
+            for(int i = 0; i < x; i++) {
+                try {
+                    player.addStudentToEntrance(_bag.extractStudent());
+                } catch (EmptyBagException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     /** This is a method for the Planning phase.
-     * Draw 3 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the 2nd and 3rd cloud tiles.
+     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the 2nd and 3rd cloud tiles.
      */
-    void addStudentsToCloud(Cloud cloud){
+    void addStudentsToCloud(Cloud cloud, int numOfPlayers){
+        int x = (numOfPlayers == 3)? 4 : 3;
         try {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < x; i++) {
                 cloud.addStudent(_bag.extractStudent());
             }
         } catch (FullCloudException e1) {
@@ -179,9 +182,10 @@ public class GameModel {
     }
 
     /** This is a method for the Action phase.
-     * The player PLAYER takes x students from the cloud CLOUD, and then place them on his entrance.
+     * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
      */
-    void takeStudentsFromCloud(Player player, Cloud cloud, int x) {
+    void takeStudentsFromCloud(Player player, Cloud cloud, int numOfPlayers) {
+        int x = (numOfPlayers == 3)? 4 : 3;
         try {
             for (int i = 0; i < x; i++) {
                 player.addStudentToEntrance(cloud.extractStudent());
