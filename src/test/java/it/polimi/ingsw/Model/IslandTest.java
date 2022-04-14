@@ -168,4 +168,37 @@ class IslandTest {
         assertEquals(1, i.getNumTower());
     }
 
+    @Test
+    public void testCalculateInfluence_EmptyIslandVoidTower() {
+        Island i = new Island();
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 2);
+        for (StudentColor color :
+                StudentColor.values()) {
+            p.addProfessor(color);
+        }
+        assertEquals(0, i.calculateInfluence(p));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Color.class, names = "VOID", mode = EnumSource.Mode.EXCLUDE)
+    public void testCalculateInfluence_EmptyIslandWithTower(Color color) {
+        Island i = new Island();
+        i.setTowerColor(color);
+        Player p = new Player(color, Wizard.WIZARD1, 3);
+        assertEquals(1, i.calculateInfluence(p));
+    }
+
+    @Test
+    public void testCalculateInfluence_WithStudentsAndTower() {
+        Island i = new Island();
+        i.setTowerColor(Color.BLACK);
+        Player p = new Player(Color.BLACK, Wizard.WIZARD1, 3);
+        for (StudentColor color :
+                StudentColor.values()) {
+            i.addStudent(color);
+            p.addProfessor(color);
+        }
+        assertEquals(StudentColor.values().length + 1, i.calculateInfluence(p));
+    }
+
 }

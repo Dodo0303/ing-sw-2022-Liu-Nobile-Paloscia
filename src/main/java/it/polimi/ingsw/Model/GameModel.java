@@ -204,13 +204,7 @@ public class GameModel {
         int maxInfluence = 0;
         Player maxInfluencer = null;
         for (int i = 0; i < _players.size(); i++) {
-            influence = 0;
-            for (StudentColor color : _players.get(i).getProfessors()) {
-                influence += island.getInfluences().get(color);
-            }
-            if (_players.get(i).getColor().equals(island.getTowerColor())) {
-                influence += island.getNumTower();
-            }
+            influence = island.calculateInfluence(_players.get(i));
             if (influence > maxInfluence) {
                 maxInfluencer = _players.get(i);
                 maxInfluence = influence;

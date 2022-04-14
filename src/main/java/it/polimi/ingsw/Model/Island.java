@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Island {
 
@@ -12,10 +13,8 @@ public class Island {
         _numMerge = 0; //how many times THIS island has merged other islands into itself.
         _numTower = 0;
         _students = new HashMap<>();
-        _influences = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
             _students.put(color, 0);
-            _influences.put(color, 0);
         }
     }
 
@@ -29,7 +28,6 @@ public class Island {
             this._noEntries += x.getNoEntries();
             for (StudentColor color : x.getStudents().keySet()) {
                 this._students.put(color, x.getStudents().get(color) + this._students.get(color));
-                this._influences.put(color, x.getInfluences().get(color) + this._influences.get(color));
             }
         } else {
             throw new GameException("You cannot unify islands with different tower colors.");
@@ -66,11 +64,6 @@ public class Island {
         return this._towerColor;
     }
 
-    /** Getter of _influences. */
-    public HashMap<StudentColor, Integer> getInfluences() {
-        return this._influences;
-    }
-
     /** Getter of _noEntries. */
     public int getNoEntries() {
         return this._noEntries;
@@ -91,9 +84,22 @@ public class Island {
         return new HashMap<>(_students);
     }
 
-
-    /** Influence of each color. TODO*/
-    private HashMap<StudentColor, Integer> _influences;
+    /**
+     * Calculate the influence of a certain player given his professors and color
+     * @param player player of which we want to calculate the influence on the island
+     * @return the influence that the player has on the island
+     */
+    public int calculateInfluence(Player player) {
+        //TODO Una carta personaggio modifica questo comportamento. Potremmo dover sostituire l'algoritmo con una classe, vedi pattern strategy
+        int result = 0;
+        if (_towerColor == player.getColor())
+            result += _numTower;
+        for (StudentColor color :
+                player.getProfessors()) {
+            result += _students.get(color);
+        }
+        return result;
+    }
 
     /** The color of tower(s) on THIS island. */
     private Color _towerColor;
