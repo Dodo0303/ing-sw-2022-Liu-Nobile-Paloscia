@@ -3,8 +3,11 @@ package it.polimi.ingsw.Model;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,4 +104,68 @@ class IslandTest {
         i1.copyFrom(i2);
         assertEquals(numTiles*2-1, i1.getNoEntries());
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 10})
+    public void testCopyFrom_MergeMultipleIslands_CheckNumMerge(int numOfIslands) {
+        List<Island> islands = new ArrayList<>();
+        for (int i = 0; i < numOfIslands; i++) {
+            islands.add(new Island());
+        }
+        for (Island island :
+                islands) {
+            island.setTowerColor(Color.GRAY);
+        }
+        for (int i = 0; i < numOfIslands - 1; i++) {
+            islands.get(0).copyFrom(islands.get(i+1));
+        }
+        assertEquals(numOfIslands-1, islands.get(0).getNumMerge());
+    }
+
+    @ParameterizedTest
+    @EnumSource(StudentColor.class)
+    public void testAddStudent(StudentColor color) {
+        Island i = new Island();
+        i.addStudent(color);
+        assertEquals(1, i.getStudents().get(color));
+    }
+
+    @Test
+    public void testAddNoEntry() {
+        Island i = new Island();
+        i.addNoEntry();
+        assertEquals(1, i.getNoEntries());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,1,10})
+    public void testRemoveNoEntry(int noEntries) {
+        Island i = new Island();
+        for (int j = 0; j < noEntries; j++) {
+            i.addNoEntry();
+        }
+        for (int j = 0; j < noEntries; j++) {
+            i.removeNoEntry();
+        }
+        assertEquals(0, i.getNoEntries());
+    }
+
+    @Test
+    public void testRemoveNoEntry_NotEnoughNoEntries_ValueShouldBeZero() {
+        Island i = new Island();
+        for (int j = 0; j < 5; j++) {
+            i.removeNoEntry();
+        }
+        assertEquals(0, i.getNoEntries());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Color.class, names = "VOID", mode = EnumSource.Mode.EXCLUDE)
+    public void testSetTowerColor(Color color){
+        Island i = new Island();
+        i.setTowerColor(color);
+        assertEquals(color, i.getTowerColor());
+        assertEquals(1, i.getNumTower());
+    }
+
 }
