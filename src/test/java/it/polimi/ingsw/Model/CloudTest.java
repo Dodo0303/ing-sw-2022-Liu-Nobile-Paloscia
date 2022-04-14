@@ -102,6 +102,13 @@ class CloudTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {2,3,4})
+    public void extractStudent_NotEnoughStudents_ShouldThrowException(int numOfPlayers) {
+        Cloud c = new Cloud(numOfPlayers);
+        assertThrows(EmptyCloudException.class, c::extractStudent);
+    }
+
 
 
 }
