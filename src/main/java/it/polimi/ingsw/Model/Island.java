@@ -26,10 +26,10 @@ public class Island {
         if (this._towerColor != Color.VOID && this._towerColor == x._towerColor) {
             _numMerge = this._numMerge + x.getNumMerge() + 1;
             _numTower += x._numTower;
+            this._noEntries += x.getNoEntries();
             for (StudentColor color : x.getStudents().keySet()) {
                 this._students.put(color, x.getStudents().get(color) + this._students.get(color));
                 this._influences.put(color, x.getInfluences().get(color) + this._influences.get(color));
-                this._noEntries += x.getNoEntries();
             }
         } else {
             throw new GameException("You cannot unify islands with different tower colors.");
@@ -52,8 +52,12 @@ public class Island {
             _noEntries--;
     }
 
-    /** Set color of the tower(s) on this island to color COLOR. */
+    /** Set color of the tower(s) on this island to color COLOR.
+     * If the island doesn't have a tower, it set towerNum to 1
+     */
     public void setTowerColor(Color color) {
+        if (_numTower == 0)
+            _numTower++;
         _towerColor = color;
     }
 
