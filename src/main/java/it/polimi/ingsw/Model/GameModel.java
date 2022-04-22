@@ -20,13 +20,13 @@ public class GameModel {
         if (numOfPlayers < 2 || numOfPlayers > 4) {
             throw new GameException();
         }
+        _bag = new Bag();
+        _spareCoins = 20;
+        _numIslands = 12;
         initializeIslands();
         initializePlayers(wizards, numOfPlayers);
         initializeClouds(numOfPlayers);
         setEntranceStudents(numOfPlayers);
-        _bag = new Bag();
-        _spareCoins = 20;
-        _numIslands = 12;
         Random randomMothernature = new Random();
         _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature.
         Random randomPlayer = new Random();
@@ -44,7 +44,7 @@ public class GameModel {
                 twoForEachColor.add(color);
             }
         }
-        for(int i = 0; i < 12; i++) {
+        for(int i = 0; i < 10; i++) {
             _islands.put(i, new Island());
             rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
             _islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
@@ -57,18 +57,19 @@ public class GameModel {
      * @param numOfPlayers number of player, to decide how many objects must be created.
      */
     private void initializePlayers(Wizard[] wizards, int numOfPlayers) {
+        _players = new ArrayList<>();
         if (numOfPlayers == 2) {
-            _players.add(new Player(Color.WHITE, wizards[0], 8));
-            _players.add(new Player(Color.BLACK, wizards[1], 8));
+            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(Color.BLACK, wizards[1], numOfPlayers));
         } else if (numOfPlayers == 3) {
-            _players.add(new Player(Color.WHITE, wizards[0], 6));
-            _players.add(new Player(Color.BLACK, wizards[1], 6));
-            _players.add(new Player(Color.GRAY, wizards[2], 6));
+            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(Color.BLACK, wizards[1], numOfPlayers));
+            _players.add(new Player(Color.GRAY, wizards[2], numOfPlayers));
         } else if (numOfPlayers == 4) {
-            _players.add(new Player(Color.WHITE, wizards[0], 8));
-            _players.add(new Player(Color.WHITE, wizards[1], 0));
-            _players.add(new Player(Color.BLACK, wizards[2], 8));
-            _players.add(new Player(Color.BLACK, wizards[3], 0));
+            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(Color.WHITE, wizards[1], numOfPlayers));
+            _players.add(new Player(Color.BLACK, wizards[2], numOfPlayers));
+            _players.add(new Player(Color.BLACK, wizards[3], numOfPlayers));
         }
     }
 
@@ -85,7 +86,7 @@ public class GameModel {
     /** Extract 7/9 students from bag and add to the entrance of each player.
      */
     void setEntranceStudents(int numOfPlayers){
-        int x = (numOfPlayers == 3)? 7 : 9;
+        int x = (numOfPlayers == 3)? 9 : 7;
         for (Player player : _players) {
             for(int i = 0; i < x; i++) {
                 try {
@@ -283,6 +284,12 @@ public class GameModel {
      * @return the winner of current game */
     public Player getWinner() {
         return this._winner;
+    }
+
+    /**
+     * @return the players.*/
+    public ArrayList<Player> getPlayers() {
+        return this._players;
     }
 
     /** @return true iff it would currently be legal for PLAYER to move */
