@@ -119,7 +119,7 @@ public class GameModel {
      */
     void playAssistant(Assistant assistant, Player player) {
         for (Player p : _players) {
-            if (p != player && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps()) {
+            if (p != player && (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps())) {
                 throw error("The card is being used.");
             }
         }
@@ -290,6 +290,12 @@ public class GameModel {
      * @return the players.*/
     public ArrayList<Player> getPlayers() {
         return this._players;
+    }
+
+    /**
+     * @return the clouds.*/
+    public ArrayList<Cloud> getClouds() {
+        return this._clouds;
     }
 
     /** @return true iff it would currently be legal for PLAYER to move */

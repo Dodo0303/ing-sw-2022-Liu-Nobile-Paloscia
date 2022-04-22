@@ -119,7 +119,7 @@ public class Player {
         if (this._entranceStudents.get(color) > 0) {
             this._entranceStudents.put(color,  this._entranceStudents.get(color) - 1);
         } else {
-            throw new GameException("Invalid operation.");
+            throw new GameException("No student of this color left.");
         }
     }
 
