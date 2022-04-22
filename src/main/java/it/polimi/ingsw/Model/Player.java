@@ -145,6 +145,13 @@ public class Player {
         this._diningTable.get(color).removeStudent();
     }
 
+    /** Remove all students in entrance. */
+    void clearEntrance() {
+        for(StudentColor color : _entranceStudents.keySet()) {
+            _entranceStudents.put(color, 0);
+        }
+    }
+
 
     /** Return the color I am currently playing. */
     Color getColor() {
@@ -179,6 +186,11 @@ public class Player {
      * @return the numbers of professors of each color. */
     List<StudentColor> getProfessors() {
         return new ArrayList<>(this._professors);
+    }
+
+    /** Set professors. */
+    void setProfessors(StudentColor color) {
+        this._professors.add(color);
     }
 
     /** The getter of _entranceStudents

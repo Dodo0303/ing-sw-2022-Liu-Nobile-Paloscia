@@ -77,7 +77,7 @@ class GameModelTest {
             game2.playAssistant(game2.getPlayers().get(1).getAssistants()[1], game2.getPlayers().get(1));
             fail("expected exception was not occured.");
         } catch (GameException e) {
-            System.out.printf(e.getMessage());
+            System.out.printf(e.getMessage() + "\n");
         }
     }
 
@@ -97,7 +97,7 @@ class GameModelTest {
             game2.moveStudentToDiningRoom(game2.getPlayers().get(0), StudentColor.RED);
             assertEquals(game2.getPlayers().get(0).getDiningTables().get(StudentColor.RED).getNumOfStudents(), 1);
         } catch (GameException e) {
-            System.out.printf(e.getMessage());
+            System.out.printf(e.getMessage() + "\n");
         }
     }
 
@@ -107,7 +107,7 @@ class GameModelTest {
             game2.moveStudentToIsland(game2.getPlayers().get(0), game2.getIslands().get(0), StudentColor.BLUE);
             assertEquals(game2.getIslands().get(0).getStudents().get(StudentColor.BLUE), 1);
         } catch (GameException e) {
-            System.out.printf(e.getMessage());
+            System.out.printf(e.getMessage() + "\n");
         }
     }
 
@@ -116,7 +116,7 @@ class GameModelTest {
         try {
             game2.moveMotherNature(100, game2.getPlayers().get(0));
         } catch (GameException e) {
-            System.out.printf(e.getMessage());
+            System.out.printf(e.getMessage() + "\n");
         }
     }
 
@@ -129,31 +129,69 @@ class GameModelTest {
     }
 
     @Test
-    void takeStudentsFromCloud() {
+    void moveMotherNature_3() {
+        Island temp = game2.getIslands().get(6);
+        game2.playAssistant(game2.getPlayers().get(0).getAssistants()[9], game2.getPlayers().get(0));
+        game2.setMothernature(5);
+        game2.getIslands().get(5).setTowerColor(Color.WHITE);
+        game2.getIslands().get(6).addStudent(StudentColor.BLUE);
+        game2.getPlayers().get(0).setProfessors(StudentColor.BLUE);
+        game2.moveMotherNature(6, game2.getPlayers().get(0));
+        assertFalse(game2.getIslands().containsValue(temp));
+        assertEquals(game2.getIslands().size(), 11);
+    }
+
+    @Test
+    void moveMotherNature_5() {
+
+    }
+    @Test
+    void takeStudentsFromCloud(){
+        try {
+            game2.getClouds().get(0).addStudent(StudentColor.BLUE);
+            game2.getClouds().get(0).addStudent(StudentColor.BLUE);
+            game2.getClouds().get(0).addStudent(StudentColor.BLUE);
+        } catch (FullCloudException e) {
+
+        }
+        game2.getPlayers().get(0).clearEntrance();
+        game2.takeStudentsFromCloud(game2.getPlayers().get(0), game2.getClouds().get(0),2);
+        int num = 0;
+        for(StudentColor color : game2.getPlayers().get(0).getEntranceStudents().keySet()) {
+            num += game2.getPlayers().get(0).getEntranceStudents().get(color);
+        }
+        assertEquals(3, num);
     }
 
     @Test
     void getSpareCoins() {
+        assertEquals(20, game2.getSpareCoins());
     }
 
     @Test
     void getMotherNature() {
+        assertNotNull(game2.getMotherNature());
     }
 
     @Test
     void getCurrentPlayer() {
+        assertNotNull(game2.getCurrentPlayer());
     }
 
     @Test
     void setCurrentPlayer() {
+        game2.setCurrentPlayer(game2.getPlayers().get(1));
+        assertEquals(game2.getCurrentPlayer(), game2.getPlayers().get(1));
     }
 
     @Test
     void getWinner() {
+        assertNull(game2.getWinner());
     }
 
     @Test
-    void isLegal() {
+    void gets() {
+        assertNull(game2.getWinner());
     }
 
 }

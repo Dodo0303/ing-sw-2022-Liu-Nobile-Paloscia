@@ -87,18 +87,12 @@ public class Island {
     /**
      * Calculate the influence of a certain player given his professors and color
      * @param player player of which we want to calculate the influence on the island
-     * @return the influence that the player has on the island
+     * @return the influence the player has on the island
      */
     public int calculateInfluence(Player player) {
-        //TODO Una carta personaggio modifica questo comportamento. Potremmo dover sostituire l'algoritmo con una classe, vedi pattern strategy
-        int result = 0;
-        if (_towerColor == player.getColor())
-            result += _numTower;
-        for (StudentColor color :
-                player.getProfessors()) {
-            result += _students.get(color);
-        }
-        return result;
+        //TODO special cases
+        StandardInfluenceCalculator calculator = new StandardInfluenceCalculator();
+        return calculator.calculateInfluence(player, this);
     }
 
     /** The color of tower(s) on THIS island. */

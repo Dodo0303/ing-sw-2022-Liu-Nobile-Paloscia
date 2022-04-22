@@ -46,7 +46,7 @@ public class GameModel {
         }
         for(int i = 0; i < 12; i++) {
             _islands.put(i, new Island());
-            if (i != _motherNature && i != oppositeMothernature()) {
+            if (i != _motherNature && i != ((_motherNature < 6)? _motherNature + 6 : _motherNature - 6)) {
                 rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
                 _islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
             }
@@ -184,12 +184,6 @@ public class GameModel {
         }
     }
 
-    /**@return the opposite index of mothernature. */
-    int oppositeMothernature() {
-        //TODO
-        return 0;
-    }
-
     /** This is a method for the Action phase.
      * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
      */
@@ -200,7 +194,7 @@ public class GameModel {
                 player.addStudentToEntrance(cloud.extractStudent());
             }
         } catch (EmptyCloudException e) {
-            throw error(e.getMessage());
+            throw error("The cloud is empty");
         }
     }
 
@@ -231,11 +225,11 @@ public class GameModel {
     private void unifyIslands(int x) {
         Island island = _islands.get(x);
         int left = (x > 0) ? x - 1 : _numIslands - 1;
-        if (_islands.get(left).getTowerColor().equals(island.getTowerColor())) {
+        if (island.getTowerColor() != Color.VOID && _islands.get(left).getTowerColor().equals(island.getTowerColor())) {
             mergeIslands(left, x--);
         }
         int right = (x < _numIslands - 1) ? x + 1 : 0;
-        if (_islands.get(right).getTowerColor().equals(island.getTowerColor())) {
+        if (island.getTowerColor() != Color.VOID && _islands.get(right).getTowerColor().equals(island.getTowerColor())) {
             mergeIslands(x, right);
         }
     }
@@ -261,7 +255,7 @@ public class GameModel {
                 _islands.put(i, _islands.get(i + 1)); // move islands after the yth forward by 1.
             }
         }
-        _islands.remove(_numIslands--);
+        _islands.remove(--_numIslands);
     }
 
     /**
@@ -316,11 +310,6 @@ public class GameModel {
      * @return the clouds.*/
     public HashMap<Integer, Island> getIslands() {
         return this._islands;
-    }
-
-    /** @return true iff it would currently be legal for PLAYER to move */
-    boolean isLegal(Player player) {
-        return !_currentPlayer.equals(player);
     }
 
     /** All islands */
