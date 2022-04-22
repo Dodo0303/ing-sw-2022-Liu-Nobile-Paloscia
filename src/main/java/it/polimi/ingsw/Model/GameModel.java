@@ -44,10 +44,12 @@ public class GameModel {
                 twoForEachColor.add(color);
             }
         }
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 12; i++) {
             _islands.put(i, new Island());
-            rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
-            _islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
+            if (i != _motherNature && i != oppositeMothernature()) {
+                rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
+                _islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
+            }
         }
     }
 
@@ -165,7 +167,7 @@ public class GameModel {
     void moveMotherNature(int x, Player player) {
         int distance;
         if (x > _numIslands - 1) {
-            throw error("Illegal movement.");
+            throw error("The chosen island does not exist.");
         } else if (x < _motherNature) {
             distance = x + _numIslands - _motherNature;
         } else if (x > _motherNature) {
@@ -174,12 +176,18 @@ public class GameModel {
             distance = 0;
         }
         if (distance > player.getUsedAssistant().getMaxSteps() || distance == 0) {
-            throw error("Illegal movement.");
+            throw error("The chosen island is too far away!");
         } else {
             _motherNature = x;
             controlIsland(x);
             unifyIslands(x);
         }
+    }
+
+    /**@return the opposite index of mothernature. */
+    int oppositeMothernature() {
+        //TODO
+        return 0;
     }
 
     /** This is a method for the Action phase.
@@ -281,6 +289,12 @@ public class GameModel {
     }
 
     /**
+     * Set current player to PLAYER */
+    void setMothernature(int x) {
+        _motherNature = x;
+    }
+
+    /**
      * @return the winner of current game */
     public Player getWinner() {
         return this._winner;
@@ -296,6 +310,12 @@ public class GameModel {
      * @return the clouds.*/
     public ArrayList<Cloud> getClouds() {
         return this._clouds;
+    }
+
+    /**
+     * @return the clouds.*/
+    public HashMap<Integer, Island> getIslands() {
+        return this._islands;
     }
 
     /** @return true iff it would currently be legal for PLAYER to move */

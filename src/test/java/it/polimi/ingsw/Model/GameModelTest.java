@@ -103,10 +103,29 @@ class GameModelTest {
 
     @Test
     void moveStudentToIsland() {
+        try {
+            game2.moveStudentToIsland(game2.getPlayers().get(0), game2.getIslands().get(0), StudentColor.BLUE);
+            assertEquals(game2.getIslands().get(0).getStudents().get(StudentColor.BLUE), 1);
+        } catch (GameException e) {
+            System.out.printf(e.getMessage());
+        }
     }
 
     @Test
-    void moveMotherNature() {
+    void moveMotherNature_1() {
+        try {
+            game2.moveMotherNature(100, game2.getPlayers().get(0));
+        } catch (GameException e) {
+            System.out.printf(e.getMessage());
+        }
+    }
+
+    @Test
+    void moveMotherNature_2() {
+        game2.playAssistant(game2.getPlayers().get(0).getAssistants()[9], game2.getPlayers().get(0));
+        game2.setMothernature(5);
+        game2.moveMotherNature(10, game2.getPlayers().get(0));
+        assertEquals(game2.getMotherNature(), game2.getIslands().get(10));
     }
 
     @Test
