@@ -119,7 +119,7 @@ public class GameModel {
     void playAssistant(Assistant assistant, Player player) {
         for (Player p : _players) {
             if (p != player && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps()) {
-                throw new GameException("The card is being used.");
+                throw error("The card is being used.");
             }
         }
         player.useAssistant(assistant);
