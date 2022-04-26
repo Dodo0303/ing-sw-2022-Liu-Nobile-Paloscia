@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +30,16 @@ public class EriantysServer {
 
     public ArrayList<MatchController> getCurrentMatches() {
         return new ArrayList<>(this.currentMatches);
+    }
+
+    public List<MatchController> getMatchmakingMatches() {
+        List<MatchController> res = new ArrayList<>();
+        for (MatchController match :
+                currentMatches) {
+            if (match.getStatus() == MatchStatus.MATCHMAKING)
+                res.add(match);
+        }
+        return res;
     }
 
     public ArrayList<ClientHandler> getClients() {
