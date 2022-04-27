@@ -21,7 +21,12 @@ class StandardInfluenceCalculator implements influenceCalculator {
 class SpecialInfluenceCalculator implements influenceCalculator {
     @Override
     public int calculateInfluence(Player player, Island island) {
-        //TODO
-        return 0;
+        int result = 0;
+
+        for (StudentColor color :
+                player.getProfessors()) {
+            result += island.getStudents().get(color);
+        }
+        return result;
     }
 }
