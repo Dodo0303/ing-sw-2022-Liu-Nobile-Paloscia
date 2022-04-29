@@ -12,6 +12,8 @@ public class MatchController implements Runnable {
 
     private GameModel game;
 
+    private InfluenceCalculator influenceCalculator;
+
     public MatchController(int totalMatchPlayers) {
         this.totalMatchPlayers = totalMatchPlayers;
         this.clients = new ClientHandler[this.totalMatchPlayers];

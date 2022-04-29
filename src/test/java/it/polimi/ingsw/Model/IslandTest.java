@@ -167,7 +167,7 @@ class IslandTest {
         assertEquals(color, i.getTowerColor());
         assertEquals(1, i.getNumTower());
     }
-
+/*
     @Test
     public void testCalculateInfluence_EmptyIslandVoidTower() {
         Island i = new Island();
@@ -200,5 +200,5 @@ class IslandTest {
         }
         assertEquals(StudentColor.values().length + 1, i.calculateInfluence(p));
     }
-
+*/
 }

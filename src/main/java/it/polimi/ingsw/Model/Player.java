@@ -154,7 +154,7 @@ public class Player {
 
 
     /** Return the color I am currently playing. */
-    Color getColor() {
+    public Color getColor() {
         return this._color;
     }
 
@@ -184,7 +184,7 @@ public class Player {
 
     /** The getter of _professors
      * @return the numbers of professors of each color. */
-    List<StudentColor> getProfessors() {
+    public List<StudentColor> getProfessors() {
         return new ArrayList<>(this._professors);
     }
 
@@ -253,7 +253,7 @@ public class Player {
     private List<StudentColor> _professors;
 
     /** The numbers of students in entrance of each color. */
-    private HashMap<StudentColor, Integer> _entranceStudents;
+    private HashMap<StudentColor, Integer> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
 
     /** Max amount of students in the entrance */
     private int _maxEntranceStudents;

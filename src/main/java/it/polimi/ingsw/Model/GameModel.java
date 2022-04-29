@@ -162,8 +162,10 @@ public class GameModel {
         island.addStudent(student);
     }
 
+
     /** This is a method for the Action phase.
      * Player PLAYER moves mothernature to xth island and try to control/conquer the xth island. */
+    /* TODO Move to controller
     void moveMotherNature(int x, Player player) {
         int distance;
         if (x > _numIslands - 1) {
@@ -183,7 +185,7 @@ public class GameModel {
             unifyIslands(x);
         }
     }
-
+    */
     /** This is a method for the Action phase.
      * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
      */
@@ -201,6 +203,7 @@ public class GameModel {
     /** First, check if the xth island can be controlled/conquered.
      * If positive, then the color with most influence controls the island ISLAND.
      * If negative, do nothing. */
+    /* TODO Move to controller
     private void controlIsland(int x) {
         Island island = _islands.get(x);
         int influence;
@@ -218,7 +221,7 @@ public class GameModel {
         }
 
     }
-
+    */
     /** First, check if the xth island can merge any adjacent island.
      * If positive, then call mergeIslands().
      * If negative, do nothing. */

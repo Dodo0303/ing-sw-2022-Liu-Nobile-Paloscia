@@ -84,17 +84,6 @@ public class Island {
         return new HashMap<>(_students);
     }
 
-    /**
-     * Calculate the influence of a certain player given his professors and color
-     * @param player player of which we want to calculate the influence on the island
-     * @return the influence the player has on the island
-     */
-    public int calculateInfluence(Player player) {
-        //TODO special cases
-        StandardInfluenceCalculator calculator = new StandardInfluenceCalculator();
-        return calculator.calculateInfluence(player, this);
-    }
-
     /** The color of tower(s) on THIS island. */
     private Color _towerColor;
 
