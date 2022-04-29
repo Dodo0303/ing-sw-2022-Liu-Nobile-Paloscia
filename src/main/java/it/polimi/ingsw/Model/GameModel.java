@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 import static it.polimi.ingsw.Model.GameException.error;
 
@@ -26,6 +24,7 @@ public class GameModel {
         initializeIslands();
         initializePlayers(wizards, numOfPlayers);
         initializeClouds(numOfPlayers);
+        initializeInfluences();
         setEntranceStudents(numOfPlayers);
         Random randomMothernature = new Random();
         _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature.
@@ -72,6 +71,18 @@ public class GameModel {
             _players.add(new Player(Color.WHITE, wizards[1], numOfPlayers));
             _players.add(new Player(Color.BLACK, wizards[2], numOfPlayers));
             _players.add(new Player(Color.BLACK, wizards[3], numOfPlayers));
+        }
+    }
+
+    /**
+     * Initialize the map of influences with all zeros
+     */
+    private void initializeInfluences() {
+        influences = new HashMap<>();
+        for (Island island :
+                _islands.values()) {
+            Integer[] values = {0,0,0,0};
+            influences.put(island, values);
         }
     }
 
@@ -291,6 +302,11 @@ public class GameModel {
         _motherNature = x;
     }
 
+    public void setInfluences(Island island, Integer[] influences) {
+        if (this.influences.replace(island, influences) == null)
+            throw new IllegalArgumentException("The island doesn't exists");
+    }
+
     /**
      * @return the winner of current game */
     public Player getWinner() {
@@ -310,9 +326,32 @@ public class GameModel {
     }
 
     /**
-     * @return the clouds.*/
+     * @return the islands.*/
     public HashMap<Integer, Island> getIslands() {
         return this._islands;
+    }
+
+    /**
+     *
+     * @param island island of interest
+     * @return the influence of each player in that island
+     */
+    public List<Integer> getInfluences(Island island) {
+        List<Integer> res = new ArrayList<Integer>();
+        Integer[] values = influences.get(island);
+        Collections.addAll(res, values);
+        return res;
+    }
+
+    /**
+     * Return the influence of a certain player in a certain island
+     * @param island island of interest
+     * @param player player of interest
+     * @return the influence of that player in that island
+     */
+    public int getInfluenceOfPlayer(Island island, Player player) {
+        int index = _players.indexOf(player);
+        return influences.get(island)[index];
     }
 
     /** All islands */
@@ -341,4 +380,9 @@ public class GameModel {
 
     /** Clouds on board */
     private ArrayList<Cloud> _clouds;
+
+    /**
+     * Maps each island with an array of integers representing the influence of each player in that island
+     */
+    private Map<Island, Integer[]> influences;
 }

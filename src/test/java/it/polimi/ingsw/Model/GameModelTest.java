@@ -110,7 +110,7 @@ class GameModelTest {
             System.out.printf(e.getMessage() + "\n");
         }
     }
-
+    /*
     @Test
     void moveMotherNature_1() {
         try {
@@ -145,6 +145,8 @@ class GameModelTest {
     void moveMotherNature_5() {
 
     }
+
+     */
     @Test
     void takeStudentsFromCloud(){
         try {
