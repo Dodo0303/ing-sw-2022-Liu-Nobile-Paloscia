@@ -1,4 +1,4 @@
-#SUPPLEMENTARY NOTES
+# SUPPLEMENTARY NOTES
 - Clients cannot update their local copy of the model until they receive an ACK from the server that approves a certain 
 action. This guarantees consistency of the models during the match. Messages sent from server instead do not expect an ACK. 
 Each ACK is broadcasted to all clients of that match (except for the NickResponseMessage, which is not broadcasted).
