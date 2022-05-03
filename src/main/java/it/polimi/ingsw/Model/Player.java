@@ -1,10 +1,12 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Exceptions.EmptyTableException;
+import it.polimi.ingsw.Exceptions.FullTableException;
+import it.polimi.ingsw.Exceptions.GameException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static it.polimi.ingsw.Model.GameException.error;
 
 /**  A new player. */
 

@@ -1,7 +1,8 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Exceptions.GameException;
+
 import java.util.HashMap;
-import java.util.List;
 
 public class Island {
 

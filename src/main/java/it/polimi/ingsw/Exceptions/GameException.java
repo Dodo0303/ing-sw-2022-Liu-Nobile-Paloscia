@@ -1,17 +1,17 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Exceptions;
 
 public class GameException extends RuntimeException{
 
     /** A GameException with no message. */
-    GameException() {
+    public GameException() {
     }
 
     /** A GameException for which .getMessage() is MSG. */
-    GameException(String msg) {
+    public GameException(String msg) {
         super(msg);
     }
 
-    static GameException error(String format, Object... args) {
+    public static GameException error(String format, Object... args) {
         return new GameException(String.format(format, args));
     }
 }

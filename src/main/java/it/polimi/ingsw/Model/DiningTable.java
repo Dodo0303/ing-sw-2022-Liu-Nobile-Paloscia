@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Exceptions.EmptyTableException;
+import it.polimi.ingsw.Exceptions.FullTableException;
+
 public class DiningTable {
     private final StudentColor color;
     private int numOfStudents;

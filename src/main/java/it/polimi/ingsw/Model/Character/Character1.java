@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model.Character;
 
 import it.polimi.ingsw.Model.StudentColor;
-import it.polimi.ingsw.Model.WrongEffectException;
+import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.ArrayList;
 import java.util.Collections;

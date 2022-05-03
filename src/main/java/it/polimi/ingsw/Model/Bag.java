@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Exceptions.EmptyBagException;
+import it.polimi.ingsw.Exceptions.TooManyStudentsException;
+
 import java.util.HashMap;
 import java.util.Random;
 

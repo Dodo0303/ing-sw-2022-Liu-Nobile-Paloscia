@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Model;
 
 
+import it.polimi.ingsw.Exceptions.EmptyCloudException;
+import it.polimi.ingsw.Exceptions.FullCloudException;
+
 import java.util.ArrayList;
 
 

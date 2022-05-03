@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Exceptions;
 
 public class FullTableException extends Exception{
 

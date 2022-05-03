@@ -1,8 +1,10 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Exceptions.*;
+
 import java.util.*;
 
-import static it.polimi.ingsw.Model.GameException.error;
+import static it.polimi.ingsw.Exceptions.GameException.error;
 
 /** A new game.
  */

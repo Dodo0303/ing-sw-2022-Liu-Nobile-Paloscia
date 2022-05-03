@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.Exceptions.EmptyTableException;
+import it.polimi.ingsw.Exceptions.FullTableException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
