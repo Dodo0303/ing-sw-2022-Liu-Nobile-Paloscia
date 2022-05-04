@@ -28,6 +28,11 @@ public class MatchController implements Runnable {
 
     public Wizard[] getWizards() { return this.wizards.clone(); }
 
+    public GameModel getGame() {
+        return this.game;
+    }
+
+
     public synchronized void addPlayer(ClientHandler client) throws MatchMakingException {
         if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException();
         clients[this.currentPlayersNumber] = client;
@@ -134,7 +139,7 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * Player PLAYER moves mothernature to xth island and try to control/conquer the xth island. */
 
-    void moveMotherNature(int x, Player player) {
+    public void moveMotherNature(int x, Player player) {
         int distance;
         if (x > getGame().getNumIslands() - 1) {
             throw error("The chosen island does not exist.");
@@ -227,10 +232,5 @@ public class MatchController implements Runnable {
         }
         getGame().getIslands().remove(getGame().setNumIslands(getGame().getNumIslands()) - 1);
     }
-
-    public GameModel getGame() {
-        return this.game;
-    }
-
 
 }
