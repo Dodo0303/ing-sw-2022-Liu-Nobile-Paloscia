@@ -113,167 +113,6 @@ public class GameModel {
         }
     }
 
-    /** This is a method for the Planning phase.
-     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the 2nd and 3rd cloud tiles.
-     */
-    void addStudentsToCloud(Cloud cloud, int numOfPlayers){
-        int x = (numOfPlayers == 3)? 4 : 3;
-        try {
-            for (int i = 0; i < x; i++) {
-                cloud.addStudent(_bag.extractStudent());
-            }
-        } catch (FullCloudException e1) {
-            throw error("the cloud is full.");
-        } catch (EmptyBagException e2) {
-            throw error("the bag is empty.");
-        }
-    }
-
-    /** This is a method for the Planning phase.
-     * Player PLAYER plays the assistant card ASSISTANT when other players are not playing the same card.
-     */
-    void playAssistant(Assistant assistant, Player player) {
-        for (Player p : _players) {
-            if (p != player && (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps())) {
-                throw error("The card is being used.");
-            }
-        }
-        player.useAssistant(assistant);
-    }
-
-    //!The following two methods implement game logic, should we move them to GameController?
-    // YL : My thought was that the Game controller calls these methods when needed,
-    // such as Game g = new Game()
-    // g.moveStudentTODiningRoom(player, student)
-    // etc...
-    // In this case, we dont need to pass Game g to them every time we use them like moveStudentTODiningRoom(g, g.player, g.student)
-    /** This is a method for the Action phase.
-     * The player PLAYER moves a student to the correspondent dining room.
-     */
-    void moveStudentToDiningRoom(Player player, StudentColor student) {
-        try{
-            try{
-                player.removeStudentFromEntrance(student);
-            } catch (GameException e1) {
-                throw error(e1.getMessage());
-            }
-            player.addToDiningTable(student);
-        } catch (FullTableException e2) {
-            throw error("The dining table is full.");
-        }
-    }
-
-    /** This is a method for the Action phase.
-     * The player PLAYER moves a student to the island ISLAND.
-     */
-    void moveStudentToIsland(Player player, Island island, StudentColor student) {
-        try {
-            player.removeStudentFromEntrance(student);
-        } catch (GameException e1) {
-            throw error(e1.getMessage());
-        }
-        island.addStudent(student);
-    }
-
-
-    /** This is a method for the Action phase.
-     * Player PLAYER moves mothernature to xth island and try to control/conquer the xth island. */
-    /* TODO Move to controller
-    void moveMotherNature(int x, Player player) {
-        int distance;
-        if (x > _numIslands - 1) {
-            throw error("The chosen island does not exist.");
-        } else if (x < _motherNature) {
-            distance = x + _numIslands - _motherNature;
-        } else if (x > _motherNature) {
-            distance = x - _motherNature;
-        } else {
-            distance = 0;
-        }
-        if (distance > player.getUsedAssistant().getMaxSteps() || distance == 0) {
-            throw error("The chosen island is too far away!");
-        } else {
-            _motherNature = x;
-            controlIsland(x);
-            unifyIslands(x);
-        }
-    }
-    */
-    /** This is a method for the Action phase.
-     * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
-     */
-    void takeStudentsFromCloud(Player player, Cloud cloud, int numOfPlayers) {
-        int x = (numOfPlayers == 3)? 4 : 3;
-        try {
-            for (int i = 0; i < x; i++) {
-                player.addStudentToEntrance(cloud.extractStudent());
-            }
-        } catch (EmptyCloudException e) {
-            throw error("The cloud is empty");
-        }
-    }
-
-    /** First, check if the xth island can be controlled/conquered.
-     * If positive, then the color with most influence controls the island ISLAND.
-     * If negative, do nothing. */
-    /* TODO Move to controller
-    private void controlIsland(int x) {
-        Island island = _islands.get(x);
-        int influence;
-        int maxInfluence = 0;
-        Player maxInfluencer = null;
-        for (int i = 0; i < _players.size(); i++) {
-            influence = island.calculateInfluence(_players.get(i));
-            if (influence > maxInfluence) {
-                maxInfluencer = _players.get(i);
-                maxInfluence = influence;
-            }
-        }
-        if (maxInfluencer != null) {
-            island.setTowerColor(maxInfluencer.getColor());
-        }
-
-    }
-    */
-    /** First, check if the xth island can merge any adjacent island.
-     * If positive, then call mergeIslands().
-     * If negative, do nothing. */
-    private void unifyIslands(int x) {
-        Island island = _islands.get(x);
-        int left = (x > 0) ? x - 1 : _numIslands - 1;
-        if (island.getTowerColor() != Color.VOID && _islands.get(left).getTowerColor().equals(island.getTowerColor())) {
-            mergeIslands(left, x--);
-        }
-        int right = (x < _numIslands - 1) ? x + 1 : 0;
-        if (island.getTowerColor() != Color.VOID && _islands.get(right).getTowerColor().equals(island.getTowerColor())) {
-            mergeIslands(x, right);
-        }
-    }
-
-
-    /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
-     * @param x the index of one of the islands to be merged.
-     * @param y the index of one of the islands to be merged.
-     */
-    private void mergeIslands(int x, int y) {
-        if (x == _numIslands - 1) {
-            _islands.get(y).copyFrom(_islands.get(x));
-            if (x == _motherNature) {
-                _motherNature = y;
-            }
-        }
-        else {
-            _islands.get(x).copyFrom(_islands.get(y));
-            if (y == _motherNature) {
-                _motherNature = x;
-            }
-            for (int i = y; i < _numIslands - 1; i++) {
-                _islands.put(i, _islands.get(i + 1)); // move islands after the yth forward by 1.
-            }
-        }
-        _islands.remove(--_numIslands);
-    }
-
     /**
      * @return number of coins not obtained by any player */
     int getSpareCoins() {
@@ -298,39 +137,50 @@ public class GameModel {
         _currentPlayer = player;
     }
 
-    /**
-     * Set current player to PLAYER */
-    void setMothernature(int x) {
+
+    /** * Set current player to PLAYER */
+    public void setMothernature(int x) {
         _motherNature = x;
     }
-
     public void setInfluences(Island island, Integer[] influences) {
         if (this.influences.replace(island, influences) == null)
             throw new IllegalArgumentException("The island doesn't exists");
     }
 
-    /**
-     * @return the winner of current game */
-    public Player getWinner() {
-        return this._winner;
+    /** * Set _numIslands to x, then return it.*/
+    public int setNumIslands(int x) {
+        _numIslands = x;
+        return this._numIslands;
     }
 
-    /**
-     * @return the players.*/
+    /** @return the players.*/
     public ArrayList<Player> getPlayers() {
         return this._players;
     }
 
-    /**
-     * @return the clouds.*/
+    /** @return the clouds.*/
     public ArrayList<Cloud> getClouds() {
         return this._clouds;
     }
 
-    /**
-     * @return the islands.*/
+    /** @return the islands.*/
     public HashMap<Integer, Island> getIslands() {
         return this._islands;
+    }
+
+    /** @return _bag.*/
+    public Bag getBag() {
+        return this._bag;
+    }
+
+    /** @return _numIslands.*/
+    public int getNumIslands() {
+        return this._numIslands;
+    }
+
+    /** @return _motherNature.*/
+    public int getMotherNatureIndex() {
+        return this._motherNature;
     }
 
     /**
@@ -356,6 +206,7 @@ public class GameModel {
         return influences.get(island)[index];
     }
 
+
     /** All islands */
     private HashMap<Integer, Island> _islands;
 
@@ -367,9 +218,6 @@ public class GameModel {
 
     /** Current player */
     private Player _currentPlayer;
-
-    /** The winner of current game */
-    private Player _winner;
 
     /** Number of islands (merged islands count as 1) */
     private int _numIslands;

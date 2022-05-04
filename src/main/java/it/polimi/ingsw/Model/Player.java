@@ -105,7 +105,7 @@ public class Player {
     }
 
     /** Add one student of StudentCOLOR color to THIS PLAYER. */
-    void addStudentToEntrance(StudentColor color) {
+    public void addStudentToEntrance(StudentColor color) {
         int num = 0;
         for(StudentColor student : StudentColor.values()) {
             num += this._entranceStudents.get(student);
@@ -117,7 +117,7 @@ public class Player {
     }
 
     /** Remove one student of StudentCOLOR color from THIS PLAYER. */
-    void removeStudentFromEntrance(StudentColor color) {
+    public void removeStudentFromEntrance(StudentColor color) {
         if (this._entranceStudents.get(color) > 0) {
             this._entranceStudents.put(color,  this._entranceStudents.get(color) - 1);
         } else {
@@ -127,7 +127,7 @@ public class Player {
 
     /** Use an assistant card.
      * @return the assistant card chosen by THIS player. */
-    Assistant useAssistant(Assistant assistant) {
+    public Assistant useAssistant(Assistant assistant) {
         int index = assistant.getValue()-1;
         Assistant res = _assistant[index];
         if (res == null)
@@ -138,7 +138,7 @@ public class Player {
     }
 
     /** Add student to the correspondent dining table. */
-    void addToDiningTable(StudentColor color) throws FullTableException {
+    public void addToDiningTable(StudentColor color) throws FullTableException {
         this._diningTable.get(color).addStudent();
     }
 
@@ -209,7 +209,7 @@ public class Player {
 
     /** The getter of _usedAssistant.
      * @return last used assistant */
-    Assistant getUsedAssistant() {
+    public Assistant getUsedAssistant() {
         return this._lastUsedAssistant;
     }
 

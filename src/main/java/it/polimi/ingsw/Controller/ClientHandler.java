@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Model.Wizard;
 
 import java.net.Socket;
@@ -40,6 +41,10 @@ public class ClientHandler implements Runnable {
     public boolean wizardAvailable() {
         //TODO
         return true;
+    }
+
+    public MatchController getMatch() {
+        return this.match;
     }
 
     public Wizard getWizard() { return this.wizard; }
