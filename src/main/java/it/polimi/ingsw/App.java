@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Controller.MatchController;
+
 import static it.polimi.ingsw.Utilities.*;
 
 /** The Eriantys game. FOR NOW, ONLY 2-PERSON GAME IS IMPLEMENTED.
@@ -14,7 +16,7 @@ public class App {
         if (inputLength == 0) {
             System.out.println("Please enter a command.");
         } else {
-            GameController game;
+            MatchController game;
             switch (args[0]) {
                 case "cli": {
                     //TODO
@@ -32,8 +34,8 @@ public class App {
                 }
 
                 default: {
-                    game = new GameController(2);
-                    System.exit(game.play());
+                    game = new MatchController(2);
+                    //System.exit(game.run());
                 }
             }
         }

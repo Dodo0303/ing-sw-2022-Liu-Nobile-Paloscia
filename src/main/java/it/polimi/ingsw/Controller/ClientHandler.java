@@ -20,12 +20,6 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
     }
 
-    public int getPlayerID() {
-        return this.playerID;
-    }
-
-    public String getNickname() { return this.nickname; }
-
     /**
      * When an object implementing interface <code>Runnable</code> is used
      * to create a thread, starting the thread causes the object's
@@ -52,4 +46,10 @@ public class ClientHandler implements Runnable {
     }
 
     public Wizard getWizard() { return this.wizard; }
+
+    public int getPlayerID() {
+        return this.playerID;
+    }
+
+    public String getNickname() { return this.nickname; }
 }

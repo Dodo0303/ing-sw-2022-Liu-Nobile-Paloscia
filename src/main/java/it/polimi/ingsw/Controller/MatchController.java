@@ -32,6 +32,10 @@ public class MatchController implements Runnable {
         return this.game;
     }
 
+    public int getTotalMatchPlayers() {
+        return this.totalMatchPlayers;
+    }
+
 
     public synchronized void addPlayer(ClientHandler client) throws MatchMakingException {
         if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException();
@@ -110,7 +114,7 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the correspondent dining room.
      */
-    void moveStudentToDiningRoom(Player player, StudentColor student) {
+    public void moveStudentToDiningRoom(Player player, StudentColor student) {
         try{
             try{
                 player.removeStudentFromEntrance(student);
@@ -126,7 +130,7 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the island ISLAND.
      */
-    void moveStudentToIsland(Player player, Island island, StudentColor student) {
+    public void moveStudentToIsland(Player player, Island island, StudentColor student) {
         try {
             player.removeStudentFromEntrance(student);
         } catch (GameException e1) {
@@ -162,7 +166,7 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
      */
-    void takeStudentsFromCloud(Player player, Cloud cloud, int numOfPlayers) {
+    public void takeStudentsFromCloud(Player player, Cloud cloud, int numOfPlayers) {
         int x = (numOfPlayers == 3)? 4 : 3;
         try {
             for (int i = 0; i < x; i++) {
@@ -176,7 +180,7 @@ public class MatchController implements Runnable {
     /** First, check if the xth island can be controlled/conquered.
      * If positive, then the color with most influence controls the island ISLAND.
      * If negative, do nothing. */
-    private void controlIsland(int x) {
+    public void controlIsland(int x) {
         Island island = getGame().getIslands().get(x);
         int influence;
         int maxInfluence = 0;
@@ -197,7 +201,7 @@ public class MatchController implements Runnable {
     /** First, check if the xth island can merge any adjacent island.
      * If positive, then call mergeIslands().
      * If negative, do nothing. */
-    private void unifyIslands(int x) {
+    public void unifyIslands(int x) {
         Island island = getGame().getIslands().get(x);
         int left = (x > 0) ? x - 1 : getGame().getNumIslands() - 1;
         if (island.getTowerColor() != Color.VOID && getGame().getIslands().get(left).getTowerColor().equals(island.getTowerColor())) {
@@ -214,7 +218,7 @@ public class MatchController implements Runnable {
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
      */
-    private void mergeIslands(int x, int y) {
+    public void mergeIslands(int x, int y) {
         if (x == getGame().getNumIslands() - 1) {
             getGame().getIslands().get(y).copyFrom(getGame().getIslands().get(x));
             if (x == getGame().getMotherNatureIndex()) {

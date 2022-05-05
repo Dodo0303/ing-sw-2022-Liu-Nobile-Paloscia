@@ -148,7 +148,7 @@ public class Player {
     }
 
     /** Remove all students in entrance. */
-    void clearEntrance() {
+    public void clearEntrance() {
         for(StudentColor color : _entranceStudents.keySet()) {
             _entranceStudents.put(color, 0);
         }
@@ -191,19 +191,19 @@ public class Player {
     }
 
     /** Set professors. */
-    void setProfessors(StudentColor color) {
+    public void setProfessors(StudentColor color) {
         this._professors.add(color);
     }
 
     /** The getter of _entranceStudents
      * @return the numbers of students in entrance of each color.*/
-    HashMap<StudentColor, Integer> getEntranceStudents() {
+    public HashMap<StudentColor, Integer> getEntranceStudents() {
         return this._entranceStudents;
     }
 
     /** The getter of _assistant.
      * @return unused assistants of THIS player. */
-    Assistant[] getAssistants() {
+    public Assistant[] getAssistants() {
         return this._assistant;
     }
 
@@ -216,7 +216,7 @@ public class Player {
 
     /** The getter of DiningTables.
     * @return the dining tables. */
-    HashMap<StudentColor, DiningTable> getDiningTables() {
+    public HashMap<StudentColor, DiningTable> getDiningTables() {
         return new HashMap<>(this._diningTable);
     }
 

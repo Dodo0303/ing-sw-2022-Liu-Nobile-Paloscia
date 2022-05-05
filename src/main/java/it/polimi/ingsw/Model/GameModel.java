@@ -121,7 +121,7 @@ public class GameModel {
 
     /**
      * @return the island with mothernature */
-    Island getMotherNature() {
+    public Island getMotherNature() {
         return _islands.get(_motherNature);
     }
 
