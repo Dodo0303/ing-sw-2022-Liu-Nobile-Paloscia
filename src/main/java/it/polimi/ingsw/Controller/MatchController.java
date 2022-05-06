@@ -3,6 +3,8 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
+import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.util.Map;
@@ -89,15 +91,33 @@ public class MatchController implements Runnable {
         //TODO
     }
 
+    /**
+     * This method checks wether the sender of a message is the current player, and sends the message to the correct handler
+     * @param msg message sended by a player
+     * @param sender handler of the player who sent the message
+     */
     public void process(MessageToServer msg, ClientHandler sender){
         //Check that the sender is the current player
         if (isCurrent(sender)){
-            gamePhase.process(msg);
+            gamePhase.process(msg, sender);
         }
     }
 
+    /**
+     * @param ch handler of the player that has to be checked
+     * @return wether the player is the current one or not
+     */
     private boolean isCurrent(ClientHandler ch){
         return ch.getNickname().equals(game.getCurrentPlayerNickname());
+    }
+
+    /**
+     * Send to a player a message that denies its last movement
+     * @param ch handler of the player
+     */
+    public void denyMovement(ClientHandler ch){
+        MessageToClient msg = new DenyMovementMessage();
+        //TODO ch.sendMessage(msg);
     }
 
     /** This is a method for the Planning phase.

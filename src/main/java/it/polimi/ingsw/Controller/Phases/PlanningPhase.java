@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller.Phases;
 
+import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Controller.MatchController;
 import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
@@ -11,14 +12,14 @@ public class PlanningPhase extends Phase{
         super(match);
     }
 
-    public void process(MessageToServer msg) {
+    public void process(MessageToServer msg, ClientHandler ch) {
         if (!(msg instanceof SendAssistantMessage)) {
-            //TODO match.sendIllegalMovement();
+            match.denyMovement(ch);
         } else {
             try {
                 match.setAssistantOfCurrentPlayer(((SendAssistantMessage) msg).getAssistant());
             } catch (GameException e) {
-                //TODO match.sendIllegalMovement();
+                match.denyMovement(ch);
             }
 
         }
