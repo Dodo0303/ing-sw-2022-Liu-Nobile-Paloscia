@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.util.Map;
 
@@ -13,6 +15,7 @@ public class MatchController implements Runnable {
     private int currentPlayersNumber;
     private final ClientHandler[] clients;
     private final Wizard[] wizards;
+    private Phase gamePhase;
 
     private GameModel game;
 
@@ -24,6 +27,7 @@ public class MatchController implements Runnable {
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
         this.wizards = new Wizard[this.totalMatchPlayers];
+        //TODO Initial game phase
     }
 
     public MatchStatus getStatus() { return this.matchStatus; }
@@ -83,6 +87,17 @@ public class MatchController implements Runnable {
         gameSetup();
 
         //TODO
+    }
+
+    public void process(MessageToServer msg, ClientHandler sender){
+        //Check that the sender is the current player
+        if (isCurrent(sender)){
+            gamePhase.process(msg);
+        }
+    }
+
+    private boolean isCurrent(ClientHandler ch){
+        return ch.getNickname().equals(game.getCurrentPlayerNickname());
     }
 
     /** This is a method for the Planning phase.

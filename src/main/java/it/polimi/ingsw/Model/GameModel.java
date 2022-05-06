@@ -210,6 +210,10 @@ public class GameModel {
         _currentPlayer.useAssistant(assistant);
     }
 
+    public String getCurrentPlayerNickname() {
+       return _currentPlayer.getNickName();
+    }
+
 
     /** All islands */
     private HashMap<Integer, Island> _islands;
