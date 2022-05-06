@@ -1,17 +1,18 @@
 package it.polimi.ingsw.Network.Messages.toServer.PlanningPhase;
 
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Model.Assistant;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 public class SendAssistantMessage extends MessageToServer {
-    private int assistantValue;
+    private Assistant assistant;
 
     public SendAssistantMessage(int assistantValue) {
-        this.assistantValue = assistantValue;
+        this.assistant = assistant;
     }
 
-    public int getAssistant() {
-        return assistantValue;
+    public Assistant getAssistant() {
+        return assistant;
     }
 
     @Override

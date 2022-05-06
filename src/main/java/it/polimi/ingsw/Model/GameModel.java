@@ -206,6 +206,10 @@ public class GameModel {
         return influences.get(island)[index];
     }
 
+    public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException{
+        _currentPlayer.useAssistant(assistant);
+    }
+
 
     /** All islands */
     private HashMap<Integer, Island> _islands;

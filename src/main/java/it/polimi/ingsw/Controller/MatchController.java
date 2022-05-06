@@ -3,6 +3,8 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 
+import java.util.Map;
+
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
 public class MatchController implements Runnable {
@@ -235,6 +237,10 @@ public class MatchController implements Runnable {
             }
         }
         getGame().getIslands().remove(getGame().setNumIslands(getGame().getNumIslands()) - 1);
+    }
+
+    public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException{
+        game.setAssistantOfCurrentPlayer(assistant);
     }
 
 }
