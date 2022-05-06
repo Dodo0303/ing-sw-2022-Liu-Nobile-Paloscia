@@ -7,7 +7,7 @@ import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 public class SendAssistantMessage extends MessageToServer {
     private Assistant assistant;
 
-    public SendAssistantMessage(int assistantValue) {
+    public SendAssistantMessage(Assistant assistant) {
         this.assistant = assistant;
     }
 
