@@ -92,20 +92,20 @@ public class MatchController implements Runnable {
     }
 
     /**
-     * This method checks wether the sender of a message is the current player, and sends the message to the correct handler
-     * @param msg message sended by a player
+     * This method checks whether the sender of a message is the current player, and sends the message to the correct handler
+     * @param msg message sent by a player
      * @param sender handler of the player who sent the message
      */
     public void process(MessageToServer msg, ClientHandler sender){
         //Check that the sender is the current player
-        if (isCurrent(sender)){
+        if (isCurrent(sender)) {
             gamePhase.process(msg, sender);
         }
     }
 
     /**
      * @param ch handler of the player that has to be checked
-     * @return wether the player is the current one or not
+     * @return whether the player is the current one or not
      */
     private boolean isCurrent(ClientHandler ch){
         return ch.getNickname().equals(game.getCurrentPlayerNickname());
