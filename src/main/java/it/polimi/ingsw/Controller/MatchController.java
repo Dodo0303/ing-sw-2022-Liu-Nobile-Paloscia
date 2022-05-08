@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.*;
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
 public class MatchController implements Runnable {
+    //TODO Add match id
     private MatchStatus matchStatus;
     private final int totalMatchPlayers;
     private int currentPlayersNumber;
