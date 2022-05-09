@@ -4,19 +4,24 @@ import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
 public class MatchController implements Runnable {
+
     private MatchStatus matchStatus;
     private final int totalMatchPlayers;
     private int currentPlayersNumber;
+    private String currentPlayer;
     private final ArrayList<ClientHandler> clients;
     private final Wizard[] wizards;
     private Phase gamePhase;
@@ -33,7 +38,6 @@ public class MatchController implements Runnable {
         this.wizards = new Wizard[this.totalMatchPlayers];
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
-        //TODO Initial game phase
     }
 
 
@@ -49,6 +53,9 @@ public class MatchController implements Runnable {
         return this.totalMatchPlayers;
     }
 
+    public String getCurrentPlayerID() {
+        return currentPlayer;
+    }
 
     // PLAYERS
 
@@ -83,6 +90,7 @@ public class MatchController implements Runnable {
     private void gameSetup() {
 
         int i;
+        String[] nicknames = new String[this.totalMatchPlayers];
 
         for (i=0; i < this.totalMatchPlayers; i++) {
             while (!clients.get(i).wizardAvailable()) {
@@ -92,14 +100,13 @@ public class MatchController implements Runnable {
                     e.printStackTrace();
                 }
             }
+            nicknames[i] = clients.get(i).getNickname();
             this.wizards[i] = clients.get(i).getWizard();
         }
 
-        this.game = new GameModel(wizards, this.totalMatchPlayers);
+        this.game = new GameModel(this.totalMatchPlayers, nicknames, this.wizards);
+
     }
-
-
-    // GAME
 
     /**
      * This method handles the whole match, from initial setup to its end.
@@ -115,25 +122,12 @@ public class MatchController implements Runnable {
 
         gameSetup();
 
-        this.gamePhase = new PlanningPhase(this);   // Match now enters planning phase.
+        int randomFirst = new Random().nextInt(this.totalMatchPlayers);
+        this.currentPlayer = this.game.getPlayers().get(randomFirst).getNickName();
 
-        for (Cloud cloud : this.game.getClouds()) {
-            addStudentsToCloud(cloud, this.totalMatchPlayers);
-        }
+        changeTurn(this.currentPlayer, "planning");
 
-        for (ClientHandler client: clients) {
-            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
-        }
-
-        /*
-        for (int i=0; i < this.totalMatchPlayers; i++) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        */
+        this.gamePhase = new PlanningPhase(this); // Match now enters planning phase.
 
     }
 
@@ -154,7 +148,7 @@ public class MatchController implements Runnable {
      * @return whether the player is the current one or not
      */
     private boolean isCurrent(ClientHandler ch){
-        return ch.getNickname().equals(game.getCurrentPlayerNickname());
+        return ch.getNickname().equals(this.currentPlayer);
     }
 
     /**
@@ -167,7 +161,7 @@ public class MatchController implements Runnable {
     }
 
     /** This is a method for the Planning phase.
-     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the 2nd and 3rd cloud tiles.
+     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the other cloud tiles.
      */
     void addStudentsToCloud(Cloud cloud, int numOfPlayers){
         int x = (numOfPlayers == 3)? 4 : 3;
@@ -179,6 +173,16 @@ public class MatchController implements Runnable {
             throw error("Cloud is full.");
         } catch (EmptyBagException e2) {
             throw error("Bag is empty.");
+        }
+    }
+
+    /**
+     * This is a method for Planning Phase.
+     * It fills each cloud with students.
+     */
+    public void fillClouds() {
+        for (Cloud cloud : this.game.getClouds()) {
+            addStudentsToCloud(cloud, this.totalMatchPlayers);
         }
     }
 
@@ -320,8 +324,19 @@ public class MatchController implements Runnable {
         getGame().getIslands().remove(getGame().setNumIslands(getGame().getNumIslands()) - 1);
     }
 
-    public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException{
-        game.setAssistantOfCurrentPlayer(assistant);
+    public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException {
+        game.setAssistantOfPlayer(this.currentPlayer, assistant);
     }
 
+    public void broadcastClouds() {
+        for (ClientHandler client : this.clients) {
+            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+        }
+    }
+
+    public void changeTurn(String playerNickname, String nextPhase) {
+        for (ClientHandler client : this.clients) {
+            client.send(new ChangeTurnMessage(playerNickname, nextPhase));
+        }
+    }
 }

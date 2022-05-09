@@ -7,12 +7,14 @@ import it.polimi.ingsw.Exceptions.GameException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**  A new player. */
 
 public class Player {
     /** A Player in GAME, initially playing COLOR. */
-    Player(Color color, Wizard wizard, int numOfPlayers) {
+    Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
+        this._nickName = nickname;
         this._color = color;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 0; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
@@ -154,6 +156,18 @@ public class Player {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(_nickName, player._nickName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_nickName);
+    }
 
     /** Return the color I am currently playing. */
     public Color getColor() {
@@ -172,14 +186,9 @@ public class Player {
         return this._coins;
     }
 
-    public void setNickName(String nickname){
-        if (_nickName == null)
-            _nickName = nickname;
-    }
-
     /** The getter of nickname.
      * @return the nickname of THIS PLAYER. */
-    String getNickName() {
+    public String getNickName() {
         return this._nickName;
     }
 

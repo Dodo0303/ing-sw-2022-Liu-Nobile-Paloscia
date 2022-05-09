@@ -18,9 +18,9 @@ class GameModelTest {
         Wizard[] wizards2 = {Wizard.WIZARD1, Wizard.WIZARD2};
         Wizard[] wizards3 = {Wizard.WIZARD1, Wizard.WIZARD2, Wizard.WIZARD3};
         Wizard[] wizards4 = {Wizard.WIZARD1, Wizard.WIZARD2, Wizard.WIZARD3, Wizard.WIZARD4};
-        game2 = new GameModel(wizards2, 2);
-        game3 = new GameModel(wizards3, 3);
-        game4 = new GameModel(wizards4, 4);
+        game2 = new GameModel(2, new String[]{"ciao", "ciao2"}, wizards2);
+        game3 = new GameModel(3, new String[]{"ciao", "ciao2", "ciao3"}, wizards3);
+        game4 = new GameModel(4, new String[]{"ciao", "ciao2", "ciao3", "ciao4"}, wizards4);
     }
 
     @Test
@@ -56,17 +56,6 @@ class GameModelTest {
     @Test
     void getMotherNature() {
         assertNotNull(game2.getMotherNature());
-    }
-
-    @Test
-    void getCurrentPlayer() {
-        assertNotNull(game2.getCurrentPlayer());
-    }
-
-    @Test
-    void setCurrentPlayer() {
-        game2.setCurrentPlayer(game2.getPlayers().get(1));
-        assertEquals(game2.getCurrentPlayer(), game2.getPlayers().get(1));
     }
 
 }

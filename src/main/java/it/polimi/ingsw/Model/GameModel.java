@@ -28,9 +28,6 @@ public class GameModel {
     /** Current players */
     private ArrayList<Player> _players;
 
-    /** Current player */
-    private Player _currentPlayer;
-
     /** Students bag */
     private final Bag _bag;
 
@@ -47,7 +44,7 @@ public class GameModel {
      * @param wizards the wizards chosen by each player.
      * @param numOfPlayers number of players in game. Must be between 2 and 4.
      */
-    public GameModel(Wizard[] wizards, int numOfPlayers) {
+    public GameModel(int numOfPlayers, String[] nicknames, Wizard[] wizards) {
         if (numOfPlayers < 2 || numOfPlayers > 4) {
             throw new GameException();
         }
@@ -56,12 +53,12 @@ public class GameModel {
         _numIslands = 12;
         _motherNature = new Random().nextInt(12); // Automatically choose a random island for mothernature.
         initializeIslands();
-        initializePlayers(wizards, numOfPlayers);
+        initializePlayers(wizards, numOfPlayers, nicknames);
         initializeClouds(numOfPlayers);
         initializeInfluences();
         setEntranceStudents(numOfPlayers);
-        _currentPlayer = _players.get(new Random().nextInt(numOfPlayers)); // Determine the first player at random.
     }
+
 
     // INITIALIZERS
 
@@ -93,20 +90,20 @@ public class GameModel {
      * @param wizards, the array of Wizards chosen by each player.
      * @param numOfPlayers number of player, to decide how many objects must be created.
      */
-    private void initializePlayers(Wizard[] wizards, int numOfPlayers) {
+    private void initializePlayers(Wizard[] wizards, int numOfPlayers, String[] nicknames) {
         _players = new ArrayList<>(numOfPlayers);
         if (numOfPlayers == 2) {
-            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.BLACK, wizards[1], numOfPlayers));
         } else if (numOfPlayers == 3) {
-            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[1], numOfPlayers));
-            _players.add(new Player(Color.GRAY, wizards[2], numOfPlayers));
+            _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.BLACK, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[2], Color.GRAY, wizards[2], numOfPlayers));
         } else if (numOfPlayers == 4) {
-            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(Color.WHITE, wizards[1], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[2], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[3], numOfPlayers));
+            _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.WHITE, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[2], Color.BLACK, wizards[2], numOfPlayers));
+            _players.add(new Player(nicknames[3], Color.BLACK, wizards[3], numOfPlayers));
         }
     }
 
@@ -155,16 +152,6 @@ public class GameModel {
     /** @return the island with mothernature */
     public Island getMotherNature() {
         return _islands.get(_motherNature);
-    }
-
-    /** @return the current player */
-    Player getCurrentPlayer() {
-        return this._currentPlayer;
-    }
-
-    /** Set current player to PLAYER */
-    void setCurrentPlayer(Player player) {
-        _currentPlayer = player;
     }
 
 
@@ -236,12 +223,12 @@ public class GameModel {
         return influences.get(island)[index];
     }
 
-    public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException {
-        _currentPlayer.useAssistant(assistant);
+    public void setAssistantOfPlayer(String playerNickname, Assistant assistant) {
+        for (Player player : _players) {
+            if (player.getNickName().equals(playerNickname)) {
+                player.useAssistant(assistant);
+                break;
+            }
+        }
     }
-
-    public String getCurrentPlayerNickname() {
-       return _currentPlayer.getNickName();
-    }
-
 }
