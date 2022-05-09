@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Model.Wizard;
+import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 import java.net.Socket;
 
@@ -20,17 +21,7 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
     }
 
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
+
     @Override
     public void run() {
 
@@ -39,6 +30,10 @@ public class ClientHandler implements Runnable {
     public boolean wizardAvailable() {
         //TODO
         return true;
+    }
+
+    public void send(MessageToClient msg) {
+
     }
 
     public MatchController getMatch() {

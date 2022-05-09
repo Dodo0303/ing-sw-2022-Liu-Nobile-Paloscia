@@ -1,13 +1,15 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Controller.Phases.Phase;
+import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
@@ -15,7 +17,7 @@ public class MatchController implements Runnable {
     private MatchStatus matchStatus;
     private final int totalMatchPlayers;
     private int currentPlayersNumber;
-    private final ClientHandler[] clients;
+    private final ArrayList<ClientHandler> clients;
     private final Wizard[] wizards;
     private Phase gamePhase;
 
@@ -23,21 +25,24 @@ public class MatchController implements Runnable {
 
     private InfluenceCalculator influenceCalculator;
 
+
+
     public MatchController(int totalMatchPlayers) {
         this.totalMatchPlayers = totalMatchPlayers;
-        this.clients = new ClientHandler[this.totalMatchPlayers];
+        this.clients = new ArrayList<>(this.totalMatchPlayers);
+        this.wizards = new Wizard[this.totalMatchPlayers];
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
-        this.wizards = new Wizard[this.totalMatchPlayers];
         //TODO Initial game phase
     }
 
+
+    // GETTERS
+
     public MatchStatus getStatus() { return this.matchStatus; }
 
-    public Wizard[] getWizards() { return this.wizards.clone(); }
-
     public GameModel getGame() {
-        return this.game;
+        return this.game; //!Rep exposed
     }
 
     public int getTotalMatchPlayers() {
@@ -45,9 +50,17 @@ public class MatchController implements Runnable {
     }
 
 
+    // PLAYERS
+
+    /**
+     * Adds a new player to the match. The new player <u>has no wizard assigned yet</u>. Player will be added only if
+     * the new match is not full already.
+     * @param client is the reference to the ClientHandler of the player to be added.
+     * @throws MatchMakingException in case match is full.
+     */
     public synchronized void addPlayer(ClientHandler client) throws MatchMakingException {
-        if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException();
-        clients[this.currentPlayersNumber] = client;
+        if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException(); //TODO: should we add "|| this.status != MATCHMAKING"? Notice that if a player disconnects he should be the only one able to enter the match again.
+        clients.add(client);
         this.currentPlayersNumber++;
         if (this.currentPlayersNumber == this.totalMatchPlayers) {
             this.matchStatus = MatchStatus.STARTED;
@@ -56,24 +69,37 @@ public class MatchController implements Runnable {
 
     }
 
-    public void removePlayer() throws MatchMakingException {
-        if (this.currentPlayersNumber == 0) throw new MatchMakingException(); //!Public invariant issue: should minimum number of players be 0 or 1?
-        this.currentPlayersNumber--;
-        clients[this.currentPlayersNumber] = null; //TODO: replace with optional?
+    public void removePlayer(ClientHandler client) throws MatchMakingException {
+        if (this.currentPlayersNumber == 0) throw new MatchMakingException("Match has no players."); //!Public invariant issue: should minimum number of players be 0 or 1?
+        if (!clients.remove(client)) throw new MatchMakingException("Match has no player named " + client.getNickname());
     }
+
+
+    // GAME SETUP
 
     /**
      * Controller waits for players to provide a Wizard. Then a new GameModel is created.
      */
     private void gameSetup() {
 
-        for (int i=0; i<this.totalMatchPlayers; i++) {
-            while (!clients[i].wizardAvailable());//? Fare una wait?
-            wizards[i] = clients[i].getWizard();
+        int i;
+
+        for (i=0; i < this.totalMatchPlayers; i++) {
+            while (!clients.get(i).wizardAvailable()) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            this.wizards[i] = clients.get(i).getWizard();
         }
 
         this.game = new GameModel(wizards, this.totalMatchPlayers);
     }
+
+
+    // GAME
 
     /**
      * This method handles the whole match, from initial setup to its end.
@@ -86,9 +112,29 @@ public class MatchController implements Runnable {
                 e.printStackTrace();
             }
         }
+
         gameSetup();
 
-        //TODO
+        this.gamePhase = new PlanningPhase(this);   // Match now enters planning phase.
+
+        for (Cloud cloud : this.game.getClouds()) {
+            addStudentsToCloud(cloud, this.totalMatchPlayers);
+        }
+
+        for (ClientHandler client: clients) {
+            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+        }
+
+        /*
+        for (int i=0; i < this.totalMatchPlayers; i++) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        */
+
     }
 
     /**
@@ -130,9 +176,9 @@ public class MatchController implements Runnable {
                 cloud.addStudent(getGame().getBag().extractStudent());
             }
         } catch (FullCloudException e1) {
-            throw error("the cloud is full.");
+            throw error("Cloud is full.");
         } catch (EmptyBagException e2) {
-            throw error("the bag is empty.");
+            throw error("Bag is empty.");
         }
     }
 

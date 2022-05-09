@@ -25,7 +25,7 @@ public class Cloud {
         } else {
             throw new IllegalArgumentException();
         }
-        this.students = new ArrayList<>();
+        this.students = new ArrayList<>(this.fullLength);
     }
 
     /**
