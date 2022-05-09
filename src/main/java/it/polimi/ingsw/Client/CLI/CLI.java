@@ -51,7 +51,7 @@ public class CLI {
         serverHandlerThread.start();
         requireNickname();
         chooseGameMode();
-        while (closed) {
+        while (!closed) {
             playAssistant();//planning
             moveStudentsFromEntrance();//AP1
             moveMotherNature();//AP2
