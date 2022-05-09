@@ -1,7 +1,10 @@
-package it.polimi.ingsw.Client;
+package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
+import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.ResetOutputMessage;
+import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.StatusMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +18,7 @@ public class ServerHandler implements Runnable {
     private ObjectInputStream input;
     private Socket socket;
     private LinkedBlockingQueue<Object> outgoingMessages;
-    private Boolean closed;
+    Boolean closed;
     private SendThread sendThread;
     private ReceiveThread receiveThread;
     private ArrayList<ClientHandler> clients; //clients who are currently connected to the server.
@@ -30,6 +33,13 @@ public class ServerHandler implements Runnable {
         this.receiveThread = new ReceiveThread();
         this.closed = false;
         this.client = client;
+        output.writeObject("Hello Server.");
+        output.flush();
+        try {
+            Object resp = input.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Illegal response from server.");
+        }
     }
 
     @Override
@@ -38,11 +48,11 @@ public class ServerHandler implements Runnable {
         this.receiveThread.start();
     }
 
-    private void send(Object message) {
+    void send(Object message) {
         outgoingMessages.add(message);
     }
 
-    private void shutdown() {
+    void shutdown() {
         sendThread.interrupt();
         receiveThread.interrupt();
         try {
@@ -84,7 +94,8 @@ public class ServerHandler implements Runnable {
                     } else if (message instanceof StatusMessage){
                         StatusMessage msg = (StatusMessage)message;
                         clients = msg.clients;
-                        client.setNickName(msg.nickname);
+                    } else {
+                        client.messageReceived(message);
                     }
                 }
             }catch (Exception e) {
@@ -94,5 +105,47 @@ public class ServerHandler implements Runnable {
         }
     }
 
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
 
+    public ObjectInputStream getInput() {
+        return input;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public LinkedBlockingQueue<Object> getOutgoingMessages() {
+        return outgoingMessages;
+    }
+
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public SendThread getSendThread() {
+        return sendThread;
+    }
+
+    public ReceiveThread getReceiveThread() {
+        return receiveThread;
+    }
+
+    public ArrayList<ClientHandler> getClients() {
+        return clients;
+    }
+
+    public CLI getClient() {
+        return client;
+    }
+
+    public void setClients(ArrayList<ClientHandler> clients) {
+        this.clients = clients;
+    }
+
+    public void setNickName(String str) {
+        getClient().setNickName(str);
+    }
 }

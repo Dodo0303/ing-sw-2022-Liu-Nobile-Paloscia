@@ -20,4 +20,17 @@ public class Utilities {
         }
     }
 
+    /** Return an object of type T read from InputStream, casting it to EXPECTEDCLASS.
+     *  Throws IllegalArgumentException in case of problems. */
+    static <T extends Serializable> T readObject(Class<T> expectedClass, ObjectInputStream in) {
+        try {
+            T result = expectedClass.cast(in.readObject());
+            in.close();
+            return result;
+        } catch (IOException | ClassCastException
+                | ClassNotFoundException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
 }

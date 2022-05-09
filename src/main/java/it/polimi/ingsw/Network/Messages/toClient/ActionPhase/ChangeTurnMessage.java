@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
-import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class ChangeTurnMessage extends MessageToClient {
@@ -14,6 +15,11 @@ public class ChangeTurnMessage extends MessageToClient {
     }
     public int getPlayerID() {
         return this.playerID;
+    }
+
+    @Override
+    public void process(ServerHandler client) {
+
     }
 
     /*
