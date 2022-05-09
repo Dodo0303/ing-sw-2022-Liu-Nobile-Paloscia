@@ -21,9 +21,9 @@ public class MatchControllerTest {
         Wizard[] wizards2 = {Wizard.WIZARD1, Wizard.WIZARD2};
         Wizard[] wizards3 = {Wizard.WIZARD1, Wizard.WIZARD2, Wizard.WIZARD3};
         Wizard[] wizards4 = {Wizard.WIZARD1, Wizard.WIZARD2, Wizard.WIZARD3, Wizard.WIZARD4};
-        game2 = new MatchController(2);
-        game3 = new MatchController(3);
-        game4 = new MatchController(4);
+        game2 = new MatchController(2, 2);
+        game3 = new MatchController(3,3);
+        game4 = new MatchController(4,4);
     }
 
     @Test

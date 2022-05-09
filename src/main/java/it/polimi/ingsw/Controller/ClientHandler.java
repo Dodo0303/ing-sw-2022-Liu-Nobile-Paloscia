@@ -97,10 +97,10 @@ public class ClientHandler implements Runnable {
             System.out.println("Expected CreateMatchMessage, received " + infoMessage.getClass());
             infoMessage = (MessageToServer) objectInputStream.readObject();
         }
-        //Received informations
+        //Received information
         match = new MatchController(new Random().nextInt(100000), ((SendStartInfoMessage) infoMessage).getNumOfPlayers()); //TODO Manage random better
         wizard = ((SendStartInfoMessage) infoMessage).getWizard();
-        //TODO Manage gamemode
+        //TODO Manage game mode
         server.addMatch(match);
         //Send ConfirmJoiningMessage
         MessageToClient msg = new ConfirmJoiningMessage(true, "Game created");

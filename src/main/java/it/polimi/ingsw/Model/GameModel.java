@@ -231,4 +231,11 @@ public class GameModel {
             }
         }
     }
+
+    public int getPlayerIndexFromNickname(String nickname) {
+        for (Player player : this._players) {
+            if (player.getNickName().equals(nickname)) return this._players.indexOf(player);
+        }
+        throw new NoSuchElementException();
+    }
 }

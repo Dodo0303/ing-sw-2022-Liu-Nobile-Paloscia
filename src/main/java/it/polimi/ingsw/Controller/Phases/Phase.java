@@ -18,4 +18,6 @@ public abstract class Phase {
     }
 
     public abstract void process(MessageToServer msg, ClientHandler ch);
+
+    public abstract void nextPhase();
 }

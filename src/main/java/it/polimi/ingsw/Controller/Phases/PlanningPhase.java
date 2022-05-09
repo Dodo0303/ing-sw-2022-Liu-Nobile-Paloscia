@@ -20,6 +20,7 @@ public class PlanningPhase extends Phase {
 
     }
 
+    @Override
     public void process(MessageToServer msg, ClientHandler ch) {
         if (!(msg instanceof SendAssistantMessage)) {
             match.denyMovement(ch);
@@ -30,8 +31,12 @@ public class PlanningPhase extends Phase {
                 match.denyMovement(ch);
             }
 
-
-
+            match.nextTurn();
         }
+    }
+
+    @Override
+    public void nextPhase() {
+        match.setGamePhase(new ActionPhase1(this.match));
     }
 }

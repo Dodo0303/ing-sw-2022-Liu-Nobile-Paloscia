@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Controller.Phases.ActionPhase1;
 import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
@@ -11,7 +12,6 @@ import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessa
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +26,7 @@ public class MatchController implements Runnable {
     private final int totalMatchPlayers;
     private int currentPlayersNumber;
     private String currentPlayer;
+    private String firstOfTurn;
     private final ArrayList<ClientHandler> clients;
     private final Wizard[] wizards;
     private Phase gamePhase;
@@ -46,7 +47,7 @@ public class MatchController implements Runnable {
     }
 
 
-    // GETTERS
+    // GETTERS AND SETTERS
 
     public MatchStatus getStatus() { return this.matchStatus; }
 
@@ -67,6 +68,10 @@ public class MatchController implements Runnable {
 
     public List<ClientHandler> getClients() {
         return new ArrayList<>(clients);
+    }
+
+    public void setGamePhase(Phase gamePhase) {
+        this.gamePhase = gamePhase;
     }
 
     // PLAYERS
@@ -136,8 +141,9 @@ public class MatchController implements Runnable {
 
         int randomFirst = new Random().nextInt(this.totalMatchPlayers);
         this.currentPlayer = this.game.getPlayers().get(randomFirst).getNickName();
+        this.firstOfTurn = this.currentPlayer;
 
-        changeTurn(this.currentPlayer, "planning");
+        broadcastTurnChange(this.currentPlayer, "planning");
 
         this.gamePhase = new PlanningPhase(this); // Match now enters planning phase.
 
@@ -350,7 +356,7 @@ public class MatchController implements Runnable {
         }
     }
 
-    public void changeTurn(String playerNickname, String nextPhase) {
+    public void broadcastTurnChange(String playerNickname, String nextPhase) {
         for (ClientHandler client : this.clients) {
             try {
                 client.send(new ChangeTurnMessage(playerNickname, nextPhase));
@@ -366,12 +372,21 @@ public class MatchController implements Runnable {
     }
 
     public boolean isWizardAvailable(Wizard wizard) {
-        for (Wizard wizardChecked :
-                wizards) {
+        for (Wizard wizardChecked : wizards) {
             if (wizardChecked == wizard)
                 return false;
         }
         return true;
     }
 
+    public void nextTurn() {
+        int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayer) + 1) % this.totalMatchPlayers;
+        this.currentPlayer = this.game.getPlayers().get(nextPlayerIndex).getNickName();
+
+        if (this.currentPlayer.equals(this.firstOfTurn)) {
+            this.gamePhase.nextPhase();
+        }
+
+        broadcastTurnChange(this.currentPlayer, this.gamePhase.toString());
+    }
 }
