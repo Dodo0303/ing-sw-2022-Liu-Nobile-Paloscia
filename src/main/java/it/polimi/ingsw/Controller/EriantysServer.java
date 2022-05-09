@@ -28,7 +28,7 @@ public class EriantysServer {
 
     public int getPort() { return this.port; }
 
-    public ArrayList<MatchController> getCurrentMatches() {
+    public List<MatchController> getCurrentMatches() {
         return new ArrayList<>(this.currentMatches);
     }
 
@@ -42,7 +42,7 @@ public class EriantysServer {
         return res;
     }
 
-    public ArrayList<ClientHandler> getClients() {
+    public List<ClientHandler> getClients() {
         return new ArrayList<>(this.clients);
     }
 
