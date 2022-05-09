@@ -11,6 +11,10 @@ import static it.polimi.ingsw.Exceptions.GameException.error;
 
 public class GameModel {
 
+    /** An uninitialized GameModel.  Only for use by subtypes. */
+    protected GameModel() {
+    }
+
     /**
      * Constructor of GameModel.
      * @param wizards the wizards chosen by each player.
@@ -206,6 +210,10 @@ public class GameModel {
         return influences.get(island)[index];
     }
 
+    public ReadOnlyGameModel readOnlyGame() {
+        return _readonlyGame;
+    }
+
 
     /** All islands */
     private HashMap<Integer, Island> _islands;
@@ -223,7 +231,7 @@ public class GameModel {
     private int _numIslands;
 
     /** Students bag */
-    private final Bag _bag;
+    private Bag _bag;
 
     /** Current players */
     private ArrayList<Player> _players;
@@ -235,4 +243,7 @@ public class GameModel {
      * Maps each island with an array of integers representing the influence of each player in that island
      */
     private Map<Island, Integer[]> influences;
+
+    /** A read-only version of this Board. */
+    private ReadOnlyGameModel _readonlyGame;
 }

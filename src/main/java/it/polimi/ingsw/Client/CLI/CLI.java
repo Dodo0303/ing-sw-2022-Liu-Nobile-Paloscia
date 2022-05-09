@@ -25,7 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class CLI {
+    String DEFAULT_HOST = "localhost";
+    int DEFAULT_PORT = 8001;
     boolean closed;
     private String nickname;
     private String host;
@@ -176,7 +179,7 @@ public class CLI {
             try {
                 serverHandler = new ServerHandler(host,port, this);
             } catch (IOException e) {
-                throw new RuntimeException(e.getMessage());
+                System.out.print(e.getMessage() + "\n");
             }
         }
         currPhase = Phase.PickingNickname;
