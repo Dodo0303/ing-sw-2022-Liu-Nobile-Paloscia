@@ -149,7 +149,7 @@ public class Player {
 
     /** Remove all students in entrance. */
     public void clearEntrance() {
-        for(StudentColor color : _entranceStudents.keySet()) {
+        for (StudentColor color : _entranceStudents.keySet()) {
             _entranceStudents.put(color, 0);
         }
     }

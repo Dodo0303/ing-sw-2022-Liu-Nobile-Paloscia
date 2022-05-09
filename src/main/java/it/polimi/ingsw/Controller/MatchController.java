@@ -1,10 +1,12 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Controller.Phases.Phase;
+import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.util.ArrayList;
@@ -96,6 +98,9 @@ public class MatchController implements Runnable {
         this.game = new GameModel(wizards, this.totalMatchPlayers);
     }
 
+
+    // GAME
+
     /**
      * This method handles the whole match, from initial setup to its end.
      */
@@ -107,7 +112,29 @@ public class MatchController implements Runnable {
                 e.printStackTrace();
             }
         }
+
         gameSetup();
+
+        this.gamePhase = new PlanningPhase(this);   // Match now enters planning phase.
+
+        for (Cloud cloud : this.game.getClouds()) {
+            addStudentsToCloud(cloud, this.totalMatchPlayers);
+        }
+
+        for (ClientHandler client: clients) {
+            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+        }
+
+        /*
+        for (int i=0; i < this.totalMatchPlayers; i++) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        */
+
     }
 
     /**
@@ -149,9 +176,9 @@ public class MatchController implements Runnable {
                 cloud.addStudent(getGame().getBag().extractStudent());
             }
         } catch (FullCloudException e1) {
-            throw error("the cloud is full.");
+            throw error("Cloud is full.");
         } catch (EmptyBagException e2) {
-            throw error("the bag is empty.");
+            throw error("Bag is empty.");
         }
     }
 

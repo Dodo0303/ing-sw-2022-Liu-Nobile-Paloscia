@@ -21,7 +21,7 @@ public class PlanningPhase extends Phase{
             } catch (GameException e) {
                 match.denyMovement(ch);
             }
-
+            this.match.notify();
         }
     }
 
