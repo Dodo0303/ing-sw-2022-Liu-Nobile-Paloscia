@@ -1,16 +1,25 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Exceptions.MatchMakingException;
+import it.polimi.ingsw.Exceptions.NoSuchMatchException;
 import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Model.Wizard;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.ConfirmJoiningMessage;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.NickResponseMessage;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendAvailableWizardsMessage;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendMatchesMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
-import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.CreateMatchMessage;
-import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.SendNickMessage;
+import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 //TODO
 
@@ -36,25 +45,10 @@ public class ClientHandler implements Runnable {
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
             //At this point the client handler must receive the nickname from the client
-            MessageToServer nickMessage = (MessageToServer) objectInputStream.readObject();
-            while (!(nickMessage instanceof SendNickMessage) || !server.isNicknameAvailable(((SendNickMessage) nickMessage).getNickname())) {
-                //TODO sendRefuseNickname
-                nickMessage = (MessageToServer) objectInputStream.readObject();
-            }
-            //Received nickname
-            nickname = ((SendNickMessage) nickMessage).getNickname();
+            receiveNickname(objectInputStream);
 
             //Now the handler must receive CreateMatchMessage
-            MessageToServer matchMessage = (MessageToServer) objectInputStream.readObject();
-            while (!(matchMessage instanceof CreateMatchMessage)) {
-                System.out.println("Expected CreateMatchMessage, received " + matchMessage.getClass());
-                matchMessage = (MessageToServer) objectInputStream.readObject();
-            }
-            if (((CreateMatchMessage)matchMessage).getNewMatch()) {
-                //TODO Create a new match
-            } else {
-                //TODO Join a match
-            }
+            receiveCreateMatch(objectInputStream);
 
             //Here the game starts. The handler must listen for incoming messages
             while(true) {
@@ -71,13 +65,127 @@ public class ClientHandler implements Runnable {
 
     }
 
+    private void receiveNickname(ObjectInputStream objectInputStream) throws ClassNotFoundException, IOException {
+        MessageToServer nickMessage = (MessageToServer) objectInputStream.readObject();
+        while (!(nickMessage instanceof SendNickMessage) || !server.isNicknameAvailable(((SendNickMessage) nickMessage).getNickname())) {
+            //Send the refuse
+            MessageToClient msg = new NickResponseMessage(false);
+            send(msg);
+            //Read new nick proposal
+            nickMessage = (MessageToServer) objectInputStream.readObject();
+        }
+        //Received valid nickname
+        nickname = ((SendNickMessage) nickMessage).getNickname();
+    }
+
+    private void receiveCreateMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        MessageToServer matchMessage = (MessageToServer) objectInputStream.readObject();
+        while (!(matchMessage instanceof CreateMatchMessage)) {
+            System.out.println("Expected CreateMatchMessage, received " + matchMessage.getClass());
+            matchMessage = (MessageToServer) objectInputStream.readObject();
+        }
+        if (((CreateMatchMessage)matchMessage).getNewMatch()) {
+            createNewMatch(objectInputStream);
+        } else {
+            joinMatch(objectInputStream);
+        }
+    }
+
+    private void createNewMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        MessageToServer infoMessage = (MessageToServer) objectInputStream.readObject();
+        while (!(infoMessage instanceof SendStartInfoMessage)){
+            System.out.println("Expected CreateMatchMessage, received " + infoMessage.getClass());
+            infoMessage = (MessageToServer) objectInputStream.readObject();
+        }
+        //Received informations
+        match = new MatchController(new Random().nextInt(100000), ((SendStartInfoMessage) infoMessage).getNumOfPlayers()); //TODO Manage random better
+        wizard = ((SendStartInfoMessage) infoMessage).getWizard();
+        //TODO Manage gamemode
+        server.addMatch(match);
+        //Send ConfirmJoiningMessage
+        MessageToClient msg = new ConfirmJoiningMessage(true, "Game created");
+        send(msg);
+
+    }
+
+    private void joinMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        List<MatchController> availableMatches = server.getMatchmakingMatches();
+        List<Integer> matchesID = new ArrayList<>();
+        List<List<String>> players = new ArrayList<>();
+        List<String> matchPlayers = new ArrayList<>();
+
+        for (MatchController matchController:
+             availableMatches) {
+            matchesID.add(matchController.getID());
+            for (ClientHandler client :
+                    matchController.getClients()) {
+                matchPlayers.add(client.getNickname());
+            }
+            players.add(matchPlayers);
+            matchPlayers.clear();
+        }
+
+        MessageToClient msg = new SendMatchesMessage(matchesID, players);
+        send(msg);
+
+        MessageToServer matchChosen =(MessageToServer) objectInputStream.readObject();
+        while (!(matchChosen instanceof MatchChosenMessage)){
+            System.out.println("Expected CreateMatchMessage, received " + matchChosen.getClass());
+            matchChosen = (MessageToServer) objectInputStream.readObject();
+        }
+
+        //Set the match attribute
+        try {
+            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID());
+        } catch (NoSuchMatchException e) {
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists");
+            send(denyJoining);
+            joinMatch(objectInputStream);
+            return;
+        }
+
+        //Add the player to the match
+
+        try {
+            match.addPlayer(this);
+        } catch (MatchMakingException e) {
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match full");
+            send(denyJoining);
+            joinMatch(objectInputStream);
+            return;
+        }
+
+        //Choose the wizard
+
+        MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
+        send(availableWizards);
+
+        MessageToServer wizardChosen = (MessageToServer) objectInputStream.readObject();
+        while (!(wizardChosen instanceof SendChosenWizardMessage)){
+            System.out.println("Expected CreateMatchMessage, received " + wizardChosen.getClass());
+            wizardChosen = (MessageToServer) objectInputStream.readObject();
+        }
+
+        //Check whether the wizard is available and set the wizard
+        if (match.isWizardAvailable(((SendChosenWizardMessage) wizardChosen).getWizard())){
+            wizard = ((SendChosenWizardMessage) wizardChosen).getWizard();
+            MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game");
+            send(confirm);
+        } else {
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available");
+            send(denyJoining);
+            joinMatch(objectInputStream); //TODO Should not return to the beginning of the method
+        }
+    } //TODO Break this method into little methods
+
     public boolean wizardAvailable() {
         //TODO
         return true;
     }
 
-    public void send(MessageToClient msg) {
-
+    public void send(MessageToClient msg) throws IOException {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        objectOutputStream.writeObject(msg);
     }
 
     public MatchController getMatch() {

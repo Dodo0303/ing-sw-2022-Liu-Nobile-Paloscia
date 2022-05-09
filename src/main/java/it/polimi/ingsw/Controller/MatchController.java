@@ -9,11 +9,15 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
 public class MatchController implements Runnable {
+    private int ID;
     private MatchStatus matchStatus;
     private final int totalMatchPlayers;
     private int currentPlayersNumber;
@@ -27,7 +31,8 @@ public class MatchController implements Runnable {
 
 
 
-    public MatchController(int totalMatchPlayers) {
+    public MatchController(int ID, int totalMatchPlayers) {
+        this.ID = ID;
         this.totalMatchPlayers = totalMatchPlayers;
         this.clients = new ArrayList<>(this.totalMatchPlayers);
         this.wizards = new Wizard[this.totalMatchPlayers];
@@ -49,6 +54,13 @@ public class MatchController implements Runnable {
         return this.totalMatchPlayers;
     }
 
+    public int getID(){
+        return ID;
+    }
+
+    public List<ClientHandler> getClients() {
+        return new ArrayList<>(clients);
+    }
 
     // PLAYERS
 
@@ -122,7 +134,11 @@ public class MatchController implements Runnable {
         }
 
         for (ClientHandler client: clients) {
-            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+            try {
+                client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         /*
@@ -322,6 +338,21 @@ public class MatchController implements Runnable {
 
     public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException{
         game.setAssistantOfCurrentPlayer(assistant);
+    }
+
+    public List<Wizard> getAvailableWizards(){
+        List<Wizard> availableWizards = new ArrayList<>(Arrays.asList(Wizard.values()));
+        availableWizards.removeAll(Arrays.asList(wizards));
+        return availableWizards;
+    }
+
+    public boolean isWizardAvailable(Wizard wizard) {
+        for (Wizard wizardChecked :
+                wizards) {
+            if (wizardChecked == wizard)
+                return false;
+        }
+        return true;
     }
 
 }
