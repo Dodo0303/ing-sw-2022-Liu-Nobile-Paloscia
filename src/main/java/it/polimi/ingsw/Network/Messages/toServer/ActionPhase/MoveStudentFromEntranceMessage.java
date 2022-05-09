@@ -1,21 +1,22 @@
 package it.polimi.ingsw.Network.Messages.toServer.ActionPhase;
 
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 public class MoveStudentFromEntranceMessage extends MessageToServer {
-    private int studentPosition;
-    private int destination;
-    private int destinationID;
+    private final StudentColor student;
+    private final int destination;
+    private final int destinationID;
 
-    public MoveStudentFromEntranceMessage(int studentPosition, int destination, int destinationID) {
-        this.studentPosition = studentPosition;
+    public MoveStudentFromEntranceMessage(StudentColor student, int destination, int destinationID) {
+        this.student = student;
         this.destination = destination;
         this.destinationID = destinationID;
     }
 
-    public int getStudentPosition() {
-        return studentPosition;
+    public StudentColor getStudent() {
+        return this.student;
     }
 
     public int getDestination() {

@@ -238,4 +238,16 @@ public class GameModel {
         }
         throw new NoSuchElementException();
     }
+
+    public void removeStudentFromEntrance(Player p, StudentColor student) {
+        p.removeStudentFromEntrance(student);
+    }
+
+    public void addToDiningTable(Player p, StudentColor student) throws FullTableException {
+        p.addToDiningTable(student);
+    }
+
+    public void addStudentToIsland(StudentColor student, Island island) {
+        island.addStudent(student);
+    }
 }

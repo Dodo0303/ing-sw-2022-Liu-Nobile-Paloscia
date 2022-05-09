@@ -143,7 +143,7 @@ public class MatchController implements Runnable {
         this.currentPlayer = this.game.getPlayers().get(randomFirst).getNickName();
         this.firstOfTurn = this.currentPlayer;
 
-        broadcastTurnChange(this.currentPlayer, "planning");
+        broadcastTurnChange(this.currentPlayer, "PlanningPhase");
 
         this.gamePhase = new PlanningPhase(this); // Match now enters planning phase.
 
@@ -204,44 +204,44 @@ public class MatchController implements Runnable {
         }
     }
 
-    /** This is a method for the Planning phase.
-     * Player PLAYER plays the assistant card ASSISTANT when other players are not playing the same card.
-     */
-    void playAssistant(Assistant assistant, Player player) {
-        for (Player p : getGame().getPlayers()) {
-            if (p != player && (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps())) {
-                throw error("The card is being used.");
-            }
-        }
-        player.useAssistant(assistant);
-    }
 
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the correspondent dining room.
      */
-    public void moveStudentToDiningRoom(Player player, StudentColor student) {
-        try{
-            try{
-                player.removeStudentFromEntrance(student);
-            } catch (GameException e1) {
-                throw error(e1.getMessage());
+    public void moveStudentToDiningRoom(StudentColor student) {
+
+        for (Player p : this.game.getPlayers()) {
+            if (p.getNickName().equals(this.currentPlayer)) {
+                try {
+                    try{
+                        game.removeStudentFromEntrance(p, student);
+                    } catch (GameException e1) {
+                        throw error(e1.getMessage());
+                    }
+                    game.addToDiningTable(p, student);
+                } catch (FullTableException e2) {
+                    throw error("The dining table is full.");
+                }
             }
-            player.addToDiningTable(student);
-        } catch (FullTableException e2) {
-            throw error("The dining table is full.");
         }
     }
 
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the island ISLAND.
      */
-    public void moveStudentToIsland(Player player, Island island, StudentColor student) {
-        try {
-            player.removeStudentFromEntrance(student);
-        } catch (GameException e1) {
-            throw error(e1.getMessage());
+    public void moveStudentToIsland(int islandID, StudentColor student) throws IllegalArgumentException, GameException {
+
+        Island island = this.game.getIslands().get(islandID);
+        if (island == null) {
+            throw new IllegalArgumentException();
         }
-        island.addStudent(student);
+
+        for (Player p : this.game.getPlayers()) {
+            if (this.currentPlayer.equals(p.getNickName())) {
+                game.removeStudentFromEntrance(p, student);
+            }
+        }
+        game.addStudentToIsland(student, island);
     }
 
 
@@ -342,7 +342,15 @@ public class MatchController implements Runnable {
         getGame().getIslands().remove(getGame().setNumIslands(getGame().getNumIslands()) - 1);
     }
 
+    /** This is a method for the Planning phase.
+     * Player PLAYER plays the assistant card ASSISTANT when other players are not playing the same card.
+     */
     public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException {
+        for (Player p : this.game.getPlayers()) {
+            if (!this.currentPlayer.equals(p.getNickName()) && (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps())) {
+                throw new GameException("Card was already used."); //TODO: What if it's the last one?
+            }
+        }
         game.setAssistantOfPlayer(this.currentPlayer, assistant);
     }
 

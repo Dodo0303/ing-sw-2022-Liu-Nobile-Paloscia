@@ -39,4 +39,9 @@ public class PlanningPhase extends Phase {
     public void nextPhase() {
         match.setGamePhase(new ActionPhase1(this.match));
     }
+
+    @Override
+    public String toString() {
+        return "PlanningPhase";
+    }
 }
