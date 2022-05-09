@@ -342,13 +342,21 @@ public class MatchController implements Runnable {
 
     public void broadcastClouds() {
         for (ClientHandler client : this.clients) {
-            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+            try {
+                client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void changeTurn(String playerNickname, String nextPhase) {
         for (ClientHandler client : this.clients) {
-            client.send(new ChangeTurnMessage(playerNickname, nextPhase));
+            try {
+                client.send(new ChangeTurnMessage(playerNickname, nextPhase));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     public List<Wizard> getAvailableWizards(){
