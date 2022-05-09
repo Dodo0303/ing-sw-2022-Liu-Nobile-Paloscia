@@ -9,15 +9,25 @@ import java.util.List;
 
 public class SendMatchesMessage extends MessageToClient {
     private List<Integer> matchesID;
-    private String message;
+    private List<List<String>> players;
 
-    public void SendStartInfoMessage(List<Integer> matchesID, String message) {
+    public List<Integer> getMatchesID() {
+        return matchesID;
+    }
+
+    public List<String> getPlayersByMatchId(int id) {
+        return players.get(id);
+    }
+
+    public void SendStartInfoMessage(List<Integer> matchesID, List<List<String>> players) {
         this.matchesID = matchesID;
-        this.message = message;
+        this.players = players;
     }
 
     @Override
     public void process(ServerHandler client) {
-
+        client.getClient().setMatchesID(matchesID);
+        client.getClient().setPlayers(players);
     }
+
 }

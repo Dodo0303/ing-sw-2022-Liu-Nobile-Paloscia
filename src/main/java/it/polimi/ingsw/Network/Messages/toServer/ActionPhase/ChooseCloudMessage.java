@@ -4,10 +4,10 @@ import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Controller.MatchController;
 import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmCloudMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 public class ChooseCloudMessage extends MessageToServer {
@@ -30,7 +30,7 @@ public class ChooseCloudMessage extends MessageToServer {
             match.takeStudentsFromCloud(player, match.getGame().getClouds().get(cloudID), match.getTotalMatchPlayers());
             message = new ConfirmCloudMessage(ch.getPlayerID(), this.cloudID);
             //TODO SEND MESSAGE
-            message = new ChangeTurnMessage(ch.getPlayerID());// TODO
+            //message = new ChangeTurnMessage(Phase.XXX);// TODO
         } catch (GameException e) {
             message = new DenyMovementMessage();
         }

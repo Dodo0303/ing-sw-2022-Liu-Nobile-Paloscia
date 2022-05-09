@@ -52,7 +52,7 @@ public class ServerHandler implements Runnable {
         outgoingMessages.add(message);
     }
 
-    void shutdown() {
+    public void shutdown() {
         sendThread.interrupt();
         receiveThread.interrupt();
         try {

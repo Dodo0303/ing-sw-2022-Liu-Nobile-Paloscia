@@ -25,7 +25,7 @@ public class MoveMotherNatureMessage extends MessageToServer {
         Player player = match.getGame().getPlayers().get(ch.getPlayerID());
         try {
             match.moveMotherNature(islandIndex, player);
-            message = new ConfirmMovementMessage(islandIndex);
+            message = new ConfirmMovementMessage(islandIndex, ch.getMatch().getGame().getIslands(), ch.getMatch().getGame().getClouds());
         } catch (GameException e) {
             message = new DenyMovementMessage();
         }

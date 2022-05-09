@@ -1,0 +1,25 @@
+package it.polimi.ingsw.Network.Messages.toClient.PlanningPhase;
+
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Model.Cloud;
+import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+
+import java.util.List;
+
+public class CloudsUpdateMessage extends MessageToClient {
+    private List<Cloud> clouds;
+
+    public CloudsUpdateMessage(List<Cloud> clouds) {
+        this.clouds = clouds;
+    }
+
+    @Override
+    public void process(ServerHandler client) {
+
+    }
+
+    public List<Cloud> getClouds() {
+        return clouds;
+    }
+}

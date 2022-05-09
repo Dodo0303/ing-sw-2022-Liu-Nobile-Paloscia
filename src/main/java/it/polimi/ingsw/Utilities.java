@@ -33,4 +33,9 @@ public class Utilities {
         }
     }
 
+    public static Boolean existInStudentColor(String str) {
+        return str.equals("GREEN") || str.equals("BLUE") || str.equals("YELLOW") || str.equals("RED") || str.equals("PINK");
+    }
+
+
 }
