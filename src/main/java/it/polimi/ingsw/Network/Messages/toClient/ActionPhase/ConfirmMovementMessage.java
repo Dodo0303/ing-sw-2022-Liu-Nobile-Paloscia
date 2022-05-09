@@ -17,8 +17,4 @@ public class ConfirmMovementMessage extends MessageToClient {
     public HashMap<Integer, Island> getIslands() {
         return this.islands;
     }
-    @Override
-    public void process(ServerHandler ch) {
-        //TODO
-    }
 }

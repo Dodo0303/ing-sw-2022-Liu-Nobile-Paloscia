@@ -23,9 +23,4 @@ public class ChangeTurnMessage extends MessageToClient {
     }
 
     */
-
-    @Override
-    public void process(ServerHandler ch) {
-
-    }
 }

@@ -4,8 +4,15 @@ public class EriantysClient implements Runnable{
     //TODO
     private ServerHandler serverHandler;
 
-    public void main() {
 
+    public void main() {
+        EriantysClient client = new EriantysClient();
+        client.run();
+    }
+
+    public ServerHandler getServerHandler()
+    {
+        return this.serverHandler;
     }
 
     @Override

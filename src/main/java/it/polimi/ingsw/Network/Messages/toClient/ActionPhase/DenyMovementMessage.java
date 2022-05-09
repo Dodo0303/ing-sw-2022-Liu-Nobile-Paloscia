@@ -5,8 +5,4 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class DenyMovementMessage extends MessageToClient {
     //TODO
-    @Override
-    public void process(ServerHandler ch) {
-
-    }
 }

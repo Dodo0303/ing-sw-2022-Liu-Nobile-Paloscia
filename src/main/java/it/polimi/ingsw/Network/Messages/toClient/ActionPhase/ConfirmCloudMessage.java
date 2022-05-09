@@ -26,8 +26,4 @@ public class ConfirmCloudMessage extends MessageToClient {
         return this.cloudID;
     }
 
-    @Override
-    public void process(ServerHandler ch) {
-
-    }
 }
