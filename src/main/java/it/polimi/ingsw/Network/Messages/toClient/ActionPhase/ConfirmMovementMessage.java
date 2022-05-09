@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
-import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Model.Island;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -18,7 +19,7 @@ public class ConfirmMovementMessage extends MessageToClient {
         return this.islands;
     }
     @Override
-    public void process(ServerHandler ch) {
-        //TODO
+    public void process(ServerHandler client) {
+
     }
 }
