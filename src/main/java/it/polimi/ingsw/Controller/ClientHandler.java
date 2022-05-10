@@ -34,6 +34,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(EriantysServer server, Socket socket) {
         this.server = server;
         this.socket = socket;
+        wizard = null;
     }
 
 
@@ -109,40 +110,9 @@ public class ClientHandler implements Runnable {
     }
 
     private void joinMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
-        List<MatchController> availableMatches = server.getMatchmakingMatches();
-        List<Integer> matchesID = new ArrayList<>();
-        List<List<String>> players = new ArrayList<>();
-        List<String> matchPlayers = new ArrayList<>();
+        sendAvailableMatchesToClient(objectInputStream);
 
-        for (MatchController matchController:
-             availableMatches) {
-            matchesID.add(matchController.getID());
-            for (ClientHandler client :
-                    matchController.getClients()) {
-                matchPlayers.add(client.getNickname());
-            }
-            players.add(matchPlayers);
-            matchPlayers.clear();
-        }
-
-        MessageToClient msg = new SendMatchesMessage(matchesID, players);
-        send(msg);
-
-        MessageToServer matchChosen =(MessageToServer) objectInputStream.readObject();
-        while (!(matchChosen instanceof MatchChosenMessage)){
-            System.out.println("Expected CreateMatchMessage, received " + matchChosen.getClass());
-            matchChosen = (MessageToServer) objectInputStream.readObject();
-        }
-
-        //Set the match attribute
-        try {
-            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID());
-        } catch (NoSuchMatchException e) {
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists");
-            send(denyJoining);
-            joinMatch(objectInputStream);
-            return;
-        }
+        receiveAndSetMatchChosen(objectInputStream);
 
         //Add the player to the match
 
@@ -156,9 +126,49 @@ public class ClientHandler implements Runnable {
         }
 
         //Choose the wizard
+        receiveWizard(objectInputStream);
+    }
 
-        MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
-        send(availableWizards);
+    private void sendAvailableMatchesToClient(ObjectInputStream objectInputStream) throws IOException {
+        List<MatchController> availableMatches = server.getMatchmakingMatches();
+        List<Integer> matchesID = new ArrayList<>();
+        List<List<String>> players = new ArrayList<>();
+        List<String> matchPlayers = new ArrayList<>();
+
+        for (MatchController matchController:
+                availableMatches) {
+            matchesID.add(matchController.getID());
+            for (ClientHandler client :
+                    matchController.getClients()) {
+                matchPlayers.add(client.getNickname());
+            }
+            players.add(matchPlayers);
+            matchPlayers.clear();
+        }
+
+        MessageToClient msg = new SendMatchesMessage(matchesID, players);
+        send(msg);
+    }
+
+    private void receiveAndSetMatchChosen(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        MessageToServer matchChosen =(MessageToServer) objectInputStream.readObject();
+        while (!(matchChosen instanceof MatchChosenMessage)){
+            System.out.println("Expected MatchChosenMessage, received " + matchChosen.getClass());
+            matchChosen = (MessageToServer) objectInputStream.readObject();
+        }
+
+        //Set the match attribute
+        try {
+            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID());
+        } catch (NoSuchMatchException e) {
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists");
+            send(denyJoining);
+            joinMatch(objectInputStream);
+        }
+    }
+
+    private void receiveWizard(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        sendAvailableWizards();
 
         MessageToServer wizardChosen = (MessageToServer) objectInputStream.readObject();
         while (!(wizardChosen instanceof SendChosenWizardMessage)){
@@ -174,13 +184,17 @@ public class ClientHandler implements Runnable {
         } else {
             MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available");
             send(denyJoining);
-            joinMatch(objectInputStream); //TODO Should not return to the beginning of the method
+            receiveWizard(objectInputStream);
         }
-    } //TODO Break this method into little methods
+    }
+
+    private void sendAvailableWizards() throws IOException {
+        MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
+        send(availableWizards);
+    }
 
     public boolean wizardAvailable() {
-        //TODO
-        return true;
+        return wizard != null;
     }
 
     public void send(MessageToClient msg) throws IOException {
