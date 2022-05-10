@@ -31,25 +31,24 @@ public class ActionPhase1 extends Phase {
                     case 0:
                         match.moveStudentToDiningRoom(((MoveStudentFromEntranceMessage) msg).getStudent());
                         this.moves++;
-                        ch.send(new ConfirmMovementMessage(((MoveStudentFromEntranceMessage) msg).getDestinationID()));
+                        //TODO: Should be broadcast
+
                     case 1:
                         match.moveStudentToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudent());
                         this.moves++;
-                        ch.send(new ConfirmMovementMessage(((MoveStudentFromEntranceMessage) msg).getDestinationID()));
+
                     default:
                         throw new IllegalArgumentException();
                 }
             } catch (IllegalArgumentException | GameException e) {
                 match.denyMovement(ch);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
 
         //TODO: Check whether professor should be moved
 
         if (this.moves == 3) {
-            match.nextTurn();
+            this.nextPhase();
         }
     }
 

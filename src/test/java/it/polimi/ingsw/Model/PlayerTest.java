@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,30 +41,30 @@ class PlayerTest {
     @ValueSource(ints={2,3,4})
     public void createPlayer_CheckAssistants(int players){
         Player player = new Player("Test", Color.BLACK, Wizard.WIZARD1, players);
-        Assistant[] ass = player.getAssistants();
+        ArrayList<Assistant> ass = player.getAssistants();
         for (int i = 0; i < 10; i++) {
-            assertEquals(i+1, ass[i].getValue());
+            assertEquals(i+1, ass.get(i).getValue());
             //Using the switch so we don't use any algorithm that could be wrong
             switch (i){
                 case 0:
                 case 1:
-                    assertEquals(1, ass[i].getMaxSteps());
+                    assertEquals(1, ass.get(i).getMaxSteps());
                     break;
                 case 2:
                 case 3:
-                    assertEquals(2, ass[i].getMaxSteps());
+                    assertEquals(2, ass.get(i).getMaxSteps());
                     break;
                 case 4:
                 case 5:
-                    assertEquals(3, ass[i].getMaxSteps());
+                    assertEquals(3, ass.get(i).getMaxSteps());
                     break;
                 case 6:
                 case 7:
-                    assertEquals(4, ass[i].getMaxSteps());
+                    assertEquals(4, ass.get(i).getMaxSteps());
                     break;
                 case 8:
                 case 9:
-                    assertEquals(5, ass[i].getMaxSteps());
+                    assertEquals(5, ass.get(i).getMaxSteps());
                     break;
             }
         }

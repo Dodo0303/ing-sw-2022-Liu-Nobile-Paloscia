@@ -250,4 +250,9 @@ public class GameModel {
     public void addStudentToIsland(StudentColor student, Island island) {
         island.addStudent(student);
     }
+
+    public int getTableNumber(Player p, StudentColor color) {
+        return p.getDiningTables().get(color).getNumOfStudents();
+    }
+
 }

@@ -16,13 +16,13 @@ public class Player {
     /** My current color. */
     private Color _color;
 
-    /** number of towers owned by THIS PLAYER. */
+    /** Number of towers owned by THIS PLAYER. */
     private int _towerNum;
 
-    /** maximum amount of towers that the player can hold */
-    private int _maxTowerNum;
+    /** Maximum amount of towers that the player can hold */
+    private final int _maxTowerNum;
 
-    /** number of coins owned by THIS PLAYER. */
+    /** Number of coins owned by THIS PLAYER. */
     private int _coins;
 
     /** The nickname set by THIS PLAYER */
@@ -35,10 +35,10 @@ public class Player {
     private HashMap<StudentColor, Integer> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
 
     /** Max amount of students in the entrance */
-    private int _maxEntranceStudents;
+    private final int _maxEntranceStudents;
 
     /** Assistant cards of THIS player. Assistant[] is being used because the index of each card represents their maxStep.*/
-    private Assistant[] _assistant = new Assistant[10];
+    private final ArrayList<Assistant> _assistants = new ArrayList<>(10);
 
     /** Last used assistant. */
     private Assistant _lastUsedAssistant;
@@ -91,8 +91,8 @@ public class Player {
     private void initAssistant(Wizard wizard) {
         int index = 0;
         for (int maxSteps = 1; maxSteps <= 5; maxSteps++) {
-            for(int j = 0; j < 2; j++) {
-                _assistant[index] = new Assistant(++index, maxSteps, wizard);
+            for (int j = 0; j < 2; j++) {
+                this._assistants.add(new Assistant(++index, maxSteps, wizard));
             }
         }
     }
@@ -200,11 +200,11 @@ public class Player {
      * @return the assistant card chosen by THIS player. */
     public Assistant useAssistant(Assistant assistant) {
         int index = assistant.getValue()-1;
-        Assistant res = _assistant[index];
+        Assistant res = _assistants.get(index);
         if (res == null)
             throw new GameException("Assistant already used");
         _lastUsedAssistant = res;
-        _assistant[index] = null;
+        _assistants.set(index, null);
         return res;
     }
 
@@ -285,8 +285,8 @@ public class Player {
 
     /** The getter of _assistant.
      * @return unused assistants of THIS player. */
-    public Assistant[] getAssistants() {
-        return this._assistant;
+    public ArrayList<Assistant> getAssistants() {
+        return this._assistants;
     }
 
     /** The getter of _usedAssistant.

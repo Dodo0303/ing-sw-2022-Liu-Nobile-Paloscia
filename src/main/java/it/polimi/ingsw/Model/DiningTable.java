@@ -4,6 +4,7 @@ import it.polimi.ingsw.Exceptions.EmptyTableException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 
 public class DiningTable {
+
     private final StudentColor color;
     private int numOfStudents;
     private int availableCoins;
@@ -51,9 +52,9 @@ public class DiningTable {
 
     /**
      * Remove a student from the table and adds an availableCoin if needed
-     * @throws EmptyTableException if the table doesn't have students
+     * @throws EmptyTableException if the table doesn't have any students
      */
-    public void removeStudent() throws EmptyTableException{
+    public void removeStudent() throws EmptyTableException {
         if (numOfStudents == 0) {
             throw new EmptyTableException();
         }

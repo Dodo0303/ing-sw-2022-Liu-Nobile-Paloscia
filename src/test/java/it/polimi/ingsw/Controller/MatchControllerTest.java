@@ -51,8 +51,8 @@ public class MatchControllerTest {
     @Test
     void playAssistant_1() {
         try {
-            game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants()[1]);
-            game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(1).getAssistants()[1]);
+            game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants().get(1));
+            game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(1).getAssistants().get(1));
             fail("expected exception was not occured.");
         } catch (GameException e) {
             System.out.printf(e.getMessage() + "\n");
@@ -61,9 +61,9 @@ public class MatchControllerTest {
 
     @Test
     void playAssistant_2() {
-        Assistant temp = game2.getGame().getPlayers().get(0).getAssistants()[1];
-        game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants()[1]);
-        assertNull(game2.getGame().getPlayers().get(0).getAssistants()[1]);
+        Assistant temp = game2.getGame().getPlayers().get(0).getAssistants().get(1);
+        game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants().get(1));
+        assertNull(game2.getGame().getPlayers().get(0).getAssistants().get(1));
         assertEquals(game2.getGame().getPlayers().get(0).getUsedAssistant(), temp);
     }
 
@@ -100,7 +100,7 @@ public class MatchControllerTest {
 
     @Test
     void moveMotherNature_2() {
-        game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants()[9]);
+        game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants().get(1));
         game2.getGame().setMothernature(5);
         game2.moveMotherNature(10, game2.getGame().getPlayers().get(0));
         assertEquals(game2.getGame().getMotherNature(), game2.getGame().getIslands().get(10));
@@ -109,7 +109,7 @@ public class MatchControllerTest {
     @Test
     void moveMotherNature_3() {
         Island temp = game2.getGame().getIslands().get(6);
-        game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants()[9]);
+        game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants().get(1));
         game2.getGame().setMothernature(5);
         game2.getGame().getIslands().get(5).setTowerColor(Color.WHITE);
         game2.getGame().getIslands().get(6).addStudent(StudentColor.BLUE);
