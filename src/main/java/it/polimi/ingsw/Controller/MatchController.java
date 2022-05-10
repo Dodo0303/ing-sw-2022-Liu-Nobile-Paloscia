@@ -28,7 +28,7 @@ public class MatchController implements Runnable {
     private String currentPlayer;
     private String firstOfTurn;
     private final ArrayList<ClientHandler> clients;
-    private final Wizard[] wizards;
+    private final List<Wizard> wizards;
     private Phase gamePhase;
 
     private GameModel game;
@@ -41,7 +41,7 @@ public class MatchController implements Runnable {
         this.ID = ID;
         this.totalMatchPlayers = totalMatchPlayers;
         this.clients = new ArrayList<>(this.totalMatchPlayers);
-        this.wizards = new Wizard[this.totalMatchPlayers];
+        this.wizards = new ArrayList<>(this.totalMatchPlayers);
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
     }
@@ -106,22 +106,28 @@ public class MatchController implements Runnable {
      */
     private void gameSetup() {
 
-        int i;
-        String[] nicknames = new String[this.totalMatchPlayers];
+        List<String> nicknames = new ArrayList<>(this.totalMatchPlayers);
 
-        for (i=0; i < this.totalMatchPlayers; i++) {
-            while (!clients.get(i).wizardAvailable()) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        while(wizards.size() < totalMatchPlayers) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            nicknames[i] = clients.get(i).getNickname();
-            this.wizards[i] = clients.get(i).getWizard();
+        }
+        //Every player has selected a wizard
+
+        //Create nicknames list
+        for (ClientHandler client :
+                clients) {
+            nicknames.add(client.getNickname());
         }
 
-        this.game = new GameModel(this.totalMatchPlayers, nicknames, this.wizards);
+        String[] nickArray = new String[totalMatchPlayers];
+        Wizard[] wizardArray = new Wizard[totalMatchPlayers];
+
+
+        this.game = new GameModel(this.totalMatchPlayers,nicknames.toArray(nickArray), wizards.toArray(wizardArray));
 
     }
 
@@ -375,7 +381,7 @@ public class MatchController implements Runnable {
     }
     public List<Wizard> getAvailableWizards(){
         List<Wizard> availableWizards = new ArrayList<>(Arrays.asList(Wizard.values()));
-        availableWizards.removeAll(Arrays.asList(wizards));
+        availableWizards.removeAll(wizards);
         return availableWizards;
     }
 
@@ -396,5 +402,24 @@ public class MatchController implements Runnable {
         }
 
         broadcastTurnChange(this.currentPlayer, this.gamePhase.toString());
+    }
+
+    public void setWizardOfPlayer(ClientHandler player, Wizard wizard) throws GameException{
+        if (isWizardAvailable(wizard)) {
+            int index = clients.indexOf(player);
+            wizards.set(index, wizard);
+
+            //Broadcast the change in wizards available
+            for (ClientHandler client :
+                    clients) {
+                try {
+                    client.sendAvailableWizards();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            throw new GameException("Wizard not available");
+        }
     }
 }

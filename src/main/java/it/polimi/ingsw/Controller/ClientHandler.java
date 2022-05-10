@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Exceptions.MatchMakingException;
 import it.polimi.ingsw.Exceptions.NoSuchMatchException;
 import it.polimi.ingsw.Model.GameModel;
@@ -100,9 +101,16 @@ public class ClientHandler implements Runnable {
         }
         //Received information
         match = new MatchController(new Random().nextInt(100000), ((SendStartInfoMessage) infoMessage).getNumOfPlayers()); //TODO Manage random better
+        new Thread(match);
         wizard = ((SendStartInfoMessage) infoMessage).getWizard();
         //TODO Manage game mode
         server.addMatch(match);
+        try {
+            match.addPlayer(this);
+        } catch (MatchMakingException e) {
+            e.printStackTrace();
+            return;
+        }
         //Send ConfirmJoiningMessage
         MessageToClient msg = new ConfirmJoiningMessage(true, "Game created");
         send(msg);
@@ -177,18 +185,18 @@ public class ClientHandler implements Runnable {
         }
 
         //Check whether the wizard is available and set the wizard
-        if (match.isWizardAvailable(((SendChosenWizardMessage) wizardChosen).getWizard())){
-            wizard = ((SendChosenWizardMessage) wizardChosen).getWizard();
+        try {
+            match.setWizardOfPlayer(this, ((SendChosenWizardMessage) wizardChosen).getWizard());
             MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game");
             send(confirm);
-        } else {
+        } catch (GameException e) {
             MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available");
             send(denyJoining);
             receiveWizard(objectInputStream);
         }
     }
 
-    private void sendAvailableWizards() throws IOException {
+    public void sendAvailableWizards() throws IOException {
         MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
         send(availableWizards);
     }
