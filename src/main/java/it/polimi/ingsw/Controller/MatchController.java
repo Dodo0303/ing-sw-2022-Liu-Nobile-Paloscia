@@ -243,6 +243,27 @@ public class MatchController implements Runnable {
         game.addToDiningTable(p, student);
         game.removeStudentFromEntrance(p, student);
 
+        moveProfessorIfNeeded(p, student);
+
+    }
+
+    private void moveProfessorIfNeeded(Player p, StudentColor student) {
+
+        //TODO: Spare professors missing in game model!
+
+        if (!p.hasProfessor(student)) {
+            for (Player p_other : this.game.getPlayers()) {
+
+                boolean isOther = !p_other.getNickName().equals(p.getNickName());
+                boolean hasProf = p_other.hasProfessor(student);
+                boolean shouldNotHaveProf = this.game.getTableNumber(p_other, student) < this.game.getTableNumber(p, student);
+
+                if (isOther && hasProf && shouldNotHaveProf) {
+                    p_other.removeProfessor(student);
+                    p.addProfessor(student);
+                }
+            }
+        }
     }
 
     /** This is a method for the Action phase.

@@ -150,13 +150,13 @@ public class Player {
     // ADD AND REMOVE PROFESSORS
 
     /** 1 professor of StudentCOLOR color to THIS PLAYER. */
-    void addProfessor(StudentColor color) {
+    public void addProfessor(StudentColor color) {
         if (!this._professors.contains(color))
             this._professors.add(color);
     }
 
     /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
-    void removeProfessor(StudentColor color) {
+    public void removeProfessor(StudentColor color) {
             this._professors.remove(color);
     }
 
@@ -237,6 +237,10 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(_nickName);
+    }
+
+    public boolean hasProfessor(StudentColor color) {
+        return this._professors.contains(color);
     }
 
 
