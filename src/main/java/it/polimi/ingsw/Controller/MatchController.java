@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementFromEntranceMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.GameModelUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
@@ -164,6 +165,9 @@ public class MatchController implements Runnable {
         }
 
         gameSetup();
+
+        //Here the server must send the game model to all the clients
+        broadcastGameModel();
 
         int randomFirst = new Random().nextInt(this.totalMatchPlayers);
         this.currentPlayerID = this.game.getPlayers().get(randomFirst).getNickName();
@@ -389,6 +393,18 @@ public class MatchController implements Runnable {
         for (ClientHandler client : this.clients) {
             try {
                 client.send(new ChangeTurnMessage(playerNickname, nextPhase));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void broadcastGameModel(){
+        MessageToClient gameModelMessage = new GameModelUpdateMessage(this.game);
+        for (ClientHandler client :
+                clients) {
+            try {
+                client.send(gameModelMessage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
