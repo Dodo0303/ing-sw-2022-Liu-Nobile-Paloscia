@@ -33,7 +33,13 @@ public class PlanningPhase extends Phase {
             }
 
             match.broadcastAssistant(match.getCurrentPlayerID(), ((SendAssistantMessage) msg).getAssistant().getValue());
+
             match.nextTurn();
+            if (match.getCurrentPlayerID().equals(match.getFirstOfTurn())) {
+                this.nextPhase();
+            }
+            match.broadcastTurnChange(match.getCurrentPlayerID(), match.getGamePhase().toString());
+
         }
     }
 

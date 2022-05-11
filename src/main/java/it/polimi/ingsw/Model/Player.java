@@ -315,4 +315,7 @@ public class Player {
         return _maxTowerNum;
     }
 
+    public boolean lastAssistant() {
+        return this._assistants.size() == 1;
+    }
 }

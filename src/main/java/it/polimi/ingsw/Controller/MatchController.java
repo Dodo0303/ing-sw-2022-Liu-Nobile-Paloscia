@@ -80,8 +80,16 @@ public class MatchController implements Runnable {
         return new ArrayList<>(clients);
     }
 
+    public Phase getGamePhase() {
+        return gamePhase;
+    }
+
     public void setGamePhase(Phase gamePhase) {
         this.gamePhase = gamePhase;
+    }
+
+    public String getFirstOfTurn() {
+        return firstOfTurn;
     }
 
     // PLAYERS
@@ -358,8 +366,8 @@ public class MatchController implements Runnable {
 
         for (Player p : this.game.getPlayers()) {
             if (!this.currentPlayerID.equals(p.getNickName())) {
-                if  (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps()) {
-                    throw new GameException("Card was already used."); //TODO: What if it's the last one?
+                if  (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps() && !p.lastAssistant()) {
+                    throw new GameException("Card was already used.");
                 }
             } else break;
         }
@@ -402,13 +410,9 @@ public class MatchController implements Runnable {
     public void nextTurn() {
         int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayerID) + 1) % this.totalMatchPlayers;
         this.currentPlayerID = this.game.getPlayers().get(nextPlayerIndex).getNickName();
-
-        if (this.currentPlayerID.equals(this.firstOfTurn)) { //TODO: this works planning phase only
-            this.gamePhase.nextPhase();
-        }
-
-        broadcastTurnChange(this.currentPlayerID, this.gamePhase.toString());
     }
+
+
 
     public void setWizardOfPlayer(ClientHandler player, Wizard wizard) throws GameException{
         if (isWizardAvailable(wizard)) {
