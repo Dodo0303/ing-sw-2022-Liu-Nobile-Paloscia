@@ -29,7 +29,7 @@ public class MatchController implements Runnable {
     private String currentPlayerID;
     private String firstOfTurn;
     private final ArrayList<ClientHandler> clients;
-    private final List<Wizard> wizards;
+    private Wizard[] wizards;
     private Phase gamePhase;
 
     private GameModel game;
@@ -42,7 +42,7 @@ public class MatchController implements Runnable {
         this.ID = ID;
         this.totalMatchPlayers = totalMatchPlayers;
         this.clients = new ArrayList<>(this.totalMatchPlayers);
-        this.wizards = new ArrayList<>(this.totalMatchPlayers);
+        this.wizards = new Wizard[this.totalMatchPlayers];
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
     }
@@ -51,6 +51,8 @@ public class MatchController implements Runnable {
     // GETTERS AND SETTERS
 
     public MatchStatus getStatus() { return this.matchStatus; }
+
+    public Wizard[] getWizards() { return this.wizards.clone(); }
 
     public GameModel getGame() {
         return this.game; //!Rep exposed
@@ -126,7 +128,7 @@ public class MatchController implements Runnable {
 
         List<String> nicknames = new ArrayList<>(this.totalMatchPlayers);
 
-        while(wizards.size() < totalMatchPlayers) {
+        while(!allWizardsAvailable()) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -145,7 +147,7 @@ public class MatchController implements Runnable {
         Wizard[] wizardArray = new Wizard[totalMatchPlayers];
 
 
-        this.game = new GameModel(this.totalMatchPlayers,nicknames.toArray(nickArray), wizards.toArray(wizardArray));
+        this.game = new GameModel(this.totalMatchPlayers,nicknames.toArray(nickArray), wizards);
 
     }
 
@@ -186,14 +188,6 @@ public class MatchController implements Runnable {
     }
 
     /**
-     * @param ch handler of the player that has to be checked
-     * @return whether the player is the current one or not
-     */
-    private boolean isCurrent(ClientHandler ch){
-        return ch.getNickname().equals(this.currentPlayerID);
-    }
-
-    /**
      * Send to a player a message that denies its last movement
      * @param ch handler of the player
      */
@@ -203,22 +197,6 @@ public class MatchController implements Runnable {
             ch.send(msg);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    /** This is a method for the Planning phase.
-     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the other cloud tiles.
-     */
-    void addStudentsToCloud(Cloud cloud, int numOfPlayers) {
-        int x = (numOfPlayers == 3)? 4 : 3;
-        try {
-            for (int i = 0; i < x; i++) {
-                cloud.addStudent(getGame().getBag().extractStudent());
-            }
-        } catch (FullCloudException e1) {
-            throw error("Cloud is full.");
-        } catch (EmptyBagException e2) {
-            throw error("Bag is empty.");
         }
     }
 
@@ -288,7 +266,6 @@ public class MatchController implements Runnable {
 
     /** This is a method for the Action phase.
      * Player PLAYER moves mothernature to xth island and try to control/conquer the xth island. */
-
     public void moveMotherNature(int x, Player player) {
         int distance;
         if (x > getGame().getNumIslands() - 1) {
@@ -417,31 +394,17 @@ public class MatchController implements Runnable {
             }
         }
     }
+
     public List<Wizard> getAvailableWizards(){
         List<Wizard> availableWizards = new ArrayList<>(Arrays.asList(Wizard.values()));
-        availableWizards.removeAll(wizards);
+        availableWizards.removeAll(Arrays.asList(wizards));
         return availableWizards;
     }
-
-    public boolean isWizardAvailable(Wizard wizard) {
-        for (Wizard wizardChecked : wizards) {
-            if (wizardChecked == wizard)
-                return false;
-        }
-        return true;
-    }
-
-    public void nextTurn() {
-        int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayerID) + 1) % this.totalMatchPlayers;
-        this.currentPlayerID = this.game.getPlayers().get(nextPlayerIndex).getNickName();
-    }
-
-
 
     public void setWizardOfPlayer(ClientHandler player, Wizard wizard) throws GameException{
         if (isWizardAvailable(wizard)) {
             int index = clients.indexOf(player);
-            wizards.set(index, wizard);
+            wizards[index] = wizard;
 
             //Broadcast the change in wizards available
             for (ClientHandler client :
@@ -474,6 +437,54 @@ public class MatchController implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void nextTurn() {
+        int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayerID) + 1) % this.totalMatchPlayers;
+        this.currentPlayerID = this.game.getPlayers().get(nextPlayerIndex).getNickName();
+    }
+
+    // UTILS
+
+    private boolean allWizardsAvailable(){
+        for (Wizard wizard :
+                wizards) {
+            if (wizard == null)
+                return false;
+        }
+        return true;
+    }
+
+    public boolean isWizardAvailable(Wizard wizard) {
+        for (Wizard wizardChecked : wizards) {
+            if (wizardChecked == wizard)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param ch handler of the player that has to be checked
+     * @return whether the player is the current one or not
+     */
+    private boolean isCurrent(ClientHandler ch){
+        return ch.getNickname().equals(this.currentPlayerID);
+    }
+
+    /** This is a method for the Planning phase.
+     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the other cloud tiles.
+     */
+    protected void addStudentsToCloud(Cloud cloud, int numOfPlayers){
+        int x = (numOfPlayers == 3)? 4 : 3;
+        try {
+            for (int i = 0; i < x; i++) {
+                cloud.addStudent(getGame().getBag().extractStudent());
+            }
+        } catch (FullCloudException e1) {
+            throw error("Cloud is full.");
+        } catch (EmptyBagException e2) {
+            throw error("Bag is empty.");
         }
     }
 
