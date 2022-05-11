@@ -34,7 +34,7 @@ public class MatchController implements Runnable {
     private GameModel game;
 
     private InfluenceCalculator influenceCalculator;
-
+    private boolean lastRound;
 
 
     public MatchController(int ID, int totalMatchPlayers) {
@@ -44,6 +44,7 @@ public class MatchController implements Runnable {
         this.wizards = new Wizard[this.totalMatchPlayers];
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
+        this.lastRound = false;
     }
 
 
@@ -54,7 +55,7 @@ public class MatchController implements Runnable {
     public Wizard[] getWizards() { return this.wizards.clone(); }
 
     public GameModel getGame() {
-        return this.game; //!Rep exposed
+        return this.game;
     }
 
     public int getTotalMatchPlayers() {
@@ -532,8 +533,57 @@ public class MatchController implements Runnable {
         }
     }
 
-    public boolean hasWinner() {
-        //TODO
+    public Player getWinner() {
+
+        Player winner = null;
+        int maxTow = 0;
+        int maxProf = 0;
+
+        for (Player p : this.game.getPlayers()) {
+            if (p.getTowerNum() > maxTow) {
+                maxTow = p.getMaxTowerNum();
+                maxProf = p.getProfessors().size();
+                winner = p;
+            } else if (p.getTowerNum() == maxTow) {
+                if (p.getProfessors().size() > maxProf) {
+                    maxProf = p.getProfessors().size();
+                    winner = p;
+                }
+            }
+        }
+
+        return winner;
+    }
+
+    public int endedAtPhase2() {
+        if (this.getCurrentPlayer().getTowerNum() == 0) return 1;
+        if (this.game.getIslands().size() <= 3) return 2;
+        return 0;
+    }
+
+    public void endGame(String reason) {
+        Player winner = this.getWinner();
+
+        for (ClientHandler client : this.clients) {
+            try {
+                client.send(new EndMessage(winner.getNickName(), reason));
+                client.closeConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //TODO: Remove from server.
+        }
+    }
+
+    public boolean noMoreStudents() {
+        return this.game.getBag().isEmpty();
+    }
+
+    public boolean noMoreAssistants() {
+        for (Player p : this.game.getPlayers()) {
+            if (p.getAssistants().size() == 0) return true;
+        }
         return false;
     }
 }

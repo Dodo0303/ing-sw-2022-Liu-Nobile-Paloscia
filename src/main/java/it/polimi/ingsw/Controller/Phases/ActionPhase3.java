@@ -27,8 +27,9 @@ public class ActionPhase3 extends Phase {
             match.broadCastCloudChoice(((ChooseCloudMessage) msg).getCloudID());
 
             match.nextTurn();
-            if (match.hasWinner()) {
-                //TODO: Handle end of match
+            if (match.getCurrentPlayerID().equals(match.getFirstOfTurn()) && (match.noMoreStudents() || match.noMoreAssistants())) {
+                if (match.noMoreStudents()) match.endGame("There are no students in the bag.");
+                else if (match.noMoreAssistants()) match.endGame("All assistants were played");
             } else {
                 this.nextPhase();
             }

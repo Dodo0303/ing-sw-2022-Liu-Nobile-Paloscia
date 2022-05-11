@@ -221,4 +221,8 @@ public class ClientHandler implements Runnable {
     }
 
     public String getNickname() { return this.nickname; }
+
+    public void closeConnection() throws IOException {
+        this.socket.close();
+    }
 }

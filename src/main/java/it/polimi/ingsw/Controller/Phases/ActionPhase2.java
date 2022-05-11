@@ -27,8 +27,10 @@ public class ActionPhase2 extends Phase {
             }
             match.broadcastMovement(((MoveMotherNatureMessage) msg).getIslandIndex());
 
-            if (match.hasWinner()) {
-                //TODO: Handle end of match
+            if (match.endedAtPhase2() == 1) {
+                match.endGame("Player built all towers.");
+            } else if (match.endedAtPhase2() == 2) {
+                match.endGame("Only three or less islands remain.");
             } else {
                 this.nextPhase();
             }
