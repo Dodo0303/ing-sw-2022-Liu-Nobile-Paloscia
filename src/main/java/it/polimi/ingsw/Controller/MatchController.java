@@ -4,10 +4,7 @@ import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementFromEntranceMessage;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementMessage;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.GameModelUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
@@ -297,11 +294,15 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
      */
-    public void takeStudentsFromCloud(Player player, Cloud cloud, int numOfPlayers) {
-        int x = (numOfPlayers == 3)? 4 : 3;
+    public void takeStudentsFromCloud(int cloudID) {
+
+        Cloud cloud = this.game.getClouds().get(cloudID);
+        Player p = this.getCurrentPlayer();
+
+        int x = (this.totalMatchPlayers == 3)? 4 : 3;
         try {
             for (int i = 0; i < x; i++) {
-                player.addStudentToEntrance(cloud.extractStudent());
+                p.addStudentToEntrance(cloud.extractStudent());
             }
         } catch (EmptyCloudException e) {
             throw error("The cloud is empty");
@@ -519,5 +520,20 @@ public class MatchController implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void broadCastCloudChoice(int cloudID) {
+        for (ClientHandler client : this.clients) {
+            try {
+                client.send(new ConfirmCloudMessage(this.currentPlayerID, cloudID));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean hasWinner() {
+        //TODO
+        return false;
     }
 }

@@ -130,7 +130,7 @@ public class MatchControllerTest {
 
         }
         game2.getGame().getPlayers().get(0).clearEntrance();
-        game2.takeStudentsFromCloud(game2.getGame().getPlayers().get(0), game2.getGame().getClouds().get(0),2);
+        game2.takeStudentsFromCloud(0);
         int num = 0;
         for(StudentColor color : game2.getGame().getPlayers().get(0).getEntranceStudents().keySet()) {
             num += game2.getGame().getPlayers().get(0).getEntranceStudents().get(color);

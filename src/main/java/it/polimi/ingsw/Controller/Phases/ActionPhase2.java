@@ -27,7 +27,11 @@ public class ActionPhase2 extends Phase {
             }
             match.broadcastMovement(((MoveMotherNatureMessage) msg).getIslandIndex());
 
-            this.nextPhase();
+            if (match.hasWinner()) {
+                //TODO: Handle end of match
+            } else {
+                this.nextPhase();
+            }
 
         } else {
             //TODO: Character handling
