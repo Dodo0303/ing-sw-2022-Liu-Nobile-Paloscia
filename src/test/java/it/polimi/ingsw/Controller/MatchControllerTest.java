@@ -93,7 +93,7 @@ public class MatchControllerTest {
     @Test
     void moveMotherNature_1() {
         try {
-            game2.moveMotherNature(100, game2.getGame().getPlayers().get(0));
+            game2.moveMotherNature(100);
         } catch (GameException e) {
             System.out.printf(e.getMessage() + "\n");
         }
@@ -103,7 +103,7 @@ public class MatchControllerTest {
     void moveMotherNature_2() {
         game2.setAssistantOfCurrentPlayer(game2.getGame().getPlayers().get(0).getAssistants().get(1));
         game2.getGame().setMothernature(5);
-        game2.moveMotherNature(10, game2.getGame().getPlayers().get(0));
+        game2.moveMotherNature(10);
         assertEquals(game2.getGame().getMotherNature(), game2.getGame().getIslands().get(10));
     }
 
@@ -115,7 +115,7 @@ public class MatchControllerTest {
         game2.getGame().getIslands().get(5).setTowerColor(Color.WHITE);
         game2.getGame().getIslands().get(6).addStudent(StudentColor.BLUE);
         game2.getGame().getPlayers().get(0).setProfessors(StudentColor.BLUE);
-        game2.moveMotherNature(6, game2.getGame().getPlayers().get(0));
+        game2.moveMotherNature(6);
         assertFalse(game2.getGame().getIslands().containsValue(temp));
         assertEquals(game2.getGame().getIslands().size(), 11);
     }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementFromEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.GameModelUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
@@ -269,22 +270,25 @@ public class MatchController implements Runnable {
 
 
     /** This is a method for the Action phase.
-     * Player PLAYER moves mothernature to xth island and try to control/conquer the xth island. */
-    public void moveMotherNature(int x, Player player) {
+     * Player PLAYER moves mothernature to xth island and tries to control/conquer the xth island. */
+    public void moveMotherNature(int x) {
         int distance;
-        if (x > getGame().getNumIslands() - 1) {
+        Player p = this.getCurrentPlayer();
+
+        if (x > this.game.getNumIslands() - 1) {
             throw error("The chosen island does not exist.");
-        } else if (x < getGame().getMotherNatureIndex()) {
-            distance = x + getGame().getNumIslands() - getGame().getMotherNatureIndex();
-        } else if (x > getGame().getMotherNatureIndex()) {
-            distance = x - getGame().getMotherNatureIndex();
+        } else if (x < this.game.getMotherNatureIndex()) {
+            distance = x + this.game.getNumIslands() - this.game.getMotherNatureIndex();
+        } else if (x > this.game.getMotherNatureIndex()) {
+            distance = x - this.game.getMotherNatureIndex();
         } else {
             distance = 0;
         }
-        if (distance > player.getUsedAssistant().getMaxSteps() || distance == 0) {
+
+        if (distance > p.getUsedAssistant().getMaxSteps() || distance == 0) {
             throw error("The chosen island is too far away!");
         } else {
-            getGame().setMothernature(x);
+            this.game.setMothernature(x);
             controlIsland(x);
             unifyIslands(x);
         }
@@ -307,61 +311,59 @@ public class MatchController implements Runnable {
     /** First, check if the xth island can be controlled/conquered.
      * If positive, then the color with most influence controls the island ISLAND.
      * If negative, do nothing. */
-    public void controlIsland(int x) {
-        Island island = getGame().getIslands().get(x);
+    private void controlIsland(int x) {
+        Island island = this.game.getIslands().get(x);
         int influence;
         int maxInfluence = 0;
         Player maxInfluencer = null;
-        for (int i = 0; i < getGame().getPlayers().size(); i++) {
-            influence = influenceCalculator.calculateInfluence(getGame().getPlayers().get(i), getGame().getIslands().get(x));
+        for (int i = 0; i < this.game.getPlayers().size(); i++) {
+            influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
             if (influence > maxInfluence) {
-                maxInfluencer = getGame().getPlayers().get(i);
+                maxInfluencer = this.game.getPlayers().get(i);
                 maxInfluence = influence;
             }
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
         }
-
     }
 
     /** First, check if the xth island can merge any adjacent island.
      * If positive, then call mergeIslands().
      * If negative, do nothing. */
-    public void unifyIslands(int x) {
-        Island island = getGame().getIslands().get(x);
-        int left = (x > 0) ? x - 1 : getGame().getNumIslands() - 1;
-        if (island.getTowerColor() != Color.VOID && getGame().getIslands().get(left).getTowerColor().equals(island.getTowerColor())) {
+    private void unifyIslands(int x) {
+        Island island = this.game.getIslands().get(x);
+        int left = (x > 0) ? x - 1 : this.game.getNumIslands() - 1;
+        if (island.getTowerColor() != Color.VOID && this.game.getIslands().get(left).getTowerColor().equals(island.getTowerColor())) {
             mergeIslands(left, x--);
         }
-        int right = (x < getGame().getNumIslands() - 1) ? x + 1 : 0;
-        if (island.getTowerColor() != Color.VOID && getGame().getIslands().get(right).getTowerColor().equals(island.getTowerColor())) {
+        int right = (x < this.game.getNumIslands() - 1) ? x + 1 : 0;
+        if (island.getTowerColor() != Color.VOID && this.game.getIslands().get(right).getTowerColor().equals(island.getTowerColor())) {
             mergeIslands(x, right);
         }
     }
 
 
-    /** In the case that x == numIslands - 1(ex. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
+    /** In the case that x == numIslands - 1 (e.g. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
      */
-    public void mergeIslands(int x, int y) {
-        if (x == getGame().getNumIslands() - 1) {
-            getGame().getIslands().get(y).copyFrom(getGame().getIslands().get(x));
-            if (x == getGame().getMotherNatureIndex()) {
-                getGame().setMothernature(y);
+    private void mergeIslands(int x, int y) {
+        if (x == this.game.getNumIslands() - 1) {
+            this.game.getIslands().get(y).copyFrom(this.game.getIslands().get(x));
+            if (x == this.game.getMotherNatureIndex()) {
+                this.game.setMothernature(y);
+            }
+        } else {
+            this.game.getIslands().get(x).copyFrom(this.game.getIslands().get(y));
+            if (y == this.game.getMotherNatureIndex()) {
+                this.game.setMothernature(x);
+            }
+            for (int i = y; i < this.game.getNumIslands() - 1; i++) {
+                this.game.getIslands().put(i, this.game.getIslands().get(i + 1)); // move islands after the yth forward by 1.
             }
         }
-        else {
-            getGame().getIslands().get(x).copyFrom(getGame().getIslands().get(y));
-            if (y == getGame().getMotherNatureIndex()) {
-                getGame().setMothernature(x);
-            }
-            for (int i = y; i < getGame().getNumIslands() - 1; i++) {
-                getGame().getIslands().put(i, getGame().getIslands().get(i + 1)); // move islands after the yth forward by 1.
-            }
-        }
-        getGame().getIslands().remove(getGame().setNumIslands(getGame().getNumIslands()) - 1);
+        this.game.getIslands().remove(this.game.setNumIslands(this.game.getNumIslands()) - 1);
     }
 
     /** This is a method for the Planning phase.
@@ -509,4 +511,13 @@ public class MatchController implements Runnable {
         this.firstOfTurn = this.game.getPlayers().get(0).getNickName();
     }
 
+    public void broadcastMovement(int numOfJumps) {
+        for (ClientHandler client : this.clients) {
+            try {
+                client.send(new ConfirmMovementMessage(numOfJumps));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

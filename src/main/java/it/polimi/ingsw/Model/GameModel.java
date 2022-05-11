@@ -155,14 +155,16 @@ public class GameModel {
 
     /** @return the island with mothernature */
     public Island getMotherNature() {
-        return _islands.get(_motherNature);
+        return this._islands.get(_motherNature);
     }
 
 
-    /** Set current player to PLAYER */
+    /** Set position of mothernature */
     public void setMothernature(int x) {
-        _motherNature = x;
+        this._motherNature = x;
     }
+
+
     public void setInfluences(Island island, Integer[] influences) {
         if (this.influences.replace(island, influences) == null)
             throw new IllegalArgumentException("The island doesn't exists");
@@ -170,7 +172,7 @@ public class GameModel {
 
     /** Set _numIslands to x, then return it.*/
     public int setNumIslands(int x) {
-        _numIslands = x;
+        this._numIslands = x;
         return this._numIslands;
     }
 

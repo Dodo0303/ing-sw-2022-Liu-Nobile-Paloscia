@@ -7,11 +7,15 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import java.util.HashMap;
 
 public class ConfirmMovementMessage extends MessageToClient {
-    private int islandIndex;
+    private final int islandIndex;
     private HashMap<Integer, Island> islands;
 
     public ConfirmMovementMessage(int islandIndex) {
         this.islandIndex = islandIndex;
+    }
+
+    public int getIslandIndex() {
+        return islandIndex;
     }
 
     public HashMap<Integer, Island> getIslands() {
@@ -19,6 +23,6 @@ public class ConfirmMovementMessage extends MessageToClient {
     }
     @Override
     public void process(ServerHandler ch) {
-        //TODO
+
     }
 }

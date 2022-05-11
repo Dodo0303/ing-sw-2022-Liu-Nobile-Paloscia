@@ -56,12 +56,13 @@ public class ActionPhase1 extends Phase {
                 default:
                     match.denyMovement(ch);
             }
+
+            if (this.moves == 3) {
+                this.nextPhase();
+            }
+
         } else {
             //TODO: Handle characters
-        }
-
-        if (this.moves == 3) {
-            this.nextPhase();
         }
     }
 

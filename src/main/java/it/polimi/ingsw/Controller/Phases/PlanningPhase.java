@@ -28,6 +28,7 @@ public class PlanningPhase extends Phase {
             try {
                 match.setAssistantOfCurrentPlayer(((SendAssistantMessage) msg).getAssistant());
             } catch (GameException e) {
+                e.printStackTrace();
                 match.denyMovement(ch);
                 return;
             }
