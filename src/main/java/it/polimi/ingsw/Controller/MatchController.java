@@ -209,7 +209,7 @@ public class MatchController implements Runnable {
     /** This is a method for the Planning phase.
      * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the other cloud tiles.
      */
-    void addStudentsToCloud(Cloud cloud, int numOfPlayers){
+    void addStudentsToCloud(Cloud cloud, int numOfPlayers) {
         int x = (numOfPlayers == 3)? 4 : 3;
         try {
             for (int i = 0; i < x; i++) {
@@ -247,20 +247,23 @@ public class MatchController implements Runnable {
 
     }
 
-    private void moveProfessorIfNeeded(Player p, StudentColor student) {
+    private void moveProfessorIfNeeded(Player p, StudentColor color) {
 
-        //TODO: Spare professors missing in game model!
+        if (this.game.getProfessors().contains(color)) {
+            this.game.removeSpareProfessor(color);
+            p.addProfessor(color);
+        }
 
-        if (!p.hasProfessor(student)) {
+        if (!p.hasProfessor(color)) {
             for (Player p_other : this.game.getPlayers()) {
 
                 boolean isOther = !p_other.getNickName().equals(p.getNickName());
-                boolean hasProf = p_other.hasProfessor(student);
-                boolean shouldNotHaveProf = this.game.getTableNumber(p_other, student) < this.game.getTableNumber(p, student);
+                boolean hasProf = p_other.hasProfessor(color);
+                boolean shouldNotHaveProf = this.game.getTableNumber(p_other, color) < this.game.getTableNumber(p, color);
 
                 if (isOther && hasProf && shouldNotHaveProf) {
-                    p_other.removeProfessor(student);
-                    p.addProfessor(student);
+                    p_other.removeProfessor(color);
+                    p.addProfessor(color);
                 }
             }
         }

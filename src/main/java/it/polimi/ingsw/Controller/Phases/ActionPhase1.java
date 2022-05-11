@@ -60,8 +60,6 @@ public class ActionPhase1 extends Phase {
             //TODO: Handle characters
         }
 
-        //TODO: Check whether professor should be moved
-
         if (this.moves == 3) {
             this.nextPhase();
         }

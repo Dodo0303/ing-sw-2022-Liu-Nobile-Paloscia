@@ -37,6 +37,9 @@ public class GameModel {
     /** Coins not obtained by any player. Initially set to 20 */
     private int _spareCoins;
 
+    /** Professors yet to be assigned to a player */
+    private ArrayList<StudentColor> _professors;
+
 
 
     /**
@@ -48,12 +51,13 @@ public class GameModel {
         if (numOfPlayers < 2 || numOfPlayers > 4) {
             throw new GameException();
         }
-        _bag = new Bag();
-        _spareCoins = 20;
-        _numIslands = 12;
-        _motherNature = new Random().nextInt(12); // Automatically choose a random island for mothernature.
+        this._bag = new Bag();
+        this._spareCoins = 20;
+        this._numIslands = 12;
+        this._motherNature = new Random().nextInt(12); // Automatically choose a random island for mothernature.
         initializeIslands();
         initializePlayers(wizards, numOfPlayers, nicknames);
+        this._professors = new ArrayList<>(Arrays.asList(StudentColor.BLUE, StudentColor.GREEN, StudentColor.PINK, StudentColor.RED, StudentColor.YELLOW));
         initializeClouds(numOfPlayers);
         initializeInfluences();
         setEntranceStudents(numOfPlayers);
@@ -198,6 +202,19 @@ public class GameModel {
     /** @return _motherNature.*/
     public int getMotherNatureIndex() {
         return this._motherNature;
+    }
+
+    /** @return a copy of the list of spare professors.*/
+    public ArrayList<StudentColor> getProfessors() {
+        return new ArrayList<>(this._professors);
+    }
+
+    /**
+     * Removes a professor from spare professors.
+     * @param color is the color of the professor to be removed.
+     */
+    public void removeSpareProfessor(StudentColor color) {
+        this._professors.remove(color);
     }
 
     /**
