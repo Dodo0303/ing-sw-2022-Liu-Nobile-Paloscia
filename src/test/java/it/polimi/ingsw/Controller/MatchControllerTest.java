@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Exceptions.FullCloudException;
+import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,7 @@ public class MatchControllerTest {
             assertEquals(game2.getGame().getPlayers().get(0).getDiningTables().get(StudentColor.BLUE).getNumOfStudents(), 1);
             game2.moveStudentToDiningRoom(StudentColor.RED);
             assertEquals(game2.getGame().getPlayers().get(0).getDiningTables().get(StudentColor.RED).getNumOfStudents(), 1);
-        } catch (GameException e) {
+        } catch (FullTableException e) {
             System.out.printf(e.getMessage() + "\n");
         }
     }

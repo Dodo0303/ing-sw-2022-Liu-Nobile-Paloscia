@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller.Phases;
 
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Controller.MatchController;
+import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementMessage;
@@ -26,22 +27,26 @@ public class ActionPhase1 extends Phase {
         if (!(msg instanceof MoveStudentFromEntranceMessage || msg instanceof ChooseCloudMessage)) {
             match.denyMovement(ch);
         } else if (msg instanceof MoveStudentFromEntranceMessage) {
-            try {
-                switch (((MoveStudentFromEntranceMessage) msg).getDestination()) {
-                    case 0:
+            switch (((MoveStudentFromEntranceMessage) msg).getDestination()) {
+
+                // Move to dining room
+                case 0:
+                    try {
                         match.moveStudentToDiningRoom(((MoveStudentFromEntranceMessage) msg).getStudent());
-                        this.moves++;
-                        //TODO: Should be broadcast
+                    } catch (FullTableException fte) {
+                        match.denyMovement(ch);
+                        return;
+                    }
+                    this.moves++;
+                    //TODO: Should be broadcast
 
-                    case 1:
-                        match.moveStudentToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudent());
-                        this.moves++;
+                // Move to island
+                case 1:
+                    match.moveStudentToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudent());
+                    this.moves++;
 
-                    default:
-                        throw new IllegalArgumentException();
-                }
-            } catch (IllegalArgumentException | GameException e) {
-                match.denyMovement(ch);
+                default:
+                    match.denyMovement(ch);
             }
         }
 

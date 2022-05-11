@@ -25,7 +25,7 @@ public class MatchController implements Runnable {
     private MatchStatus matchStatus;
     private final int totalMatchPlayers;
     private int currentPlayersNumber;
-    private String currentPlayer;
+    private String currentPlayerID;
     private String firstOfTurn;
     private final ArrayList<ClientHandler> clients;
     private final List<Wizard> wizards;
@@ -60,8 +60,17 @@ public class MatchController implements Runnable {
     }
 
     public String getCurrentPlayerID() {
-        return currentPlayer;
+        return currentPlayerID;
     }
+
+    Player getCurrentPlayer() {
+        for (Player p : this.game.getPlayers()) {
+            if (p.getNickName().equals(this.currentPlayerID)) return p;
+            break;
+        }
+        throw new MatchException("No current player.");
+    }
+
     public int getID(){
         return ID;
     }
@@ -146,10 +155,10 @@ public class MatchController implements Runnable {
         gameSetup();
 
         int randomFirst = new Random().nextInt(this.totalMatchPlayers);
-        this.currentPlayer = this.game.getPlayers().get(randomFirst).getNickName();
-        this.firstOfTurn = this.currentPlayer;
+        this.currentPlayerID = this.game.getPlayers().get(randomFirst).getNickName();
+        this.firstOfTurn = this.currentPlayerID;
 
-        broadcastTurnChange(this.currentPlayer, "PlanningPhase");
+        broadcastTurnChange(this.currentPlayerID, "PlanningPhase");
 
         this.gamePhase = new PlanningPhase(this); // Match now enters planning phase.
 
@@ -172,7 +181,7 @@ public class MatchController implements Runnable {
      * @return whether the player is the current one or not
      */
     private boolean isCurrent(ClientHandler ch){
-        return ch.getNickname().equals(this.currentPlayer);
+        return ch.getNickname().equals(this.currentPlayerID);
     }
 
     /**
@@ -214,40 +223,29 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the correspondent dining room.
      */
-    public void moveStudentToDiningRoom(StudentColor student) {
+    public void moveStudentToDiningRoom(StudentColor student) throws FullTableException {
 
-        for (Player p : this.game.getPlayers()) {
-            if (p.getNickName().equals(this.currentPlayer)) {
-                try {
-                    try{
-                        game.removeStudentFromEntrance(p, student);
-                    } catch (GameException e1) {
-                        throw error(e1.getMessage());
-                    }
-                    game.addToDiningTable(p, student);
-                } catch (FullTableException e2) {
-                    throw error("The dining table is full.");
-                }
-            }
-        }
+        Player p = this.getCurrentPlayer();
+
+        game.addToDiningTable(p, student);
+        game.removeStudentFromEntrance(p, student);
+
     }
 
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the island ISLAND.
      */
-    public void moveStudentToIsland(int islandID, StudentColor student) throws IllegalArgumentException, GameException {
+    public void moveStudentToIsland(int islandID, StudentColor student) throws IllegalArgumentException {
 
+        Player p = this.getCurrentPlayer();
         Island island = this.game.getIslands().get(islandID);
+
         if (island == null) {
             throw new IllegalArgumentException();
         }
 
-        for (Player p : this.game.getPlayers()) {
-            if (this.currentPlayer.equals(p.getNickName())) {
-                game.removeStudentFromEntrance(p, student);
-            }
-        }
         game.addStudentToIsland(student, island);
+        game.removeStudentFromEntrance(p, student);
     }
 
 
@@ -352,13 +350,18 @@ public class MatchController implements Runnable {
      * Player PLAYER plays the assistant card ASSISTANT when other players are not playing the same card.
      */
     public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException {
+
         for (Player p : this.game.getPlayers()) {
-            if (!this.currentPlayer.equals(p.getNickName()) && (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps())) {
-                throw new GameException("Card was already used."); //TODO: What if it's the last one?
-            }
+            if (!this.currentPlayerID.equals(p.getNickName())) {
+                if  (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps()) {
+                    throw new GameException("Card was already used."); //TODO: What if it's the last one?
+                }
+            } else break;
         }
-        game.setAssistantOfPlayer(this.currentPlayer, assistant);
+        game.setAssistantOfPlayer(this.currentPlayerID, assistant);
     }
+
+    //TODO: Add broadcast used assistant
 
     public void broadcastClouds() {
         for (ClientHandler client : this.clients) {
@@ -394,14 +397,14 @@ public class MatchController implements Runnable {
     }
 
     public void nextTurn() {
-        int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayer) + 1) % this.totalMatchPlayers;
-        this.currentPlayer = this.game.getPlayers().get(nextPlayerIndex).getNickName();
+        int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayerID) + 1) % this.totalMatchPlayers;
+        this.currentPlayerID = this.game.getPlayers().get(nextPlayerIndex).getNickName();
 
-        if (this.currentPlayer.equals(this.firstOfTurn)) {
+        if (this.currentPlayerID.equals(this.firstOfTurn)) { //TODO: this works planning phase only
             this.gamePhase.nextPhase();
         }
 
-        broadcastTurnChange(this.currentPlayer, this.gamePhase.toString());
+        broadcastTurnChange(this.currentPlayerID, this.gamePhase.toString());
     }
 
     public void setWizardOfPlayer(ClientHandler player, Wizard wizard) throws GameException{
