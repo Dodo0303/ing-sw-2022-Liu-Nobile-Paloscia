@@ -32,7 +32,7 @@ public class PlanningPhase extends Phase {
                 return;
             }
 
-            //match.broadcastAssistant();
+            match.broadcastAssistant(match.getCurrentPlayerID(), ((SendAssistantMessage) msg).getAssistant().getValue());
             match.nextTurn();
         }
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Controller.Phases.ActionPhase1;
 import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
@@ -10,6 +9,7 @@ import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementFrom
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.Random;
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
 public class MatchController implements Runnable {
-    private int ID;
+    private final int ID;
 
     private MatchStatus matchStatus;
     private final int totalMatchPlayers;
@@ -191,7 +191,11 @@ public class MatchController implements Runnable {
      */
     public void denyMovement(ClientHandler ch){
         MessageToClient msg = new DenyMovementMessage();
-        //TODO ch.sendMessage(msg);
+        try {
+            ch.send(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /** This is a method for the Planning phase.
@@ -362,8 +366,6 @@ public class MatchController implements Runnable {
         game.setAssistantOfPlayer(this.currentPlayerID, assistant);
     }
 
-    //TODO: Add broadcast used assistant
-
     public void broadcastClouds() {
         for (ClientHandler client : this.clients) {
             try {
@@ -431,6 +433,16 @@ public class MatchController implements Runnable {
         for (ClientHandler client : this.clients) {
             try {
                 client.send(new ConfirmMovementFromEntranceMessage(student, playerID, destination, destinationID));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void broadcastAssistant(String playerID, int assistantValue) {
+        for (ClientHandler client : this.clients) {
+            try {
+                client.send(new UsedAssistantMessage(playerID, assistantValue));
             } catch (IOException e) {
                 e.printStackTrace();
             }
