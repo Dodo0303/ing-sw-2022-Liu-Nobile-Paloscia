@@ -272,4 +272,15 @@ public class GameModel {
         return p.getDiningTables().get(color).getNumOfStudents();
     }
 
+    public void sortPlayers() {
+        this._players.sort(new PlayerComparator());
+    }
+
+    private class PlayerComparator implements Comparator<Player> {
+
+        @Override
+        public int compare(Player p1, Player p2) {
+            return Integer.compare(p1.getUsedAssistant().getValue(), p2.getUsedAssistant().getValue());
+        }
+    }
 }

@@ -476,4 +476,10 @@ public class MatchController implements Runnable {
             }
         }
     }
+
+    public void sortPlayers() {
+        this.game.sortPlayers();
+        this.firstOfTurn = this.game.getPlayers().get(0).getNickName();
+    }
+
 }

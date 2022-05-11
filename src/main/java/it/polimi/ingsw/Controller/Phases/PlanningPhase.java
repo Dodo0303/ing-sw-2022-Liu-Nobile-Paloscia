@@ -36,6 +36,7 @@ public class PlanningPhase extends Phase {
 
             match.nextTurn();
             if (match.getCurrentPlayerID().equals(match.getFirstOfTurn())) {
+                match.sortPlayers();
                 this.nextPhase();
             }
             match.broadcastTurnChange(match.getCurrentPlayerID(), match.getGamePhase().toString());
