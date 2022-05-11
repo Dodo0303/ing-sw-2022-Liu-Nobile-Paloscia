@@ -6,6 +6,7 @@ import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementFromEntranceMessage;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.DenyMovementMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
@@ -423,6 +424,16 @@ public class MatchController implements Runnable {
             }
         } else {
             throw new GameException("Wizard not available");
+        }
+    }
+
+    public void broadcastMovementFromEntrance(StudentColor student, String playerID, int destination, int destinationID) {
+        for (ClientHandler client : this.clients) {
+            try {
+                client.send(new ConfirmMovementFromEntranceMessage(student, playerID, destination, destinationID));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

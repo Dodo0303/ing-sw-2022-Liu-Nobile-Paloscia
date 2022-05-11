@@ -9,8 +9,8 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class ConfirmCloudMessage extends MessageToClient {
     //TODO
-    private int playerID;
-    private int cloudID;
+    private final int playerID;
+    private final int cloudID;
 
     public ConfirmCloudMessage(int playerID, int cloudID) {
         this.playerID = playerID;

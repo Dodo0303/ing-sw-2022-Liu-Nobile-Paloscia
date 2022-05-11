@@ -3,15 +3,9 @@ package it.polimi.ingsw.Controller.Phases;
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Controller.MatchController;
 import it.polimi.ingsw.Exceptions.FullTableException;
-import it.polimi.ingsw.Exceptions.GameException;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ConfirmMovementMessage;
-import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
-import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
-
-import java.io.IOException;
 
 public class ActionPhase1 extends Phase {
 
@@ -24,7 +18,7 @@ public class ActionPhase1 extends Phase {
 
     @Override
     public void process(MessageToServer msg, ClientHandler ch) {
-        if (!(msg instanceof MoveStudentFromEntranceMessage || msg instanceof ChooseCloudMessage)) {
+        if (!(msg instanceof MoveStudentFromEntranceMessage || msg instanceof UseCharacterMessage)) {
             match.denyMovement(ch);
         } else if (msg instanceof MoveStudentFromEntranceMessage) {
             switch (((MoveStudentFromEntranceMessage) msg).getDestination()) {
@@ -34,20 +28,36 @@ public class ActionPhase1 extends Phase {
                     try {
                         match.moveStudentToDiningRoom(((MoveStudentFromEntranceMessage) msg).getStudent());
                     } catch (FullTableException fte) {
+                        fte.printStackTrace();
                         match.denyMovement(ch);
                         return;
                     }
                     this.moves++;
-                    //TODO: Should be broadcast
+                    match.broadcastMovementFromEntrance(((MoveStudentFromEntranceMessage) msg).getStudent(),
+                                                        match.getCurrentPlayerID(),
+                                                        ((MoveStudentFromEntranceMessage) msg).getDestination(),
+                                                        ((MoveStudentFromEntranceMessage) msg).getDestinationID());
 
                 // Move to island
                 case 1:
-                    match.moveStudentToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudent());
+                    try {
+                        match.moveStudentToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudent());
+                    } catch (IllegalArgumentException iae) {
+                        iae.printStackTrace();
+                        match.denyMovement(ch);
+                        return;
+                    }
                     this.moves++;
+                    match.broadcastMovementFromEntrance(((MoveStudentFromEntranceMessage) msg).getStudent(),
+                            match.getCurrentPlayerID(),
+                            ((MoveStudentFromEntranceMessage) msg).getDestination(),
+                            ((MoveStudentFromEntranceMessage) msg).getDestinationID());
 
                 default:
                     match.denyMovement(ch);
             }
+        } else {
+            //TODO: Handle characters
         }
 
         //TODO: Check whether professor should be moved
