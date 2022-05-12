@@ -102,7 +102,7 @@ public class ClientHandler implements Runnable {
             infoMessage = (MessageToServer) objectInputStream.readObject();
         }
         //Received information
-        match = new MatchController(new Random().nextInt(100000), ((SendStartInfoMessage) infoMessage).getNumOfPlayers()); //TODO Manage random better
+        match = new MatchController(server.generateMatchID(), ((SendStartInfoMessage) infoMessage).getNumOfPlayers());
         new Thread(match);
         wizard = ((SendStartInfoMessage) infoMessage).getWizard();
         //TODO Manage game mode

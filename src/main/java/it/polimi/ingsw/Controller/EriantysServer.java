@@ -116,4 +116,20 @@ public class EriantysServer {
         throw new NoSuchMatchException();
     }
 
+    public int generateMatchID() {
+        Random rnd = new Random();
+
+        int id = rnd.nextInt(Integer.MAX_VALUE);
+        List<Integer> IDs = new ArrayList<>();
+        for (MatchController match :
+                currentMatches) {
+            IDs.add(match.getID());
+        }
+        while (IDs.contains(id)) {
+            id = rnd.nextInt(Integer.MAX_VALUE);
+        }
+
+        return id;
+    }
+
 }
