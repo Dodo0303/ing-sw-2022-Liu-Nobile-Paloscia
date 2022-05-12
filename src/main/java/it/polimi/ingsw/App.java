@@ -34,7 +34,7 @@ public class App {
                 }
 
                 default: {
-                    game = new MatchController(2);
+                    game = new MatchController(2, 2); //TODO
                     //System.exit(game.run());
                 }
             }

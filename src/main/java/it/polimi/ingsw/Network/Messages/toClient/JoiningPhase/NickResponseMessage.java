@@ -26,4 +26,6 @@ public class NickResponseMessage extends MessageToClient {
             client.setNickName(nickname);
         }
     }
+
+    //TODO Update server side
 }

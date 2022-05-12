@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Exceptions.NoSuchMatchException;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -103,6 +105,15 @@ public class EriantysServer {
             if (nickname.equals(client.getNickname())) return false;
         }
         return true;
+    }
+
+    public MatchController getMatchById(int ID) throws NoSuchMatchException {
+        for (MatchController match :
+                currentMatches) {
+            if (match.getID() == ID)
+                return match;
+        }
+        throw new NoSuchMatchException();
     }
 
 }

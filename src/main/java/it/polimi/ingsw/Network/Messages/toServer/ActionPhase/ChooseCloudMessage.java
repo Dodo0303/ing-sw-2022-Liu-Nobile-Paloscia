@@ -23,6 +23,7 @@ public class ChooseCloudMessage extends MessageToServer {
 
     @Override
     public void process(ClientHandler ch) {
+        /*
         MatchController match = ch.getMatch();
         MessageToClient message;
         Player player = match.getGame().getPlayers().get(ch.getPlayerID());
@@ -35,5 +36,7 @@ public class ChooseCloudMessage extends MessageToServer {
             message = new DenyMovementMessage();
         }
         //TODO send message method in ClientHandler
+        */
+
     }
 }

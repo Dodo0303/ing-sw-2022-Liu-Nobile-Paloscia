@@ -7,12 +7,52 @@ import it.polimi.ingsw.Exceptions.GameException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**  A new player. */
 
 public class Player {
+
+    /** My current color. */
+    private Color _color;
+
+    /** Number of towers owned by THIS PLAYER. */
+    private int _towerNum;
+
+    /** Maximum amount of towers that the player can hold */
+    private final int _maxTowerNum;
+
+    /** Number of coins owned by THIS PLAYER. */
+    private int _coins;
+
+    /** The nickname set by THIS PLAYER */
+    private String _nickName;
+
+    /** The numbers of professors of each color. */
+    private List<StudentColor> _professors;
+
+    /** The numbers of students in entrance of each color. */
+    private HashMap<StudentColor, Integer> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
+
+    /** Max amount of students in the entrance */
+    private final int _maxEntranceStudents;
+
+    /** Assistant cards of THIS player. Assistant[] is being used because the index of each card represents their maxStep.*/
+    private final ArrayList<Assistant> _assistants = new ArrayList<>(10);
+
+    /** Last used assistant. */
+    private Assistant _lastUsedAssistant;
+
+    /** Dining tables of THIS player. */
+    private HashMap<StudentColor, DiningTable> _diningTable;
+
+
+
+    // CONSTRUCTOR
+
     /** A Player in GAME, initially playing COLOR. */
-    Player(Color color, Wizard wizard, int numOfPlayers) {
+    Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
+        this._nickName = nickname;
         this._color = color;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 0; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
@@ -31,6 +71,10 @@ public class Player {
         initDiningTable();
     }
 
+
+
+    // INITIALIZATION
+
     /** Initialize _entranceStudents */
     private void initEntranceStudents() {
         this._entranceStudents = new HashMap<>();
@@ -47,8 +91,8 @@ public class Player {
     private void initAssistant(Wizard wizard) {
         int index = 0;
         for (int maxSteps = 1; maxSteps <= 5; maxSteps++) {
-            for(int j = 0; j < 2; j++) {
-                _assistant[index] = new Assistant(++index, maxSteps, wizard);
+            for (int j = 0; j < 2; j++) {
+                this._assistants.add(new Assistant(++index, maxSteps, wizard));
             }
         }
     }
@@ -60,6 +104,10 @@ public class Player {
             this._diningTable.put(color, new DiningTable(color));
         }
     }
+
+
+
+    // ADD AND REMOVE TOWERS
 
     /** Add 1 tower to THIS PLAYER. */
     void addTower() {
@@ -78,6 +126,10 @@ public class Player {
         }
     }
 
+
+
+    // ADD AND REMOVE COINS
+
     /** Add 1 coin to THIS PLAYER. */
     void addCoin() {
         this._coins++;
@@ -93,16 +145,24 @@ public class Player {
             throw new GameException("Not enough coins");
     }
 
+
+
+    // ADD AND REMOVE PROFESSORS
+
     /** 1 professor of StudentCOLOR color to THIS PLAYER. */
-    void addProfessor(StudentColor color) {
+    public void addProfessor(StudentColor color) {
         if (!this._professors.contains(color))
             this._professors.add(color);
     }
 
     /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
-    void removeProfessor(StudentColor color) {
+    public void removeProfessor(StudentColor color) {
             this._professors.remove(color);
     }
+
+
+
+    // ADD AND REMOVE STUDENTS FROM ENTRANCE
 
     /** Add one student of StudentCOLOR color to THIS PLAYER. */
     public void addStudentToEntrance(StudentColor color) {
@@ -125,17 +185,32 @@ public class Player {
         }
     }
 
+    /** Remove all students in entrance. */
+    public void clearEntrance() {
+        for (StudentColor color : _entranceStudents.keySet()) {
+            _entranceStudents.put(color, 0);
+        }
+    }
+
+
+
+    // ASSISTANT
+
     /** Use an assistant card.
      * @return the assistant card chosen by THIS player. */
     public Assistant useAssistant(Assistant assistant) {
         int index = assistant.getValue()-1;
-        Assistant res = _assistant[index];
+        Assistant res = _assistants.get(index);
         if (res == null)
             throw new GameException("Assistant already used");
         _lastUsedAssistant = res;
-        _assistant[index] = null;
+        _assistants.set(index, null);
         return res;
     }
+
+
+
+    // ADD AND REMOVE FROM DINING TABLE
 
     /** Add student to the correspondent dining table. */
     public void addToDiningTable(StudentColor color) throws FullTableException {
@@ -147,13 +222,30 @@ public class Player {
         this._diningTable.get(color).removeStudent();
     }
 
-    /** Remove all students in entrance. */
-    public void clearEntrance() {
-        for(StudentColor color : _entranceStudents.keySet()) {
-            _entranceStudents.put(color, 0);
-        }
+
+
+    // UTILS
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(_nickName, player._nickName);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(_nickName);
+    }
+
+    public boolean hasProfessor(StudentColor color) {
+        return this._professors.contains(color);
+    }
+
+
+
+    // GETTERS
 
     /** Return the color I am currently playing. */
     public Color getColor() {
@@ -162,27 +254,21 @@ public class Player {
 
     /**The getter of _towerNum
      * @return number of towers owned by THIS PLAYER. */
-    int getTowerNum() {
+    public int getTowerNum() {
         return this._towerNum;
     }
 
     /** The getter of coins.
      * @return number of coins owned by THIS PLAYER.*/
-    int getCoins() {
+    public int getCoins() {
         return this._coins;
-    }
-
-    public void setNickName(String nickname){
-        if (_nickName == null)
-            _nickName = nickname;
     }
 
     /** The getter of nickname.
      * @return the nickname of THIS PLAYER. */
-    String getNickName() {
+    public String getNickName() {
         return this._nickName;
     }
-
 
     /** The getter of _professors
      * @return the numbers of professors of each color. */
@@ -203,8 +289,8 @@ public class Player {
 
     /** The getter of _assistant.
      * @return unused assistants of THIS player. */
-    public Assistant[] getAssistants() {
-        return this._assistant;
+    public ArrayList<Assistant> getAssistants() {
+        return this._assistants;
     }
 
     /** The getter of _usedAssistant.
@@ -213,7 +299,6 @@ public class Player {
         return this._lastUsedAssistant;
     }
 
-
     /** The getter of DiningTables.
     * @return the dining tables. */
     public HashMap<StudentColor, DiningTable> getDiningTables() {
@@ -221,7 +306,6 @@ public class Player {
     }
 
     /**
-     *
      * @return the maximum amount of students that can be in the entrance
      */
     public int getMaxEntranceStudents() {
@@ -229,44 +313,13 @@ public class Player {
     }
 
     /**
-     *
      * @return the maximum amount of towers that this player can have
      */
     public int getMaxTowerNum(){
         return _maxTowerNum;
     }
 
-    /** My current color. */
-    private Color _color;
-
-    /** number of towers owned by THIS PLAYER. */
-    private int _towerNum;
-
-    /** maximum amount of towers that the player can hold */
-    private int _maxTowerNum;
-
-    /** number of coins owned by THIS PLAYER. */
-    private int _coins;
-
-    /** The nickname set by THIS PLAYER */
-    private String _nickName;
-
-    /** The numbers of professors of each color. */
-    private List<StudentColor> _professors;
-
-    /** The numbers of students in entrance of each color. */
-    private HashMap<StudentColor, Integer> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
-
-    /** Max amount of students in the entrance */
-    private int _maxEntranceStudents;
-
-    /** Assistant cards of THIS player. Assistant[] is being used because the index of each card represents their maxStep.*/
-    private Assistant[] _assistant = new Assistant[10];
-
-    /** Last used assistant. */
-    private Assistant _lastUsedAssistant;
-
-    /** Dining tables of THIS player. */
-    private HashMap<StudentColor, DiningTable> _diningTable;
-
+    public boolean lastAssistant() {
+        return this._assistants.size() == 1;
+    }
 }

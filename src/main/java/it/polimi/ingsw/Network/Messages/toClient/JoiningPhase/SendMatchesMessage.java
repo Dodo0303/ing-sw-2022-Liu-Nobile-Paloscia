@@ -11,6 +11,11 @@ public class SendMatchesMessage extends MessageToClient {
     private List<Integer> matchesID;
     private List<List<String>> players;
 
+    public SendMatchesMessage(List<Integer> matchesID, List<List<String>> players) {
+        this.matchesID = matchesID;
+        this.players = players;
+    }
+
     public List<Integer> getMatchesID() {
         return matchesID;
     }
@@ -19,9 +24,8 @@ public class SendMatchesMessage extends MessageToClient {
         return players.get(id);
     }
 
-    public void SendStartInfoMessage(List<Integer> matchesID, List<List<String>> players) {
-        this.matchesID = matchesID;
-        this.players = players;
+    public List<List<String>> getPlayers() {
+        return players;
     }
 
     @Override
@@ -29,5 +33,6 @@ public class SendMatchesMessage extends MessageToClient {
         client.getClient().setMatchesID(matchesID);
         client.getClient().setPlayers(players);
     }
+
 
 }

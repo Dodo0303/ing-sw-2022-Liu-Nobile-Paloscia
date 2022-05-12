@@ -15,43 +15,82 @@ public class GameModel {
     protected GameModel() {
     }
 
+
+    /** A read-only version of this Board. */
+    private ReadOnlyGameModel _readonlyGame;
+
+    /** All islands */
+    private HashMap<Integer, Island> _islands;
+
+    /** Number of islands (merged islands count as 1) */
+    private int _numIslands;
+
+    /** The index of the island with mothernature */
+    private int _motherNature;
+
+    /**
+     * Maps each island with an array of integers representing the influence of each player in that island
+     */
+    private Map<Island, Integer[]> influences;
+
+    /** Current players */
+    private ArrayList<Player> _players;
+
+    /** Students bag */
+    private Bag _bag;
+
+    /** Clouds on board */
+    private ArrayList<Cloud> _clouds;
+
+    /** Coins not obtained by any player. Initially set to 20 */
+    private int _spareCoins;
+
+    /** Professors yet to be assigned to a player */
+    private ArrayList<StudentColor> _professors;
+
+
+
     /**
      * Constructor of GameModel.
      * @param wizards the wizards chosen by each player.
      * @param numOfPlayers number of players in game. Must be between 2 and 4.
      */
-    public GameModel(Wizard[] wizards, int numOfPlayers) {
+    public GameModel(int numOfPlayers, String[] nicknames, Wizard[] wizards) {
         if (numOfPlayers < 2 || numOfPlayers > 4) {
             throw new GameException();
         }
-        _bag = new Bag();
-        _spareCoins = 20;
-        _numIslands = 12;
+        this._bag = new Bag();
+        this._spareCoins = 20;
+        this._numIslands = 12;
+        this._motherNature = new Random().nextInt(12); // Automatically choose a random island for mothernature.
         initializeIslands();
-        initializePlayers(wizards, numOfPlayers);
+        initializePlayers(wizards, numOfPlayers, nicknames);
+        this._professors = new ArrayList<>(Arrays.asList(StudentColor.BLUE, StudentColor.GREEN, StudentColor.PINK, StudentColor.RED, StudentColor.YELLOW));
         initializeClouds(numOfPlayers);
         initializeInfluences();
         setEntranceStudents(numOfPlayers);
-        Random randomMothernature = new Random();
-        _motherNature = randomMothernature.nextInt(12); //automatically choose a random island for mothernature.
-        Random randomPlayer = new Random();
-        _currentPlayer = _players.get(randomPlayer.nextInt(numOfPlayers)); //Determine the first player at random.
     }
 
-    /** Initialize 12 islands with 2 students each.
+
+    // INITIALIZERS
+
+    /**
+     * Initialize 12 islands with 2 students each.
      */
     private void initializeIslands() {
-        int rnd;
+        int rnd, i;
         _islands = new HashMap<>();
-        ArrayList<StudentColor> twoForEachColor = new ArrayList<>();
+        ArrayList<StudentColor> twoForEachColor = new ArrayList<>(10);
+
         for (StudentColor color : StudentColor.values()) {
-            for(int i = 0; i < 2; i++) {
+            for(i = 0; i < 2; i++) {
                 twoForEachColor.add(color);
             }
         }
-        for(int i = 0; i < 12; i++) {
+
+        for(i = 0; i < 12; i++) {
             _islands.put(i, new Island());
-            if (i != _motherNature && i != ((_motherNature < 6)? _motherNature + 6 : _motherNature - 6)) {
+            if (i != _motherNature && i != (_motherNature + 6) % 12) {
                 rnd = new Random().nextInt(twoForEachColor.size()); //rnd is a random number between 0 and twoForEachColor.size().
                 _islands.get(i).addStudent(twoForEachColor.remove(rnd)); //add the student at rnd position of the arraylist twoForEachColor to the ISLAND and then remove it from twoForEachColor.
             }
@@ -63,20 +102,20 @@ public class GameModel {
      * @param wizards, the array of Wizards chosen by each player.
      * @param numOfPlayers number of player, to decide how many objects must be created.
      */
-    private void initializePlayers(Wizard[] wizards, int numOfPlayers) {
-        _players = new ArrayList<>();
+    private void initializePlayers(Wizard[] wizards, int numOfPlayers, String[] nicknames) {
+        _players = new ArrayList<>(numOfPlayers);
         if (numOfPlayers == 2) {
-            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.BLACK, wizards[1], numOfPlayers));
         } else if (numOfPlayers == 3) {
-            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[1], numOfPlayers));
-            _players.add(new Player(Color.GRAY, wizards[2], numOfPlayers));
+            _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.BLACK, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[2], Color.GRAY, wizards[2], numOfPlayers));
         } else if (numOfPlayers == 4) {
-            _players.add(new Player(Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(Color.WHITE, wizards[1], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[2], numOfPlayers));
-            _players.add(new Player(Color.BLACK, wizards[3], numOfPlayers));
+            _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.WHITE, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[2], Color.BLACK, wizards[2], numOfPlayers));
+            _players.add(new Player(nicknames[3], Color.BLACK, wizards[3], numOfPlayers));
         }
     }
 
@@ -96,8 +135,8 @@ public class GameModel {
      * @param numOfPlayers number of players in the game, to decide number of students on each Cloud.
      */
     private void initializeClouds(int numOfPlayers){
-        _clouds = new ArrayList<>();
-        for (int i=0; i<numOfPlayers; i++) {
+        _clouds = new ArrayList<>(numOfPlayers);
+        for (int i=0; i < numOfPlayers; i++) {
             _clouds.add(new Cloud(numOfPlayers));
         }
     }
@@ -117,43 +156,31 @@ public class GameModel {
         }
     }
 
-    /**
-     * @return number of coins not obtained by any player */
+    /** @return number of coins not obtained by any player */
     int getSpareCoins() {
         return this._spareCoins;
     }
 
-    /**
-     * @return the island with mothernature */
+    /** @return the island with mothernature */
     public Island getMotherNature() {
-        return _islands.get(_motherNature);
-    }
-
-    /**
-     * @return the current player */
-    Player getCurrentPlayer() {
-        return this._currentPlayer;
-    }
-
-    /**
-     * Set current player to PLAYER */
-    void setCurrentPlayer(Player player) {
-        _currentPlayer = player;
+        return this._islands.get(_motherNature);
     }
 
 
-    /** * Set current player to PLAYER */
+    /** Set position of mothernature */
     public void setMothernature(int x) {
-        _motherNature = x;
+        this._motherNature = x;
     }
+
+
     public void setInfluences(Island island, Integer[] influences) {
         if (this.influences.replace(island, influences) == null)
             throw new IllegalArgumentException("The island doesn't exists");
     }
 
-    /** * Set _numIslands to x, then return it.*/
+    /** Set _numIslands to x, then return it.*/
     public int setNumIslands(int x) {
-        _numIslands = x;
+        this._numIslands = x;
         return this._numIslands;
     }
 
@@ -187,13 +214,26 @@ public class GameModel {
         return this._motherNature;
     }
 
+    /** @return a copy of the list of spare professors.*/
+    public ArrayList<StudentColor> getProfessors() {
+        return new ArrayList<>(this._professors);
+    }
+
+    /**
+     * Removes a professor from spare professors.
+     * @param color is the color of the professor to be removed.
+     */
+    public void removeSpareProfessor(StudentColor color) {
+        this._professors.remove(color);
+    }
+
     /**
      *
      * @param island island of interest
      * @return the influence of each player in that island
      */
     public List<Integer> getInfluences(Island island) {
-        List<Integer> res = new ArrayList<Integer>();
+        List<Integer> res = new ArrayList<>();
         Integer[] values = influences.get(island);
         Collections.addAll(res, values);
         return res;
@@ -210,40 +250,52 @@ public class GameModel {
         return influences.get(island)[index];
     }
 
+    public void setAssistantOfPlayer(String playerNickname, Assistant assistant) {
+        for (Player player : _players) {
+            if (player.getNickName().equals(playerNickname)) {
+                player.useAssistant(assistant);
+                break;
+            }
+        }
+    }
     public ReadOnlyGameModel readOnlyGame() {
         return _readonlyGame;
     }
 
 
-    /** All islands */
-    private HashMap<Integer, Island> _islands;
+    public int getPlayerIndexFromNickname(String nickname) {
+        for (Player player : this._players) {
+            if (player.getNickName().equals(nickname)) return this._players.indexOf(player);
+        }
+        throw new NoSuchElementException();
+    }
 
-    /** Coins not obtained by any player. Initially set to 20 */
-    private int _spareCoins;
+    public void removeStudentFromEntrance(Player p, StudentColor student) {
+        p.removeStudentFromEntrance(student);
+    }
 
-    /** The index of the island with mothernature */
-    private int _motherNature;
+    public void addToDiningTable(Player p, StudentColor student) throws FullTableException {
+        p.addToDiningTable(student);
+    }
 
-    /** Current player */
-    private Player _currentPlayer;
+    public void addStudentToIsland(StudentColor student, Island island) {
+        island.addStudent(student);
+    }
 
-    /** Number of islands (merged islands count as 1) */
-    private int _numIslands;
+    public int getTableNumber(Player p, StudentColor color) {
+        return p.getDiningTables().get(color).getNumOfStudents();
+    }
 
-    /** Students bag */
-    private Bag _bag;
+    public void sortPlayers() {
+        this._players.sort(new PlayerComparator());
+    }
 
-    /** Current players */
-    private ArrayList<Player> _players;
+    private class PlayerComparator implements Comparator<Player> {
 
-    /** Clouds on board */
-    private ArrayList<Cloud> _clouds;
+        @Override
+        public int compare(Player p1, Player p2) {
+            return Integer.compare(p1.getUsedAssistant().getValue(), p2.getUsedAssistant().getValue());
+        }
+    }
 
-    /**
-     * Maps each island with an array of integers representing the influence of each player in that island
-     */
-    private Map<Island, Integer[]> influences;
-
-    /** A read-only version of this Board. */
-    private ReadOnlyGameModel _readonlyGame;
 }

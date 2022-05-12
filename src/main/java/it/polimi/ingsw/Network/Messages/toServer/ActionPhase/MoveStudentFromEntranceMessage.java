@@ -5,18 +5,18 @@ import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 public class MoveStudentFromEntranceMessage extends MessageToServer {
-    private StudentColor color;
-    private int destination;
-    private int destinationID;
+    private final StudentColor student;
+    private final int destination;
+    private final int destinationID;
 
-    public MoveStudentFromEntranceMessage(StudentColor color, int destination, int destinationID) {
-        this.color = color;
+    public MoveStudentFromEntranceMessage(StudentColor student, int destination, int destinationID) {
+        this.student = student;
         this.destination = destination;
         this.destinationID = destinationID;
     }
 
-    public StudentColor getStudentcolor() {
-        return color;
+    public StudentColor getStudent() {
+        return this.student;
     }
 
     public int getDestination() {

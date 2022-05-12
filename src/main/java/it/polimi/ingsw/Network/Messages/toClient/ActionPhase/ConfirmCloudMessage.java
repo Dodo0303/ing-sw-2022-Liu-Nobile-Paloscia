@@ -6,16 +6,16 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class ConfirmCloudMessage extends MessageToClient {
     //TODO
-    private int playerID;
-    private int cloudID;
+    private final String playerID;
+    private final int cloudID;
 
-    public ConfirmCloudMessage(int playerID, int cloudID) {
+    public ConfirmCloudMessage(String playerID, int cloudID) {
         this.playerID = playerID;
         this.cloudID = cloudID;
 
     }
 
-    public int getPlayerID() {
+    public String getPlayerID() {
         return this.playerID;
     }
 

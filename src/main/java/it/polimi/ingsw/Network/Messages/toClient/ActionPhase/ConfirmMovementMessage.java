@@ -6,18 +6,19 @@ import it.polimi.ingsw.Model.Cloud;
 import it.polimi.ingsw.Model.Island;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfirmMovementMessage extends MessageToClient {
-    private int islandIndex;
+    private final int islandIndex;
     private HashMap<Integer, Island> islands;
-    private ArrayList<Cloud> clouds;//prep for AP3
 
-    public ConfirmMovementMessage(int islandIndex, HashMap<Integer, Island> islands, ArrayList<Cloud> clouds) {
+    public ConfirmMovementMessage(int islandIndex, HashMap<Integer, Island> islands) {
         this.islandIndex = islandIndex;
         this.islands = islands;
-        this.clouds = clouds;
+    }
+
+    public int getIslandIndex() {
+        return islandIndex;
     }
 
     public HashMap<Integer, Island> getIslands() {
