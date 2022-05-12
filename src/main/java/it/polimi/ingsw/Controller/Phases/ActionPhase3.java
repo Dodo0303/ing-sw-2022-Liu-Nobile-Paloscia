@@ -30,9 +30,8 @@ public class ActionPhase3 extends Phase {
             if (match.getCurrentPlayerID().equals(match.getFirstOfTurn()) && (match.noMoreStudents() || match.noMoreAssistants())) {
                 if (match.noMoreStudents()) match.endGame("There are no students in the bag.");
                 else if (match.noMoreAssistants()) match.endGame("All assistants were played");
-            } else {
-                this.nextPhase();
             }
+            this.nextPhase();
         } else {
             //TODO: Character handling
         }
@@ -40,7 +39,10 @@ public class ActionPhase3 extends Phase {
 
     @Override
     public void nextPhase() {
-        match.setGamePhase(new PlanningPhase(this.match));
+        if (match.getCurrentPlayerID().equals(match.getFirstOfTurn()))
+            match.setGamePhase(new PlanningPhase(this.match));
+        else
+            match.setGamePhase(new ActionPhase1(this.match));
     }
 
     @Override
