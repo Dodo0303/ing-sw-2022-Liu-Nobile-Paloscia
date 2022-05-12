@@ -66,7 +66,7 @@ public class ClientHandler implements Runnable {
             receiveCreateMatch();
             //Here the game starts. The handler must listen for incoming messages
             while(true) {
-                MessageToServer message = (MessageToServer) objectInputStream.readObject();
+                MessageToServer message = (MessageToServer) incomingMessages.take();
                 Thread messageHandler = new Thread(() -> match.process(message, this));
                 messageHandler.start();
             }

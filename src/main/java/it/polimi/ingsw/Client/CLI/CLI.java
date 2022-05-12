@@ -176,7 +176,7 @@ public class CLI {
             //host = input.nextLine(); //TODO
             host = "localhost";
             System.out.print("Port?\n");
-            port = 20010;
+            port = Integer.parseInt(input.nextLine());
             try {
                 serverHandler = new ServerHandler(host,port, this);
             } catch (IOException e) {
