@@ -173,9 +173,10 @@ public class CLI {
     private void buildConnection() {
         while(serverHandler == null) {
             System.out.print("Host?\n");
-            host = input.nextLine();
+            //host = input.nextLine(); //TODO
+            host = "localhost";
             System.out.print("Port?\n");
-            port = Integer.parseInt(input.nextLine());
+            port = 20010;
             try {
                 serverHandler = new ServerHandler(host,port, this);
             } catch (IOException e) {

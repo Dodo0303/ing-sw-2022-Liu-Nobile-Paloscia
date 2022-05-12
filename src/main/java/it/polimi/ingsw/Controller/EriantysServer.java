@@ -1,6 +1,10 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Client.EriantysClient;
 import it.polimi.ingsw.Exceptions.NoSuchMatchException;
+import it.polimi.ingsw.Network.Messages.ConnectionStatusMessage;
+import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.StatusMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,17 +19,111 @@ import java.util.concurrent.Executors;
 /**
  * Singleton containing server information, i.e. its port and current matches.
  */
-public class EriantysServer {
+public class EriantysServer implements Runnable{
 
-    private final int port;
-    private static EriantysServer instance;
+    private int port;
     private ArrayList<MatchController> currentMatches;
-    private ArrayList<ClientHandler> clients;
+    private ArrayList<ClientHandler> clients; //ClientID corresponds to index of this arraylist.
+    Boolean shutdown;
 
-    private EriantysServer(int port) {
-        this.port = port;
+    public EriantysServer() {
+        randomPort();
         currentMatches = new ArrayList<>();
         clients = new ArrayList<>();
+        shutdown = false;
+    }
+
+    public static void main(String[] args) {
+        EriantysServer server;
+        server = new EriantysServer();
+        new Thread(server).start();
+    }
+
+
+    /**
+     * Starts the server by creating a new ServerSocket. For each incoming connection, it creates a new Socket
+     * and passes it to a new ClientHandler.
+     */
+    @Override
+    public void run() {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        ServerSocket serverSocket;
+        try {
+            serverSocket = new ServerSocket(this.port);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        System.out.println("Server ready on port " + this.port);
+        while (!shutdown) {
+            try {
+                Socket socket = serverSocket.accept();
+                ClientHandler newClient = new ClientHandler(this, socket, clients.size());
+                executor.submit(newClient);
+                clients.add(newClient);
+                new Thread(newClient).start();
+            } catch (IOException e) {
+                break;
+            }
+        }
+
+        executor.shutdown();
+    }
+
+    synchronized public void sendToAll(Object msg) {
+        if (msg == null) {
+            throw new IllegalArgumentException("Null cannot be sent as a message.");
+        }
+        for (ClientHandler cl : clients)
+            cl.send(msg);
+    }
+
+    synchronized void clientDisconnected(int playerID) {
+        if (clients.contains(playerID)) {
+            clients.remove(playerID);
+            ConnectionStatusMessage msg = new ConnectionStatusMessage(playerID,false,getClients());
+            sendToAll(msg);
+            playerDisconnected(playerID);
+            System.out.println("Connection with client number " + playerID + " closed.\n");
+        }
+    }
+
+    protected void playerDisconnected(int playerID) {
+        //TODO Resilienza alle disconnessioni; Persistenza
+    }
+
+    public void randomPort() {
+        int lowest_port = 1025;
+        int highest_port = 65535;
+        port = new Random().nextInt(highest_port+1 - lowest_port) + lowest_port;
+    }
+
+    public boolean isNicknameAvailable(String nickname) {
+        for (ClientHandler client: clients) {
+            if (nickname.equals(client.getNickname())) return false;
+        }
+        return true;
+    }
+
+    public void removeClient(ClientHandler clientToRemove) {
+        clients.remove(clientToRemove);
+    }
+
+    public void addMatch(MatchController matchToAdd) {
+        this.currentMatches.add(matchToAdd);
+    }
+
+    public void removeMatch(MatchController matchToRemove) {
+        this.currentMatches.remove(matchToRemove);
+    }
+
+    public MatchController getMatchById(int ID) throws NoSuchMatchException {
+        for (MatchController match :
+                currentMatches) {
+            if (match.getID() == ID)
+                return match;
+        }
+        throw new NoSuchMatchException();
     }
 
     public int getPort() { return this.port; }
@@ -47,73 +145,4 @@ public class EriantysServer {
     public List<ClientHandler> getClients() {
         return new ArrayList<>(this.clients);
     }
-
-    public void addMatch(MatchController matchToAdd) {
-        this.currentMatches.add(matchToAdd);
-    }
-
-    public void removeMatch(MatchController matchToRemove) {
-        this.currentMatches.remove(matchToRemove);
-    }
-
-    public static EriantysServer instance() {
-        int lowest_port = 1025;
-        int highest_port = 65535;
-        if (instance==null) {
-            instance = new EriantysServer(new Random().nextInt(highest_port+1 - lowest_port) + lowest_port);
-        }
-        return instance;
-    }
-
-    /**
-     * Starts the server by creating a new ServerSocket. For each incoming connection, it creates a new Socket
-     * and passes it to a new ClientHandler.
-     */
-    public void startServer() {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        ServerSocket serverSocket;
-
-        try {
-            serverSocket = new ServerSocket(this.port);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return;
-        }
-
-        System.out.println("Server ready on port " + this.port);
-
-        while (true) {
-            try {
-                Socket socket = serverSocket.accept();
-                ClientHandler newClient = new ClientHandler(this, socket);
-                executor.submit(newClient);
-                clients.add(newClient);
-            } catch (IOException e) {
-                break;
-            }
-        }
-
-        executor.shutdown();
-    }
-
-    public void removeClient(ClientHandler clientToRemove) {
-        clients.remove(clientToRemove);
-    }
-
-    public boolean isNicknameAvailable(String nickname) {
-        for (ClientHandler client: clients) {
-            if (nickname.equals(client.getNickname())) return false;
-        }
-        return true;
-    }
-
-    public MatchController getMatchById(int ID) throws NoSuchMatchException {
-        for (MatchController match :
-                currentMatches) {
-            if (match.getID() == ID)
-                return match;
-        }
-        throw new NoSuchMatchException();
-    }
-
 }

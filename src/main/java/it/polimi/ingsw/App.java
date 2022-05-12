@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Controller.MatchController;
+import it.polimi.ingsw.Client.EriantysClient;
+import it.polimi.ingsw.Controller.EriantysServer;
 
 import static it.polimi.ingsw.Utilities.*;
 
@@ -14,37 +15,41 @@ public class App {
     public static void main(String[] args) {
         int inputLength = args.length;
         if (inputLength == 0) {
-            System.out.println("Please enter a command.");
-        } else {
-            MatchController game;
-            switch (args[0]) {
-                case "cli": {
-                    //TODO
-                }
-                case "GUI": {
-                    //TODO
-                    break;
-                }
-                case "server": {
-
-                }
-                case "help": {
-                    usage();
-                    break;
-                }
-
-                default: {
-                    game = new MatchController(2, 2); //TODO
-                    //System.exit(game.run());
+            usage();
+            return;
+        }
+        launchServer(args);
+        switch (args[0].toLowerCase()) {
+            case "-gui": {
+                //TODO
+                break;
+            }
+            case "-cli": {
+                launchCLI(args);
+                break;
+            }
+            case "-help": {
+                usage();
+                break;
                 }
             }
-        }
-
     }
 
     /** Print usage message. */
     private static void usage() {
         printUsage(USAGE);
+    }
+
+    private static void launchServer(String[] args) {
+        EriantysServer.main(args);
+    }
+
+    private static void launchCLI(String[] args) {
+        EriantysClient.main(args);
+    }
+
+    private void launchGUI(String[] args) {
+        //TODO
     }
 
 }

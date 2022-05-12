@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ServerHandler implements Runnable {
+    int playerID;
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket socket;
@@ -37,6 +38,7 @@ public class ServerHandler implements Runnable {
         output.flush();
         try {
             Object resp = input.readObject();
+            playerID = (Integer) resp;
         } catch (ClassNotFoundException e) {
             throw new IOException("Illegal response from server.");
         }

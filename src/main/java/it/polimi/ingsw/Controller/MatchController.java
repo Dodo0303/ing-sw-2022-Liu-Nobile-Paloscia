@@ -196,11 +196,7 @@ public class MatchController implements Runnable {
      */
     public void denyMovement(ClientHandler ch){
         MessageToClient msg = new DenyMovementMessage();
-        try {
-            ch.send(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ch.send(msg);
     }
 
     /**
@@ -385,21 +381,13 @@ public class MatchController implements Runnable {
 
     public void broadcastClouds() {
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
         }
     }
 
     public void broadcastTurnChange(String playerNickname, String nextPhase) {
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new ChangeTurnMessage(playerNickname, nextPhase));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new ChangeTurnMessage(playerNickname, nextPhase));
         }
     }
 
@@ -407,11 +395,7 @@ public class MatchController implements Runnable {
         MessageToClient gameModelMessage = new GameModelUpdateMessage(this.game);
         for (ClientHandler client :
                 clients) {
-            try {
-                client.send(gameModelMessage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(gameModelMessage);
         }
     }
 
@@ -442,21 +426,13 @@ public class MatchController implements Runnable {
 
     public void broadcastMovementFromEntrance(StudentColor student, String playerID, int destination, int destinationID) {
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new ConfirmMovementFromEntranceMessage(student, playerID, destination, destinationID));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new ConfirmMovementFromEntranceMessage(student, playerID, destination, destinationID));
         }
     }
 
     public void broadcastAssistant(String playerID, int assistantValue) {
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new UsedAssistantMessage(playerID, assistantValue));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new UsedAssistantMessage(playerID, assistantValue));
         }
     }
 
@@ -515,21 +491,13 @@ public class MatchController implements Runnable {
 
     public void broadcastMovement(int islandIndex) {
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new ConfirmMovementMessage(islandIndex, this.game.getIslands()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new ConfirmMovementMessage(islandIndex, this.game.getIslands()));
         }
     }
 
     public void broadCastCloudChoice(int cloudID) {
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new ConfirmCloudMessage(this.currentPlayerID, cloudID));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new ConfirmCloudMessage(this.currentPlayerID, cloudID));
         }
     }
 
@@ -565,12 +533,8 @@ public class MatchController implements Runnable {
         Player winner = this.getWinner();
 
         for (ClientHandler client : this.clients) {
-            try {
-                client.send(new EndMessage(winner.getNickName(), reason));
-                client.closeConnection();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.send(new EndMessage(winner.getNickName(), reason));
+            client.close();
 
             //TODO: Remove from server.
         }
