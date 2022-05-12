@@ -513,10 +513,10 @@ public class MatchController implements Runnable {
         this.firstOfTurn = this.game.getPlayers().get(0).getNickName();
     }
 
-    public void broadcastMovement(int numOfJumps) {
+    public void broadcastMovement(int islandIndex) {
         for (ClientHandler client : this.clients) {
             try {
-                client.send(new ConfirmMovementMessage(numOfJumps));
+                client.send(new ConfirmMovementMessage(islandIndex, this.game.getIslands()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

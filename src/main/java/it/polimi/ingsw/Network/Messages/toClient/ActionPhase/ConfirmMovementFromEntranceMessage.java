@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
-import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 

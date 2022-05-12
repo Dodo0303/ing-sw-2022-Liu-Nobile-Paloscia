@@ -27,6 +27,6 @@ public class ConfirmMovementMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) {
         client.getClient().setIslands(islands);
-        client.getClient().setClouds(clouds);
+        //client.getClient().setClouds(clouds);
     }
 }

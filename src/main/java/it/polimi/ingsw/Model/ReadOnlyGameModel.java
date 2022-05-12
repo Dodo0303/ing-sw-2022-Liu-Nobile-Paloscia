@@ -11,8 +11,6 @@ class ReadOnlyGameModel extends GameModel {
     ReadOnlyGameModel(GameModel game) {
         _gameModel = game;
     }
-    @Override
-    void setCurrentPlayer(Player player){}
 
     @Override
     public void setMothernature(int x){}

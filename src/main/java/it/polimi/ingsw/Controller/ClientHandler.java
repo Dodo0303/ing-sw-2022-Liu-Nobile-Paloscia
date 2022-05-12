@@ -71,13 +71,15 @@ public class ClientHandler implements Runnable {
         MessageToServer nickMessage = (MessageToServer) objectInputStream.readObject();
         while (!(nickMessage instanceof SendNickMessage) || !server.isNicknameAvailable(((SendNickMessage) nickMessage).getNickname())) {
             //Send the refuse
-            MessageToClient msg = new NickResponseMessage(false);
+            MessageToClient msg = new NickResponseMessage(null);
             send(msg);
             //Read new nick proposal
             nickMessage = (MessageToServer) objectInputStream.readObject();
         }
         //Received valid nickname
         nickname = ((SendNickMessage) nickMessage).getNickname();
+        MessageToClient msg = new NickResponseMessage(nickname);
+        send(msg);
     }
 
     private void receiveCreateMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {

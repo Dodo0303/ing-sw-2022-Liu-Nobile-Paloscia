@@ -256,7 +256,7 @@ public class CLI {
                 assis = -1;
             }
         }
-        send(new SendAssistantMessage(assis));
+        send(new SendAssistantMessage(assistants[assis])); //TODO Check
     }
 
     private void moveStudentsFromEntrance() {
