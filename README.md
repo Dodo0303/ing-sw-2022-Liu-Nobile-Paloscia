@@ -16,15 +16,15 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 | Functionality | Status |
 |:-----------------------|:------------------------------------:|
-| Simplified Ruleset | N |
-| Complete Ruleset | N |
-| Socket |N |
-| CLI | N |
-| GUI | N |
-| All character cards | N |
-| 4 Player Game | N |
-| Persistence | N |
-| Resilience to disconnections | N |
+| Simplified Ruleset | 🟠 |
+| Complete Ruleset | 🟠 |
+| Socket |🟠 |
+| CLI | 🟠 |
+| GUI | 🔴 |
+| All character cards | 🟠 |
+| 4 Player Game | 🔴 |
+| Persistence | 🔴 |
+| Resilience to disconnections | 🔴 |
 
 ## Game Rules
 
