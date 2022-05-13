@@ -79,7 +79,7 @@ public class ServerHandler implements Runnable {
                     }
                 }
             } catch (Exception e) {
-                System.out.print("An error occurred, which shut down the socket.");
+                System.out.print("An error in sending occurred, which shut down the socket.");
                 shutdown();
             }
         }
@@ -101,7 +101,7 @@ public class ServerHandler implements Runnable {
                     }
                 }
             }catch (Exception e) {
-                System.out.print("An error occurred, which shut down the socket.");
+                System.out.print("An error in receiving occurred, which shut down the socket.");
                 shutdown();
             }
         }

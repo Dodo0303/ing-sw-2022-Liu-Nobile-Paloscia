@@ -181,6 +181,8 @@ public class ClientHandler implements Runnable {
             //Send the refuse
             MessageToClient msg = new NickResponseMessage(null);
             send(msg);
+            System.out.println("Received invalid nickname: " + ((SendNickMessage) nickMessage).getNickname());
+
             //Read new nick proposal
             nickMessage = (MessageToServer) incomingMessages.take();
         }
@@ -188,6 +190,7 @@ public class ClientHandler implements Runnable {
         nickname = ((SendNickMessage) nickMessage).getNickname();
         MessageToClient msg = new NickResponseMessage(nickname);
         send(msg);
+        System.out.println("Received valid nickname: " + ((SendNickMessage) nickMessage).getNickname());
     }
 
     private void receiveCreateMatch() throws IOException, ClassNotFoundException, InterruptedException {
