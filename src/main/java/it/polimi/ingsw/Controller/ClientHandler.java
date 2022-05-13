@@ -189,6 +189,7 @@ public class ClientHandler implements Runnable {
         //Check whether the wizard is available and set the wizard
         try {
             match.setWizardOfPlayer(this, ((SendChosenWizardMessage) wizardChosen).getWizard());
+            this.wizard = ((SendChosenWizardMessage) wizardChosen).getWizard();
             MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game");
             send(confirm);
         } catch (GameException e) {
@@ -226,5 +227,20 @@ public class ClientHandler implements Runnable {
 
     public void closeConnection() throws IOException {
         this.socket.close();
+    }
+
+    //METHODS FOR TEST PURPOSES ONLY
+
+    protected void setWizard(Wizard wizard){
+        this.wizard = wizard;
+        match.setWizardOfPlayer(this, wizard);
+    }
+
+    protected void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    protected void setMatch(MatchController match){
+        this.match = match;
     }
 }

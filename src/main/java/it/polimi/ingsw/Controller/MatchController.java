@@ -144,8 +144,6 @@ public class MatchController implements Runnable {
         }
 
         String[] nickArray = new String[totalMatchPlayers];
-        Wizard[] wizardArray = new Wizard[totalMatchPlayers];
-
 
         this.game = new GameModel(this.totalMatchPlayers,nicknames.toArray(nickArray), wizards);
 
