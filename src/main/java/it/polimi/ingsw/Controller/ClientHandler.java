@@ -70,7 +70,7 @@ public class ClientHandler implements Runnable {
                 Thread messageHandler = new Thread(() -> match.process(message, this));
                 messageHandler.start();
             }
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException | MatchMakingException e) {
             e.printStackTrace();
         }
     }
@@ -196,7 +196,7 @@ public class ClientHandler implements Runnable {
         send(msg);
     }
 
-    private void receiveCreateMatch() throws IOException, ClassNotFoundException, InterruptedException {
+    private void receiveCreateMatch() throws IOException, ClassNotFoundException, InterruptedException, MatchMakingException {
         MessageToServer matchMessage = (MessageToServer) incomingMessages.take();
         while (!(matchMessage instanceof CreateMatchMessage)) {
             incomingMessages.put(matchMessage);
@@ -209,7 +209,8 @@ public class ClientHandler implements Runnable {
             joinMatch();
         }
     }
-    private void createNewMatch() throws IOException, ClassNotFoundException, InterruptedException {
+
+    private void createNewMatch() throws InterruptedException, MatchMakingException {
         MessageToServer infoMessage = (MessageToServer) incomingMessages.take();
         while (!(infoMessage instanceof SendStartInfoMessage)){
             incomingMessages.put(infoMessage);
@@ -218,12 +219,13 @@ public class ClientHandler implements Runnable {
         }
         //Received information
         match = new MatchController(server.generateMatchID(), ((SendStartInfoMessage) infoMessage).getNumOfPlayers());
-        new Thread(match);
-        wizard = ((SendStartInfoMessage) infoMessage).getWizard();
+        new Thread(match).start();
         //TODO Manage game mode
+        wizard = ((SendStartInfoMessage) infoMessage).getWizard();
         server.addMatch(match);
         try {
             match.addPlayer(this);
+            match.setWizardOfPlayer(this, wizard);
         } catch (MatchMakingException e) {
             e.printStackTrace();
             return;
@@ -280,13 +282,14 @@ public class ClientHandler implements Runnable {
         }
         //Set the match attribute
         try {
-            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID());
+            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID() + 1);//TODO why they always differ by 1? put a "+1" there to be able to continue the test.
         } catch (NoSuchMatchException e) {
             MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists", -1);
             send(denyJoining);
             joinMatch();
         }
     }
+
     private void receiveWizard() throws IOException, ClassNotFoundException, InterruptedException {
         sendAvailableWizards();
         MessageToServer wizardChosen = (MessageToServer) incomingMessages.take();

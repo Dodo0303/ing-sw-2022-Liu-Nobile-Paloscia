@@ -3,10 +3,11 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Exceptions.EmptyBagException;
 import it.polimi.ingsw.Exceptions.TooManyStudentsException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Bag {
+public class Bag implements Serializable {
     /**
      * The hashmap is used to memorize number of students of each color in bag.
      * Students are 24 because the other 2 of each color should be already on the islands.

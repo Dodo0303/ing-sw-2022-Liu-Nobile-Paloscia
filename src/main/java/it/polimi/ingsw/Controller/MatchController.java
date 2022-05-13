@@ -47,7 +47,6 @@ public class MatchController implements Runnable {
         this.lastRound = false;
     }
 
-
     // GETTERS AND SETTERS
 
     public MatchStatus getStatus() { return this.matchStatus; }
@@ -130,7 +129,7 @@ public class MatchController implements Runnable {
 
         while(!allWizardsAvailable()) {
             try {
-                wait();
+                wait(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

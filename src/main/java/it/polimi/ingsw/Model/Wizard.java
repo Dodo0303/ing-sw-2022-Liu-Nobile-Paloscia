@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Model;
 
-public enum Wizard {
+import java.io.Serializable;
+
+public enum Wizard implements Serializable {
     /**
      * TODO Find a name for the wizards?
      */

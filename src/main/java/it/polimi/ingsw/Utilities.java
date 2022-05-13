@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Client.CLI.Phase;
+
 import java.io.*;
 
 public class Utilities {
@@ -36,6 +38,28 @@ public class Utilities {
     public static Boolean existInStudentColor(String str) {
         return str.equals("GREEN") || str.equals("BLUE") || str.equals("YELLOW") || str.equals("RED") || str.equals("PINK");
     }
+
+    public static Phase getPhase(String str) {
+        switch (str) {
+            case "PlanningPhase" : {
+                return Phase.Planning;
+            }
+            case "ActionPhase1" : {
+                return Phase.Action1;
+            }
+            case "ActionPhase2" : {
+                return Phase.Action2;
+            }
+            case "ActionPhase3" : {
+                return Phase.Action3;
+            }
+            case "Ending" : {
+                return Phase.Ending;
+            }
+        }
+        return null;
+    }
+
 
 
 }

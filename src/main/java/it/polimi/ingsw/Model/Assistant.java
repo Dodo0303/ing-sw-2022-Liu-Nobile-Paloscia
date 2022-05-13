@@ -1,8 +1,9 @@
 package it.polimi.ingsw.Model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Assistant {
+public class Assistant implements Serializable {
     private int value;
     private int maxSteps;
     private Wizard wizard;

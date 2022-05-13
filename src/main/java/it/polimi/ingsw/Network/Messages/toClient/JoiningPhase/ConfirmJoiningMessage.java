@@ -28,15 +28,22 @@ public class ConfirmJoiningMessage extends MessageToClient {
     public void process(ServerHandler ch) {
         if (result) {
             System.out.println("You've joined match " + matchID);
-            if (ch.getClient().getCurrPhase().equals(Phase.ChoosingGameMode)) {
+            if (message.equals("Game created")) {
+                ch.getClient().setPhase(Phase.GameJoined);
+            } else if (message.equals("You joined the game")){
                 ch.getClient().setPhase(Phase.GameJoined);
             } else {
-                ch.getClient().setPhase(Phase.JoiningGame2);
+                ch.getClient().setPhase(Phase.JoiningGame1);
             }
         } else {
             System.out.println(this.message);
-            ch.getClient().setPhase(Phase.JoiningGame1);
-            ch.getClient().joinGame();
+            if (message.equals("Wizard not available")) {
+                ch.getClient().setPhase(Phase.JoiningGame2);
+                ch.getClient().chooseWizard();
+            } else {
+                ch.getClient().setPhase(Phase.JoiningGame1);
+                ch.getClient().joinGame();
+            }
         }
     }
 }

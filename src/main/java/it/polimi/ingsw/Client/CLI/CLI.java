@@ -3,15 +3,10 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.EndMessage;
-import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.ConfirmJoiningMessage;
-import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.NickResponseMessage;
-import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendAvailableWizardMessage;
-import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendMatchesMessage;
-import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
-import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.ChangeTurnMessage;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
 import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.ResetOutputMessage;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.StatusMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
@@ -20,7 +15,6 @@ import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMess
 import it.polimi.ingsw.Utilities;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -28,6 +22,7 @@ import java.util.Scanner;
 public class CLI {
     String DEFAULT_HOST = "localhost";
     int DEFAULT_PORT = 8001;
+    GameModel game;
     boolean closed;
     private String nickname;
     private String host;
@@ -41,7 +36,6 @@ public class CLI {
     private HashMap<StudentColor, Integer> entrance;
     private int numIslands;
     private HashMap<Integer, Island> islands;
-    private ArrayList<Cloud> clouds;
 
     public void start() {
         closed = false;
@@ -51,12 +45,6 @@ public class CLI {
         serverHandlerThread.start();
         requireNickname();
         chooseGameMode();
-        while (!closed) {
-            playAssistant();//planning
-            moveStudentsFromEntrance();//AP1
-            moveMotherNature();//AP2
-            chooseCloud();//AP3
-        }
     }
 
     public void send(Object message) {
@@ -90,21 +78,20 @@ public class CLI {
             } else if (currPhase.equals(Phase.JoiningGame2)) {
                 ((ConfirmJoiningMessage) message).process(this.serverHandler);
             }
-        } else if (message instanceof SendAvailableWizardMessage) {
+        } else if (message instanceof SendAvailableWizardsMessage) {
             if (currPhase.equals(Phase.JoiningGame1)) {
-                ((SendAvailableWizardMessage) message).process(this.serverHandler);
-                currPhase = Phase.JoiningGame2;
+                ((SendAvailableWizardsMessage) message).process(this.serverHandler);
             }
         } else if (message instanceof ChangeTurnMessage) {
+            System.out.println(currPhase.toString() + " to " + ((ChangeTurnMessage) message).getPhase().toString());//TODO DELETE AFTER TESTS
             if (currPhase.equals(Phase.GameJoined) && ((ChangeTurnMessage) message).getPhase().equals(Phase.Planning)) {//TODO waiting for phase's definition in the server side
                 ((ChangeTurnMessage) message).process(this.serverHandler);
-                currPhase = Phase.Planning;
             } else if (currPhase.equals(Phase.Planning) && ((ChangeTurnMessage) message).getPhase().equals(Phase.Action1)) {
                 ((ChangeTurnMessage) message).process(this.serverHandler);
-                currPhase = Phase.Action1;
+                //currPhase = Phase.Action1;
             } else if (currPhase.equals(Phase.Action3) && ((ChangeTurnMessage) message).getPhase().equals(Phase.Planning)) {
                 ((ChangeTurnMessage) message).process(this.serverHandler);
-                currPhase = Phase.Planning;
+                //currPhase = Phase.Planning;
             }
         } else if (message instanceof ConfirmMovementFromEntrance) {
             if (currPhase.equals(Phase.Action1)) {
@@ -133,6 +120,18 @@ public class CLI {
                 ((EndMessage) message).process(this.serverHandler);
                 currPhase = Phase.Ending;
             }
+        } else if (message instanceof GameModelUpdateMessage) { //TODO
+            if (currPhase.equals(Phase.GameJoined) ||
+                    currPhase.equals(Phase.Planning) ||
+                    currPhase.equals(Phase.Action1) ||
+                    currPhase.equals(Phase.Action2) ||
+                    currPhase.equals(Phase.Action3)) {
+                ((GameModelUpdateMessage) message).process(this.serverHandler);
+            }
+        } else if (message instanceof CloudsUpdateMessage) { //TODO
+            ((CloudsUpdateMessage) message).process(this.serverHandler);
+        } else if (message instanceof UsedAssistantMessage) { //TODO
+            ((UsedAssistantMessage) message).process(this.serverHandler);
         }
     }
 
@@ -183,7 +182,7 @@ public class CLI {
             while (!currPhase.equals(Phase.CreatingGame)) {
                 currPhase = getCurrPhase();
             }
-            int numPlayer = 0, wiz = 0;
+            int numPlayer = 0, wiz = -1;
             String mode = "";
             while(numPlayer > 4 || numPlayer < 2) {
                 System.out.print("choose between 2,3, or 4 for total number of players.\n");
@@ -193,9 +192,9 @@ public class CLI {
                 System.out.print("turn on expert mode? Respond with true or false.\n");
                 mode = input.nextLine();
             }
-            while(wiz > 4 || wiz < 1) {
+            while(wiz > 3 || wiz < 0) {
                 System.out.print("Choose a wizard for yourself. Type in 1,2,3, or 4.\n");
-                wiz = Integer.parseInt(input.nextLine());
+                wiz = Integer.parseInt(input.nextLine()) - 1;
             }
             send(new SendStartInfoMessage(numPlayer, Boolean.parseBoolean(mode), Wizard.values()[wiz]));
         } catch (Exception e) {
@@ -215,7 +214,6 @@ public class CLI {
                 match = Integer.parseInt(input.nextLine()) - 1;
             }
             send(new MatchChosenMessage(match));
-            //TODO
         } catch (Exception e) {
             e.printStackTrace();
             System.out.print("Something went wrong, please try agian.\n");
@@ -229,9 +227,6 @@ public class CLI {
             while (!currPhase.equals(Phase.JoiningGame2)) {
                 currPhase = getCurrPhase();
             }
-            for (int i = 1; i <= wizards.size(); i++) {
-                System.out.print(i + "." + wizards.get(i - 1) + "\n");
-            }
             while(wiz < 0 || wiz > wizards.size() - 1) {
                 System.out.print("Choose a wizard.\n");
                 wiz = Integer.parseInt(input.nextLine()) - 1;
@@ -240,34 +235,34 @@ public class CLI {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.print("Something went wrong, please try agian.\n");
-            joinGame();
+            chooseWizard();
         }
     }
 
-    private void playAssistant() {
+    public void playAssistant() {
         try {
             while (!currPhase.equals(Phase.Planning)) {
                 currPhase = getCurrPhase();
             }
             int assis = -1;
-            for (int i = 1; i <= assistants.length; i++) {
-                System.out.print(i + "." + assistants[i - 1] + "\n");
+            for (int i = 1; i <= 10; i++) {
+                System.out.print(i + "." + game.getPlayers().get(getServerHandler().playerID).getAssistants().get(i - 1) + "\n");
             }
-            while(assis < 1 || assis > assistants.length - 1) { //TODO did not use UsedAssistantMessage
-                System.out.print("Choose an assistant card.\n");
+            while(assis < 0 || assis > 9) { //TODO did not use UsedAssistantMessage
+                System.out.print("Choose assistant card.\n");
                 assis = Integer.parseInt(input.nextLine()) - 1;
-                if (assistants[assis] == null) {
+                if (game.getPlayers().get(getServerHandler().playerID).getAssistants().get(assis) == null) {
                     System.out.print("You cannot choose this assistant card.\n");
                     assis = -1;
                 }
             }
-            send(new SendAssistantMessage(assistants[assis])); //TODO Check
+            send(new SendAssistantMessage(game.getPlayers().get(getServerHandler().playerID).getAssistants().get(assis))); //TODO Check
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.print("Something went wrong, please try agian.\n");
-            joinGame();
         }
     }
-
+//TODO 05/13
     private void moveStudentsFromEntrance() {
         while (!currPhase.equals(Phase.Action1)) {
             currPhase = getCurrPhase();
@@ -345,7 +340,7 @@ public class CLI {
     }
 
     private void printClouds() {
-        for (int i = 0; i < clouds.size(); i++) {
+        for (int i = 0; i < game.getClouds().size(); i++) {
             System.out.print("cloud " + i + " :\n");
             System.out.print("Students:\n");
             for (StudentColor color:StudentColor.values()) {
@@ -410,11 +405,15 @@ public class CLI {
         this.islands = islands;
     }
 
-    public void setClouds(ArrayList<Cloud> clouds) {
-        this.clouds = clouds;
-    }
-
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public void setGame(GameModel game) {
+        this.game = game;
+    }
+
+    public GameModel getGame() {
+        return game;
     }
 }
