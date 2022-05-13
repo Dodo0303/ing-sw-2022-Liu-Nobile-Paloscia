@@ -21,5 +21,6 @@ public class SendAvailableWizardMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) {
         client.getClient().setWizards(wizards);
+
     }
 }

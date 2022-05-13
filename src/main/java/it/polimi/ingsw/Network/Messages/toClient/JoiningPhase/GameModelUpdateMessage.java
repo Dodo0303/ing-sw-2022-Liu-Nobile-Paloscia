@@ -17,6 +17,5 @@ public class GameModelUpdateMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-
     }
 }

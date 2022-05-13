@@ -19,6 +19,5 @@ public class SendAvailableWizardsMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-
     }
 }

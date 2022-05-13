@@ -24,7 +24,7 @@ public class EriantysServer implements Runnable{
     private int port;
     private ArrayList<MatchController> currentMatches;
     private ArrayList<ClientHandler> clients; //ClientID corresponds to index of this arraylist.
-    Boolean shutdown;
+    boolean shutdown;
 
     public EriantysServer() {
         randomPort();
@@ -38,7 +38,6 @@ public class EriantysServer implements Runnable{
         server = new EriantysServer();
         new Thread(server).start();
     }
-
 
     /**
      * Starts the server by creating a new ServerSocket. For each incoming connection, it creates a new Socket
@@ -134,7 +133,7 @@ public class EriantysServer implements Runnable{
     }
 
 
-    public MatchController getMatchById(int ID) throws NoSuchMatchException {
+    public MatchController getMatchById(int ID) throws NoSuchMatchException {//TODO why ID differs by match.getID by 1?
         for (MatchController match :
                 currentMatches) {
             if (match.getID() == ID)

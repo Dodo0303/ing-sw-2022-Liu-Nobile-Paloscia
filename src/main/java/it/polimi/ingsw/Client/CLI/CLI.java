@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class CLI {
     String DEFAULT_HOST = "localhost";
     int DEFAULT_PORT = 8001;
@@ -36,8 +35,6 @@ public class CLI {
     private Scanner input = new Scanner(System.in);
     private ServerHandler serverHandler;
     private Phase currPhase;
-    private List<Integer> matchesID;
-    private List<List<String>> players;
     private List<Wizard> wizards;
     private Assistant[] assistants;
     private int numStudentToMove;
@@ -80,33 +77,23 @@ public class CLI {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
                 ((NickResponseMessage) message).process(this.serverHandler);
-                currPhase = Phase.ChoosingGameMode;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof SendMatchesMessage) {
-            if (currPhase.equals(Phase.ChoosingGameMode)) {
+            if (currPhase.equals(Phase.ChoosingGameMode) || currPhase.equals(Phase.JoiningGame1)) {
                 ((SendMatchesMessage) message).process(this.serverHandler);
                 currPhase = Phase.JoiningGame1;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof ConfirmJoiningMessage) {
-            if (currPhase.equals(Phase.CreatingGame)) {
+            if (currPhase.equals(Phase.CreatingGame) ||
+                    currPhase.equals(Phase.JoiningGame1)) {
                 ((ConfirmJoiningMessage) message).process(this.serverHandler);
-                currPhase = Phase.GameJoined;
             } else if (currPhase.equals(Phase.JoiningGame2)) {
                 ((ConfirmJoiningMessage) message).process(this.serverHandler);
-                currPhase = Phase.GameJoined;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof SendAvailableWizardMessage) {
             if (currPhase.equals(Phase.JoiningGame1)) {
                 ((SendAvailableWizardMessage) message).process(this.serverHandler);
                 currPhase = Phase.JoiningGame2;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof ChangeTurnMessage) {
             if (currPhase.equals(Phase.GameJoined) && ((ChangeTurnMessage) message).getPhase().equals(Phase.Planning)) {//TODO waiting for phase's definition in the server side
@@ -118,57 +105,42 @@ public class CLI {
             } else if (currPhase.equals(Phase.Action3) && ((ChangeTurnMessage) message).getPhase().equals(Phase.Planning)) {
                 ((ChangeTurnMessage) message).process(this.serverHandler);
                 currPhase = Phase.Planning;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof ConfirmMovementFromEntrance) {
             if (currPhase.equals(Phase.Action1)) {
                 ((ConfirmMovementFromEntrance) message).process(this.serverHandler);
                 currPhase = Phase.Action2;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof MoveProfessorMessage) {
             if (currPhase.equals(Phase.Action2)) {
                 ((MoveProfessorMessage) message).process(this.serverHandler);
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof DenyMovementMessage) {
                 if (currPhase.equals(Phase.Action2)) {
                     ((DenyMovementMessage) message).process(this.serverHandler);
-                } else {
-                    serverHandler.getOutgoingMessages().add(message);
                 }
             } else if (message instanceof ConfirmMovementMessage) {
             if (currPhase.equals(Phase.Action2)) {
                 ((ConfirmMovementMessage) message).process(this.serverHandler);
                 currPhase = Phase.Action3;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if (message instanceof ConfirmCloudMessage) {
             if (currPhase.equals(Phase.Action3)) {
                 ((ConfirmCloudMessage) message).process(this.serverHandler);
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         } else if(message instanceof EndMessage) {
             if (currPhase.equals(Phase.Action3)) {
                 ((EndMessage) message).process(this.serverHandler);
                 currPhase = Phase.Ending;
-            } else {
-                serverHandler.getOutgoingMessages().add(message);
             }
         }
     }
 
     public void requireNickname() {
-        System.out.print("Nickname?");
+        System.out.print("Nickname?\n");
         String temp = input.nextLine();
         send(new SendNickMessage(temp));
     }
-
 
     private void buildConnection() {
         while(serverHandler == null) {
@@ -187,6 +159,9 @@ public class CLI {
     }
 
     private void chooseGameMode() {
+        while (!getCurrPhase().equals(Phase.ChoosingGameMode)) {
+            currPhase = getCurrPhase();
+        }
         int temp = 0;
         while(temp != 1 && temp != 2) {
             System.out.print("Press 1 for new game, press 2 for joining exiting game.\n");
@@ -199,69 +174,104 @@ public class CLI {
         } else {
             send(new CreateMatchMessage(false));
             joinGame();
+            chooseWizard();
         }
     }
 
     private void newgame() {
-        while (!currPhase.equals(Phase.CreatingGame));
-        int numPlayer = 0, wiz = 0;
-        String mode = "";
-        while(numPlayer > 4 || numPlayer < 2) {
-            System.out.print("choose between 2,3, or 4 for total number of players.\n");
-            numPlayer = Integer.parseInt(input.nextLine());
+        try {
+            while (!currPhase.equals(Phase.CreatingGame)) {
+                currPhase = getCurrPhase();
+            }
+            int numPlayer = 0, wiz = 0;
+            String mode = "";
+            while(numPlayer > 4 || numPlayer < 2) {
+                System.out.print("choose between 2,3, or 4 for total number of players.\n");
+                numPlayer = Integer.parseInt(input.nextLine());
+            }
+            while(!mode.equals("true") && !mode.equals("false")) {
+                System.out.print("turn on expert mode? Respond with true or false.\n");
+                mode = input.nextLine();
+            }
+            while(wiz > 4 || wiz < 1) {
+                System.out.print("Choose a wizard for yourself. Type in 1,2,3, or 4.\n");
+                wiz = Integer.parseInt(input.nextLine());
+            }
+            send(new SendStartInfoMessage(numPlayer, Boolean.parseBoolean(mode), Wizard.values()[wiz]));
+        } catch (Exception e) {
+            System.out.print("Something went wrong, please try agian.\n");
+            newgame();
         }
-        while(!mode.equals("true") && !mode.equals("false")) {
-            System.out.print("turn on expert mode? Respond with true or false.\n");
-            mode = input.nextLine();
-        }
-        while(wiz > 4 || wiz < 1) {
-            System.out.print("Choose a wizard for yourself. Type in 1,2,3, or 4.\n");
-            wiz = Integer.parseInt(input.nextLine());
-        }
-        send(new SendStartInfoMessage(numPlayer, Boolean.parseBoolean(mode), Wizard.values()[Integer.parseInt(input.nextLine())]));
     }
 
-    private void joinGame() {
-        while (!currPhase.equals(Phase.JoiningGame1));
-        int match = -1, wiz = -1;
-        for (int i = 1; i <= matchesID.size(); i++) {
-            System.out.print(i + "." + matchesID.get(i - 1) + "\n");
+    public void joinGame() {
+        try {
+            while (!currPhase.equals(Phase.JoiningGame1)) {
+                currPhase = getCurrPhase();
+            }
+            int match = -1;
+            while (match < 0) {
+                System.out.print("Choose a match.\n");
+                match = Integer.parseInt(input.nextLine()) - 1;
+            }
+            send(new MatchChosenMessage(match));
+            //TODO
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.print("Something went wrong, please try agian.\n");
+            joinGame();
         }
-        while(match < 0 || match > matchesID.size() - 1) {
-            System.out.print("Choose a match.\n");
-            match = Integer.parseInt(input.nextLine()) - 1;
+    }
+
+    public void chooseWizard() {
+        try {
+            int wiz = -1;
+            while (!currPhase.equals(Phase.JoiningGame2)) {
+                currPhase = getCurrPhase();
+            }
+            for (int i = 1; i <= wizards.size(); i++) {
+                System.out.print(i + "." + wizards.get(i - 1) + "\n");
+            }
+            while(wiz < 0 || wiz > wizards.size() - 1) {
+                System.out.print("Choose a wizard.\n");
+                wiz = Integer.parseInt(input.nextLine()) - 1;
+            }
+            send(new SendChosenWizardMessage(Wizard.values()[wiz]));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.print("Something went wrong, please try agian.\n");
+            joinGame();
         }
-        send(new MatchChosenMessage(match));
-        while (!currPhase.equals(Phase.JoiningGame2));
-        for (int i = 1; i <= wizards.size(); i++) {
-            System.out.print(i + "." + wizards.get(i - 1) + "\n");
-        }
-        while(wiz < 0 || wiz > wizards.size() - 1) {
-            System.out.print("Choose a wizard.\n");
-            wiz = Integer.parseInt(input.nextLine()) - 1;
-        }
-        send(new SendChosenWizardMessage(Wizard.values()[wiz]));
     }
 
     private void playAssistant() {
-        while (!currPhase.equals(Phase.Planning));
-        int assis = -1;
-        for (int i = 1; i <= assistants.length; i++) {
-            System.out.print(i + "." + assistants[i - 1] + "\n");
-        }
-        while(assis < 1 || assis > assistants.length - 1) { //TODO did not use UsedAssistantMessage
-            System.out.print("Choose an assistant card.\n");
-            assis = Integer.parseInt(input.nextLine()) - 1;
-            if (assistants[assis] == null) {
-                System.out.print("You cannot choose this assistant card.\n");
-                assis = -1;
+        try {
+            while (!currPhase.equals(Phase.Planning)) {
+                currPhase = getCurrPhase();
             }
+            int assis = -1;
+            for (int i = 1; i <= assistants.length; i++) {
+                System.out.print(i + "." + assistants[i - 1] + "\n");
+            }
+            while(assis < 1 || assis > assistants.length - 1) { //TODO did not use UsedAssistantMessage
+                System.out.print("Choose an assistant card.\n");
+                assis = Integer.parseInt(input.nextLine()) - 1;
+                if (assistants[assis] == null) {
+                    System.out.print("You cannot choose this assistant card.\n");
+                    assis = -1;
+                }
+            }
+            send(new SendAssistantMessage(assistants[assis])); //TODO Check
+        } catch (Exception e) {
+            System.out.print("Something went wrong, please try agian.\n");
+            joinGame();
         }
-        send(new SendAssistantMessage(assistants[assis])); //TODO Check
     }
 
     private void moveStudentsFromEntrance() {
-        while (!currPhase.equals(Phase.Action1));
+        while (!currPhase.equals(Phase.Action1)) {
+            currPhase = getCurrPhase();
+        }
         int num = -1, islandID = -1;
         StudentColor tempColor;
         String str = "";
@@ -293,7 +303,9 @@ public class CLI {
     }
 
     public void moveMotherNature() {
-        while (!currPhase.equals(Phase.Action2));
+        while (!currPhase.equals(Phase.Action2)) {
+            currPhase = getCurrPhase();
+        }
         int num = -1;
         while (num < 0 || num >= numIslands) {
             printIslands();
@@ -304,7 +316,9 @@ public class CLI {
     }
 
     public void chooseCloud() {
-        while (!currPhase.equals(Phase.Action3));
+        while (!currPhase.equals(Phase.Action3)) {
+            currPhase = getCurrPhase();
+        }
         int num = -1;
         while (num < 0 || num >= islands.size()) {
             printClouds();
@@ -370,14 +384,6 @@ public class CLI {
 
     public void setPhase(Phase phase) {
         this.currPhase = phase;
-    }
-
-    public void setMatchesID(List<Integer> matchesID) {
-        this.matchesID = matchesID;
-    }
-
-    public void setPlayers(List<List<String>> players) {
-        this.players = players;
     }
 
     public void setWizards(List<Wizard> wizards) {
