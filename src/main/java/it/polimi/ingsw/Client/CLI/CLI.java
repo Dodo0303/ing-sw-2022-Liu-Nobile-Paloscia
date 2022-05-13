@@ -173,7 +173,8 @@ public class CLI {
     private void buildConnection() {
         while(serverHandler == null) {
             System.out.print("Host?\n");
-            host = input.nextLine();
+            //host = input.nextLine(); //TODO
+            host = "localhost";
             System.out.print("Port?\n");
             port = Integer.parseInt(input.nextLine());
             try {

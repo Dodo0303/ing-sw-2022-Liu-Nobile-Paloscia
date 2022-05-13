@@ -5,11 +5,13 @@ import it.polimi.ingsw.Exceptions.MatchMakingException;
 import it.polimi.ingsw.Exceptions.NoSuchMatchException;
 import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Model.Wizard;
+import it.polimi.ingsw.Network.Messages.ConnectionStatusMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.ConfirmJoiningMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.NickResponseMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendAvailableWizardsMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendMatchesMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
@@ -21,6 +23,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 //TODO
 
@@ -31,50 +35,154 @@ public class ClientHandler implements Runnable {
     private int playerID;
     private String nickname;
     private Wizard wizard;
+    ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
+    private BlockingQueue<Object> incomingMessages;
+    private LinkedBlockingQueue<Object> outgoingMessages;
+    private Thread sendThread;
+    private volatile Thread receiveThread; // Created only after connection is open.
+    boolean closed;
 
-    public ClientHandler(EriantysServer server, Socket socket) {
+    public ClientHandler(EriantysServer server, Socket socket, int playerID) throws IOException {
         this.server = server;
         this.socket = socket;
+        this.playerID = playerID;
         wizard = null;
+        closed = false;
+        incomingMessages = new LinkedBlockingQueue<Object>();
+        outgoingMessages = new LinkedBlockingQueue<Object>();
+        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        objectInputStream = new ObjectInputStream(socket.getInputStream());
+        sendThread =  new SendThread();
     }
-
 
     @Override
     public void run() {
-
         try {
-            InputStream inputStream = socket.getInputStream();
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-
+            sendThread.start();
             //At this point the client handler must receive the nickname from the client
-            receiveNickname(objectInputStream);
-
+            receiveNickname();
             //Now the handler must receive CreateMatchMessage
-            receiveCreateMatch(objectInputStream);
-
+            receiveCreateMatch();
             //Here the game starts. The handler must listen for incoming messages
             while(true) {
-                MessageToServer message = (MessageToServer) objectInputStream.readObject();
+                MessageToServer message = (MessageToServer) incomingMessages.take();
                 Thread messageHandler = new Thread(() -> match.process(message, this));
                 messageHandler.start();
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 
-    private void receiveNickname(ObjectInputStream objectInputStream) throws ClassNotFoundException, IOException {
-        MessageToServer nickMessage = (MessageToServer) objectInputStream.readObject();
-        while (!(nickMessage instanceof SendNickMessage) || !server.isNicknameAvailable(((SendNickMessage) nickMessage).getNickname())) {
+    private class SendThread extends Thread {
+        public void run() {
+            //setting up connection with client
+            try {
+                String handle = (String) objectInputStream.readObject();
+                if (!"Hello Server.".equals(handle)) {
+                    throw new IOException("Incorrect string received from client.\n");
+                }
+                objectOutputStream.writeObject(playerID);
+                objectOutputStream.flush();
+                receiveThread = new ReceiveThread();
+                receiveThread.start();
+            } catch (Exception e) {
+                try {
+                    closed = true;
+                    socket.close();
+                } catch (Exception ignored) {
+                }
+                System.out.println("Error while setting up connection: " + e + "\n");
+                return;
+            }
+            //send message
+            try {
+                while(!closed) {
+                    try {
+                        Object msg = outgoingMessages.take();
+                        objectOutputStream.writeObject(msg);
+                    } catch (InterruptedException e) {
+                        System.out.println("Error while sending message to client: " + e + "\n");
+                        return;
+                    }
+                }
+            } catch (IOException e) {
+                if (!closed) {
+                    closeWithError("Error while sending message to client: " + e + "\n");
+                    System.out.println("Server sendThread terminated by IOException: " + e + "\n");
+                }
+            } catch (Exception e) {
+                if (!closed) {
+                    closeWithError("Internal Error: Unexpected exception in output thread: " + e + "\n");
+                    System.out.println("Unexpected error shuts down server's sendThread:\n");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private class ReceiveThread extends Thread {
+        public void run() {
+            while(!closed) {
+                try {
+                    Object msg = objectInputStream.readObject();
+                    if (msg instanceof DisconnectMessage) {
+                        closed = true;
+                        outgoingMessages.clear();
+                        objectOutputStream.writeObject("*goodbye*");
+                        objectOutputStream.flush();
+                        server.clientDisconnected(playerID);
+                        close();
+                    } else {
+                        incomingMessages.put(msg);
+                    }
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    void close() {
+        closed = true;
+        sendThread.interrupt();
+        if (receiveThread != null)
+            receiveThread.interrupt();
+        try {
+            socket.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void closeWithError(String err) {
+        //TODO announce to other clients.
+        close();
+    }
+
+    public void send(Object msg) {
+        if (msg == null) {
+            throw new IllegalArgumentException("Null cannot be sent as a message.");
+        } else if (msg instanceof DisconnectMessage){
+            outgoingMessages.clear();
+        }
+        outgoingMessages.add(msg);
+    }
+
+    private void receiveNickname() throws ClassNotFoundException, IOException, InterruptedException {
+        MessageToServer nickMessage = (MessageToServer) incomingMessages.take();
+        while (!(nickMessage instanceof SendNickMessage)) {
+            incomingMessages.put(nickMessage);
+            nickMessage = (MessageToServer) incomingMessages.take();
+        }
+        while (!server.isNicknameAvailable(((SendNickMessage) nickMessage).getNickname())) {
             //Send the refuse
             MessageToClient msg = new NickResponseMessage(null);
             send(msg);
             //Read new nick proposal
-            nickMessage = (MessageToServer) objectInputStream.readObject();
+            nickMessage = (MessageToServer) incomingMessages.take();
         }
         //Received valid nickname
         nickname = ((SendNickMessage) nickMessage).getNickname();
@@ -82,11 +190,12 @@ public class ClientHandler implements Runnable {
         send(msg);
     }
 
-    private void receiveCreateMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
-        MessageToServer matchMessage = (MessageToServer) objectInputStream.readObject();
+    private void receiveCreateMatch() throws IOException, ClassNotFoundException, InterruptedException {
+        MessageToServer matchMessage = (MessageToServer) incomingMessages.take();
         while (!(matchMessage instanceof CreateMatchMessage)) {
+            incomingMessages.put(matchMessage);
             System.out.println("Expected CreateMatchMessage, received " + matchMessage.getClass());
-            matchMessage = (MessageToServer) objectInputStream.readObject();
+            matchMessage = (MessageToServer) incomingMessages.take();
         }
         if (((CreateMatchMessage)matchMessage).getNewMatch()) {
             createNewMatch(objectInputStream);
@@ -94,7 +203,7 @@ public class ClientHandler implements Runnable {
             joinMatch(objectInputStream);
         }
     }
-
+//TODO 05/12/2022
     private void createNewMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
         MessageToServer infoMessage = (MessageToServer) objectInputStream.readObject();
         while (!(infoMessage instanceof SendStartInfoMessage)){
@@ -208,11 +317,6 @@ public class ClientHandler implements Runnable {
         return wizard != null;
     }
 
-    public void send(MessageToClient msg) throws IOException {
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        objectOutputStream.writeObject(msg);
-    }
-
     public MatchController getMatch() {
         return this.match;
     }
@@ -225,9 +329,6 @@ public class ClientHandler implements Runnable {
 
     public String getNickname() { return this.nickname; }
 
-    public void closeConnection() throws IOException {
-        this.socket.close();
-    }
 
     //METHODS FOR TEST PURPOSES ONLY
 
