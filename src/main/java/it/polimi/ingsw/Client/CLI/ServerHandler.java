@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ServerHandler implements Runnable {
@@ -19,6 +20,7 @@ public class ServerHandler implements Runnable {
     private ObjectInputStream input;
     private Socket socket;
     private LinkedBlockingQueue<Object> outgoingMessages;
+    private LinkedBlockingQueue<Object> incomingMessages;
     Boolean closed;
     private SendThread sendThread;
     private ReceiveThread receiveThread;
@@ -30,6 +32,7 @@ public class ServerHandler implements Runnable {
         this.input = new ObjectInputStream(socket.getInputStream());
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.outgoingMessages = new LinkedBlockingQueue<Object>();
+        this.incomingMessages = new LinkedBlockingQueue<Object>();
         this.sendThread = new SendThread();
         this.receiveThread = new ReceiveThread();
         this.closed = false;
@@ -76,11 +79,12 @@ public class ServerHandler implements Runnable {
                     } else {
                         output.writeObject(message);
                         output.flush();
+                        System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
                     }
                 }
             } catch (Exception e) {
-                System.out.print("An error in sending occurred, which shut down the socket.");
-                shutdown();
+                System.out.print(e.getMessage());
+                //shutdown();
             }
         }
     }
@@ -91,6 +95,7 @@ public class ServerHandler implements Runnable {
             try {
                 while(!closed) {
                     Object message = input.readObject();
+                    System.out.print(message.getClass().toString() + " received by client" + "\n"); //TODO delete after tests
                     if (message instanceof DisconnectMessage) {
                         shutdown();
                     } else if (message instanceof StatusMessage){
@@ -100,11 +105,14 @@ public class ServerHandler implements Runnable {
                         client.messageReceived(message);
                     }
                 }
-            }catch (Exception e) {
-                System.out.print("An error in receiving occurred, which shut down the socket.");
-                shutdown();
+            } catch (Exception e) {
+                System.out.print(e.getMessage());
+                //shutdown();
             }
         }
+    }
+    public void removeMessage(Object obj) {
+        incomingMessages.remove(obj);
     }
 
     public ObjectOutputStream getOutput() {

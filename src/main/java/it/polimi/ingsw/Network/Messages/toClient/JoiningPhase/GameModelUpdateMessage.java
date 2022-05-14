@@ -17,6 +17,7 @@ public class GameModelUpdateMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-
+        ch.getClient().setGame(gameModel);
+        System.out.println(this.getClass().toString() + " processed.");
     }
 }

@@ -4,13 +4,14 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullCloudException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Class for cloud tile. It can have a maximum of 3 or 4 students, depending on number of players (given to constructor).
  */
-public class Cloud {
+public class Cloud implements Serializable {
     /**
      * ArrayList of StudentColor that represent the students lying on the cloud tile.
      */

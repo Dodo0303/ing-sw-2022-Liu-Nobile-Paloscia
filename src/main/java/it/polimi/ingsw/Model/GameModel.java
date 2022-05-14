@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Exceptions.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static it.polimi.ingsw.Exceptions.GameException.error;
@@ -9,15 +10,11 @@ import static it.polimi.ingsw.Exceptions.GameException.error;
 /** A new game.
  */
 
-public class GameModel {
+public class GameModel implements Serializable {
 
     /** An uninitialized GameModel.  Only for use by subtypes. */
     protected GameModel() {
     }
-
-
-    /** A read-only version of this Board. */
-    private ReadOnlyGameModel _readonlyGame;
 
     /** All islands */
     private HashMap<Integer, Island> _islands;
@@ -258,10 +255,6 @@ public class GameModel {
             }
         }
     }
-    public ReadOnlyGameModel readOnlyGame() {
-        return _readonlyGame;
-    }
-
 
     public int getPlayerIndexFromNickname(String nickname) {
         for (Player player : this._players) {
@@ -288,6 +281,42 @@ public class GameModel {
 
     public void sortPlayers() {
         this._players.sort(new PlayerComparator());
+    }
+
+    public void set_islands(HashMap<Integer, Island> _islands) {
+        this._islands = _islands;
+    }
+
+    public void set_numIslands(int _numIslands) {
+        this._numIslands = _numIslands;
+    }
+
+    public void set_motherNature(int _motherNature) {
+        this._motherNature = _motherNature;
+    }
+
+    public void setInfluences(Map<Island, Integer[]> influences) {
+        this.influences = influences;
+    }
+
+    public void set_players(ArrayList<Player> _players) {
+        this._players = _players;
+    }
+
+    public void set_bag(Bag _bag) {
+        this._bag = _bag;
+    }
+
+    public void set_clouds(ArrayList<Cloud> _clouds) {
+        this._clouds = _clouds;
+    }
+
+    public void set_spareCoins(int _spareCoins) {
+        this._spareCoins = _spareCoins;
+    }
+
+    public void set_professors(ArrayList<StudentColor> _professors) {
+        this._professors = _professors;
     }
 
     private class PlayerComparator implements Comparator<Player> {

@@ -30,9 +30,9 @@ public class SendMatchesMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
-        client.getClient().setMatchesID(matchesID);
-        client.getClient().setPlayers(players);
+        System.out.println("Available matches:");
+        for (int m : matchesID) {
+            System.out.println(m);
+        }
     }
-
-
 }

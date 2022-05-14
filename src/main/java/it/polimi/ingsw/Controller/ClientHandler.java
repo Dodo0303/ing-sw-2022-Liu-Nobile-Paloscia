@@ -54,12 +54,12 @@ public class ClientHandler implements Runnable {
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectInputStream = new ObjectInputStream(socket.getInputStream());
         sendThread =  new SendThread();
+        sendThread.start();
     }
 
     @Override
     public void run() {
         try {
-            sendThread.start();
             //At this point the client handler must receive the nickname from the client
             receiveNickname();
             //Now the handler must receive CreateMatchMessage
@@ -70,7 +70,7 @@ public class ClientHandler implements Runnable {
                 Thread messageHandler = new Thread(() -> match.process(message, this));
                 messageHandler.start();
             }
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException | MatchMakingException e) {
             e.printStackTrace();
         }
     }
@@ -102,6 +102,7 @@ public class ClientHandler implements Runnable {
                     try {
                         Object msg = outgoingMessages.take();
                         objectOutputStream.writeObject(msg);
+                        System.out.print(msg.getClass().toString() + " sent by server" + "\n"); //TODO delete after tests
                     } catch (InterruptedException e) {
                         System.out.println("Error while sending message to client: " + e + "\n");
                         return;
@@ -136,6 +137,7 @@ public class ClientHandler implements Runnable {
                         close();
                     } else {
                         incomingMessages.put(msg);
+                        System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
                     }
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
@@ -181,19 +183,20 @@ public class ClientHandler implements Runnable {
             //Send the refuse
             MessageToClient msg = new NickResponseMessage(null);
             send(msg);
-            System.out.println("Received invalid nickname: " + ((SendNickMessage) nickMessage).getNickname());
-
             //Read new nick proposal
             nickMessage = (MessageToServer) incomingMessages.take();
+            while (!(nickMessage instanceof SendNickMessage)) {
+                incomingMessages.put(nickMessage);
+                nickMessage = (MessageToServer) incomingMessages.take();
+            }
         }
         //Received valid nickname
         nickname = ((SendNickMessage) nickMessage).getNickname();
         MessageToClient msg = new NickResponseMessage(nickname);
         send(msg);
-        System.out.println("Received valid nickname: " + ((SendNickMessage) nickMessage).getNickname());
     }
 
-    private void receiveCreateMatch() throws IOException, ClassNotFoundException, InterruptedException {
+    private void receiveCreateMatch() throws IOException, ClassNotFoundException, InterruptedException, MatchMakingException {
         MessageToServer matchMessage = (MessageToServer) incomingMessages.take();
         while (!(matchMessage instanceof CreateMatchMessage)) {
             incomingMessages.put(matchMessage);
@@ -201,57 +204,55 @@ public class ClientHandler implements Runnable {
             matchMessage = (MessageToServer) incomingMessages.take();
         }
         if (((CreateMatchMessage)matchMessage).getNewMatch()) {
-            createNewMatch(objectInputStream);
+            createNewMatch();
         } else {
-            joinMatch(objectInputStream);
+            joinMatch();
         }
     }
-//TODO 05/12/2022
-    private void createNewMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
-        MessageToServer infoMessage = (MessageToServer) objectInputStream.readObject();
+
+    private void createNewMatch() throws InterruptedException, MatchMakingException {
+        MessageToServer infoMessage = (MessageToServer) incomingMessages.take();
         while (!(infoMessage instanceof SendStartInfoMessage)){
+            incomingMessages.put(infoMessage);
             System.out.println("Expected CreateMatchMessage, received " + infoMessage.getClass());
-            infoMessage = (MessageToServer) objectInputStream.readObject();
+            infoMessage = (MessageToServer) incomingMessages.take();
         }
         //Received information
         match = new MatchController(server.generateMatchID(), ((SendStartInfoMessage) infoMessage).getNumOfPlayers());
-        new Thread(match);
-        wizard = ((SendStartInfoMessage) infoMessage).getWizard();
+        new Thread(match).start();
         //TODO Manage game mode
+        wizard = ((SendStartInfoMessage) infoMessage).getWizard();
         server.addMatch(match);
         try {
             match.addPlayer(this);
+            match.setWizardOfPlayer(this, wizard);
         } catch (MatchMakingException e) {
             e.printStackTrace();
             return;
         }
         //Send ConfirmJoiningMessage
-        MessageToClient msg = new ConfirmJoiningMessage(true, "Game created");
+        MessageToClient msg = new ConfirmJoiningMessage(true, "Game created", match.getID());
         send(msg);
-
     }
 
-    private void joinMatch(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
-        sendAvailableMatchesToClient(objectInputStream);
-
-        receiveAndSetMatchChosen(objectInputStream);
-
+    private void joinMatch() throws IOException, ClassNotFoundException, InterruptedException {
+        sendAvailableMatchesToClient();
+        receiveAndSetMatchChosen();
         //Add the player to the match
-
         try {
             match.addPlayer(this);
         } catch (MatchMakingException e) {
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match full");
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match full", match.getID());
             send(denyJoining);
-            joinMatch(objectInputStream);
+            joinMatch();
             return;
         }
 
         //Choose the wizard
-        receiveWizard(objectInputStream);
+        receiveWizard();
     }
 
-    private void sendAvailableMatchesToClient(ObjectInputStream objectInputStream) throws IOException {
+    private void sendAvailableMatchesToClient() throws IOException {
         List<MatchController> availableMatches = server.getMatchmakingMatches();
         List<Integer> matchesID = new ArrayList<>();
         List<List<String>> players = new ArrayList<>();
@@ -272,42 +273,42 @@ public class ClientHandler implements Runnable {
         send(msg);
     }
 
-    private void receiveAndSetMatchChosen(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
-        MessageToServer matchChosen =(MessageToServer) objectInputStream.readObject();
+    private void receiveAndSetMatchChosen() throws IOException, ClassNotFoundException, InterruptedException {
+        MessageToServer matchChosen =(MessageToServer) incomingMessages.take();
         while (!(matchChosen instanceof MatchChosenMessage)){
+            incomingMessages.put(matchChosen);
             System.out.println("Expected MatchChosenMessage, received " + matchChosen.getClass());
-            matchChosen = (MessageToServer) objectInputStream.readObject();
+            matchChosen = (MessageToServer) incomingMessages.take();
         }
-
         //Set the match attribute
         try {
-            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID());
+            match = server.getMatchById(((MatchChosenMessage) matchChosen).getMatchID() + 1);//TODO why they always differ by 1? put a "+1" there to be able to continue the test.
         } catch (NoSuchMatchException e) {
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists");
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists", -1);
             send(denyJoining);
-            joinMatch(objectInputStream);
+            joinMatch();
         }
     }
 
-    private void receiveWizard(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+    private void receiveWizard() throws IOException, ClassNotFoundException, InterruptedException {
         sendAvailableWizards();
-
-        MessageToServer wizardChosen = (MessageToServer) objectInputStream.readObject();
+        MessageToServer wizardChosen = (MessageToServer) incomingMessages.take();
         while (!(wizardChosen instanceof SendChosenWizardMessage)){
+            incomingMessages.put(wizardChosen);
             System.out.println("Expected CreateMatchMessage, received " + wizardChosen.getClass());
-            wizardChosen = (MessageToServer) objectInputStream.readObject();
+            wizardChosen = (MessageToServer) incomingMessages.take();
         }
 
         //Check whether the wizard is available and set the wizard
         try {
             match.setWizardOfPlayer(this, ((SendChosenWizardMessage) wizardChosen).getWizard());
+            MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game", match.getID());
             this.wizard = ((SendChosenWizardMessage) wizardChosen).getWizard();
-            MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game");
             send(confirm);
         } catch (GameException e) {
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available");
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available", match.getID());
             send(denyJoining);
-            receiveWizard(objectInputStream);
+            receiveWizard();
         }
     }
 

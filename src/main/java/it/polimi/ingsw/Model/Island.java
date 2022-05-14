@@ -2,9 +2,10 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Exceptions.GameException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Island {
+public class Island implements Serializable {
 
     /** A new island.
      */

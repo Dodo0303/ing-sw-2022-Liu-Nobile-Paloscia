@@ -21,10 +21,14 @@ public class NickResponseMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) {
         if (nickname == null) {
+            System.out.print("Nickname has been taken.\n");
             client.getClient().requireNickname();
         } else {
             client.setNickName(nickname);
+            client.getClient().setPhase(Phase.ChoosingGameMode);
+            System.out.println(client.getClient().getCurrPhase().toString() +" phase set.\n");
         }
+
     }
 
     //TODO Update server side

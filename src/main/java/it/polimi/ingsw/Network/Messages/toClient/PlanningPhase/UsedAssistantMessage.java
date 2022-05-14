@@ -22,6 +22,6 @@ public class UsedAssistantMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-
+        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayers().get(ch.getClient().getGame().getPlayerIndexFromNickname(playerID)).getAssistants().get(assistantValue));
     }
 }

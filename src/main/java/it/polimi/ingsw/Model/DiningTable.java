@@ -3,7 +3,9 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Exceptions.EmptyTableException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 
-public class DiningTable {
+import java.io.Serializable;
+
+public class DiningTable implements Serializable {
 
     private final StudentColor color;
     private int numOfStudents;

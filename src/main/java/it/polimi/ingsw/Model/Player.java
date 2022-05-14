@@ -4,6 +4,7 @@ import it.polimi.ingsw.Exceptions.EmptyTableException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.GameException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 /**  A new player. */
 
-public class Player {
+public class Player implements Serializable {
 
     /** My current color. */
     private Color _color;
