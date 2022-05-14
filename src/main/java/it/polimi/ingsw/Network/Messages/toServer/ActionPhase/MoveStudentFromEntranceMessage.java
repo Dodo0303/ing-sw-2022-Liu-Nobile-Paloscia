@@ -29,6 +29,5 @@ public class MoveStudentFromEntranceMessage extends MessageToServer {
 
     @Override
     public void process(ClientHandler ch) {
-        //TODO
     }
 }

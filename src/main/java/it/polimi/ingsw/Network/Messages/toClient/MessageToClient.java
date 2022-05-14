@@ -8,5 +8,5 @@ import it.polimi.ingsw.Exceptions.FullTableException;
 import java.io.Serializable;
 
 public abstract class MessageToClient implements Serializable {
-    public abstract void process(ServerHandler client) throws FullTableException, InterruptedException;
+    public abstract void process(ServerHandler client);
 }

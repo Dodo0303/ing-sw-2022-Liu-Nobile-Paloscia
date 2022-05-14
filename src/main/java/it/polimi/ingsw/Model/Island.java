@@ -94,7 +94,6 @@ public class Island implements Serializable {
 
     /** Represents how many times THIS island has merged other islands into itself.
      * The total number of islands merged is _numMerge+1
-     * TODO Could be replaced by numTower
      */
     private int _numMerge;
 

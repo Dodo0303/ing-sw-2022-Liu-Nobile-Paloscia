@@ -5,7 +5,6 @@ import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class ConfirmCloudMessage extends MessageToClient {
-    //TODO
     private final String playerID;
     private final int cloudID;
 

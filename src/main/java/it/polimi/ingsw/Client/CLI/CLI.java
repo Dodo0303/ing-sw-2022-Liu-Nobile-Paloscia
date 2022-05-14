@@ -322,7 +322,7 @@ public class CLI {
                 }
             }
         }
-        System.out.println(tempColor.toString() + num + islandID);//TODO DELETE
+        System.out.println(tempColor.toString() + num + islandID);//TODO DELETE AFTER TEST
         send(new MoveStudentFromEntranceMessage(tempColor, num, islandID));
     }
     public void moveMotherNature() {
@@ -340,7 +340,6 @@ public class CLI {
         }
         send(new MoveMotherNatureMessage(num));
     }
-    //TODO 05/14
     public void chooseCloud() {
         while (!currPhase.equals(Phase.Action3)) {
             currPhase = getCurrPhase();
