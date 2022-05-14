@@ -6,11 +6,10 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Utilities;
 
 public class ChangeTurnMessage extends MessageToClient {
-    //TODO
     private String playerNickname;
     private Phase gamePhase;
 
-    public ChangeTurnMessage(String playerNickname, String gamePhase) {//TODO Phase gamePhase
+    public ChangeTurnMessage(String playerNickname, String gamePhase) {
         this.playerNickname = playerNickname;
         this.gamePhase = Utilities.getPhase(gamePhase);
     }
@@ -30,11 +29,13 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().setPhase(Phase.Planning);
                 ch.getClient().playAssistant();
             } else if (ch.getClient().getCurrPhase().equals(Phase.Planning) && this.gamePhase.equals(Phase.Action1)) {
-
+                ch.getClient().setPhase(Phase.Action1);
+                ch.getClient().moveStudentsFromEntrance();
             } else if (ch.getClient().getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
-
+                ch.getClient().setPhase(Phase.Planning);
+                ch.getClient().playAssistant();
             }
-            System.out.println(this.getClass().toString() + " processed.");
+            System.out.println(this.getClass().toString() + " processed."); //TODO delete after test
         }
     }
 

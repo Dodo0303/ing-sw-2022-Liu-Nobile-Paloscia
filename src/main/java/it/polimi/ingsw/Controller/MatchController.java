@@ -45,6 +45,7 @@ public class MatchController implements Runnable {
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
         this.lastRound = false;
+        this.influenceCalculator = new StandardInfluenceCalculator(); //TODO the special one
     }
 
     // GETTERS AND SETTERS
@@ -522,7 +523,7 @@ public class MatchController implements Runnable {
         return winner;
     }
 
-    public int endedAtPhase2() {
+    public int endedAtPhase2() {//TODO debug this
         if (this.getCurrentPlayer().getTowerNum() == 0) return 1;
         if (this.game.getIslands().size() <= 3) return 2;
         return 0;

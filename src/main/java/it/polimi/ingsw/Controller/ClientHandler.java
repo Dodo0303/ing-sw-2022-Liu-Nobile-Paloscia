@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -72,6 +73,7 @@ public class ClientHandler implements Runnable {
             }
         } catch (IOException | ClassNotFoundException | InterruptedException | MatchMakingException e) {
             e.printStackTrace();
+            return;
         }
     }
 

@@ -34,5 +34,6 @@ public class SendMatchesMessage extends MessageToClient {
         for (int m : matchesID) {
             System.out.println(m);
         }
+        client.getClient().setPhase(Phase.JoiningGame1);
     }
 }
