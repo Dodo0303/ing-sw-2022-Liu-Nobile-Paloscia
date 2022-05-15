@@ -57,12 +57,14 @@ public class EriantysServer implements Runnable{
         while (!shutdown) {
             try {
                 Socket socket = serverSocket.accept();
-                ClientHandler newClient = new ClientHandler(this, socket, clients.size());
+                ClientHandler newClient = new ClientHandler(this, socket);
                 executor.submit(newClient);
                 clients.add(newClient);
                 new Thread(newClient).start();
-            } catch (IOException e) {
-                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Fatal exception error, server down.");
+                shutdown = true;
             }
         }
 

@@ -49,15 +49,9 @@ public class CLI {
     public void send(Object message) {
         if (message == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.\n");
-        } else if (serverHandler.closed) {
-            throw new IllegalStateException("You are off-line!\n");
         } else {
             serverHandler.send(message);
         }
-    }
-
-    public void resetOutput() {
-        serverHandler.send(new ResetOutputMessage());
     }
 
     protected void messageReceived(Object message) throws FullTableException, InterruptedException {
@@ -71,13 +65,13 @@ public class CLI {
             }
         } else if (message instanceof ConfirmJoiningMessage) {
             if (currPhase.equals(Phase.CreatingGame) ||
-                    currPhase.equals(Phase.JoiningGame1)) {
-                ((ConfirmJoiningMessage) message).process(this.serverHandler);
-            } else if (currPhase.equals(Phase.JoiningGame2)) {
+                    currPhase.equals(Phase.JoiningGame1) ||
+                    currPhase.equals(Phase.JoiningGame2)) {
                 ((ConfirmJoiningMessage) message).process(this.serverHandler);
             }
         } else if (message instanceof SendAvailableWizardsMessage) {
-            if (currPhase.equals(Phase.JoiningGame1)) {
+            if (currPhase.equals(Phase.JoiningGame1) ||
+                    currPhase.equals(Phase.JoiningGame2)) {
                 ((SendAvailableWizardsMessage) message).process(this.serverHandler);
             }
         } else if (message instanceof ChangeTurnMessage) {
@@ -160,7 +154,7 @@ public class CLI {
         }
     }
 
-    private void chooseGameMode() {
+    public void chooseGameMode() {
         while (!getCurrPhase().equals(Phase.ChoosingGameMode)) {
             currPhase = getCurrPhase();
         }
@@ -242,14 +236,15 @@ public class CLI {
             while (!currPhase.equals(Phase.JoiningGame2)) {
                 currPhase = getCurrPhase();
             }
-            while(wiz < 0 || wiz > wizards.size() - 1) {
+            while(wiz < 0 || wiz >= wizards.size()) {
                 System.out.print("Choose a wizard.\n");
                 String in = input.nextLine();
                 if (Utilities.isNumeric(in)) {
                     wiz = Integer.parseInt(in) - 1;
                 }
             }
-            send(new SendChosenWizardMessage(Wizard.values()[wiz]));
+            setPhase(Phase.JoiningGame2);
+            send(new SendChosenWizardMessage(wizards.get(wiz)));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.print("Something went wrong, please try agian.\n");
@@ -264,7 +259,10 @@ public class CLI {
             }
             int assis = -1;
             for (int i = 1; i <= 10; i++) {
-                System.out.print(i + "." + game.getPlayers().get(getServerHandler().playerID).getAssistants().get(i - 1) + "\n");
+                Assistant assistant = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(i - 1);
+                if (assistant != null) {
+                    System.out.println(i + ". MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
+                }
             }
             while(assis < 0 || assis > 9) {
                 System.out.print("Choose assistant card.\n");
@@ -272,12 +270,12 @@ public class CLI {
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
-                if (assis != -1 && game.getPlayers().get(getServerHandler().playerID).getAssistants().get(assis) == null) {
+                if (assis != -1 && game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(assis) == null) {
                     System.out.print("You cannot choose this assistant card.\n");
                     assis = -1;
                 }
             }
-            send(new SendAssistantMessage(game.getPlayers().get(getServerHandler().playerID).getAssistants().get(assis)));
+            send(new SendAssistantMessage(game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(assis)));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.print("Something went wrong, please try agian.\n");
@@ -291,18 +289,23 @@ public class CLI {
         }
         int num = -1;
         int islandID = -1;
+        int value = -1;
         entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
         numIslands = game.getNumIslands();
         StudentColor tempColor;
         String str = "";
         while ((!Utilities.existInStudentColor(str)) ||
-                (Utilities.existInStudentColor(str) && entrance.get(StudentColor.valueOf(str)) <= 0)) {
+                (Utilities.existInStudentColor(str) && value <= 0)) {
             System.out.print("You have in your entrance:\n");
             for (StudentColor color:StudentColor.values()) {
                 System.out.print(color + " student:" + entrance.get(color) + "\n");
             }
             System.out.println("Which color of student would you like to move?(Choose between GREEN, BLUE, YELLOW, RED, and PINK)");
             str = input.nextLine();
+            value = entrance.get(StudentColor.valueOf(str));
+            if (value <= 0) {
+                System.out.println("You don't have any student of color " + str + ".");
+            }
         }
         tempColor = StudentColor.valueOf(str);
         while (num != 0 && num != 1) {
@@ -365,6 +368,9 @@ public class CLI {
                 System.out.print(islands.get(i).getNumTower() + "tower(s) of color " + islands.get(i).getTowerColor().toString() +"on the island\n");
             } else {
                 System.out.print("No tower on the island.\n");
+            }
+            if (game.getMotherNatureIndex() == i) {
+                System.out.print("The motherNature is here\n");
             }
             System.out.print("Students:\n");
             for (StudentColor color:StudentColor.values()) {

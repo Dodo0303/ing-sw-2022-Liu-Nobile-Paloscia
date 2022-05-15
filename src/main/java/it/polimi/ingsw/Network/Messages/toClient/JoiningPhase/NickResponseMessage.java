@@ -19,7 +19,7 @@ public class NickResponseMessage extends MessageToClient {
     }
 
     @Override
-    public void process(ServerHandler client) {
+    public void process(ServerHandler client) throws InterruptedException {
         if (nickname == null) {
             System.out.print("Nickname has been taken.\n");
             client.getClient().requireNickname();

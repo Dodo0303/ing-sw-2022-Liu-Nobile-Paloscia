@@ -27,8 +27,6 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-//TODO
-
 public class ClientHandler implements Runnable {
     private Socket socket;
     private EriantysServer server;
@@ -44,7 +42,7 @@ public class ClientHandler implements Runnable {
     private volatile Thread receiveThread; // Created only after connection is open.
     boolean closed;
 
-    public ClientHandler(EriantysServer server, Socket socket, int playerID) throws IOException {
+    public ClientHandler(EriantysServer server, Socket socket) throws IOException {
         this.server = server;
         this.socket = socket;
         this.playerID = playerID;
@@ -76,7 +74,8 @@ public class ClientHandler implements Runnable {
             return;
         }
     }
-
+    /** Set up connection and send message when send(Object msg) is called.
+     */
     private class SendThread extends Thread {
         public void run() {
             //setting up connection with client
@@ -124,7 +123,8 @@ public class ClientHandler implements Runnable {
             }
         }
     }
-
+    /** Listen on the chosen port, receive any incoming message
+     */
     private class ReceiveThread extends Thread {
         public void run() {
             while(!closed) {
@@ -141,13 +141,17 @@ public class ClientHandler implements Runnable {
                         incomingMessages.put(msg);
                         System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
                     }
-                } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Connection with " + nickname +" lost.");
+                    closeWithError(e.getMessage());
                 }
             }
         }
     }
 
+    /** Shut down THIS clientHandler.
+     */
     void close() {
         closed = true;
         sendThread.interrupt();
@@ -161,18 +165,22 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /** Shut down THIS clientHandler and announce the disconnection to other clients.
+     */
     void closeWithError(String err) {
         //TODO announce to other clients.
         close();
     }
 
+    /** Send message msg.
+     */
     public void send(Object msg) {
         if (msg == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.");
         } else if (msg instanceof DisconnectMessage){
             outgoingMessages.clear();
         }
-        outgoingMessages.add(msg);
+        while (!outgoingMessages.offer(msg));
     }
 
     private void receiveNickname() throws ClassNotFoundException, IOException, InterruptedException {

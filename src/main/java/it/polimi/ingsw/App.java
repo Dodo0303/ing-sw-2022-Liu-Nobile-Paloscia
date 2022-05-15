@@ -5,7 +5,7 @@ import it.polimi.ingsw.Controller.EriantysServer;
 
 import static it.polimi.ingsw.Utilities.*;
 
-/** The Eriantys game. FOR NOW, ONLY 2-PERSON GAME IS IMPLEMENTED.
+/** The Eriantys game.
  */
 public class App {
 
@@ -18,7 +18,6 @@ public class App {
             usage();
             return;
         }
-        launchServer(args);
         switch (args[0].toLowerCase()) {
             case "-gui": {
                 //TODO gui
@@ -28,8 +27,8 @@ public class App {
                 launchCLI(args);
                 break;
             }
-            case "-help": {
-                usage();
+            case "-server": {
+                launchServer(args);
                 break;
                 }
             }
