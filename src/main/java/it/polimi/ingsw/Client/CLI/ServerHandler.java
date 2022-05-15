@@ -54,7 +54,7 @@ public class ServerHandler implements Runnable {
     }
 
     void send(Object message) {
-        outgoingMessages.add(message);
+        while (!outgoingMessages.offer(message));
     }
 
     public void shutdown() {

@@ -30,10 +30,16 @@ public class SendMatchesMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
-        System.out.println("Available matches:");
-        for (int m : matchesID) {
-            System.out.println(m);
+        if (matchesID.isEmpty()) {
+            System.out.println("There is no available match.");
+            client.getClient().setPhase(Phase.ChoosingGameMode);
+            client.getClient().chooseGameMode();
+        } else {
+            System.out.println("Available matches:");
+            for (int m : matchesID) {
+                System.out.println(m);
+            }
+            client.getClient().setPhase(Phase.JoiningGame1);
         }
-        client.getClient().setPhase(Phase.JoiningGame1);
     }
 }
