@@ -33,7 +33,7 @@ public class Player implements Serializable {
     private List<StudentColor> _professors;
 
     /** The numbers of students in entrance of each color. */
-    private HashMap<StudentColor, Integer> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
+    private List<StudentColor> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
 
     /** Max amount of students in the entrance */
     private final int _maxEntranceStudents;
@@ -78,10 +78,8 @@ public class Player implements Serializable {
 
     /** Initialize _entranceStudents */
     private void initEntranceStudents() {
-        this._entranceStudents = new HashMap<>();
-        for(StudentColor color : StudentColor.values()) {
-            this._entranceStudents.put(color, 0);
-        }
+        this._entranceStudents = new ArrayList<>();
+        //TODO Someone (controller) has to draw the students and put them here when the match starts
     }
     /** Initialize _professors */
     private void initProfessors() {
@@ -165,32 +163,29 @@ public class Player implements Serializable {
 
     // ADD AND REMOVE STUDENTS FROM ENTRANCE
 
-    /** Add one student of StudentCOLOR color to THIS PLAYER. */
+    /**
+     * Add one student in the last position of the entrance
+     * @param color color of the student to be added
+     */
     public void addStudentToEntrance(StudentColor color) {
-        int num = 0;
-        for(StudentColor student : StudentColor.values()) {
-            num += this._entranceStudents.get(student);
-            if (num >= _maxEntranceStudents) {
-                throw new GameException("Entrance is full.");
-            }
+        if (_entranceStudents.size() >= _maxEntranceStudents) {
+            throw new GameException("Entrance is full");
+        } else {
+            _entranceStudents.add(color);
         }
-        this._entranceStudents.put(color,  this._entranceStudents.get(color) + 1);
     }
 
-    /** Remove one student of StudentCOLOR color from THIS PLAYER. */
-    public void removeStudentFromEntrance(StudentColor color) {
-        if (this._entranceStudents.get(color) > 0) {
-            this._entranceStudents.put(color,  this._entranceStudents.get(color) - 1);
-        } else {
-            throw new GameException("No student of this color left.");
-        }
+    /**
+     * Remove a student from the entrance
+     * @param index index of the student to be removed
+     */
+    public StudentColor removeStudentFromEntrance(int index) throws IndexOutOfBoundsException{
+        return _entranceStudents.remove(index);
     }
 
     /** Remove all students in entrance. */
     public void clearEntrance() {
-        for (StudentColor color : _entranceStudents.keySet()) {
-            _entranceStudents.put(color, 0);
-        }
+        _entranceStudents.clear();
     }
 
 
@@ -284,7 +279,7 @@ public class Player implements Serializable {
 
     /** The getter of _entranceStudents
      * @return the numbers of students in entrance of each color.*/
-    public HashMap<StudentColor, Integer> getEntranceStudents() {
+    public List<StudentColor> getEntranceStudents() {
         return this._entranceStudents;
     }
 

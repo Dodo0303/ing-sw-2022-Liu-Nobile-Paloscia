@@ -74,11 +74,8 @@ class PlayerTest {
     @ValueSource( ints = {2,4})
     public void createPlayer_CheckEntranceStudents_TwoFourPlayers(int players) {
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, players);
-        HashMap<StudentColor, Integer> students = p.getEntranceStudents();
-        for (StudentColor color :
-                StudentColor.values()) {
-            assertEquals(0, students.get(color));
-        }
+        List<StudentColor> students = p.getEntranceStudents();
+        assertEquals(0, students.size());
         assertEquals(7, p.getMaxEntranceStudents());
 
     }
@@ -86,11 +83,8 @@ class PlayerTest {
     @Test
     public void createPlayer_CheckEntranceStudents_TwoFourPlayers() {
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 3);
-        HashMap<StudentColor, Integer> students = p.getEntranceStudents();
-        for (StudentColor color :
-                StudentColor.values()) {
-            assertEquals(0, students.get(color));
-        }
+        List<StudentColor> students = p.getEntranceStudents();
+        assertEquals(0, students.size());
         assertEquals(9, p.getMaxEntranceStudents());
 
     }
@@ -214,9 +208,10 @@ class PlayerTest {
     @EnumSource(StudentColor.class)
     public void testAddStudentToEntrance(StudentColor color) {
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
-        int oldNumOfStudents = p.getEntranceStudents().get(color);
+        int oldNumOfStudents = p.getEntranceStudents().size();
         p.addStudentToEntrance(color);
-        assertEquals(oldNumOfStudents+1, p.getEntranceStudents().get(color));
+        assertEquals(oldNumOfStudents+1, p.getEntranceStudents().size());
+        assertEquals(color, p.getEntranceStudents().get(oldNumOfStudents));
     }
     
     @ParameterizedTest
@@ -234,8 +229,8 @@ class PlayerTest {
     public void testRemoveStudentFromEntrance(StudentColor color) {
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
         p.addStudentToEntrance(color);
-        p.removeStudentFromEntrance(color);
-        assertEquals(0, p.getEntranceStudents().get(color));
+        p.removeStudentFromEntrance(0);
+        assertEquals(0, p.getEntranceStudents().size());
 
     }
 
@@ -243,7 +238,7 @@ class PlayerTest {
     @EnumSource(StudentColor.class)
     public void removeStudentFromEntrance_NotEnoughStudents_ShouldThrowException(StudentColor color){
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
-        assertThrows(GameException.class, () -> p.removeStudentFromEntrance(color));
+        assertThrows(IndexOutOfBoundsException.class, () -> p.removeStudentFromEntrance(0));
     }
 
     @Test

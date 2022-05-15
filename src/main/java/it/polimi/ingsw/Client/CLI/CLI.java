@@ -30,7 +30,7 @@ public class CLI {
     private ServerHandler serverHandler;
     private Phase currPhase;
     private List<Wizard> wizards;
-    private HashMap<StudentColor, Integer> entrance;
+    private List<StudentColor> entrance;
     private int numIslands;
     private HashMap<Integer, Island> islands;
     private int ap1Moves;
@@ -287,27 +287,23 @@ public class CLI {
         while (!currPhase.equals(Phase.Action1)) {
             currPhase = getCurrPhase();
         }
-        int num = -1;
-        int islandID = -1;
-        int value = -1;
+        int num = -1, islandID = -1, i=0, index = -1;
         entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
         numIslands = game.getNumIslands();
         StudentColor tempColor;
-        String str = "";
-        while ((!Utilities.existInStudentColor(str)) ||
-                (Utilities.existInStudentColor(str) && value <= 0)) {
-            System.out.print("You have in your entrance:\n");
-            for (StudentColor color:StudentColor.values()) {
-                System.out.print(color + " student:" + entrance.get(color) + "\n");
-            }
-            System.out.println("Which color of student would you like to move?(Choose between GREEN, BLUE, YELLOW, RED, and PINK)");
-            str = input.nextLine();
-            value = entrance.get(StudentColor.valueOf(str));
-            if (value <= 0) {
-                System.out.println("You don't have any student of color " + str + ".");
-            }
+        System.out.print("You have in your entrance:\n");
+        for (StudentColor color: entrance) {
+            System.out.print(i + ")" + color + " ");
+            i++;
         }
-        tempColor = StudentColor.valueOf(str);
+        System.out.println("");
+
+        while (index < 0 || index > entrance.size()) {
+            System.out.print("Which student would you like to move?(Write the index)");
+            String in = input.nextLine();
+            if (Utilities.isNumeric(in))
+                index = Integer.parseInt(in);
+        }
         while (num != 0 && num != 1) {
             System.out.print("Where would you like to move the student?(0 for dinning table, 1 for island)\n");
             String in = input.nextLine();
@@ -325,8 +321,8 @@ public class CLI {
                 }
             }
         }
-        System.out.println(tempColor.toString() + num + islandID);//TODO DELETE AFTER TEST
-        send(new MoveStudentFromEntranceMessage(tempColor, num, islandID));
+        System.out.println(index + num + islandID);//TODO DELETE AFTER TEST
+        send(new MoveStudentFromEntranceMessage(index, num, islandID));
     }
     public void moveMotherNature() {
         while (!currPhase.equals(Phase.Action2)) {
@@ -374,7 +370,7 @@ public class CLI {
             }
             System.out.print("Students:\n");
             for (StudentColor color:StudentColor.values()) {
-                System.out.print(color + "student:" + entrance.get(color) + "\n");
+                System.out.print(color + "student:" + islands.get(i).getStudents().get(color) + "\n");
             }
             System.out.print("\n");
         }
@@ -428,7 +424,7 @@ public class CLI {
         this.wizards = wizards;
     }
 
-    public void setEntrance(HashMap<StudentColor, Integer> entrance) {
+    public void setEntrance(List<StudentColor> entrance) {
         this.entrance = entrance;
     }
 

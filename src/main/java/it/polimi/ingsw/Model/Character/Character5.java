@@ -6,7 +6,7 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
-public class Character5 extends Character{
+public class Character5 extends CharacterCard {
 
     public Character5() {
         super(5, 2);
@@ -41,5 +41,12 @@ public class Character5 extends Character{
     @Override
     public int getNumberOfNoEntries() throws WrongEffectException {
         return noEntries;
+    }
+
+    @Override
+    public boolean usable() {
+        if (noEntries > 0)
+            return true;
+        return false;
     }
 }

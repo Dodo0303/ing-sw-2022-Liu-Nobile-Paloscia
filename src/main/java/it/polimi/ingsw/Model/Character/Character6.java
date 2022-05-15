@@ -5,7 +5,7 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
-public class Character6 extends Character{
+public class Character6 extends CharacterCard {
 
     public Character6() {
         super(6, 3);

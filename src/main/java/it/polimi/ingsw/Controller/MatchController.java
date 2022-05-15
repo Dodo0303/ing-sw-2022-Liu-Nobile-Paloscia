@@ -1,9 +1,12 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Controller.InfluenceCalculators.InfluenceCalculator;
+import it.polimi.ingsw.Controller.InfluenceCalculators.StandardInfluenceCalculator;
 import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Controller.Phases.PlanningPhase;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Model.Character.CharacterCard;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.GameModelUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
@@ -211,14 +214,15 @@ public class MatchController implements Runnable {
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the correspondent dining room.
      */
-    public void moveStudentToDiningRoom(StudentColor student) throws FullTableException {
+    public void moveStudentToDiningRoom(int studentIndex) throws FullTableException {
 
         Player p = this.getCurrentPlayer();
 
-        game.addToDiningTable(p, student);
-        game.removeStudentFromEntrance(p, student);
+        StudentColor color = game.removeStudentFromEntrance(p, studentIndex);
+        game.addToDiningTable(p, color);
 
-        moveProfessorIfNeeded(p, student);
+
+        moveProfessorIfNeeded(p, color);
 
     }
 
@@ -244,10 +248,144 @@ public class MatchController implements Runnable {
         }
     }
 
+    /**
+     * Method called when a player uses a character. It removes the price of the character from the money of the player
+     * @param nickname of the player that is using the character
+     * @param characterID ID of the character used
+     */
+    private void removeCoinsToPlayer(String nickname, int characterID){
+        game.removeCoinsToPlayer(nickname, characterID);
+    }
+
+    /**
+     * Remove the coins from the player that is using the character and, if necessary, increments the price of the character
+     * @param nickname nickname of the player that is using the character
+     * @param characterID character used
+     * @throws WrongEffectException if the method is trying to use an incorrect effect
+     * @throws NotEnoughNoEntriesException in case the character is the number 5 and there are no no-entry tiles left
+     */
+    public void useCharacter(String nickname, int characterID) throws WrongEffectException, NotEnoughNoEntriesException {
+        removeCoinsToPlayer(nickname, characterID);
+        game.useEffectOfCharacter(characterID);
+    }
+
+    /**
+     * Remove the coins from the player that is using the character and returns the color of the student extracted from the character. Then replace that student with a random one from the bag.
+     * @param nickname nickname of the player that is using the character
+     * @param characterId ID of the character to be used
+     * @param studentIndex index of the student that has to be extracted from the character
+     * @param removeCoins true if the method should remove the coins from the player
+     * @return the color of the student extracted
+     * @throws EmptyBagException if there are no more students in the bag and the character can't be filled again
+     * @throws WrongEffectException if the method is trying to call the wrong effect
+     */
+    public StudentColor useCharacter(String nickname, int characterId, int studentIndex, boolean removeCoins) throws EmptyBagException, WrongEffectException {
+        if (removeCoins)
+            removeCoinsToPlayer(nickname, characterId);
+        return game.useEffectOfCharacter(characterId, studentIndex, game.drawStudentFromBag());
+    }
+
+    /**
+     * Remove the coins from the player that is using the character and returns the color of the student extracted from the character. Then replace that student with a given one.
+     * @param nickname nickname of the player that is using the character
+     * @param characterId ID of the character to be used
+     * @param studentIndex index of the student that has to be extracted from the character
+     * @param removeCoins true if the method should remove the coins from the player
+     * @param studentToAdd student that will replace the one extracted
+     * @return the color of the student extracted
+     * @throws EmptyBagException if there are no more students in the bag and the character can't be filled again
+     * @throws WrongEffectException if the method is trying to call the wrong effect
+     */
+    public StudentColor useCharacter (String nickname, int characterId, int studentIndex, boolean removeCoins, StudentColor studentToAdd) throws WrongEffectException {
+        if (removeCoins)
+            removeCoinsToPlayer(nickname, characterId);
+        return game.useEffectOfCharacter(characterId, studentIndex, studentToAdd);
+    }
+
+     /*
+    public void addCoinsToPlayer(String nickname, int coins){
+        game.addCoinsToPlayer(nickname, coins);
+    }
+    */
+    public void addNoEntryToIsland(int islandID) throws GameException, NotEnoughNoEntriesException {
+        CharacterCard character = game.getCharacterById(5);
+        try {
+            character.useEffect();
+            game.addNoEntry(game.getIslands().get(islandID));
+        } catch (NotEnoughNoEntriesException e) {
+            throw new NotEnoughNoEntriesException();
+        } catch (WrongEffectException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setInfluenceCalculator(InfluenceCalculator influenceCalculator){
+        this.influenceCalculator = influenceCalculator;
+    }
+
+    /**
+     * Methods used by the 2nd character. Computes the influence on an island without moving mother nature
+     * @param islandID island in which computing the influence
+     */
+    public void conquerAndJoinIslands(int islandID) {
+        controlIsland(islandID);
+        unifyIslands(islandID);
+    }
+
+    /**
+     * Method used by 10th character. It swaps two students between the entrance and the table
+     * @param nickname nickname of the player using the character
+     * @param entrancePosition index of the student that the player wants to remove from the entrance
+     * @param table color of the student that the player wants to remove from the table
+     * @throws EmptyTableException if the table chosen is empty
+     * @throws FullTableException if the table chosen is full
+     */
+    public void swapStudentsEntranceAndTable(String nickname, int entrancePosition, StudentColor table) throws EmptyTableException, FullTableException {
+        Player player = game.getPlayerByNickname(nickname);
+        StudentColor color = game.removeStudentFromEntrance(player, entrancePosition );
+        game.removeStudentFromTable(player, table);
+        game.addStudentToEntrance(player, table);
+        game.addToDiningTable(player, color);
+    }
+
+    /**
+     * Remove the student from the entrance, given its index
+     * @param nickname player that wants to remove a student
+     * @param entrancePosition index of the student to be removed
+     * @return the color of the student removed
+     */
+    public StudentColor removeStudentFromEntrance(String nickname, int entrancePosition) {
+        return game.removeStudentFromEntrance(game.getPlayerByNickname(nickname), entrancePosition);
+    }
+
+    public void addStudentToEntrance(String nickname, StudentColor student){
+        game.addStudentToEntrance(game.getPlayerByNickname(nickname), student);
+    }
+
+    public void addStudentToTable(String nickname, StudentColor student) throws FullTableException {
+        game.addToDiningTable(game.getPlayerByNickname(nickname), student);
+    }
+
+    /**
+     * Method used by 12th character. It removes three student of the chosen color from the tables of every player
+     * @param color color of the students to be removed
+     */
+    public void removeThreeStudentsFromTables(StudentColor color){
+        for (ClientHandler client :
+                clients) {
+            try {
+                for (int i = 0; i < 3; i++) {
+                    game.removeStudentFromTable(game.getPlayerByNickname(client.getNickname()), color);
+                }
+
+            } catch (EmptyTableException ignored) {}
+        }
+    }
+
     /** This is a method for the Action phase.
      * The player PLAYER moves a student to the island ISLAND.
      */
-    public void moveStudentToIsland(int islandID, StudentColor student) throws IllegalArgumentException {
+    public void moveStudentFromEntranceToIsland(int islandID, int studentIndex) throws IllegalArgumentException {
 
         Player p = this.getCurrentPlayer();
         Island island = this.game.getIslands().get(islandID);
@@ -255,9 +393,14 @@ public class MatchController implements Runnable {
         if (island == null) {
             throw new IllegalArgumentException();
         }
+        StudentColor color = game.removeStudentFromEntrance(p, studentIndex);
 
-        game.addStudentToIsland(student, island);
-        game.removeStudentFromEntrance(p, student);
+        game.addStudentToIsland(color, island);
+    }
+
+    public void moveStudentToIsland(int islandID, StudentColor color) {
+        Island island = this.game.getIslands().get(islandID);
+        game.addStudentToIsland(color, island);
     }
 
 
@@ -422,9 +565,9 @@ public class MatchController implements Runnable {
         }
     }
 
-    public void broadcastMovementFromEntrance(StudentColor student, String playerID, int destination, int destinationID) {
+    public void broadcastMovementFromEntrance(int studentIndex, String playerID, int destination, int destinationID) {
         for (ClientHandler client : this.clients) {
-            client.send(new ConfirmMovementFromEntranceMessage(student, playerID, destination, destinationID));
+            client.send(new ConfirmMovementFromEntranceMessage(studentIndex, playerID, destination, destinationID));
         }
     }
 
@@ -437,6 +580,19 @@ public class MatchController implements Runnable {
     public void nextTurn() {
         int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayerID) + 1) % this.totalMatchPlayers;
         this.currentPlayerID = this.game.getPlayers().get(nextPlayerIndex).getNickName();
+    }
+
+    /**
+     * Checks if the current player has enough money to use that character
+     * @param characterID character to check
+     * @param player player to check
+     * @return true if the player can use that character, false if not
+     */
+    public boolean isCharacterAvailable(int characterID, String player){
+         if (game.canAffordCharacter(player, characterID)){
+             return true;
+         }
+         return false;
     }
 
     // UTILS

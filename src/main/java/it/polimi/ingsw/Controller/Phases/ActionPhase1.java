@@ -3,6 +3,8 @@ package it.polimi.ingsw.Controller.Phases;
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Controller.MatchController;
 import it.polimi.ingsw.Exceptions.FullTableException;
+import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
+import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
@@ -21,20 +23,20 @@ public class ActionPhase1 extends Phase {
         if (!(msg instanceof MoveStudentFromEntranceMessage || msg instanceof UseCharacterMessage)) {
             match.denyMovement(ch);
         } else if (msg instanceof MoveStudentFromEntranceMessage) {
-            System.out.println(((MoveStudentFromEntranceMessage) msg).getStudent().toString() + ((MoveStudentFromEntranceMessage) msg).getDestination() + ((MoveStudentFromEntranceMessage) msg).getDestinationID()); //TODO DEL AFTER TEST
+            System.out.println(((MoveStudentFromEntranceMessage) msg).getStudentIndex() + ((MoveStudentFromEntranceMessage) msg).getDestination() + ((MoveStudentFromEntranceMessage) msg).getDestinationID()); //TODO DEL AFTER TEST
             switch (((MoveStudentFromEntranceMessage) msg).getDestination()) {
 
                 // Move to dining room
                 case 0:
                     try {
-                        match.moveStudentToDiningRoom(((MoveStudentFromEntranceMessage) msg).getStudent());
+                        match.moveStudentToDiningRoom(((MoveStudentFromEntranceMessage) msg).getStudentIndex());
                     } catch (FullTableException fte) {
                         fte.printStackTrace();
                         match.denyMovement(ch);
                         return;
                     }
                     this.moves++;
-                    match.broadcastMovementFromEntrance(((MoveStudentFromEntranceMessage) msg).getStudent(),
+                    match.broadcastMovementFromEntrance(((MoveStudentFromEntranceMessage) msg).getStudentIndex(),
                                                         match.getCurrentPlayerID(),
                                                         ((MoveStudentFromEntranceMessage) msg).getDestination(),
                                                         ((MoveStudentFromEntranceMessage) msg).getDestinationID());
@@ -43,14 +45,14 @@ public class ActionPhase1 extends Phase {
                 // Move to island
                 case 1:
                     try {
-                        match.moveStudentToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudent());
+                        match.moveStudentFromEntranceToIsland(((MoveStudentFromEntranceMessage) msg).getDestinationID(), ((MoveStudentFromEntranceMessage) msg).getStudentIndex());
                     } catch (IllegalArgumentException iae) {
                         iae.printStackTrace();
                         match.denyMovement(ch);
                         return;
                     }
                     this.moves++;
-                    match.broadcastMovementFromEntrance(((MoveStudentFromEntranceMessage) msg).getStudent(),
+                    match.broadcastMovementFromEntrance(((MoveStudentFromEntranceMessage) msg).getStudentIndex(),
                             match.getCurrentPlayerID(),
                             ((MoveStudentFromEntranceMessage) msg).getDestination(),
                             ((MoveStudentFromEntranceMessage) msg).getDestinationID());
@@ -66,7 +68,19 @@ public class ActionPhase1 extends Phase {
             }
 
         } else {
-            //TODO: Handle characters
+            //Message is UseCharacterMessage
+            if(match.isCharacterAvailable(((UseCharacterMessage) msg).getCharacterID(), ch.getNickname())){
+                /*
+                try {
+                    match.useCharacter(ch.getNickname(), ((UseCharacterMessage) msg).getCharacterID());
+                } catch (WrongEffectException | NotEnoughNoEntriesException e) {
+                    match.denyMovement(ch);
+                } */
+                match.setGamePhase(new CharacterPhase(match, this, ((UseCharacterMessage) msg).getCharacterID()));
+                //TODO If the character doesn't need any other message, call its process method from here
+            } else {
+                match.denyMovement(ch);
+            }
         }
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Character11 extends Character{
+public class Character11 extends CharacterCard {
 
     public Character11(StudentColor[] students) {
         super(11, 2);

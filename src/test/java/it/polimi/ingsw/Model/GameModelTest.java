@@ -24,31 +24,6 @@ class GameModelTest {
     }
 
     @Test
-    public void testSetEntranceStudents() {
-        for (Player player : game2.getPlayers()) {
-            assertEquals(7, player.getEntranceStudents().get(StudentColor.BLUE)
-                    + player.getEntranceStudents().get(StudentColor.GREEN)
-                    + player.getEntranceStudents().get(StudentColor.PINK)
-                    + player.getEntranceStudents().get(StudentColor.RED)
-                    + player.getEntranceStudents().get(StudentColor.YELLOW));
-        }
-        for (Player player : game3.getPlayers()) {
-            assertEquals(9, player.getEntranceStudents().get(StudentColor.BLUE)
-                    + player.getEntranceStudents().get(StudentColor.GREEN)
-                    + player.getEntranceStudents().get(StudentColor.PINK)
-                    + player.getEntranceStudents().get(StudentColor.RED)
-                    + player.getEntranceStudents().get(StudentColor.YELLOW));
-        }
-        for (Player player : game4.getPlayers()) {
-            assertEquals(7, player.getEntranceStudents().get(StudentColor.BLUE)
-                    + player.getEntranceStudents().get(StudentColor.GREEN)
-                    + player.getEntranceStudents().get(StudentColor.PINK)
-                    + player.getEntranceStudents().get(StudentColor.RED)
-                    + player.getEntranceStudents().get(StudentColor.YELLOW));
-        }
-    }
-
-    @Test
     void getSpareCoins() {
         assertEquals(20, game2.getSpareCoins());
     }

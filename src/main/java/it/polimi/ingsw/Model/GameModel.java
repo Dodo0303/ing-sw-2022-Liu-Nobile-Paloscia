@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Exceptions.*;
+import it.polimi.ingsw.Model.Character.CharacterCard;
+import it.polimi.ingsw.Model.Character.CharacterFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -45,6 +47,8 @@ public class GameModel implements Serializable {
     /** Professors yet to be assigned to a player */
     private ArrayList<StudentColor> _professors;
 
+    private List<CharacterCard> characters;
+
 
 
     /**
@@ -62,6 +66,7 @@ public class GameModel implements Serializable {
         this._motherNature = new Random().nextInt(12); // Automatically choose a random island for mothernature.
         initializeIslands();
         initializePlayers(wizards, numOfPlayers, nicknames);
+        initializeCharacters();
         this._professors = new ArrayList<>(Arrays.asList(StudentColor.BLUE, StudentColor.GREEN, StudentColor.PINK, StudentColor.RED, StudentColor.YELLOW));
         initializeClouds(numOfPlayers);
         initializeInfluences();
@@ -135,6 +140,26 @@ public class GameModel implements Serializable {
         _clouds = new ArrayList<>(numOfPlayers);
         for (int i=0; i < numOfPlayers; i++) {
             _clouds.add(new Cloud(numOfPlayers));
+        }
+    }
+
+    /**
+     * Randomly choose and initialize three characters
+     */
+    private void initializeCharacters(){
+        characters = new ArrayList<>();
+        CharacterFactory factory = new CharacterFactory(this);
+        List<Integer> characterIDs = new ArrayList<>();
+        Random rnd = new Random();
+        int id;
+        for (int i = 0; i < 3; i++) {
+            id = rnd.nextInt(12);
+            id++;
+            while(characterIDs.contains(id)){
+                id = rnd.nextInt(12);
+            }
+            characterIDs.add(i, id);
+            characters.add(factory.createCharacter(id));
         }
     }
 
@@ -216,6 +241,25 @@ public class GameModel implements Serializable {
         return new ArrayList<>(this._professors);
     }
 
+    public boolean canAffordCharacter(String playerNickname, int characterID){
+        Player p = null;
+        for (Player player :
+                _players) {
+            if (player.getNickName().equals(playerNickname))
+                p = player;
+        }
+        if (p==null) {
+            throw new GameException("That player doesn't exist");
+        } else {
+        for (CharacterCard character:
+             characters) {
+            if (character.getID() == characterID && p.getCoins() >= character.getPrice())
+                return true;
+        }
+        return false;
+        }
+    }
+
     /**
      * Removes a professor from spare professors.
      * @param color is the color of the professor to be removed.
@@ -263,8 +307,16 @@ public class GameModel implements Serializable {
         throw new NoSuchElementException();
     }
 
-    public void removeStudentFromEntrance(Player p, StudentColor student) {
-        p.removeStudentFromEntrance(student);
+    public StudentColor removeStudentFromEntrance(Player p, int studentIndex) {
+        return p.removeStudentFromEntrance(studentIndex);
+    }
+
+    public void addStudentToEntrance(Player p, StudentColor student){
+        p.addStudentToEntrance(student);
+    }
+
+    public void removeStudentFromTable(Player p, StudentColor color) throws EmptyTableException {
+        p.removeFromDiningTable(color);
     }
 
     public void addToDiningTable(Player p, StudentColor student) throws FullTableException {
@@ -277,6 +329,77 @@ public class GameModel implements Serializable {
 
     public int getTableNumber(Player p, StudentColor color) {
         return p.getDiningTables().get(color).getNumOfStudents();
+    }
+
+    /**
+     * draw one student from the bag
+     * @return the StudentColor of the student
+     * @throws EmptyBagException if the bga is empty
+     */
+    public StudentColor drawStudentFromBag() throws EmptyBagException {
+        return _bag.extractStudent();
+    }
+
+    public void addNoEntry(Island island){
+        island.addNoEntry();
+    }
+
+    public CharacterCard getCharacterById(int ID){
+        for (CharacterCard character:
+             characters) {
+            if (character.getID() == ID)
+                return character;
+        }
+        throw new GameException("Character not present");
+    }
+
+    public void removeCoinsToPlayer(String playerNickname, int characterID){
+        Player p = null;
+        for (Player player :
+                _players) {
+            if (player.getNickName().equals(playerNickname))
+                p = player;
+        }
+        if (p==null) {
+            throw new GameException("That player doesn't exist");
+        } else {
+
+            p.removeCoins(getCharacterById(characterID).getPrice());
+
+        }
+    }
+
+    public void addCoinsToPlayer(String playerNickname, int coins){
+        Player p = null;
+        for (Player player :
+                _players) {
+            if (player.getNickName().equals(playerNickname))
+                p = player;
+        }
+        if (p==null) {
+            throw new GameException("That player doesn't exist");
+        } else {
+            for (int i = 0; i < coins; i++) {
+                p.addCoin();
+            }
+        }
+    }
+
+    public void useEffectOfCharacter(int characterID) throws WrongEffectException, NotEnoughNoEntriesException {
+        getCharacterById(characterID).useEffect();
+    }
+
+    public StudentColor useEffectOfCharacter(int characterID, int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
+        return getCharacterById(characterID).useEffect(studentIndex, studentToAdd);
+    }
+
+    public Player getPlayerByNickname(String playerNickname) {
+        for (Player player :
+                _players) {
+            if (player.getNickName().equals(playerNickname))
+                return player;
+        }
+        throw new GameException("The player doesn't exist");
     }
 
     public void sortPlayers() {

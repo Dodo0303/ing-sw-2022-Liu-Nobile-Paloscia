@@ -6,7 +6,7 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
-public abstract class Character {
+public abstract class CharacterCard {
     private int _ID;
     protected int _price;
     protected boolean used = false;
@@ -15,7 +15,7 @@ public abstract class Character {
     protected int noEntries = 0;
     //!students, noEntries and _price are protected because some concrete characters should be able to directly access them, for example in the initializer and in useEffect()
 
-    public Character(int ID, int initialPrice){
+    public CharacterCard(int ID, int initialPrice){
         _ID = ID;
         _price = initialPrice;
     }
@@ -80,5 +80,13 @@ public abstract class Character {
      */
     public boolean isUsed() {
         return used;
+    }
+
+    /**
+     *
+     * @return wether the card can be used or not
+     */
+    public boolean usable() {
+        return true;
     }
 }
