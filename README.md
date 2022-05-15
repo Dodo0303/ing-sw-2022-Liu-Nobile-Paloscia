@@ -25,6 +25,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 | 4 Player Game | 🔴 |
 | Persistence | 🔴 |
 | Resilience to disconnections | 🔴 |
+| Multiple matches | 🟢 |
 
 ## Game Rules
 
