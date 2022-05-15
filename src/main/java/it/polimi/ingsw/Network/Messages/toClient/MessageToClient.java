@@ -3,6 +3,7 @@ package it.polimi.ingsw.Network.Messages.toClient;
 import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Exceptions.FullTableException;
 
 import java.io.Serializable;
 

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -35,7 +37,16 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
     }
 
     @Override
-    public void process(ServerHandler ch) {
+    public void process(ServerHandler client) throws FullTableException {
+        if (client.getClient().getCurrPhase().equals(Phase.Action1)) {
+            if (destination == 0) {
+                client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), studentPosition);
+                client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), studentPosition);
+            } else if (destination == 1) {
+                client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), studentPosition);
+                client.getClient().getGame().addStudentToIsland(studentPosition, client.getClient().getGame().getIslands().get(destinationID));
+            }
+        }
 
     }
 }

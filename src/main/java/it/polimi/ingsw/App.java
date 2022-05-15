@@ -21,7 +21,7 @@ public class App {
         launchServer(args);
         switch (args[0].toLowerCase()) {
             case "-gui": {
-                //TODO
+                //TODO gui
                 break;
             }
             case "-cli": {
@@ -49,7 +49,7 @@ public class App {
     }
 
     private void launchGUI(String[] args) {
-        //TODO
+        //TODO lauchGUI
     }
 
 }

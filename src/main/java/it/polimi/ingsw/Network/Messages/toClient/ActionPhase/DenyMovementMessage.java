@@ -15,6 +15,10 @@ public class DenyMovementMessage extends MessageToClient {
             client.getClient().moveMotherNature();
         } else if (client.getClient().getCurrPhase().equals(Phase.Action3)) {
             client.getClient().chooseCloud();
+        } else if (client.getClient().getCurrPhase().equals(Phase.Planning)) {
+            client.getClient().playAssistant();
+        } else if (client.getClient().getCurrPhase().equals(Phase.Action1)) {
+            client.getClient().moveStudentsFromEntrance();
         }
     }
 }

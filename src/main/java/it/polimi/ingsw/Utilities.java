@@ -59,7 +59,9 @@ public class Utilities {
         }
         return null;
     }
-
+    public static boolean isNumeric(String str) {
+        return str.matches("^[1-9]\\d*$");
+    }
 
 
 }

@@ -21,6 +21,7 @@ public class ActionPhase1 extends Phase {
         if (!(msg instanceof MoveStudentFromEntranceMessage || msg instanceof UseCharacterMessage)) {
             match.denyMovement(ch);
         } else if (msg instanceof MoveStudentFromEntranceMessage) {
+            System.out.println(((MoveStudentFromEntranceMessage) msg).getStudent().toString() + ((MoveStudentFromEntranceMessage) msg).getDestination() + ((MoveStudentFromEntranceMessage) msg).getDestinationID()); //TODO DEL AFTER TEST
             switch (((MoveStudentFromEntranceMessage) msg).getDestination()) {
 
                 // Move to dining room
@@ -37,6 +38,7 @@ public class ActionPhase1 extends Phase {
                                                         match.getCurrentPlayerID(),
                                                         ((MoveStudentFromEntranceMessage) msg).getDestination(),
                                                         ((MoveStudentFromEntranceMessage) msg).getDestinationID());
+                    break;
 
                 // Move to island
                 case 1:
@@ -52,9 +54,11 @@ public class ActionPhase1 extends Phase {
                             match.getCurrentPlayerID(),
                             ((MoveStudentFromEntranceMessage) msg).getDestination(),
                             ((MoveStudentFromEntranceMessage) msg).getDestinationID());
+                    break;
 
                 default:
                     match.denyMovement(ch);
+                    break;
             }
 
             if (this.moves == 3) {

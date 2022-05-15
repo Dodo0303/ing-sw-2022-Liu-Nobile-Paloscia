@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Model.Cloud;
 import it.polimi.ingsw.Model.Island;
@@ -26,7 +27,7 @@ public class ConfirmMovementMessage extends MessageToClient {
     }
     @Override
     public void process(ServerHandler client) {
-        client.getClient().setIslands(islands);
-        //client.getClient().setClouds(clouds);
+        client.getClient().setPhase(Phase.Action3);
+        client.getClient().getGame().set_islands(islands);
     }
 }

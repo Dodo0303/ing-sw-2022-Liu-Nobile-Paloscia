@@ -16,20 +16,5 @@ public class ChooseCloudMessage extends MessageToServer {
 
     @Override
     public void process(ClientHandler ch) {
-        /*
-        MatchController match = ch.getMatch();
-        MessageToClient message;
-        Player player = match.getGame().getPlayers().get(ch.getPlayerID());
-        try {
-            match.takeStudentsFromCloud(player, match.getGame().getClouds().get(cloudID), match.getTotalMatchPlayers());
-            message = new ConfirmCloudMessage(ch.getPlayerID(), this.cloudID);
-            //TODO SEND MESSAGE
-            //message = new ChangeTurnMessage(Phase.XXX);// TODO
-        } catch (GameException e) {
-            message = new DenyMovementMessage();
-        }
-        //TODO send message method in ClientHandler
-        */
-
     }
 }
