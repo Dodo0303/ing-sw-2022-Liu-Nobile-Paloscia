@@ -102,13 +102,9 @@ public class CLI {
         } else if (message instanceof DenyMovementMessage) {
             ((DenyMovementMessage) message).process(this.serverHandler);
         } else if (message instanceof ConfirmMovementMessage) {
-            if (currPhase.equals(Phase.Action2)) {
-                ((ConfirmMovementMessage) message).process(this.serverHandler);
-            }
+            ((ConfirmMovementMessage) message).process(this.serverHandler);
         } else if (message instanceof ConfirmCloudMessage) {
-            if (currPhase.equals(Phase.Action3)) {
-                ((ConfirmCloudMessage) message).process(this.serverHandler);
-            }
+            ((ConfirmCloudMessage) message).process(this.serverHandler);
         } else if(message instanceof EndMessage) {
             if (currPhase.equals(Phase.Action3)) {
                 ((EndMessage) message).process(this.serverHandler);
@@ -287,7 +283,7 @@ public class CLI {
         while (!currPhase.equals(Phase.Action1)) {
             currPhase = getCurrPhase();
         }
-        int num = -1, islandID = -1, i=0, index = -1;
+        int num = -1, islandID = -1, i = 0, index = -1;
         entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
         numIslands = game.getNumIslands();
         StudentColor tempColor;
