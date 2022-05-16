@@ -34,12 +34,25 @@ public class ActionPhase3 extends Phase {
             this.nextPhase();
             match.broadcastTurnChange(match.getCurrentPlayerID(), match.getGamePhase().toString());
         } else {
-            //TODO: Character handling
+            //Message is UseCharacterMessage
+            if(match.isCharacterAvailable(((UseCharacterMessage) msg).getCharacterID(), ch.getNickname())){
+                int id = ((UseCharacterMessage) msg).getCharacterID();
+                if (id ==  2 || id == 4 || id == 6 || id == 8) {
+                    //The character doesn't need any other message
+                    new CharacterPhase(match, this, id).process(msg, ch);
+                } else {
+                    match.setGamePhase(new CharacterPhase(match, this, id));
+                }
+
+            } else {
+                match.denyMovement(ch);
+            }
         }
     }
 
     @Override
     public void nextPhase() {
+        match.resetCharacterAttributes();
         if (match.getCurrentPlayerID().equals(match.getFirstOfTurn()))
             match.setGamePhase(new PlanningPhase(this.match));
         else

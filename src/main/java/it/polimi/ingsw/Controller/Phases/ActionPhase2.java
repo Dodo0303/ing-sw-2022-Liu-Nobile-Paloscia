@@ -36,7 +36,19 @@ public class ActionPhase2 extends Phase {
             }
 
         } else {
-            //TODO: Character handling
+            //Message is UseCharacterMessage
+            if(match.isCharacterAvailable(((UseCharacterMessage) msg).getCharacterID(), ch.getNickname())){
+                int id = ((UseCharacterMessage) msg).getCharacterID();
+                if (id ==  2 || id == 4 || id == 6 || id == 8) {
+                    //The character doesn't need any other message
+                    new CharacterPhase(match, this, id).process(msg, ch);
+                } else {
+                    match.setGamePhase(new CharacterPhase(match, this, id));
+                }
+
+            } else {
+                match.denyMovement(ch);
+            }
         }
     }
 

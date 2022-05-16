@@ -70,12 +70,6 @@ public class ActionPhase1 extends Phase {
         } else {
             //Message is UseCharacterMessage
             if(match.isCharacterAvailable(((UseCharacterMessage) msg).getCharacterID(), ch.getNickname())){
-                /*
-                try {
-                    match.useCharacter(ch.getNickname(), ((UseCharacterMessage) msg).getCharacterID());
-                } catch (WrongEffectException | NotEnoughNoEntriesException e) {
-                    match.denyMovement(ch);
-                } */
                 int id = ((UseCharacterMessage) msg).getCharacterID();
                 if (id ==  2 || id == 4 || id == 6 || id == 8) {
                     //The character doesn't need any other message

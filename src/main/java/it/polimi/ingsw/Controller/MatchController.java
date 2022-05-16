@@ -117,6 +117,12 @@ public class MatchController implements Runnable {
         this.additionalMoves = 1;
     }
 
+    public void resetCharacterAttributes() {
+        this.influenceCalculator = new StandardInfluenceCalculator();
+        this.additionalMoves = 0;
+        this.professorChecker = new StandardProfessorChecker();
+    }
+
     // PLAYERS
 
     /**
