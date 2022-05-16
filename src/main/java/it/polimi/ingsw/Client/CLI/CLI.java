@@ -55,7 +55,7 @@ public class CLI {
         }
     }
 
-    protected void messageReceived(Object message) throws FullTableException, InterruptedException, EmptyCloudException {
+    protected void messageReceived(Object message) throws InterruptedException, EmptyCloudException {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
                 ((NickResponseMessage) message).process(this.serverHandler);

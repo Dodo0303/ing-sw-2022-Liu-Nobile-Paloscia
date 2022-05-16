@@ -16,6 +16,8 @@ public class PlanningPhase extends Phase {
         super(match);
 
         //TODO: What if bag is empty?
+        //TODO: might forget to extract students from bag before using fillClouds()?
+        //TODO: need to fill the cloud before the 2nd, 3rd...nth round starts
 
         this.match.fillClouds();
         this.match.broadcastClouds();
