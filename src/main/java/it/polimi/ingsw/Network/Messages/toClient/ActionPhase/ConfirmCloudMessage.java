@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
+import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
@@ -54,7 +55,7 @@ public class CLI {
         }
     }
 
-    protected void messageReceived(Object message) throws FullTableException, InterruptedException {
+    protected void messageReceived(Object message) throws FullTableException, InterruptedException, EmptyCloudException {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
                 ((NickResponseMessage) message).process(this.serverHandler);
@@ -94,6 +95,8 @@ public class CLI {
                 } else {
                     moveStudentsFromEntrance();
                 }
+            } else {
+                ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
             }
         } else if (message instanceof MoveProfessorMessage) {
             if (currPhase.equals(Phase.Action2)) {

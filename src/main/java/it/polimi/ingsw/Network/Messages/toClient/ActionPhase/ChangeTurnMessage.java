@@ -24,6 +24,7 @@ public class ChangeTurnMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
+        System.out.println(playerNickname + " " +ch.getClient().getNickname());
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
             if (ch.getClient().getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setPhase(Phase.Planning);

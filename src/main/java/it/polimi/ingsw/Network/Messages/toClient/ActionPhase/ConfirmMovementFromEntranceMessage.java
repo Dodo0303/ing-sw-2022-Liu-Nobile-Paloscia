@@ -38,31 +38,16 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
-        if (playerID.equals(client.getClient().getNickname()) && client.getClient().getCurrPhase().equals(Phase.Action1)) {
-            if (destination == 0) {
-                StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), studentPosition);
-                try {
-                    client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), color);
-                } catch (FullTableException e) {
-                    e.printStackTrace();
-                }
-            } else if (destination == 1) {
-                StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), studentPosition);
-                client.getClient().getGame().addStudentToIsland(color, client.getClient().getGame().getIslands().get(destinationID));
+        if (destination == 0) {
+            StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
+            try {
+                client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), color);
+            } catch (FullTableException e) {
+                e.printStackTrace();
             }
-        } else if (!playerID.equals(client.getClient().getNickname())) {
-            if (destination == 0) {
-                StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(client.getClient().getNickname())), studentPosition);
-                try {
-                    client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), color);
-                } catch (FullTableException e) {
-                    e.printStackTrace();
-                }
-            } else if (destination == 1) {
-                StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
-                client.getClient().getGame().addStudentToIsland(color, client.getClient().getGame().getIslands().get(destinationID));
-            }
+        } else if (destination == 1) {
+            StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
+            client.getClient().getGame().addStudentToIsland(color, client.getClient().getGame().getIslands().get(destinationID));
         }
-
     }
 }

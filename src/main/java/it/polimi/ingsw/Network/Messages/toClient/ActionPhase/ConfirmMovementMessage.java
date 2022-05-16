@@ -27,11 +27,11 @@ public class ConfirmMovementMessage extends MessageToClient {
     }
     @Override
     public void process(ServerHandler client) {
-        if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
-            client.getClient().setPhase(Phase.Action3);
-        }
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().setMothernature(islandIndex);
-        client.getClient().chooseCloud();
+        if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
+            client.getClient().setPhase(Phase.Action3);
+            client.getClient().chooseCloud();
+        }
     }
 }
