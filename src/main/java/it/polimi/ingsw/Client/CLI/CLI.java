@@ -298,7 +298,7 @@ public class CLI {
         }
         System.out.println("");
 
-        while (index < 0 || index > entrance.size()) {
+        while (index < 0 || index > entrance.size() - 1) {
             System.out.print("Which student would you like to move?(Write the index)");
             String in = input.nextLine();
             if (Utilities.isNumeric(in))
@@ -344,7 +344,7 @@ public class CLI {
             currPhase = getCurrPhase();
         }
         int num = -1;
-        while (num < 0 || num >= islands.size()) {
+        while (num < 0 || num >= islands.size() - 1) {
             printClouds();
             System.out.print("Which cloud would you like to take students from?\n");
             String in = input.nextLine();
@@ -380,10 +380,8 @@ public class CLI {
         for (int i = 0; i < game.getClouds().size(); i++) {
             System.out.print("cloud " + i + " :\n");
             System.out.print("Students:\n");
-            for (StudentColor color:StudentColor.values()) {
-                for (int j = 0; j < StudentColor.values().length; j++) {
-                    System.out.print(color + "student:" + game.getClouds().get(i).getStudents().get(j)+ "\n");
-                }
+            for (StudentColor color: game.getClouds().get(i).getStudents()) {
+                System.out.println(color + "  ");
             }
         }
     }

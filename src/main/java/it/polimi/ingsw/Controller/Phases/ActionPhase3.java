@@ -32,6 +32,7 @@ public class ActionPhase3 extends Phase {
                 else if (match.noMoreAssistants()) match.endGame("All assistants were played");
             }
             this.nextPhase();
+            match.broadcastTurnChange(match.getCurrentPlayerID(), match.getGamePhase().toString());
         } else {
             //TODO: Character handling
         }

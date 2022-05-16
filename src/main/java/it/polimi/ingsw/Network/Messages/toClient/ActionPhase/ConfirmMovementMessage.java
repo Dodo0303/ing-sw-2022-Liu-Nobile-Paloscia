@@ -29,5 +29,6 @@ public class ConfirmMovementMessage extends MessageToClient {
     public void process(ServerHandler client) {
         client.getClient().setPhase(Phase.Action3);
         client.getClient().getGame().set_islands(islands);
+        client.getClient().chooseCloud();
     }
 }
