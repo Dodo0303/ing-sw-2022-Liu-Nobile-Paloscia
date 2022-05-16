@@ -4,6 +4,8 @@ import it.polimi.ingsw.Controller.InfluenceCalculators.InfluenceCalculator;
 import it.polimi.ingsw.Controller.InfluenceCalculators.StandardInfluenceCalculator;
 import it.polimi.ingsw.Controller.Phases.Phase;
 import it.polimi.ingsw.Controller.Phases.PlanningPhase;
+import it.polimi.ingsw.Controller.ProfessorChecker.ProfessorChecker;
+import it.polimi.ingsw.Controller.ProfessorChecker.StandardProfessorChecker;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -36,7 +38,12 @@ public class MatchController implements Runnable {
 
     private GameModel game;
 
+    //NEEDED FOR CHARACTER USAGE
     private InfluenceCalculator influenceCalculator;
+    private ProfessorChecker professorChecker;
+    private int additionalMoves;
+
+
     private boolean lastRound;
 
 
@@ -49,6 +56,8 @@ public class MatchController implements Runnable {
         this.currentPlayersNumber = 0;
         this.lastRound = false;
         this.influenceCalculator = new StandardInfluenceCalculator(); //TODO the special one
+        this.professorChecker = new StandardProfessorChecker();
+        this.additionalMoves = 0;
     }
 
     // GETTERS AND SETTERS
@@ -94,6 +103,18 @@ public class MatchController implements Runnable {
 
     public String getFirstOfTurn() {
         return firstOfTurn;
+    }
+
+    public void setInfluenceCalculator(InfluenceCalculator influenceCalculator){
+        this.influenceCalculator = influenceCalculator;
+    }
+
+    public void setProfessorChecker(ProfessorChecker professorChecker){
+        this.professorChecker = professorChecker;
+    }
+
+    public void setAdditionalMoves() {
+        this.additionalMoves = 1;
     }
 
     // PLAYERS
@@ -237,7 +258,7 @@ public class MatchController implements Runnable {
 
                 boolean isOther = !p_other.getNickName().equals(p.getNickName());
                 boolean hasProf = p_other.hasProfessor(color);
-                boolean shouldNotHaveProf = this.game.getTableNumber(p_other, color) < this.game.getTableNumber(p, color);
+                boolean shouldNotHaveProf = professorChecker.shouldSwapProfessor(game, p, p_other, color);
 
                 if (isOther && hasProf && shouldNotHaveProf) {
                     p_other.removeProfessor(color);
@@ -318,12 +339,9 @@ public class MatchController implements Runnable {
         }
     }
 
-    public void setInfluenceCalculator(InfluenceCalculator influenceCalculator){
-        this.influenceCalculator = influenceCalculator;
-    }
 
     /**
-     * Methods used by the 2nd character. Computes the influence on an island without moving mother nature
+     * Methods used by the 3nd character. Computes the influence on an island without moving mother nature
      * @param islandID island in which computing the influence
      */
     public void conquerAndJoinIslands(int islandID) {
@@ -419,7 +437,7 @@ public class MatchController implements Runnable {
             distance = 0;
         }
 
-        if (distance > p.getUsedAssistant().getMaxSteps() || distance == 0) {
+        if (distance > p.getUsedAssistant().getMaxSteps() + additionalMoves*2 || distance == 0) {
             throw error("The chosen island is too far away!");
         } else {
             this.game.setMothernature(x);
@@ -463,6 +481,7 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
+            System.out.println("Island " + x + "conquered by " + maxInfluencer.getColor());
         }
     }
 
@@ -628,7 +647,7 @@ public class MatchController implements Runnable {
         int x = (numOfPlayers == 3)? 4 : 3;
         try {
             for (int i = 0; i < x; i++) {
-                cloud.addStudent(getGame().getBag().extractStudent());
+                cloud.addStudent(game.getBag().extractStudent());
             }
         } catch (FullCloudException e1) {
             throw error("Cloud is full.");

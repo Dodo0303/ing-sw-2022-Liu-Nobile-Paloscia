@@ -1,10 +1,14 @@
 package it.polimi.ingsw.Controller.Phases;
 
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Controller.InfluenceCalculators.AdditionalPointsInfluenceCalculator;
 import it.polimi.ingsw.Controller.InfluenceCalculators.ExcludeColorInfluenceCalculator;
+import it.polimi.ingsw.Controller.InfluenceCalculators.NoTowerInfluenceCalculator;
 import it.polimi.ingsw.Controller.MatchController;
+import it.polimi.ingsw.Controller.ProfessorChecker.SpecialProfessorChecker;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
@@ -138,9 +142,47 @@ public class CharacterPhase extends Phase{
                     }
                 }
             }
+        } else if (msg instanceof UseCharacterMessage){
+            //The character chosen didn't need any second message to apply its effect
+            if (expectedCharacterID == 2) {
+                try {
+                    match.useCharacter(ch.getNickname(), expectedCharacterID);
+                    match.setProfessorChecker(new SpecialProfessorChecker());
+                } catch (WrongEffectException | NotEnoughNoEntriesException e) {
+                    e.printStackTrace();
+                    match.denyMovement(ch);
+                }
+            } else if (expectedCharacterID == 4) {
+                try {
+                    match.useCharacter(ch.getNickname(), expectedCharacterID);
+                    match.setAdditionalMoves();
+                } catch (WrongEffectException | NotEnoughNoEntriesException e) {
+                    e.printStackTrace();
+                    match.denyMovement(ch);
+                }
+            } else if (expectedCharacterID == 6) {
+                try {
+                    match.useCharacter(ch.getNickname(), expectedCharacterID);
+                    match.setInfluenceCalculator(new NoTowerInfluenceCalculator());
+                } catch (WrongEffectException | NotEnoughNoEntriesException e) {
+                    e.printStackTrace();
+                    match.denyMovement(ch);
+                }
+            } else if (expectedCharacterID == 8) {
+                try {
+                    match.useCharacter(ch.getNickname(), expectedCharacterID);
+                    match.setInfluenceCalculator(new AdditionalPointsInfluenceCalculator(ch.getNickname()));
+                } catch (WrongEffectException | NotEnoughNoEntriesException e) {
+                    e.printStackTrace();
+                    match.denyMovement(ch);
+                }
+            }
+
+            return;
         } else {
             match.denyMovement(ch);
-        } //TODO Broadcast ack messages
+            System.out.println("character message expected, received: " + msg.getClass());
+        }//TODO Broadcast ack messages
         nextPhase();
     }
 

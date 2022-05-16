@@ -76,8 +76,14 @@ public class ActionPhase1 extends Phase {
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     match.denyMovement(ch);
                 } */
-                match.setGamePhase(new CharacterPhase(match, this, ((UseCharacterMessage) msg).getCharacterID()));
-                //TODO If the character doesn't need any other message, call its process method from here
+                int id = ((UseCharacterMessage) msg).getCharacterID();
+                if (id ==  2 || id == 4 || id == 6 || id == 8) {
+                    //The character doesn't need any other message
+                    new CharacterPhase(match, this, id).process(msg, ch);
+                } else {
+                    match.setGamePhase(new CharacterPhase(match, this, id));
+                }
+
             } else {
                 match.denyMovement(ch);
             }

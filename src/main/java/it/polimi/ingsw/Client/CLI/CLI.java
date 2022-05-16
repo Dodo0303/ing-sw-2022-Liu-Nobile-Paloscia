@@ -148,7 +148,7 @@ public class CLI {
             }
             currPhase = Phase.PickingNickname;
         } catch (Exception e) {
-            System.out.println("Something went wrong, please try agian.\n");
+            System.out.println("Something went wrong, please try again.\n");
             buildConnection();
         }
     }
@@ -360,7 +360,7 @@ public class CLI {
         for (int i = 0; i < numIslands; i++) {
             System.out.print("island " + i + " :\n");
             if (!islands.get(i).getTowerColor().equals(Color.VOID)) {
-                System.out.print(islands.get(i).getNumTower() + "tower(s) of color " + islands.get(i).getTowerColor().toString() +"on the island\n");
+                System.out.print(islands.get(i).getNumTower() + " tower(s) of color " + islands.get(i).getTowerColor().toString() +" on the island\n");
             } else {
                 System.out.print("No tower on the island.\n");
             }

@@ -121,12 +121,16 @@ class PlayerTest {
     @Test
     public void removeTower_RemoveTooManyTowers_ShouldThrowException() {
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        for (int i = 0; i < p.getMaxTowerNum(); i++) {
+            p.removeTower();
+        }
         assertThrows(GameException.class, p::removeTower);
     }
 
     @Test
     public void testAddTower(){
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        p.removeTower();
         int towers = p.getTowerNum();
         p.addTower();
         assertEquals(towers + 1, p.getTowerNum());
