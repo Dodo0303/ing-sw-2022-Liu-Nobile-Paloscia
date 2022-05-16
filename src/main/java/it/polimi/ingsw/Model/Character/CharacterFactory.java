@@ -74,7 +74,7 @@ public class CharacterFactory {
                 res = new Character12();
                 break;
             default:
-                throw new GameException("No character found");
+                throw new GameException("No character found: " + ID); //TODO Fix this
         }
         return res;
     }

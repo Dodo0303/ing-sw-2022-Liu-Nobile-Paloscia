@@ -72,7 +72,6 @@ public class MatchController implements Runnable {
     Player getCurrentPlayer() {
         for (Player p : this.game.getPlayers()) {
             if (p.getNickName().equals(this.currentPlayerID)) return p;
-            break;
         }
         throw new MatchException("No current player.");
     }
@@ -640,6 +639,7 @@ public class MatchController implements Runnable {
 
     public void sortPlayers() {
         this.game.sortPlayers();
+        this.currentPlayerID = game.getPlayers().get(0).getNickName();
         this.firstOfTurn = this.game.getPlayers().get(0).getNickName();
     }
 

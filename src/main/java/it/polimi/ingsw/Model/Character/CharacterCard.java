@@ -4,9 +4,10 @@ import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class CharacterCard {
+public abstract class CharacterCard implements Serializable {
     private int _ID;
     protected int _price;
     protected boolean used = false;

@@ -56,7 +56,7 @@ public class Player implements Serializable {
         this._nickName = nickname;
         this._color = color;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
-            this._towerNum = 0; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
+            this._towerNum = 8; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
             this._maxTowerNum = 8;
             this._maxEntranceStudents = 7;
         } else if (numOfPlayers == 3 && color != Color.VOID) {
