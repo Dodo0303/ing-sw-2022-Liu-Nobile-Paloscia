@@ -3,6 +3,8 @@ package it.polimi.ingsw.Controller.Phases;
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Controller.MatchController;
 import it.polimi.ingsw.Exceptions.GameException;
+import it.polimi.ingsw.Model.Color;
+import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
@@ -25,6 +27,7 @@ public class ActionPhase2 extends Phase {
                 match.denyMovement(ch);
                 return;
             }
+
             match.broadcastMovement(((MoveMotherNatureMessage) msg).getIslandIndex());
 
             if (match.endedAtPhase2() == 1) {

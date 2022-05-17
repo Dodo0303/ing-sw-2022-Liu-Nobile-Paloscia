@@ -103,6 +103,7 @@ public class ClientHandler implements Runnable {
                     try {
                         Object msg = outgoingMessages.take();
                         objectOutputStream.writeObject(msg);
+                        objectOutputStream.reset();
                         System.out.print(msg.getClass().toString() + " sent by server" + "\n"); //TODO delete after tests
                     } catch (InterruptedException e) {
                         System.out.println("Error while sending message to client: " + e + "\n");

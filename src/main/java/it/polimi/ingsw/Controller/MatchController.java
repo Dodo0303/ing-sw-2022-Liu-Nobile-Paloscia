@@ -487,7 +487,6 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
-            System.out.println("Island " + x + "conquered by " + maxInfluencer.getColor());
         }
     }
 
@@ -517,6 +516,7 @@ public class MatchController implements Runnable {
             if (x == this.game.getMotherNatureIndex()) {
                 this.game.setMothernature(y);
             }
+            System.out.println( y + " merged " + x);//TODO DELETE AFTER TEST
         } else {
             this.game.getIslands().get(x).copyFrom(this.game.getIslands().get(y));
             if (y == this.game.getMotherNatureIndex()) {
@@ -525,6 +525,7 @@ public class MatchController implements Runnable {
             for (int i = y; i < this.game.getNumIslands() - 1; i++) {
                 this.game.getIslands().put(i, this.game.getIslands().get(i + 1)); // move islands after the yth forward by 1.
             }
+            System.out.println( x + " merged " + y);//TODO DELETE AFTER TEST
         }
         this.game.getIslands().remove(this.game.setNumIslands(this.game.getNumIslands()) - 1);
     }
@@ -670,7 +671,7 @@ public class MatchController implements Runnable {
 
     public void broadcastMovement(int islandIndex) {
         for (ClientHandler client : this.clients) {
-            client.send(new ConfirmMovementMessage(islandIndex, this.game.getIslands()));
+            client.send(new ConfirmMovementMessage(islandIndex, game.getIslands()));
         }
     }
 
