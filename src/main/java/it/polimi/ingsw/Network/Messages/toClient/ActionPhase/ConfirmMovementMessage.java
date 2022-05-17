@@ -1,12 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
-import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
-import it.polimi.ingsw.Model.Cloud;
-import it.polimi.ingsw.Model.Color;
 import it.polimi.ingsw.Model.Island;
-import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 import java.util.HashMap;

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
-import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.StudentColor;

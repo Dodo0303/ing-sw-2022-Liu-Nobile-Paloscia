@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.CLI;
+package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
@@ -26,9 +26,9 @@ public class ServerHandler implements Runnable {
     private SendThread sendThread;
     private ReceiveThread receiveThread;
     private ArrayList<ClientHandler> clients; //clients who are currently connected to the server.
-    private CLI client;
+    private GUI client;
 
-    public ServerHandler(String host, int port, CLI client) throws IOException {
+    public ServerHandler(String host, int port, GUI client) throws IOException {
         this.socket = new Socket(host, port);
         this.input = new ObjectInputStream(socket.getInputStream());
         this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -148,7 +148,7 @@ public class ServerHandler implements Runnable {
         return clients;
     }
 
-    public CLI getClient() {
+    public GUI getClient() {
         return client;
     }
 

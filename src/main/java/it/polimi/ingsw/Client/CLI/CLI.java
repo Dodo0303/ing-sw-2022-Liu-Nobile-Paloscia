@@ -14,9 +14,7 @@ import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class CLI {
@@ -50,7 +48,7 @@ public class CLI {
         }
     }
 
-    protected void messageReceived(Object message) throws InterruptedException, EmptyCloudException {
+    public void messageReceived(Object message) throws InterruptedException, EmptyCloudException {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
                 ((NickResponseMessage) message).process(this.serverHandler);
