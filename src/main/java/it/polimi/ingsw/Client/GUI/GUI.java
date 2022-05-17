@@ -1,57 +1,33 @@
 package it.polimi.ingsw.Client.GUI;
 
-import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
-import it.polimi.ingsw.Model.GameModel;
-import it.polimi.ingsw.Model.Wizard;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
-import java.util.List;
-import java.util.Scanner;
+import java.io.File;
+import java.util.Objects;
 
 public class GUI {
-    GameModel game;
-    boolean closed;
-    private String nickname;
-    private String host;
-    private int port;
-    private Scanner input = new Scanner(System.in);
+    private final Stage stage;
     private ServerHandler serverHandler;
-    private Phase currPhase;
-    private List<Wizard> wizards;
-    private int ap1Moves;
+
+    public GUI(Stage stage) {
+        this.stage = stage;
+    }
 
     public void start() {
-        ap1Moves = 0;
-        closed = false;
-        currPhase = Phase.BuildingConnection;
-        buildConnection();
-        Thread serverHandlerThread  = new Thread(this.serverHandler);
-        serverHandlerThread.start();
-        requireNickname();
-        chooseGameMode();
-    }
-
-    public void send(Object message) {
-        if (message == null) {
-            throw new IllegalArgumentException("Null cannot be sent as a message.\n");
-        } else {
-            serverHandler.send(message);
+        try {
+            stage.getIcons().add(new Image("icon.png"));
+            stage.setResizable(false);
+            stage.setTitle("Eriantys");
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml" + File.separator + "login.fxml")));
+            Scene scene = new Scene(root, 1024, 1024);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    private void buildConnection() {
-    }
-
-    private void requireNickname() {
-    }
-
-    private void chooseGameMode() {
-    }
-
-
-    public void messageReceived(Object message) {
-    }
-
-    public void setNickName(String str) {
     }
 }
