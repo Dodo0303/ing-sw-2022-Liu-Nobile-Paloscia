@@ -22,8 +22,9 @@ public class GUI {
             stage.getIcons().add(new Image("icon.png"));
             stage.setResizable(false);
             stage.setTitle("Eriantys");
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml" + File.separator + "login.fxml")));
-            Scene scene = new Scene(root, 1024, 1024);
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/login.fxml")));
+            Scene scene = new Scene(root, 600, 402);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/login.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
