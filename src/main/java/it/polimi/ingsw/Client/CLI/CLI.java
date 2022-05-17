@@ -31,9 +31,6 @@ public class CLI {
     private ServerHandler serverHandler;
     private Phase currPhase;
     private List<Wizard> wizards;
-    private List<StudentColor> entrance;
-    private int numIslands;
-    private HashMap<Integer, Island> islands;
     private int ap1Moves;
 
     public void start() {
@@ -287,8 +284,8 @@ public class CLI {
             currPhase = getCurrPhase();
         }
         int num = -1, islandID = -1, i = 0, index = -1;
-        entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
-        numIslands = game.getNumIslands();
+        List<StudentColor>  entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
+        int numIslands = game.getNumIslands();
         StudentColor tempColor;
         System.out.print("You have in your entrance:\n");
         for (StudentColor color: entrance) {
@@ -328,7 +325,7 @@ public class CLI {
             currPhase = getCurrPhase();
         }
         int num = -1;
-        while (num < 0 || num >= numIslands) {
+        while (num < 0 || num >= game.getNumIslands()) {
             printIslands();
             System.out.print("Where would you like to move the mather nature?\n");
             String in = input.nextLine();
@@ -343,7 +340,7 @@ public class CLI {
             currPhase = getCurrPhase();
         }
         int num = -1;
-        while (num < 0 || num >= islands.size() - 1) {
+        while (num < 0 || num >= game.getIslands().size() - 1) {
             printClouds();
             System.out.print("Which cloud would you like to take students from?\n");
             String in = input.nextLine();
@@ -355,12 +352,11 @@ public class CLI {
     }
 
     private void printIslands() {
-        numIslands = game.getNumIslands();
-        islands = game.getIslands();
+        int numIslands = game.getNumIslands();
         for (int i = 0; i < numIslands; i++) {
             System.out.print("island " + i + " :\n");
-            if (!islands.get(i).getTowerColor().equals(Color.VOID)) {
-                System.out.print(islands.get(i).getNumTower() + " tower(s) of color " + islands.get(i).getTowerColor().toString() +" on the island\n");
+            if (!game.getIslands().get(i).getTowerColor().equals(Color.VOID)) {
+                System.out.print(game.getIslands().get(i).getNumTower() + " tower(s) of color " + game.getIslands().get(i).getTowerColor().toString() +" on the island\n");
             } else {
                 System.out.print("No tower on the island.\n");
             }
@@ -369,7 +365,7 @@ public class CLI {
             }
             System.out.print("Students:\n");
             for (StudentColor color:StudentColor.values()) {
-                System.out.print(color + "student:" + islands.get(i).getStudents().get(color) + "\n");
+                System.out.print(color + "student:" + game.getIslands().get(i).getStudents().get(color) + "\n");
             }
             System.out.print("\n");
         }
@@ -419,18 +415,6 @@ public class CLI {
 
     public void setWizards(List<Wizard> wizards) {
         this.wizards = wizards;
-    }
-
-    public void setEntrance(List<StudentColor> entrance) {
-        this.entrance = entrance;
-    }
-
-    public void setNumIslands(int numIslands) {
-        this.numIslands = numIslands;
-    }
-
-    public void setIslands(HashMap<Integer, Island> islands) {
-        this.islands = islands;
     }
 
     public void setClosed(boolean closed) {
