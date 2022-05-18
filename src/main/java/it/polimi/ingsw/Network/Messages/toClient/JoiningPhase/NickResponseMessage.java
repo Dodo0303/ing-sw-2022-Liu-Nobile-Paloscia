@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 /** If the nickname chosen by players is available, then the server should respond with the chosen nickname,
@@ -27,7 +28,6 @@ public class NickResponseMessage extends MessageToClient {
             client.getClient().setPhase(Phase.ChoosingGameMode);
             System.out.println(client.getClient().getCurrPhase().toString() +" phase set.\n");
         }
-
     }
 
     //TODO Update server side

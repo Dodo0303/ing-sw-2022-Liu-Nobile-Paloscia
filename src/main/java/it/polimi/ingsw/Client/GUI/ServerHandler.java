@@ -103,7 +103,7 @@ public class ServerHandler implements Runnable {
                         StatusMessage msg = (StatusMessage)message;
                         clients = msg.clients;
                     } else {
-                        //client.messageReceived(message);
+                        client.messageReceived(message);
                     }
                 }
             } catch (Exception e) {
