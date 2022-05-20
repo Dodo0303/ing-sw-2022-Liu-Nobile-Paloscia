@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 import java.util.List;
@@ -39,6 +40,20 @@ public class SendMatchesMessage extends MessageToClient {
                 System.out.println(m);
             }
             client.getClient().setPhase(Phase.JoiningGame1);
+        }
+    }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        if (matchesID.isEmpty()) {
+            System.out.println("There is no available match.");
+            client.getClient().setCurrPhase(Phase_GUI.ChoosingGameMode);
+            client.getClient().chooseGameMode();
+        } else {
+            System.out.println("Available matches:");
+            for (int m : matchesID) {
+                System.out.println(m);
+            }
+            client.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
         }
     }
 }

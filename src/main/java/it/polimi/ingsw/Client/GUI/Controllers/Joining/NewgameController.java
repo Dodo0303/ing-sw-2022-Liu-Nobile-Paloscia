@@ -19,9 +19,7 @@ public class NewgameController implements Initializable {
     private CheckBox expertBox;
     @FXML
     private ChoiceBox<String> numPlayerBox;
-    private int numChosen;
     private String[] nums = {"2", "3", "4"};
-    Wizard wizard;
     GUI gui;
 
 
@@ -32,13 +30,20 @@ public class NewgameController implements Initializable {
 
     public void execute() {
         try {
-            boolean mode = expertBox.isSelected();
-            int x = Integer.parseInt(numPlayerBox.getValue());
-            //gui.changeScene("ChooseWizardController", "");
-            gui.send(new SendStartInfoMessage(x, mode, wizard));
+            if (numPlayerBox.getValue() == null) {
+                setMessage("Please choose a number.");
+            } else {
+                boolean mode = expertBox.isSelected();
+                int x = Integer.parseInt(numPlayerBox.getValue());
+                sendNewGameInfo(x, mode);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendNewGameInfo(int numPlayer, boolean expert) {
+        gui.completeCreateNewGame(numPlayer, expert);
     }
 
     public void setGUI(GUI gui) {

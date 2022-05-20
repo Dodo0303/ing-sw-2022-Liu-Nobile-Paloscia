@@ -5,6 +5,8 @@ import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
+import java.io.IOException;
+
 /** If the nickname chosen by players is available, then the server should respond with the chosen nickname,
  * otherwise return with null.
  */
@@ -26,9 +28,16 @@ public class NickResponseMessage extends MessageToClient {
         } else {
             client.setNickName(nickname);
             client.getClient().setPhase(Phase.ChoosingGameMode);
-            System.out.println(client.getClient().getCurrPhase().toString() +" phase set.\n");
         }
     }
 
-    //TODO Update server side
+    public void GUIprocess(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        if (nickname == null) {
+            client.getClient().requireNickname(true);
+        } else {
+            client.getClient().setNickname(nickname);
+            client.getClient().setCurrPhase(Phase_GUI.ChoosingGameMode);
+            client.getClient().chooseGameMode();
+        }
+    }
 }

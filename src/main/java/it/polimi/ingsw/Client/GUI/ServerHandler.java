@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Client.GUI;
 
-import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
-import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.ResetOutputMessage;
 import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.StatusMessage;
@@ -12,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ServerHandler implements Runnable {
@@ -84,6 +81,7 @@ public class ServerHandler implements Runnable {
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.print(e.getMessage());
                 //shutdown();
             }
@@ -107,6 +105,7 @@ public class ServerHandler implements Runnable {
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.print(e.getMessage());
                 //shutdown();
             }

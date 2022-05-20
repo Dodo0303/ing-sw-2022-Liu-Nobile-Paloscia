@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GUI.Controllers.Joining;
 
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 public class LoginController {
     @FXML
@@ -32,31 +34,17 @@ public class LoginController {
         try {
             host = hostField.getText();
             port = Integer.parseInt(portField.getText());
-            messageLabel.setText("Connecting...");
+            setMessage("Connecting...");
             gui.setCurrPhase(Phase_GUI.BuildingConnection);
-            gui.settingUpConnection(host, port);
-            nextScene("/fxml/nickname.fxml", "", gui.getStage());
+            if (gui.settingUpConnection(host, port)) {
+                gui.setCurrPhase(Phase_GUI.PickingNickname);
+                gui.startServerHandler();
+                gui.requireNickname(false);
+            } else {
+                setMessage("Network not reachable, please try again.");
+            }
         } catch (NumberFormatException e) {
             messageLabel.setText(portField.getText() + " is not a valid port.");
-        } catch (IOException e1) {
-            messageLabel.setText("Network is unreachable, please try again.");
-        }
-
-    }
-    public void nextScene(String file, String message, Stage stage) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
-            Parent root = fxmlLoader.load();
-            NicknameController nicknameController = fxmlLoader.getController();
-            nicknameController.setGUI(gui);
-            Scene scene = new Scene(root, 600, 402);
-            if (!message.isEmpty()) {
-                messageLabel.setText(message);
-            }
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-
         }
     }
 
