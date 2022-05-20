@@ -3,8 +3,11 @@ package it.polimi.ingsw.Client.GUI;
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
 import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.ChooseWizardController;
+import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Model.Wizard;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +18,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class GUI {
+    private GameModel game;
     private final Stage stage;
     private ServerHandler serverHandler;
     private Phase_GUI currPhase;
@@ -26,6 +31,7 @@ public class GUI {
     private int port;
     private int numPlayer;
     private boolean expert;
+    private List<Wizard> wizards;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -81,12 +87,15 @@ public class GUI {
         }
     }
 
-    public void chooseGameMode() {
+    public void chooseGameMode(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/chooseGameMode.fxml"));
             Parent root = fxmlLoader.load();
             ChooseGameModeController chooseGameModeController = fxmlLoader.getController();
             chooseGameModeController.setGUI(this);
+            if (msg != null) {
+                chooseGameModeController.setMessage(msg);
+            }
             Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -117,15 +126,59 @@ public class GUI {
         }
     }
 
-    public void completeCreateNewGame(int numPlayer, boolean expert) {
+    public void joinGame(String msg, List<Integer> matches) {
         try {
-            this.numPlayer = numPlayer;
-            this.expert = expert;
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/JoinGame.fxml"));
+            Parent root = fxmlLoader.load();
+            JoinGameController joinGameController = fxmlLoader.getController();
+            joinGameController.setGUI(this);
+            joinGameController.setMatches(matches);
+            if (msg != null) {
+                joinGameController.setMessage(msg);
+            }
+            Scene scene = new Scene(root, 600, 402);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void completeCreateNewGame(int numPlayer, boolean expert) {
+        this.numPlayer = numPlayer;
+        this.expert = expert;
+        chooseWizard(true);
+    }
+
+
+    public void chooseWizard(boolean newGame) {
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseWizard.fxml"));
             Parent root = fxmlLoader.load();
             ChooseWizardController chooseWizardController = fxmlLoader.getController();
             chooseWizardController.setGUI(this);
-            chooseWizardController.sendMessageForNewGame(numPlayer, expert);
+            if (newGame) {
+                chooseWizardController.setNewgame(true);
+                chooseWizardController.setMessageForNewGame(numPlayer, expert);
+            } else {
+                chooseWizardController.setNewgame(false);
+                if (!wizards.contains(Wizard.WIZARD1)) {
+                    chooseWizardController.disableRadio(1);
+                }
+                if (!wizards.contains(Wizard.WIZARD2)) {
+                    chooseWizardController.disableRadio(2);
+                }
+                if (!wizards.contains(Wizard.WIZARD3)) {
+                    chooseWizardController.disableRadio(3);
+                }
+                if (!wizards.contains(Wizard.WIZARD4)) {
+                    chooseWizardController.disableRadio(4);
+                }
+            }
             Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -157,6 +210,10 @@ public class GUI {
         }
     }
 
+    public void playAssistant() {
+        //todo
+    }
+
     public void send(Object message) {
         if (message == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.\n");
@@ -169,8 +226,6 @@ public class GUI {
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
     }
-
-
 
     public void messageReceived(Object message) {
         if (message instanceof NickResponseMessage) {
@@ -190,8 +245,21 @@ public class GUI {
         } else if (message instanceof SendAvailableWizardsMessage) {
             if (currPhase.equals(Phase_GUI.JoiningGame1) ||
                     currPhase.equals(Phase_GUI.JoiningGame2)) {
-                //((SendAvailableWizardsMessage) message).process(this.serverHandler);
+                ((SendAvailableWizardsMessage) message).processGUI(this.serverHandler);
             }
+        } else if (message instanceof GameModelUpdateMessage) {
+            ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
+        }  else if (message instanceof ChangeTurnMessage) {
+            System.out.println(currPhase.toString() + " to " + ((ChangeTurnMessage) message).getPhase().toString());//TODO DELETE AFTER TESTS
+            if (currPhase.equals(Phase_GUI.GameJoined) && ((ChangeTurnMessage) message).getPhase().equals(Phase_GUI.Planning)) {
+                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
+            } else if (currPhase.equals(Phase_GUI.Planning) && ((ChangeTurnMessage) message).getPhase().equals(Phase_GUI.Action1)) {
+                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
+            } else if (currPhase.equals(Phase_GUI.Action3) && ((ChangeTurnMessage) message).getPhase().equals(Phase_GUI.Planning)) {
+                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
+            }
+        } else if (message instanceof CloudsUpdateMessage) {
+            ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
         }
     }
 
@@ -245,5 +313,17 @@ public class GUI {
 
     public boolean isExpert() {
         return expert;
+    }
+
+    public void setWizards(List<Wizard> wizards) {
+        this.wizards = wizards;
+    }
+
+    public GameModel getGame() {
+        return game;
+    }
+
+    public void setGame(GameModel game) {
+        this.game = game;
     }
 }

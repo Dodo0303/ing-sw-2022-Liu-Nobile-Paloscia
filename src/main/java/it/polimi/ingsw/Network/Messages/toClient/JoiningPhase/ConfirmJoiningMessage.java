@@ -62,10 +62,9 @@ public class ConfirmJoiningMessage extends MessageToClient {
             System.out.println(this.message);
             if (message.equals("Wizard not available")) {
                 ch.getClient().setCurrPhase(Phase_GUI.JoiningGame2);
-                ch.getClient().completeCreateNewGame(ch.getClient().getNumPlayer(), ch.getClient().isExpert());
+                ch.getClient().chooseWizard(false);
             } else {
                 ch.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
-                //ch.getClient().joinGame();
             }
         }
     }

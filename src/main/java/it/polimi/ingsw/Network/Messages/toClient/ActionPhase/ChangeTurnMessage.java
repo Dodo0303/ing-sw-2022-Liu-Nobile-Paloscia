@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Utilities;
 
@@ -35,6 +36,23 @@ public class ChangeTurnMessage extends MessageToClient {
             } else if (ch.getClient().getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setPhase(Phase.Planning);
                 ch.getClient().playAssistant();
+            }
+            System.out.println(this.getClass().toString() + " processed."); //TODO delete after test
+        }
+    }
+//todo
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
+        System.out.println(playerNickname + " " +ch.getClient().getNickname());
+        if (this.playerNickname.equals(ch.getClient().getNickname())) {
+            if (ch.getClient().getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
+                ch.getClient().setCurrPhase(Phase_GUI.Planning);
+                //ch.getClient().playAssistant();
+            } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
+                ch.getClient().setCurrPhase(Phase_GUI.Action1);
+                //ch.getClient().moveStudentsFromEntrance();
+            } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
+                ch.getClient().setCurrPhase(Phase_GUI.Planning);
+                //ch.getClient().playAssistant();
             }
             System.out.println(this.getClass().toString() + " processed."); //TODO delete after test
         }

@@ -28,7 +28,8 @@ public class ChooseGameModeController{
     }
 
     public void joingame(ActionEvent actionEvent) {
-        //todo
+        gui.send(new CreateMatchMessage(false));
+        gui.setCurrPhase(Phase_GUI.JoiningGame1);
     }
 
     public void setGUI(GUI gui) {

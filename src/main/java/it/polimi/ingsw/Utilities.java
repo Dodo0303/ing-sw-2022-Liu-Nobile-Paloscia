@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 
 import java.io.*;
 
@@ -56,6 +57,21 @@ public class Utilities {
             case "Ending" : {
                 return Phase.Ending;
             }
+        }
+        return null;
+    }
+
+    public static Phase_GUI getPhaseGUI(Phase phase) {
+        if (phase.equals(Phase.Planning)) {
+            return Phase_GUI.Planning;
+        } else if (phase.equals(Phase.Action1)) {
+            return Phase_GUI.Action1;
+        } else if (phase.equals(Phase.Action2)) {
+            return Phase_GUI.Action2;
+        } else if (phase.equals(Phase.Action3)) {
+            return Phase_GUI.Action3;
+        } else if (phase.equals(Phase.Ending)) {
+            return Phase_GUI.Ending;
         }
         return null;
     }

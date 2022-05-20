@@ -10,6 +10,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class NewgameController implements Initializable {
@@ -45,7 +46,6 @@ public class NewgameController implements Initializable {
     public void sendNewGameInfo(int numPlayer, boolean expert) {
         gui.completeCreateNewGame(numPlayer, expert);
     }
-
     public void setGUI(GUI gui) {
         this.gui = gui;
     }

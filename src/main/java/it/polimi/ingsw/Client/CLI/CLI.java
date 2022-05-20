@@ -211,7 +211,7 @@ public class CLI {
                 System.out.print("Choose a match.\n");
                 String in = input.nextLine();
                 if (Utilities.isNumeric(in)) {
-                    match = Integer.parseInt(in) - 1;
+                    match = Integer.parseInt(in) - 1; //todo why minus one to get to correct match id
                 }
             }
             send(new MatchChosenMessage(match));

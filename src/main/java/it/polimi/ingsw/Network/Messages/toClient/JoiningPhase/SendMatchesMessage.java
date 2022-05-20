@@ -45,14 +45,10 @@ public class SendMatchesMessage extends MessageToClient {
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
         if (matchesID.isEmpty()) {
-            System.out.println("There is no available match.");
             client.getClient().setCurrPhase(Phase_GUI.ChoosingGameMode);
-            client.getClient().chooseGameMode();
+            client.getClient().chooseGameMode("There is no available match. Please try again.");
         } else {
-            System.out.println("Available matches:");
-            for (int m : matchesID) {
-                System.out.println(m);
-            }
+            client.getClient().joinGame("", matchesID);
             client.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
         }
     }

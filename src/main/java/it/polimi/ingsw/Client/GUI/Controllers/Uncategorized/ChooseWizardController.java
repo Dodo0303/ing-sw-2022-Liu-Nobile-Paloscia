@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GUI.Controllers.Uncategorized;
 
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Model.Wizard;
+import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.SendChosenWizardMessage;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.SendStartInfoMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ public class ChooseWizardController implements Initializable {
     Wizard wizard;
     int numPlayer;
     boolean expert;
+    boolean newgame;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,14 +54,38 @@ public class ChooseWizardController implements Initializable {
             radio3.setDisable(true);
             radio4.setDisable(true);
             ConfirmButton.setDisable(true);
+        }
+        if (newgame) {
             gui.send(new SendStartInfoMessage(numPlayer, expert, wizard));
+        } else {
+            gui.send(new SendChosenWizardMessage(wizard));
         }
     }
 
-    public void sendMessageForNewGame(int numPlayer, boolean expert) {
+    public void disableRadio(int x) {
+        switch (x) {
+            case 1 : {
+                radio1.setDisable(true);
+                break;
+            }
+            case 2 : {
+                radio2.setDisable(true);
+                break;
+            }
+            case 3 : {
+                radio3.setDisable(true);
+                break;
+            }
+            case 4 : {
+                radio4.setDisable(true);
+                break;
+            }
+        }
+    }
+
+    public void setMessageForNewGame(int numPlayer, boolean expert) {
         this.numPlayer = numPlayer;
         this.expert = expert;
-
     }
 
     public Wizard getWizard() {
@@ -70,6 +96,10 @@ public class ChooseWizardController implements Initializable {
     }
     public void setMessage(String message) {
         messageLabel.setText(message);
+    }
+
+    public void setNewgame(boolean newgame) {
+        this.newgame = newgame;
     }
 
 
