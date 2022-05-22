@@ -16,11 +16,11 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 | Functionality | Status |
 |:-----------------------|:------------------------------------:|
-| Simplified Ruleset | 🟠 |
-| Complete Ruleset | 🟠 |
+| Simplified Ruleset | 🟢 |
+| Complete Ruleset | 🟢 |
 | Socket |🟠 |
 | CLI | 🟠 |
-| GUI | 🔴 |
+| GUI | 🟠 |
 | All character cards | 🟠 |
 | 4 Player Game | 🔴 |
 | Persistence | 🔴 |

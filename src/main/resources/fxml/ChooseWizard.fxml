@@ -26,7 +26,7 @@
             </ImageView>
             <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="455.0" layoutY="67.0">
                <image>
-                  <Image url="@../assets/Assistenti/retro/CarteTOT_back_41@3x.png" />
+                  <Image url="@../assets/Assistenti/retro/CarteTOT_back_11@3x.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="14.0" layoutY="67.0">
