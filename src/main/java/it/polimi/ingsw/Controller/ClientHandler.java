@@ -225,7 +225,7 @@ public class ClientHandler implements Runnable {
         MessageToServer infoMessage = (MessageToServer) incomingMessages.take();
         while (!(infoMessage instanceof SendStartInfoMessage)){
             incomingMessages.put(infoMessage);
-            System.out.println("Expected CreateMatchMessage, received " + infoMessage.getClass());
+            System.out.println("Expected SendStartInfoMessage, received " + infoMessage.getClass());
             infoMessage = (MessageToServer) incomingMessages.take();
         }
         //Received information
@@ -246,7 +246,7 @@ public class ClientHandler implements Runnable {
         send(msg);
     }
 
-    private void joinMatch() throws IOException, ClassNotFoundException, InterruptedException {
+    private void joinMatch() throws IOException, ClassNotFoundException, InterruptedException, MatchMakingException {
         sendAvailableMatchesToClient();
         receiveAndSetMatchChosen();
         //Add the player to the match
@@ -263,7 +263,7 @@ public class ClientHandler implements Runnable {
         receiveWizard();
     }
 
-    private void sendAvailableMatchesToClient() throws IOException {
+    private void sendAvailableMatchesToClient() throws IOException, MatchMakingException, ClassNotFoundException, InterruptedException {
         List<MatchController> availableMatches = server.getMatchmakingMatches();
         List<Integer> matchesID = new ArrayList<>();
         List<List<String>> players = new ArrayList<>();
@@ -282,9 +282,11 @@ public class ClientHandler implements Runnable {
 
         MessageToClient msg = new SendMatchesMessage(matchesID, players);
         send(msg);
+        if (matchesID.isEmpty())
+            receiveCreateMatch();
     }
 
-    private void receiveAndSetMatchChosen() throws IOException, ClassNotFoundException, InterruptedException {
+    private void receiveAndSetMatchChosen() throws IOException, ClassNotFoundException, InterruptedException, MatchMakingException {
         MessageToServer matchChosen =(MessageToServer) incomingMessages.take();
         while (!(matchChosen instanceof MatchChosenMessage)){
             incomingMessages.put(matchChosen);
@@ -312,11 +314,12 @@ public class ClientHandler implements Runnable {
 
         //Check whether the wizard is available and set the wizard
         try {
+            this.wizard = ((SendChosenWizardMessage) wizardChosen).getWizard();
             match.setWizardOfPlayer(this, ((SendChosenWizardMessage) wizardChosen).getWizard());
             MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game", match.getID());
-            this.wizard = ((SendChosenWizardMessage) wizardChosen).getWizard();
             send(confirm);
         } catch (GameException e) {
+            this.wizard = null;
             MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available", match.getID());
             send(denyJoining);
             receiveWizard();
@@ -324,8 +327,10 @@ public class ClientHandler implements Runnable {
     }
 
     public void sendAvailableWizards() throws IOException {
-        MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
-        send(availableWizards);
+        if (wizard == null) {
+            MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
+            send(availableWizards);
+        }
     }
 
     public boolean wizardAvailable() {

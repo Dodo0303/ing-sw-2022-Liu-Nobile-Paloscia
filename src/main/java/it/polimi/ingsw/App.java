@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.Client.EriantysClient;
+import it.polimi.ingsw.Client.EriantysClientGUI;
 import it.polimi.ingsw.Controller.EriantysServer;
 
 import static it.polimi.ingsw.Utilities.*;
@@ -20,7 +21,7 @@ public class App {
         }
         switch (args[0].toLowerCase()) {
             case "-gui": {
-                //TODO gui
+                launchGUI(args);
                 break;
             }
             case "-cli": {
@@ -47,8 +48,8 @@ public class App {
         EriantysClient.main(args);
     }
 
-    private void launchGUI(String[] args) {
-        //TODO lauchGUI
+    private static void launchGUI(String[] args) {
+        EriantysClientGUI.main(args);
     }
 
 }

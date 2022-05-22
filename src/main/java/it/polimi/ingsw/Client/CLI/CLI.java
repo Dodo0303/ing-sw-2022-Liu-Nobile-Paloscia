@@ -30,6 +30,7 @@ public class CLI {
     private int ap1Moves;
 
     public void start() {
+        printTitle();
         ap1Moves = 0;
         closed = false;
         currPhase = Phase.BuildingConnection;
@@ -152,7 +153,7 @@ public class CLI {
         }
         int temp = 0;
         while(temp != 1 && temp != 2) {
-            System.out.print("Press 1 for new game, press 2 for joining exiting game.\n");
+            System.out.print("Press 1 for new game, press 2 for joining an existing game.\n");
             String in = input.nextLine();
             if (Utilities.isNumeric(in)) {
                 temp = Integer.parseInt(in);
@@ -164,8 +165,8 @@ public class CLI {
             newgame();
         } else {
             send(new CreateMatchMessage(false));
-            joinGame();
-            chooseWizard();
+            //joinGame();
+            //chooseWizard();
         }
     }
 
@@ -196,7 +197,7 @@ public class CLI {
             }
             send(new SendStartInfoMessage(numPlayer, Boolean.parseBoolean(mode), Wizard.values()[wiz]));
         } catch (Exception e) {
-            System.out.print("Something went wrong, please try agian.\n");
+            System.out.print("Something went wrong, please try again.\n");
             newgame();
         }
     }
@@ -239,7 +240,7 @@ public class CLI {
             send(new SendChosenWizardMessage(wizards.get(wiz)));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.print("Something went wrong, please try agian.\n");
+            System.out.print("Something went wrong, please try again.\n");
             chooseWizard();
         }
     }
@@ -297,7 +298,7 @@ public class CLI {
                 index = Integer.parseInt(in);
         }
         while (num != 0 && num != 1) {
-            System.out.print("Where would you like to move the student?(0 for dinning table, 1 for island)\n");
+            System.out.print("Where would you like to move the student?(0 for dining table, 1 for island)\n");
             String in = input.nextLine();
             if (Utilities.isNumeric(in)) {
                 num = Integer.parseInt(in);
@@ -316,6 +317,7 @@ public class CLI {
         System.out.println(index + num + islandID);//TODO DELETE AFTER TEST
         send(new MoveStudentFromEntranceMessage(index, num, islandID));
     }
+
     public void moveMotherNature() {
         while (!currPhase.equals(Phase.Action2)) {
             currPhase = getCurrPhase();
@@ -351,21 +353,23 @@ public class CLI {
     private void printIslands() {
         int numIslands = game.getNumIslands();
         for (int i = 0; i < numIslands; i++) {
-            System.out.print("island " + i + " :\n");
-            if (!game.getIslands().get(i).getTowerColor().equals(Color.VOID)) {
-                System.out.print(game.getIslands().get(i).getNumTower() + " tower(s) of color " + game.getIslands().get(i).getTowerColor().toString() +" on the island\n");
-            } else {
-                System.out.print("No tower on the island.\n");
-            }
-            if (game.getMotherNatureIndex() == i) {
-                System.out.print("The motherNature is here\n");
-            }
-            System.out.print("Students:\n");
-            for (StudentColor color:StudentColor.values()) {
-                System.out.print(color + "student:" + game.getIslands().get(i).getStudents().get(color) + "\n");
-            }
-            System.out.print("\n");
+            printIsland(i);
         }
+    }
+
+
+    private void printIsland(int index){
+        System.out.println("Island " + index);
+        if (game.getIslands().get(index).getTowerColor().equals(Color.VOID))
+            System.out.println("No ♜ on this island");
+        else
+            System.out.println(game.getIslands().get(index).getTowerColor() + "owns " + game.getIslands().get(index).getNumTower() + " ♜");
+        System.out.println("Students:");
+        System.out.println("\uD83D\uDD34: " + game.getIslands().get(index).getStudents().get(StudentColor.RED));
+        System.out.println("\uD83D\uDFE1: " + game.getIslands().get(index).getStudents().get(StudentColor.YELLOW));
+        System.out.println("\uD83D\uDFE2: " + game.getIslands().get(index).getStudents().get(StudentColor.GREEN));
+        System.out.println("\uD83D\uDD35: " + game.getIslands().get(index).getStudents().get(StudentColor.BLUE));
+        System.out.println("\uD83D\uDFE3: " + game.getIslands().get(index).getStudents().get(StudentColor.PINK));
     }
 
     private void printClouds() {
@@ -376,6 +380,16 @@ public class CLI {
                 System.out.println(color + "  ");
             }
         }
+    }
+
+    private void printTitle(){
+        System.out.println(
+                "███████╗██████╗░██╗░█████╗░███╗░░██╗████████╗██╗░░░██╗░██████╗\n" +
+                "██╔════╝██╔══██╗██║██╔══██╗████╗░██║╚══██╔══╝╚██╗░██╔╝██╔════╝\n" +
+                "█████╗░░██████╔╝██║███████║██╔██╗██║░░░██║░░░░╚████╔╝░╚█████╗░\n" +
+                "██╔══╝░░██╔══██╗██║██╔══██║██║╚████║░░░██║░░░░░╚██╔╝░░░╚═══██╗\n" +
+                "███████╗██║░░██║██║██║░░██║██║░╚███║░░░██║░░░░░░██║░░░██████╔╝\n" +
+                "╚══════╝╚═╝░░╚═╝╚═╝╚═╝░░╚═╝╚═╝░░╚══╝░░░╚═╝░░░░░░╚═╝░░░╚═════╝░");
     }
 
     public String getNickname() {

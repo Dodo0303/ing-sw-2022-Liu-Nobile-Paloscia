@@ -40,6 +40,7 @@ public class SendMatchesMessage extends MessageToClient {
                 System.out.println(m);
             }
             client.getClient().setPhase(Phase.JoiningGame1);
+            client.getClient().joinGame();
         }
     }
 

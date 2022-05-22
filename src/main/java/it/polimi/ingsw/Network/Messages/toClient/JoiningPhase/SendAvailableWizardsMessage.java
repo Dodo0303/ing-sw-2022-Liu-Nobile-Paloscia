@@ -30,6 +30,8 @@ public class SendAvailableWizardsMessage extends MessageToClient {
         for (Wizard w : wizards) {
             System.out.println(i++ + ". " + w);
         }
+
+        ch.getClient().chooseWizard();
    }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {

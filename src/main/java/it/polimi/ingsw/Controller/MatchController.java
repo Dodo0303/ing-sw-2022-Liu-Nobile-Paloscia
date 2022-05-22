@@ -473,7 +473,7 @@ public class MatchController implements Runnable {
     /** First, check if the xth island can be controlled/conquered.
      * If positive, then the color with most influence controls the island ISLAND.
      * If negative, do nothing. */
-    private void controlIsland(int x) {
+    private synchronized void controlIsland(int x) {
         Island island = this.game.getIslands().get(x);
         int influence;
         int maxInfluence = 0;
@@ -487,13 +487,15 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
+            System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
+            System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
         }
     }
 
     /** First, check if the xth island can merge any adjacent island.
      * If positive, then call mergeIslands().
      * If negative, do nothing. */
-    private void unifyIslands(int x) {
+    private synchronized void unifyIslands(int x) {
         Island island = this.game.getIslands().get(x);
         int left = (x > 0) ? x - 1 : this.game.getNumIslands() - 1;
         if (island.getTowerColor() != Color.VOID && this.game.getIslands().get(left).getTowerColor().equals(island.getTowerColor())) {
@@ -510,7 +512,7 @@ public class MatchController implements Runnable {
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
      */
-    private void mergeIslands(int x, int y) {
+    private synchronized void mergeIslands(int x, int y) {
         if (x == this.game.getNumIslands() - 1) {
             this.game.getIslands().get(y).copyFrom(this.game.getIslands().get(x));
             if (x == this.game.getMotherNatureIndex()) {
@@ -537,7 +539,7 @@ public class MatchController implements Runnable {
 
         for (Player p : this.game.getPlayers()) {
             if (!this.currentPlayerID.equals(p.getNickName())) {
-                if  (p.getUsedAssistant() != null && assistant.getMaxSteps() == p.getUsedAssistant().getMaxSteps() && !p.lastAssistant()) {
+                if  (p.getUsedAssistant() != null && assistant.getValue() == p.getUsedAssistant().getValue() && !p.lastAssistant()) {
                     throw new GameException("Card was already used.");
                 }
             } else break;
