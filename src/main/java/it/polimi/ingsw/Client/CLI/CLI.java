@@ -331,6 +331,7 @@ public class CLI {
         }
         send(new MoveMotherNatureMessage(num));
     }
+
     public void chooseCloud() {
         while (!currPhase.equals(Phase.Action3)) {
             currPhase = getCurrPhase();

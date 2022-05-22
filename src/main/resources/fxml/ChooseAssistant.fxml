@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.ChooseAssistantController">
+   <top>
+      <AnchorPane prefHeight="17.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+         <children>
+            <SplitMenuButton mnemonicParsing="false" text="Menu">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </SplitMenuButton>
+         </children>
+      </AnchorPane>
+   </top>
+   <bottom>
+      <AnchorPane prefHeight="129.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="ConfirmButton" layoutX="889.0" layoutY="14.0" mnemonicParsing="false" onAction="#execute" prefHeight="54.0" prefWidth="143.0" text="Confirm">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </bottom>
+   <center>
+      <AnchorPane prefHeight="996.0" prefWidth="1761.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="351.0" layoutY="222.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_1@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="604.0" layoutY="222.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_2@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="892.0" layoutY="222.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_3@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="1172.0" layoutY="222.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_4@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="1422.0" layoutY="222.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_5@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="351.0" layoutY="540.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_6@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="604.0" layoutY="540.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_7@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="892.0" layoutY="540.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_8@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="1172.0" layoutY="540.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_9@3x.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="136.0" layoutX="1422.0" layoutY="540.0" onMouseClicked="#choose">
+               <image>
+                  <Image url="@../assets/Assistenti/3x/Animali_1_10@3x.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="messageLabel" alignment="CENTER" layoutX="559.0" layoutY="2.0" prefHeight="147.0" prefWidth="863.0" text="Choose an assistant card">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="radio1" layoutX="411.0" layoutY="455.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio2" layoutX="664.0" layoutY="455.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio3" layoutX="960.0" layoutY="455.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio4" layoutX="1240.0" layoutY="455.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio5" layoutX="1482.0" layoutY="455.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio6" layoutX="411.0" layoutY="771.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio7" layoutX="672.0" layoutY="771.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio8" layoutX="960.0" layoutY="771.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio9" layoutX="1240.0" layoutY="771.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio10" layoutX="1490.0" layoutY="763.0" mnemonicParsing="false" />
+            <Button fx:id="goToBoardButton" layoutX="52.0" layoutY="222.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="177.0" text="Check board">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

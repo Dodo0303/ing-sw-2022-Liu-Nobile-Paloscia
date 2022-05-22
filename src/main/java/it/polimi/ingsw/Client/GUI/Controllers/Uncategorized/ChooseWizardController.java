@@ -97,7 +97,6 @@ public class ChooseWizardController implements Initializable {
     public void setMessage(String message) {
         messageLabel.setText(message);
     }
-
     public void setNewgame(boolean newgame) {
         this.newgame = newgame;
     }
