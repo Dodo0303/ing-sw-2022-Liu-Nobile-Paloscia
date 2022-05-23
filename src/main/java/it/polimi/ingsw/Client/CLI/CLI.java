@@ -289,7 +289,6 @@ public class CLI {
             System.out.print(i + ")" + color + " ");
             i++;
         }
-        System.out.println("");
 
         while (index < 0 || index > entrance.size() - 1) {
             System.out.print("Which student would you like to move?(Write the index)");
@@ -351,7 +350,7 @@ public class CLI {
     }
 
     private void printIslands() {
-        int numIslands = game.getNumIslands();
+        int numIslands = game.getIslands().size();
         for (int i = 0; i < numIslands; i++) {
             printIsland(i);
         }
@@ -363,7 +362,9 @@ public class CLI {
         if (game.getIslands().get(index).getTowerColor().equals(Color.VOID))
             System.out.println("No ♜ on this island");
         else
-            System.out.println(game.getIslands().get(index).getTowerColor() + "owns " + game.getIslands().get(index).getNumTower() + " ♜");
+            System.out.println(game.getIslands().get(index).getTowerColor() + " owns " + game.getIslands().get(index).getNumTower() + " ♜");
+        if (game.getMotherNatureIndex() == index)
+            System.out.println("Mother nature is here");
         System.out.println("Students:");
         System.out.println("\uD83D\uDD34: " + game.getIslands().get(index).getStudents().get(StudentColor.RED));
         System.out.println("\uD83D\uDFE1: " + game.getIslands().get(index).getStudents().get(StudentColor.YELLOW));
