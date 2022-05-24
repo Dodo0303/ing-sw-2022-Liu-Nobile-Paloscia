@@ -96,7 +96,7 @@ public class ServerHandler implements Runnable {
             try {
                 while(!closed) {
                     Object message = input.readObject();
-                    System.out.print(message.getClass().toString() + " received by client" + "\n"); //TODO delete after tests
+                    System.out.print(message.getClass().toString() + " received from server" + "\n"); //TODO delete after tests
                     if (message instanceof DisconnectMessage) {
                         shutdown();
                     } else if (message instanceof StatusMessage){

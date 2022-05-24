@@ -282,7 +282,7 @@ public class CLI {
         }
         int num = -1, islandID = -1, i = 0, index = -1;
         List<StudentColor>  entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
-        int numIslands = game.getNumIslands();
+        int numIslands = game.getIslands().size();
         StudentColor tempColor;
         System.out.print("You have in your entrance:\n");
         for (StudentColor color: entrance) {
@@ -322,7 +322,7 @@ public class CLI {
             currPhase = getCurrPhase();
         }
         int num = -1;
-        while (num < 0 || num >= game.getNumIslands()) {
+        while (num < 0 || num >= game.getIslands().size()) {
             printIslands();
             System.out.print("Where would you like to move the mather nature?\n");
             String in = input.nextLine();
