@@ -118,7 +118,7 @@
                         </ImageView>
                     </children>
                 </StackPane>
-                <StackPane fx:id="island11" layoutX="507.0" layoutY="62.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island11" layoutX="405.0" layoutY="35.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="511.0" layoutY="110.0">
                             <image>
@@ -139,7 +139,7 @@
                         <ImageView fx:id="t11_2" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island8" layoutX="337.0" layoutY="660.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island8" layoutX="267.0" layoutY="696.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="337.0" layoutY="660.0">
                             <image>
@@ -160,7 +160,7 @@
                         <ImageView fx:id="t82" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island4" layoutX="1181.0" layoutY="646.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island4" layoutX="1229.0" layoutY="679.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="1181.0" layoutY="646.0">
                             <image>
@@ -181,7 +181,7 @@
                         <ImageView fx:id="t42" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island7" layoutX="507.0" layoutY="823.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island7" layoutX="431.0" layoutY="884.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="541.0" layoutY="788.0">
                             <image>
@@ -202,7 +202,7 @@
                         <ImageView fx:id="t72" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island3" layoutX="1190.0" layoutY="461.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island3" layoutX="1284.0" layoutY="454.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="1313.0" layoutY="453.0">
                             <image>
@@ -244,7 +244,7 @@
                         <ImageView fx:id="t62" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island2" layoutX="1153.0" layoutY="244.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island2" layoutX="1223.0" layoutY="195.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="1146.0" layoutY="282.0">
                             <image>
@@ -265,7 +265,7 @@
                         <ImageView fx:id="t22" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island1" layoutX="975.0" layoutY="52.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island1" layoutX="1056.0" layoutY="14.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="957.0" layoutY="122.0">
                             <image>
@@ -286,7 +286,7 @@
                         <ImageView fx:id="t12" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island9" layoutX="303.0" layoutY="461.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island9" layoutX="204.0" layoutY="454.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="198.0" layoutY="470.0">
                             <image>
@@ -307,7 +307,7 @@
                         <ImageView fx:id="t92" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island5" layoutX="1006.0" layoutY="823.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island5" layoutX="1056.0" layoutY="874.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="957.0" layoutY="788.0">
                             <image>
@@ -328,7 +328,7 @@
                         <ImageView fx:id="t52" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
                     </children>
                 </StackPane>
-                <StackPane fx:id="island10" layoutX="337.0" layoutY="254.0" prefHeight="192.0" prefWidth="204.0">
+                <StackPane fx:id="island10" layoutX="245.0" layoutY="227.0" prefHeight="192.0" prefWidth="204.0">
                     <children>
                         <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="337.0" layoutY="274.0">
                             <image>
@@ -353,31 +353,28 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>
-            <StackPane layoutX="852.0" layoutY="350.0" prefHeight="150.0" prefWidth="200.0">
+            <StackPane layoutX="855.0" layoutY="237.0" prefHeight="150.0" prefWidth="200.0">
                <children>
                   <ImageView fx:id="cloud1" fitHeight="207.0" fitWidth="225.0">
                      <image>
                         <Image url="@../assets/Cloud.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="student0_00" fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </StackPane>
-            <StackPane layoutX="621.0" layoutY="501.0" prefHeight="150.0" prefWidth="200.0">
+            <StackPane layoutX="618.0" layoutY="576.0" prefHeight="150.0" prefWidth="200.0">
                <children>
                   <ImageView fx:id="cloud0" fitHeight="207.0" fitWidth="225.0">
                      <image>
                         <Image url="@../assets/Cloud.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="cloud0_1" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-20.0" />
-                  <ImageView fx:id="cloud0_0" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-30.0" />
-                  <ImageView fx:id="cloud0_3" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="10.0" translateY="20.0" />
-                  <ImageView fx:id="cloud0_2" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-10.0" />
                </children>
             </StackPane>
             <Circle fill="#1f93ff00" layoutX="846.0" layoutY="540.0" radius="540.0" stroke="BLACK" strokeType="INSIDE" />
             <Label layoutX="61.0" layoutY="131.0" prefHeight="78.0" prefWidth="206.0" text="R_circle = 540px. C = (846, 540)" />
+            <Label layoutX="52.0" layoutY="236.0" prefHeight="27.0" prefWidth="224.0" text="W_Island = 204   H_Island = 192" />
+            <Label layoutX="61.0" layoutY="323.0" prefHeight="17.0" prefWidth="202.0" text="W_Student = H_Student = 55" />
             </children>
         </AnchorPane>
    </left>

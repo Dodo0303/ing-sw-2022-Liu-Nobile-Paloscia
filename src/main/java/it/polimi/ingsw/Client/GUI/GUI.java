@@ -263,70 +263,7 @@ public class GUI {
             serverHandler.send(message);
         }
     }
-/* //todo : this part of code is a shit mountain, will be substituted in a few days.
-    private void initBoardView(GameBoardController gameBoardController) {
-        for (int i = 0; i < getGame().getNumIslands(); i++) {
-            Island island = getGame().getIslands().get(i);
-            for (StudentColor color : StudentColor.values()) {
-                if (island.getStudents().get(color) != 0) {
-                    if (color.equals(StudentColor.GREEN)) {
-                        Image img1 = new Image("/assets/Students/green.png");
-                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img1));
-                    } else if (color.equals(StudentColor.BLUE)) {
-                        Image img2 = new Image("/assets/Students/blue.png");
-                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img2));
-                    } else if (color.equals(StudentColor.PINK)) {
-                        Image img3 = new Image("/assets/Students/pink.png");
-                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img3));
-                    } else if (color.equals(StudentColor.RED)) {
-                        Image img4 = new Image("/assets/Students/red.png");
-                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img4));
-                    } else if (color.equals(StudentColor.YELLOW)) {
-                        Image img5 = new Image("/assets/Students/yellow.png");
-                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img5));
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < getGame().getClouds().size(); i++) {
-            for (StudentColor color : getGame().getClouds().get(i).getStudents()) {
-                if (color.equals(StudentColor.GREEN)) {
-                    Image img1 = new Image("/assets/Students/green.png");
-                    ImageView imageView = new ImageView(img1);
-                    imageView.setFitHeight(35);
-                    imageView.setFitWidth(35);
-                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
-                } else if (color.equals(StudentColor.BLUE)) {
-                    Image img2 = new Image("/assets/Students/blue.png");
-                    ImageView imageView = new ImageView(img2);
-                    imageView.setFitHeight(35);
-                    imageView.setFitWidth(35);
-                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
-                } else if (color.equals(StudentColor.PINK)) {
-                    Image img3 = new Image("/assets/Students/pink.png");
-                    ImageView imageView = new ImageView(img3);
-                    imageView.setFitHeight(35);
-                    imageView.setFitWidth(35);
-                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
-                } else if (color.equals(StudentColor.RED)) {
-                    Image img4 = new Image("/assets/Students/red.png");
-                    ImageView imageView = new ImageView(img4);
-                    imageView.setFitHeight(35);
-                    imageView.setFitWidth(35);
-                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
-                } else if (color.equals(StudentColor.YELLOW)) {
-                    Image img5 = new Image("/assets/Students/yellow.png");
-                    ImageView imageView = new ImageView(img5);
-                    imageView.setFitHeight(35);
-                    imageView.setFitWidth(35);
-                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
-                }
-            }
-        }
-    }
 
-
- */
     public void startServerHandler() {
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
