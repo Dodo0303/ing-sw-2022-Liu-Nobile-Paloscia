@@ -25,7 +25,6 @@ public class ChangeTurnMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        System.out.println(playerNickname + " " +ch.getClient().getNickname());
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
             if (ch.getClient().getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setPhase(Phase.Planning);
@@ -42,11 +41,10 @@ public class ChangeTurnMessage extends MessageToClient {
     }
 //todo
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
-        System.out.println(playerNickname + " " +ch.getClient().getNickname());
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
             if (ch.getClient().getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Planning);
-                //ch.getClient().playAssistant();
+                ch.getClient().playAssistant("");
             } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Action1);
                 //ch.getClient().moveStudentsFromEntrance();

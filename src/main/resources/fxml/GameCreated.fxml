@@ -32,7 +32,7 @@
                   <Image url="@../assets/loadingSpinner.png" />
                </image>
             </ImageView>
-            <Label layoutX="104.0" layoutY="324.0" text="Waiting for players..." />
+            <Label fx:id="waitingLabel" layoutX="104.0" layoutY="324.0" text="Waiting for players..." />
             </children>
         </AnchorPane>
     </right>

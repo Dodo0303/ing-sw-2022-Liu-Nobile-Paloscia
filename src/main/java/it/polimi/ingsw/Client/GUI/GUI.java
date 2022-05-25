@@ -1,20 +1,20 @@
 package it.polimi.ingsw.Client.GUI;
 
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.GUI.Controllers.ChooseAssistantController;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
+import it.polimi.ingsw.Client.GUI.Controllers.GameBoardController;
 import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.ChooseWizardController;
-import it.polimi.ingsw.Model.GameModel;
-import it.polimi.ingsw.Model.Wizard;
+import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,6 +32,7 @@ public class GUI {
     private int numPlayer;
     private boolean expert;
     private List<Wizard> wizards;
+    private Assistant assistant;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -210,8 +211,49 @@ public class GUI {
         }
     }
 
-    public void playAssistant() {
-        //todo
+    public void playAssistant(String msg) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant.fxml"));
+            Parent root = fxmlLoader.load();
+            ChooseAssistantController chooseAssistantController = fxmlLoader.getController();
+            chooseAssistantController.setGUI(this);
+            for (int i = 0; i < 10; i++) {
+                if (getGame().getPlayers().get(getGame().getPlayerIndexFromNickname(getNickname())).getAssistants().get(i) == null) {
+                    chooseAssistantController.disableRadio(i);
+                }
+            }
+            if (!Objects.equals(msg, "")) {
+                chooseAssistantController.setMessage(msg);
+            }
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkBoard() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            GameBoardController gameBoardController = fxmlLoader.getController();
+            gameBoardController.setGUI(this);
+            //initBoardView(gameBoardController);
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void send(Object message) {
@@ -221,7 +263,70 @@ public class GUI {
             serverHandler.send(message);
         }
     }
+/* //todo : this part of code is a shit mountain, will be substituted in a few days.
+    private void initBoardView(GameBoardController gameBoardController) {
+        for (int i = 0; i < getGame().getNumIslands(); i++) {
+            Island island = getGame().getIslands().get(i);
+            for (StudentColor color : StudentColor.values()) {
+                if (island.getStudents().get(color) != 0) {
+                    if (color.equals(StudentColor.GREEN)) {
+                        Image img1 = new Image("/assets/Students/green.png");
+                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img1));
+                    } else if (color.equals(StudentColor.BLUE)) {
+                        Image img2 = new Image("/assets/Students/blue.png");
+                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img2));
+                    } else if (color.equals(StudentColor.PINK)) {
+                        Image img3 = new Image("/assets/Students/pink.png");
+                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img3));
+                    } else if (color.equals(StudentColor.RED)) {
+                        Image img4 = new Image("/assets/Students/red.png");
+                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img4));
+                    } else if (color.equals(StudentColor.YELLOW)) {
+                        Image img5 = new Image("/assets/Students/yellow.png");
+                        gameBoardController.getStackPaneByIndex(i).getChildren().add(new ImageView(img5));
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < getGame().getClouds().size(); i++) {
+            for (StudentColor color : getGame().getClouds().get(i).getStudents()) {
+                if (color.equals(StudentColor.GREEN)) {
+                    Image img1 = new Image("/assets/Students/green.png");
+                    ImageView imageView = new ImageView(img1);
+                    imageView.setFitHeight(35);
+                    imageView.setFitWidth(35);
+                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
+                } else if (color.equals(StudentColor.BLUE)) {
+                    Image img2 = new Image("/assets/Students/blue.png");
+                    ImageView imageView = new ImageView(img2);
+                    imageView.setFitHeight(35);
+                    imageView.setFitWidth(35);
+                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
+                } else if (color.equals(StudentColor.PINK)) {
+                    Image img3 = new Image("/assets/Students/pink.png");
+                    ImageView imageView = new ImageView(img3);
+                    imageView.setFitHeight(35);
+                    imageView.setFitWidth(35);
+                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
+                } else if (color.equals(StudentColor.RED)) {
+                    Image img4 = new Image("/assets/Students/red.png");
+                    ImageView imageView = new ImageView(img4);
+                    imageView.setFitHeight(35);
+                    imageView.setFitWidth(35);
+                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
+                } else if (color.equals(StudentColor.YELLOW)) {
+                    Image img5 = new Image("/assets/Students/yellow.png");
+                    ImageView imageView = new ImageView(img5);
+                    imageView.setFitHeight(35);
+                    imageView.setFitWidth(35);
+                    gameBoardController.getStackPaneByIndex(i).getChildren().add(imageView);
+                }
+            }
+        }
+    }
 
+
+ */
     public void startServerHandler() {
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
@@ -251,15 +356,11 @@ public class GUI {
             ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
         }  else if (message instanceof ChangeTurnMessage) {
             System.out.println(currPhase.toString() + " to " + ((ChangeTurnMessage) message).getPhase().toString());//TODO DELETE AFTER TESTS
-            if (currPhase.equals(Phase_GUI.GameJoined) && ((ChangeTurnMessage) message).getPhase().equals(Phase_GUI.Planning)) {
-                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
-            } else if (currPhase.equals(Phase_GUI.Planning) && ((ChangeTurnMessage) message).getPhase().equals(Phase_GUI.Action1)) {
-                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
-            } else if (currPhase.equals(Phase_GUI.Action3) && ((ChangeTurnMessage) message).getPhase().equals(Phase_GUI.Planning)) {
-                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
-            }
+            ((ChangeTurnMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof CloudsUpdateMessage) {
             ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof UsedAssistantMessage) {
+            ((UsedAssistantMessage) message).processGUI(this.serverHandler);
         }
     }
 
@@ -325,5 +426,10 @@ public class GUI {
 
     public void setGame(GameModel game) {
         this.game = game;
+    }
+
+
+    public void setAssistant(Assistant assistant) {
+        this.assistant = assistant;
     }
 }

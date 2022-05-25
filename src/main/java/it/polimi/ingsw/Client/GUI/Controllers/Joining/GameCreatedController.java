@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class GameCreatedController implements Initializable {
     @FXML
-    private Label messageLabel;
+    private Label messageLabel, waitingLabel;
     @FXML
     private ImageView load;
 
@@ -35,7 +35,7 @@ public class GameCreatedController implements Initializable {
     }
 
     public void setMessage(String message) {
-        messageLabel.setText(message);
+        waitingLabel.setText(message);
     }
     public void setGUI(GUI gui) {
         this.gui = gui;

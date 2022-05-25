@@ -4,5 +4,7 @@ import java.io.Serializable;
 
 public enum StudentColor implements Serializable {
     /** Possible student colors. */
-    GREEN, BLUE, YELLOW, RED, PINK
+    GREEN, BLUE, YELLOW, RED, PINK;
+
+
 }
