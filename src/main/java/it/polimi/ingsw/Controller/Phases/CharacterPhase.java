@@ -8,6 +8,7 @@ import it.polimi.ingsw.Controller.MatchController;
 import it.polimi.ingsw.Controller.ProfessorChecker.SpecialProfessorChecker;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
@@ -31,6 +32,7 @@ public class CharacterPhase extends Phase{
                 try { //TODO Manage the computation of the influence when there is a no entry tile in an island
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.addNoEntryToIsland(((MoveNoEntryMessage) msg).getIslandID());
+                    match.broadcastMessage(new NoEntryMovedMessage(((MoveNoEntryMessage) msg).getIslandID()));
                 } catch (NotEnoughNoEntriesException | WrongEffectException e) {
                     match.denyMovement(ch);
                 }
@@ -42,6 +44,7 @@ public class CharacterPhase extends Phase{
                 try {
                     StudentColor colorChosen = match.useCharacter(ch.getNickname(), expectedCharacterID, ((MoveStudentFromCharacterMessage) msg).getStudentIndex(), true);
                     match.moveStudentToIsland(((MoveStudentFromCharacterMessage) msg).getIslandID(), colorChosen);
+                    match.broadcastMessage(new StudentMovedFromCharacterMessage(match.getGame().getCharacterById(expectedCharacterID), match.getGame().getIslands()));
                 } catch (EmptyBagException | WrongEffectException e) {
                     match.denyMovement(ch);
                 }
@@ -54,6 +57,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.conquerAndJoinIslands(((ChooseIslandMessage) msg).getIslandID());
+                    match.broadcastMessage(new IslandChosenMessage(match.getGame().getIslands()));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     match.denyMovement(ch);
@@ -66,6 +70,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new ExcludeColorInfluenceCalculator(((ChooseStudentColorMessage) msg).getStudentColor()));
+                    match.broadcastMessage(new StudentColorChosenMessage( false, ((ChooseStudentColorMessage) msg).getStudentColor(), null));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     match.denyMovement(ch);
@@ -76,6 +81,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.removeThreeStudentsFromTables(((ChooseStudentColorMessage) msg).getStudentColor());
+                    match.broadcastMessage(new StudentColorChosenMessage(true, ((ChooseStudentColorMessage) msg).getStudentColor(), match.getGame().getPlayers()));
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     match.denyMovement(ch);
                     e.printStackTrace();
@@ -96,6 +102,7 @@ public class CharacterPhase extends Phase{
                         for (int i = 0; i < numOfSwap; i++) {
                             match.swapStudentsEntranceAndTable(ch.getNickname(), ((SwapStudentsTableEntranceMessage) msg).getEntrancePosition()[i], ((SwapStudentsTableEntranceMessage) msg).getTable()[i]);
                         }
+                        match.broadcastMessage(new EntranceTableSwappedMessage(match.getCurrentPlayerID(), ((SwapStudentsTableEntranceMessage) msg).getTable(), match.getGame().getEntranceOfPlayer(match.getGame().getPlayerByNickname(match.getCurrentPlayerID()))));
                     } catch (EmptyTableException | FullTableException | WrongEffectException | NotEnoughNoEntriesException e) {
                         e.printStackTrace();
                         match.denyMovement(ch);
@@ -110,6 +117,7 @@ public class CharacterPhase extends Phase{
                 try {
                     StudentColor studentChosen = match.useCharacter(ch.getNickname(), expectedCharacterID, ((MoveStudentsToTableMessage) msg).getIndex(), true);
                     match.addStudentToTable(ch.getNickname(), studentChosen);
+                    match.broadcastMessage(new StudentMovedToTableMessage(match.getCurrentPlayerID(), studentChosen, match.getGame().getCharacterById(expectedCharacterID)));
                 } catch (EmptyBagException | WrongEffectException | FullTableException e) {
                     match.denyMovement(ch);
                     e.printStackTrace();
@@ -136,6 +144,8 @@ public class CharacterPhase extends Phase{
                             match.addStudentToEntrance(ch.getNickname(), colorPicked);
 
                         }
+
+                        match.broadcastMessage(new CharacterEntranceSwappedMessage(match.getCurrentPlayerID(), match.getGame().getEntranceOfPlayer(match.getGame().getPlayerByNickname(match.getCurrentPlayerID())), match.getGame().getCharacterById(expectedCharacterID)));
                     } catch (WrongEffectException e) {
                         e.printStackTrace();
                         match.denyMovement(ch);
@@ -148,6 +158,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setProfessorChecker(new SpecialProfessorChecker());
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -156,6 +168,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setAdditionalMoves();
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -164,6 +178,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new NoTowerInfluenceCalculator());
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -172,6 +188,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new AdditionalPointsInfluenceCalculator(ch.getNickname()));
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -181,8 +199,8 @@ public class CharacterPhase extends Phase{
             return;
         } else {
             match.denyMovement(ch);
-            System.out.println("character message expected, received: " + msg.getClass());
-        }//TODO Broadcast ack messages
+            System.out.println("Character message expected, received: " + msg.getClass());
+        }//TODO process of ack messages
         nextPhase();
     }
 

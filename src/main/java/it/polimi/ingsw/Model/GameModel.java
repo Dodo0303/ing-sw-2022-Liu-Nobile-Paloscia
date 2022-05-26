@@ -178,6 +178,10 @@ public class GameModel implements Serializable {
         }
     }
 
+    public List<StudentColor> getEntranceOfPlayer(Player player) {
+        return player.getEntranceStudents();
+    }
+
     /** @return number of coins not obtained by any player */
     int getSpareCoins() {
         return this._spareCoins;
