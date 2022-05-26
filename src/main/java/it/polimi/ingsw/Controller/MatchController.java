@@ -683,6 +683,17 @@ public class MatchController implements Runnable {
         }
     }
 
+    /**
+     * Broadcast any message to all the clients of this match
+     * @param message message to be sent
+     */
+    public void broadcastMessage(MessageToClient message) {
+        for (ClientHandler client :
+                clients) {
+            client.send(message);
+        }
+    }
+
     public Player getWinner() {
 
         Player winner = null;
