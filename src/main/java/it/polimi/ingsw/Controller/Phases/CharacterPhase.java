@@ -102,7 +102,7 @@ public class CharacterPhase extends Phase{
                         for (int i = 0; i < numOfSwap; i++) {
                             match.swapStudentsEntranceAndTable(ch.getNickname(), ((SwapStudentsTableEntranceMessage) msg).getEntrancePosition()[i], ((SwapStudentsTableEntranceMessage) msg).getTable()[i]);
                         }
-                        match.broadcastMessage(new StudentsSwappedMessage(match.getCurrentPlayerID(), ((SwapStudentsTableEntranceMessage) msg).getTable(), match.getGame().getEntranceOfPlayer(match.getGame().getPlayerByNickname(match.getCurrentPlayerID()))));
+                        match.broadcastMessage(new EntranceTableSwappedMessage(match.getCurrentPlayerID(), ((SwapStudentsTableEntranceMessage) msg).getTable(), match.getGame().getEntranceOfPlayer(match.getGame().getPlayerByNickname(match.getCurrentPlayerID()))));
                     } catch (EmptyTableException | FullTableException | WrongEffectException | NotEnoughNoEntriesException e) {
                         e.printStackTrace();
                         match.denyMovement(ch);
@@ -117,6 +117,7 @@ public class CharacterPhase extends Phase{
                 try {
                     StudentColor studentChosen = match.useCharacter(ch.getNickname(), expectedCharacterID, ((MoveStudentsToTableMessage) msg).getIndex(), true);
                     match.addStudentToTable(ch.getNickname(), studentChosen);
+                    match.broadcastMessage(new StudentMovedToTableMessage(match.getCurrentPlayerID(), studentChosen, match.getGame().getCharacterById(expectedCharacterID)));
                 } catch (EmptyBagException | WrongEffectException | FullTableException e) {
                     match.denyMovement(ch);
                     e.printStackTrace();
@@ -143,6 +144,8 @@ public class CharacterPhase extends Phase{
                             match.addStudentToEntrance(ch.getNickname(), colorPicked);
 
                         }
+
+                        match.broadcastMessage(new CharacterEntranceSwappedMessage(match.getCurrentPlayerID(), match.getGame().getEntranceOfPlayer(match.getGame().getPlayerByNickname(match.getCurrentPlayerID())), match.getGame().getCharacterById(expectedCharacterID)));
                     } catch (WrongEffectException e) {
                         e.printStackTrace();
                         match.denyMovement(ch);
@@ -155,6 +158,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setProfessorChecker(new SpecialProfessorChecker());
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -163,6 +168,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setAdditionalMoves();
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -171,6 +178,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new NoTowerInfluenceCalculator());
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -179,6 +188,8 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new AdditionalPointsInfluenceCalculator(ch.getNickname()));
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
                     match.denyMovement(ch);
@@ -189,7 +200,7 @@ public class CharacterPhase extends Phase{
         } else {
             match.denyMovement(ch);
             System.out.println("Character message expected, received: " + msg.getClass());
-        }//TODO Broadcast ack messages
+        }//TODO process of ack messages
         nextPhase();
     }
 
