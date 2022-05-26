@@ -23,9 +23,7 @@ public class ChooseAssistantController implements Initializable {
     @FXML
     private RadioButton radio1, radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9, radio10;
     @FXML
-    private ImageView pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9, pic10;
-    @FXML
-    private Button ConfirmButton, goToBoardButton;
+    private Button ConfirmButton, CheckBoardButton;
     @FXML
     private Label messageLabel;
     @FXML
@@ -84,7 +82,7 @@ public class ChooseAssistantController implements Initializable {
             radio9.setDisable(true);
             radio10.setDisable(true);
             ConfirmButton.setDisable(true);
-            goToBoardButton.setDisable(true);
+            CheckBoardButton.setDisable(true);
             gui.send(new SendAssistantMessage(assistant));
         } else {
             setMessage("This card is not available");

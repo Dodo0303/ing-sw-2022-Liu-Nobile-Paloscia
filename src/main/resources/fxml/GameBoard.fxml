@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -10,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.GameBoardController">
@@ -90,265 +90,13 @@
       </AnchorPane>
    </right>
    <left>
-        <AnchorPane prefHeight="1080.0" prefWidth="1557.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1557.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="messageLabel" alignment="CENTER" layoutX="51.0" layoutY="884.0" prefHeight="70.0" prefWidth="286.0">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
-                <StackPane fx:id="island0" layoutX="741.0" layoutY="3.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                  <ImageView fx:id="stud00_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                  <ImageView fx:id="stud00_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                  <ImageView fx:id="stud00_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                  <ImageView fx:id="stud00_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="stud00_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                  <ImageView fx:id="stud00_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                  <ImageView fx:id="stud00_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                  <ImageView fx:id="stud00_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                  <ImageView fx:id="stud00_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                  <ImageView fx:id="mn0" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                  <ImageView fx:id="t01" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                  <ImageView fx:id="t02" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="741.0" layoutY="26.0">
-                            <image>
-                                <Image url="@../assets/Island1.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island11" layoutX="405.0" layoutY="35.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="511.0" layoutY="110.0">
-                            <image>
-                                <Image url="@../assets/Island2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud11_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud11_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud11_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud11_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud11_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud11_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud11_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud11_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud11_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn11" fitHeight="60.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="90.0" translateY="-60.0" />
-                        <ImageView fx:id="t11_1" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t11_2" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island8" layoutX="267.0" layoutY="696.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="337.0" layoutY="660.0">
-                            <image>
-                                <Image url="@../assets/Island3.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud08_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud08_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud08_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud08_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud08_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud08_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud08_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud08_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud08_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn8" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t81" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t82" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island4" layoutX="1229.0" layoutY="679.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="1181.0" layoutY="646.0">
-                            <image>
-                                <Image url="@../assets/Island2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud04_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud04_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud04_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud04_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud04_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud04_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud04_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud04_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud04_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn4" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t41" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t42" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island7" layoutX="431.0" layoutY="884.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="541.0" layoutY="788.0">
-                            <image>
-                                <Image url="@../assets/Island2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud07_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud07_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud07_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud07_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud07_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud07_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud07_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud07_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud07_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn7" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t71" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t72" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island3" layoutX="1284.0" layoutY="454.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="1313.0" layoutY="453.0">
-                            <image>
-                                <Image url="@../assets/Island1.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud03_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud03_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud03_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud03_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud03_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud03_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud03_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud03_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud03_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn3" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t31" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t32" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island6" layoutX="741.0" layoutY="888.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0">
-                            <image>
-                                <Image url="@../assets/Island1.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud06_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud06_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud06_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud06_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud06_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud06_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud06_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud06_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud06_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn6" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t61" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t62" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island2" layoutX="1223.0" layoutY="195.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="1146.0" layoutY="282.0">
-                            <image>
-                                <Image url="@../assets/Island3.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud02_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud02_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud02_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud02_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud02_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud02_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud02_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud02_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud02_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn2" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t21" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t22" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island1" layoutX="1056.0" layoutY="14.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="957.0" layoutY="122.0">
-                            <image>
-                                <Image url="@../assets/Island3.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud01_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud01_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud01_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud01_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud01_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud01_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud01_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud01_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud01_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn1" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t11" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t12" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island9" layoutX="204.0" layoutY="454.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="198.0" layoutY="470.0">
-                            <image>
-                                <Image url="@../assets/Island2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud09_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud09_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud09_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud09_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud09_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud09_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud09_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud09_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud09_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn9" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t91" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t92" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island5" layoutX="1056.0" layoutY="874.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="957.0" layoutY="788.0">
-                            <image>
-                                <Image url="@../assets/Island2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud05_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud05_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud05_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud05_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud05_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud05_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud05_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud05_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud05_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn5" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t51" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t52" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
-                <StackPane fx:id="island10" layoutX="245.0" layoutY="227.0" prefHeight="192.0" prefWidth="204.0">
-                    <children>
-                        <ImageView fitHeight="192.0" fitWidth="204.0" layoutX="337.0" layoutY="274.0">
-                            <image>
-                                <Image url="@../assets/Island2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="stud10_01" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud10_02" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="-60.0" />
-                        <ImageView fx:id="stud10_03" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" translateY="-60.0" />
-                        <ImageView fx:id="stud10_05" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="stud10_04" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-40.0" />
-                        <ImageView fx:id="stud10_06" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="40.0" />
-                        <ImageView fx:id="stud10_07" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="-60.0" translateY="40.0" />
-                        <ImageView fx:id="stud10_08" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateY="40.0" />
-                        <ImageView fx:id="stud10_09" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" translateY="40.0" />
-                        <ImageView fx:id="mn10" fitHeight="90.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" rotate="39.3" translateX="100.0" translateY="-70.0" />
-                        <ImageView fx:id="t10_1" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-45.0" translateX="-100.0" translateY="-70.0" />
-                        <ImageView fx:id="t10_2" fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" rotate="-98.5" translateX="-100.0" translateY="50.0" />
-                    </children>
-                </StackPane>
             <Button fx:id="menuButton" layoutX="5.0" layoutY="3.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="196.0" style="-fx-background-color: #69bae9;" text="Under Construction..." textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -359,6 +107,9 @@
                      <image>
                         <Image url="@../assets/Cloud.png" />
                      </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
                   </ImageView>
                </children>
             </StackPane>
@@ -371,10 +122,6 @@
                   </ImageView>
                </children>
             </StackPane>
-            <Circle fill="#1f93ff00" layoutX="846.0" layoutY="540.0" radius="540.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label layoutX="61.0" layoutY="131.0" prefHeight="78.0" prefWidth="206.0" text="R_circle = 540px. C = (846, 540)" />
-            <Label layoutX="52.0" layoutY="236.0" prefHeight="27.0" prefWidth="224.0" text="W_Island = 204   H_Island = 192" />
-            <Label layoutX="61.0" layoutY="323.0" prefHeight="17.0" prefWidth="202.0" text="W_Student = H_Student = 55" />
             </children>
         </AnchorPane>
    </left>

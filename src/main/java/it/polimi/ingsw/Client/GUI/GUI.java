@@ -243,7 +243,7 @@ public class GUI {
             Parent root = fxmlLoader.load();
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
-            //initBoardView(gameBoardController);
+            gameBoardController.drawIslands(getGame().getIslands().size());
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
