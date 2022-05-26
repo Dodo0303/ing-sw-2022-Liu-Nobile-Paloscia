@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GUI;
 import it.polimi.ingsw.Client.GUI.Controllers.ChooseAssistantController;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
 import it.polimi.ingsw.Client.GUI.Controllers.GameBoardController;
+import it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController;
 import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.ChooseWizardController;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
@@ -244,6 +245,30 @@ public class GUI {
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
             gameBoardController.drawIslands(getGame().getIslands().size());
+            gameBoardController.drawClouds(game.getPlayers().size());
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewSchoolBoard(boolean twoPlayer) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            SchoolBoardController schoolBoardController = fxmlLoader.getController();
+            schoolBoardController.setGUI(this);
+            schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
+            if (twoPlayer) {
+                schoolBoardController.drawSchoolBoard(game.getPlayers().get(0));
+                schoolBoardController.drawSchoolBoard(game.getPlayers().get(1));
+            } //todo
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
