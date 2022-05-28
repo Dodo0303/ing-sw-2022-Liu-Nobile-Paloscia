@@ -588,7 +588,7 @@ public class MatchController implements Runnable {
                 }
             }
         } else {
-            throw new GameException("Wizard not available");
+            throw new GameException("Wizard " + wizard.toString() + " not available");
         }
     }
 
@@ -635,8 +635,10 @@ public class MatchController implements Runnable {
 
     public boolean isWizardAvailable(Wizard wizard) {
         for (Wizard wizardChecked : wizards) {
-            if (wizardChecked == wizard)
+            if (wizardChecked == wizard) {
+                System.out.println(wizardChecked.toString() + " already taken");
                 return false;
+            }
         }
         return true;
     }

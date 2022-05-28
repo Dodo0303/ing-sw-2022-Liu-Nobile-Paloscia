@@ -218,7 +218,7 @@ public class CLI {
             send(new MatchChosenMessage(match));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.print("Something went wrong, please try agian.\n");
+            System.out.print("Something went wrong, please try again.\n");
             joinGame();
         }
     }

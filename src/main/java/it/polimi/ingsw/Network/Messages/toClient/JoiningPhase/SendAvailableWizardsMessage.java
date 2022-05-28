@@ -21,9 +21,8 @@ public class SendAvailableWizardsMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        if (ch.getClient().getCurrPhase().equals(Phase.JoiningGame1)) {
-            ch.getClient().setPhase(Phase.JoiningGame2);
-        }
+
+        ch.getClient().setPhase(Phase.JoiningGame2);
         int i = 1;
         ch.getClient().setWizards(this.wizards);
         System.out.println("Available wizards:");

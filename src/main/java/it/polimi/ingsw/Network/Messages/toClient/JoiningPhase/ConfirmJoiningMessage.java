@@ -38,13 +38,6 @@ public class ConfirmJoiningMessage extends MessageToClient {
             }
         } else {
             System.out.println(this.message);
-            if (message.equals("Wizard not available")) {
-                ch.getClient().setPhase(Phase.JoiningGame2);
-                ch.getClient().chooseWizard();
-            } else {
-                ch.getClient().setPhase(Phase.JoiningGame1);
-                ch.getClient().joinGame();
-            }
         }
     }
     //todo
