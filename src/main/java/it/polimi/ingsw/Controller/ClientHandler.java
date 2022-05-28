@@ -184,7 +184,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void sendAvailableWizards() throws IOException {
-        if (wizardAvailable()) {
+        if (!wizardAvailable()) {
             MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
             send(availableWizards);
         }
