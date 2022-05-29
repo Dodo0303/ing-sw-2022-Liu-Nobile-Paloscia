@@ -2,16 +2,23 @@ package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.DraggableMaker;
 import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -25,23 +32,40 @@ public class GameBoardController implements Initializable {
     private AnchorPane anchorPane;
     @FXML
     private StackPane cloud0, cloud1, cloud2, cloud3;
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private Button backButton;
     private ArrayList<Point> students, towers, cloudStudents;
-    private ArrayList<ImageView> imageViews;
+    private ArrayList<ImageView> islandImageViews, imageViews;
     private ArrayList<StackPane> clouds;
     private Point motherNature;
     private GUI gui;
+    private boolean moveStudent, moveMotherNature, chooseCloud;
+    private int studentIndex;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initCoords();
+        moveStudent = false;
+        moveMotherNature = false;
+        chooseCloud = false;
     }
 
     public void back() {
-        gui.playAssistant("");
+        if (moveStudent) {
+            gui.moveStudentsFromEntrance("Move a student");
+        } else {
+            gui.playAssistant("");
+        }
     }
 
     public void viewSchoolBoard() {
-        gui.viewSchoolBoard(true);
+        if (gui.getCurrPhase().equals(Phase_GUI.Action1)) {
+            gui.moveStudentsFromEntrance("");
+        } else {
+            gui.viewSchoolBoard("");
+        }
     }
 
     public void setGUI(GUI gui) {
@@ -50,6 +74,7 @@ public class GameBoardController implements Initializable {
 
     private void initCoords() {
         imageViews = new ArrayList<>();
+        islandImageViews = new ArrayList<>();
         students = new ArrayList<>();
         towers = new ArrayList<>();
         cloudStudents = new ArrayList<>();
@@ -88,6 +113,22 @@ public class GameBoardController implements Initializable {
         towers.add(new Point(-10, -40));
         towers.add(new Point(25, -80));
         motherNature = new Point(-50, -50);
+    }
+
+    public void cloud0Chosen() {
+        gui.send(new ChooseCloudMessage(0));
+    }
+
+    public void cloud1Chosen() {
+        gui.send(new ChooseCloudMessage(1));
+    }
+
+    public void cloud2Chosen() {
+        gui.send(new ChooseCloudMessage(2));
+    }
+
+    public void cloud3Chosen() {
+        gui.send(new ChooseCloudMessage(3));
     }
 
     public void drawClouds(int numClouds) {
@@ -135,22 +176,48 @@ public class GameBoardController implements Initializable {
         int y0 = 540;
         for (int i = 0; i < numIslands; i++) {
             Island island = gui.getGame().getIslands().get(i);
-            double x = 440 * Math.cos(2 * Math.PI * i / numIslands) + x0 - 100;
-            double y = 440 * Math.sin(2 * Math.PI * i / numIslands) + y0 - 100;
+            double x = 440 * Math.cos(2 * Math.PI * i / numIslands - Math.PI / 2) + x0 - 100;
+            double y = 440 * Math.sin(2 * Math.PI * i / numIslands - Math.PI / 2) + y0 - 100;
             StackPane stackPane = new StackPane();
             stackPane.setLayoutX(x);
             stackPane.setLayoutY(y);
             stackPane.setPrefWidth(200);
             stackPane.setPrefHeight(200);
-            imageViews.add(new ImageView());
-            ImageView imageView = imageViews.get(imageViews.size() - 1);
+            islandImageViews.add(new ImageView());
+            ImageView imageView = islandImageViews.get(islandImageViews.size() - 1);
             Image il = new Image("/assets/Island2.png");
             imageView.setImage(il);
             imageView.setFitWidth(190);
             imageView.setFitHeight(190);
+            if (moveStudent) {
+                imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    int islandChosen = islandImageViews.indexOf(imageView);
+                    gui.send(new MoveStudentFromEntranceMessage(studentIndex, 1, islandChosen));
+                    event.consume();
+                });
+            }
+            if (moveMotherNature) {
+                imageView.setOnDragOver(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent dragEvent) {
+                        if (dragEvent.getDragboard().hasImage()) {
+                            dragEvent.acceptTransferModes(TransferMode.COPY);
+                            dragEvent.consume();
+                        }
+                    }
+                });
+                imageView.setOnDragDropped(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent dragEvent) {
+                        dragEvent.setDropCompleted(true);
+                        int islandChosen = islandImageViews.indexOf(imageView);
+                        gui.send(new MoveMotherNatureMessage(islandChosen));
+                        dragEvent.consume();
+                    }
+                });
+            }
             stackPane.getChildren().add(imageView);
             ArrayList<Point> tempStudents = new ArrayList<>(students);
-            ArrayList<Point> tempTowers = new ArrayList<>(towers);
             for (StudentColor color : island.getStudents().keySet()) {
                 for (int j = 0; j < island.getStudents().get(color); j++) {
                     imageViews.add(new ImageView());
@@ -179,7 +246,8 @@ public class GameBoardController implements Initializable {
                     stackPane.getChildren().add(imageView1);
                 }
             }
-            for (int h = 0; i < island.getNumTower(); h++) {
+            ArrayList<Point> tempTowers = new ArrayList<>(towers);
+            for (int h = 0; h < island.getNumTower(); h++) {
                 imageViews.add(new ImageView());
                 ImageView imageView2 = imageViews.get(imageViews.size() - 1);
                 if (island.getTowerColor().equals(Color.WHITE)) {
@@ -208,9 +276,47 @@ public class GameBoardController implements Initializable {
                 imageView3.setTranslateY(-50);
                 imageView3.setFitWidth(20);
                 imageView3.setFitHeight(30);
+                if (moveMotherNature) {
+                    imageView3.addEventFilter(MouseEvent.DRAG_DETECTED, event -> {
+                        Dragboard dragboard = imageView3.startDragAndDrop(TransferMode.COPY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(mot);
+                        dragboard.setContent(content);
+                    });
+                }
                 stackPane.getChildren().add(imageView3);
             }
             anchorPane.getChildren().add(stackPane);
         }
     }
+
+    public void disableBack() {
+        backButton.setDisable(true);
+        backButton.setVisible(false);
+    }
+
+    public void setMessage(String msg) {
+        messageLabel.setText(msg);
+    }
+
+
+    public void setMoveStudent(boolean moveStudent) {
+        this.moveStudent = moveStudent;
+    }
+
+    public void setMoveMotherNature(boolean moveMotherNature) {
+        this.moveMotherNature = moveMotherNature;
+    }
+
+    public void setChooseCloud(boolean chooseCloud) {
+        this.chooseCloud = chooseCloud;
+    }
+
+    public void setStudentIndex(int studentIndex) {
+        this.studentIndex = studentIndex;
+    }
+
+
+
+
 }

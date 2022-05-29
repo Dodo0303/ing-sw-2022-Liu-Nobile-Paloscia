@@ -23,7 +23,7 @@ public class ActionPhase1 extends Phase {
         if (!(msg instanceof MoveStudentFromEntranceMessage || msg instanceof UseCharacterMessage)) {
             match.denyMovement(ch);
         } else if (msg instanceof MoveStudentFromEntranceMessage) {
-            System.out.println(((MoveStudentFromEntranceMessage) msg).getStudentIndex() + ((MoveStudentFromEntranceMessage) msg).getDestination() + ((MoveStudentFromEntranceMessage) msg).getDestinationID()); //TODO DEL AFTER TEST
+            System.out.println(((MoveStudentFromEntranceMessage) msg).getStudentIndex() + " " + ((MoveStudentFromEntranceMessage) msg).getDestination() + " " + ((MoveStudentFromEntranceMessage) msg).getDestinationID()); //TODO DEL AFTER TEST
             switch (((MoveStudentFromEntranceMessage) msg).getDestination()) {
 
                 // Move to dining room

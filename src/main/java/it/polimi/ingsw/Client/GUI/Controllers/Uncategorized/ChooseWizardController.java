@@ -54,6 +54,8 @@ public class ChooseWizardController implements Initializable {
             radio3.setDisable(true);
             radio4.setDisable(true);
             ConfirmButton.setDisable(true);
+        } else {
+            setMessage("Please choose a wizard.");
         }
         if (newgame) {
             gui.send(new SendStartInfoMessage(numPlayer, expert, wizard));

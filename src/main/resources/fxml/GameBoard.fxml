@@ -63,22 +63,18 @@
                   </Button>
                </children>
             </StackPane>
+                <Label fx:id="messageLabel" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="117.0" prefWidth="329.0">
+                    <font>
+                        <Font name="Papyrus" size="17.0" />
+                    </font>
+                </Label>
          </children>
       </AnchorPane>
    </right>
    <left>
         <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1557.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="messageLabel" alignment="CENTER" layoutX="51.0" layoutY="884.0" prefHeight="70.0" prefWidth="286.0">
-                    <font>
-                        <Font name="System Bold" size="20.0" />
-                    </font>
-                </Label>
-            <Button fx:id="menuButton" layoutX="5.0" layoutY="3.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="196.0" style="-fx-background-color: #69bae9;" text="Under Construction..." textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <StackPane fx:id="cloud1" layoutX="819.0" layoutY="333.0" prefHeight="150.0" prefWidth="200.0">
+            <StackPane fx:id="cloud1" layoutX="819.0" layoutY="333.0" onMouseClicked="#cloud1Chosen" prefHeight="150.0" prefWidth="200.0">
                <children>
                   <ImageView fitHeight="207.0" fitWidth="225.0">
                      <image>
@@ -90,7 +86,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="cloud0" layoutX="618.0" layoutY="576.0" prefHeight="150.0" prefWidth="200.0">
+            <StackPane fx:id="cloud0" layoutX="618.0" layoutY="576.0" onMouseClicked="#cloud0Chosen" prefHeight="150.0" prefWidth="200.0">
                <children>
                   <ImageView fitHeight="207.0" fitWidth="225.0">
                      <image>
@@ -99,7 +95,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="cloud2" layoutX="527.0" layoutY="333.0" prefHeight="150.0" prefWidth="200.0" visible="false">
+            <StackPane fx:id="cloud2" layoutX="527.0" layoutY="333.0" onMouseClicked="#cloud2Chosen" prefHeight="150.0" prefWidth="200.0" visible="false">
                <children>
                   <ImageView fitHeight="207.0" fitWidth="225.0">
                      <image>
@@ -111,7 +107,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="cloud3" layoutX="895.0" layoutY="576.0" prefHeight="150.0" prefWidth="200.0" visible="false">
+            <StackPane fx:id="cloud3" layoutX="895.0" layoutY="576.0" onMouseClicked="#cloud3Chosen" prefHeight="150.0" prefWidth="200.0" visible="false">
                <children>
                   <ImageView fitHeight="207.0" fitWidth="225.0">
                      <image>

@@ -31,4 +31,13 @@ public class ConfirmCloudMessage extends MessageToClient {
             client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)).addStudentToEntrance(color);
         }
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws EmptyCloudException {
+        StudentColor color;
+        int num = (client.getClient().getGame().getPlayers().size() == 3)? 4 : 3;
+        for (int i = 0; i < num; i++) {
+            color = client.getClient().getGame().getClouds().get(cloudID).extractStudent();
+            client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)).addStudentToEntrance(color);
+        }
+    }
 }

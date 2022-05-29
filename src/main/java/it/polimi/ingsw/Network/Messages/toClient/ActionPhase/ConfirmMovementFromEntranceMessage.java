@@ -49,4 +49,18 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
             client.getClient().getGame().addStudentToIsland(color, client.getClient().getGame().getIslands().get(destinationID));
         }
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        if (destination == 0) {
+            StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
+            try {
+                client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), color);
+            } catch (FullTableException e) {
+                e.printStackTrace();
+            }
+        } else if (destination == 1) {
+            StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
+            client.getClient().getGame().addStudentToIsland(color, client.getClient().getGame().getIslands().get(destinationID));
+        }
+    }
 }

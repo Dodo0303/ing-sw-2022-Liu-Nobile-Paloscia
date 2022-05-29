@@ -28,7 +28,7 @@ public class ActionPhase2 extends Phase {
                 return;
             }
 
-            match.broadcastMovement(((MoveMotherNatureMessage) msg).getIslandIndex());
+            match.broadcastMovement(match.getGame().getMotherNatureIndex());
 
             if (match.endedAtPhase2() == 1) {
                 match.endGame("Player built all towers.");

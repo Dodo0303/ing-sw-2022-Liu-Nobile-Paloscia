@@ -1,46 +1,98 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Model.Color;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.StudentMovedToTableMessage;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SchoolBoardController implements Initializable {
     @FXML
-    private Label MyNickname, OpponentNickname;
+    private Button otherBoardButton, backButton;
+    @FXML
+    private Label MyNickname, OpponentNickname, messageLabel, backLabel;
     @FXML
     private ImageView MyCard, OpponentCard;
     private GUI gui;
     private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers;
-    private ArrayList<StackPane> boards;
+    private ArrayList<String> players;
     private Point greenProf, redProf, yellowProf, pinkProf, blueProf;
     @FXML
-    private StackPane OpponentBoard, MyBoard;
+    private StackPane OpponentBoard, MyBoard, moveToIslandPane;
+    @FXML
+    private Rectangle tableArea;
     private ArrayList<ImageView> imageViews;
+    private boolean backButtonBool;
+    private int studentIndex;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initCoords();
+        backButtonBool = true;
+        players = new ArrayList<>();
+    }
+
+    public void handleDropOver(DragEvent dragEvent) {
+        if (dragEvent.getDragboard().hasImage()) {
+            dragEvent.acceptTransferModes(TransferMode.COPY);
+            dragEvent.consume();
+        }
+    }
+
+    public void handleIslandDrop(DragEvent dragEvent) {
+        dragEvent.setDropCompleted(true);
+        gui.moveStudentToIsland("Choose an island.", studentIndex);
+        studentIndex = -1;
+    }
+
+    public void handleTableDrop(DragEvent dragEvent) {
+        dragEvent.setDropCompleted(true);
+        MyBoard.setDisable(true);
+        backButton.setDisable(true);
+        otherBoardButton.setDisable(true);
+        gui.send(new MoveStudentFromEntranceMessage(studentIndex, 0, -1));
+        studentIndex = -1;
     }
 
     public void otherBoards() {
-        //todo
+        if (gui.getGame().getPlayers().size() != 4) {
+            OpponentBoard.setDisable(true);
+            OpponentBoard.setVisible(false);
+        }
+        for (Player player : gui.getGame().getPlayers()) {
+            if (!players.contains(player.getNickName())) {
+                drawSchoolBoard(player);
+            }
+        }
     }
 
     public void drawSchoolBoard(Player player) {
-        StackPane p;
-        if (player.getNickName().equals(gui.getNickname())) {
+        if (players.contains(player.getNickName())) {
+            return;
+        }
+        players.add(player.getNickName());
+        StackPane p = null;
+        if (players.size() == 1) {
             p = MyBoard;
             MyNickname.setText(player.getNickName());
             if (player.getUsedAssistant() != null) {
@@ -48,7 +100,7 @@ public class SchoolBoardController implements Initializable {
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
                 MyCard.setImage(image);
             }
-        } else {
+        } else if (players.size() == 2){
             p = OpponentBoard;
             OpponentNickname.setText(player.getNickName());
             if (player.getUsedAssistant() != null) {
@@ -57,61 +109,78 @@ public class SchoolBoardController implements Initializable {
                 OpponentCard.setImage(image);
             }
         }
+        //draw entrance
         for (int i = 0; i < gui.getGame().getEntranceOfPlayer(player).size(); i++) {
             StudentColor stud = gui.getGame().getEntranceOfPlayer(player).get(i);
+            Image stuImage = null;
             imageViews.add(new ImageView());
             ImageView imageView1 = imageViews.get(imageViews.size() - 1);
             if (stud.equals(StudentColor.GREEN)) {
-                Image stu = new Image("/assets/Students/green.png");
-                imageView1.setImage(stu);
+                stuImage = new Image("/assets/Students/green.png");
+                imageView1.setImage(stuImage);
             } else if (stud.equals(StudentColor.RED)) {
-                Image stu = new Image("/assets/Students/red.png");
-                imageView1.setImage(stu);
+                stuImage = new Image("/assets/Students/red.png");
+                imageView1.setImage(stuImage);
             } else if (stud.equals(StudentColor.YELLOW)) {
-                Image stu = new Image("/assets/Students/yellow.png");
-                imageView1.setImage(stu);
+                stuImage = new Image("/assets/Students/yellow.png");
+                imageView1.setImage(stuImage);
             } else if (stud.equals(StudentColor.PINK)) {
-                Image stu = new Image("/assets/Students/pink.png");
-                imageView1.setImage(stu);
+                stuImage = new Image("/assets/Students/pink.png");
+                imageView1.setImage(stuImage);
             } else if (stud.equals(StudentColor.BLUE)) {
-                Image stu = new Image("/assets/Students/blue.png");
-                imageView1.setImage(stu);
+                stuImage = new Image("/assets/Students/blue.png");
+                imageView1.setImage(stuImage);
             }
             imageView1.setFitHeight(35);
             imageView1.setFitWidth(35);
             Point temp = entrance.get(i);
             imageView1.setTranslateX(temp.getX());
             imageView1.setTranslateY(temp.getY());
+            Image finalStuImage = stuImage;
+            if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Action1)) {
+                imageView1.setOnDragDetected(evt -> {
+                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(finalStuImage);
+                    dragboard.setContent(content);
+                    for (Point point : entrance) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            studentIndex = entrance.indexOf(point);
+                        }
+                    }
+                });
+            } else if (players.size() == 3 || !gui.getCurrPhase().equals(Phase_GUI.Action1)){
+                tableArea.setDisable(true);
+            }
             p.getChildren().add(imageView1);
         }
-
+        //draw dining table
         for (StudentColor color : StudentColor.values()) {
-            int index = 0;
             int stud = player.getDiningTables().get(color).getNumOfStudents();
-            imageViews.add(new ImageView());
-            ImageView imageView1 = imageViews.get(imageViews.size() - 1);
-            Point temp = null;
             for (int i = 0; i < stud; i++) {
+                imageViews.add(new ImageView());
+                ImageView imageView1 = imageViews.get(imageViews.size() - 1);
+                Point temp = null;
                 if (color.equals(StudentColor.GREEN)) {
-                    Image stu = new Image("/assets/Students/green.png");
+                    Image stu = new Image("/assets/Students/mercury.png");
                     imageView1.setImage(stu);
-                    temp = greenStudents.get(index++);
+                    temp = greenStudents.get(i);
                 } else if (color.equals(StudentColor.RED)) {
-                    Image stu = new Image("/assets/Students/red.png");
+                    Image stu = new Image("/assets/Students/mercury.png");
                     imageView1.setImage(stu);
-                    temp = redStudents.get(index++);
+                    temp = redStudents.get(i);
                 } else if (color.equals(StudentColor.YELLOW)) {
-                    Image stu = new Image("/assets/Students/yellow.png");
+                    Image stu = new Image("/assets/Students/mercury.png");
                     imageView1.setImage(stu);
-                    temp = yellowStudents.get(index++);
+                    temp = yellowStudents.get(i);
                 } else if (color.equals(StudentColor.PINK)) {
-                    Image stu = new Image("/assets/Students/pink.png");
+                    Image stu = new Image("/assets/Students/mercury.png");
                     imageView1.setImage(stu);
-                    temp = pinkStudents.get(index++);
+                    temp = pinkStudents.get(i);
                 } else if (color.equals(StudentColor.BLUE)) {
-                    Image stu = new Image("/assets/Students/blue.png");
+                    Image stu = new Image("/assets/Students/mercury.png");
                     imageView1.setImage(stu);
-                    temp = blueStudents.get(index++);
+                    temp = blueStudents.get(i);
                 }
                 imageView1.setFitHeight(25);
                 imageView1.setFitWidth(25);
@@ -120,30 +189,30 @@ public class SchoolBoardController implements Initializable {
                 p.getChildren().add(imageView1);
             }
         }
-
+        //draw prof
         for (int i = 0; i < player.getProfessors().size(); i++) {
             StudentColor prof = player.getProfessors().get(i);
             imageViews.add(new ImageView());
             ImageView imageView1 = imageViews.get(imageViews.size() - 1);
             Point temp = null;
             if (prof.equals(StudentColor.GREEN)) {
-                Image stu = new Image("/assets/Students/green.png");
+                Image stu = new Image("/assets/Students/mercury.png");
                 imageView1.setImage(stu);
                 temp = greenProf;
             } else if (prof.equals(StudentColor.RED)) {
-                Image stu = new Image("/assets/Students/red.png");
+                Image stu = new Image("/assets/Students/mercury.png");
                 imageView1.setImage(stu);
                 temp = redProf;
             } else if (prof.equals(StudentColor.YELLOW)) {
-                Image stu = new Image("/assets/Students/yellow.png");
+                Image stu = new Image("/assets/Students/mercury.png");
                 imageView1.setImage(stu);
                 temp = yellowProf;
             } else if (prof.equals(StudentColor.PINK)) {
-                Image stu = new Image("/assets/Students/pink.png");
+                Image stu = new Image("/assets/Students/mercury.png");
                 imageView1.setImage(stu);
                 temp = pinkProf;
             } else if (prof.equals(StudentColor.BLUE)) {
-                Image stu = new Image("/assets/Students/blue.png");
+                Image stu = new Image("/assets/Students/mercury.png");
                 imageView1.setImage(stu);
                 temp = blueProf;
             }
@@ -154,7 +223,7 @@ public class SchoolBoardController implements Initializable {
             p.getChildren().add(imageView1);
         }
 
-        for (int i = 0; i < player.getTowerNum(); i++) {
+        for (int i = 0; i < player.getTowerNum(); i++) {//todo towernum does not update
             imageViews.add(new ImageView());
             ImageView imageView1 = imageViews.get(imageViews.size() - 1);
             Point temp = null;
@@ -180,7 +249,7 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void back() {
-        gui.checkBoard();
+        gui.checkBoard("");
     }
 
     private void initCoords() {
@@ -268,5 +337,26 @@ public class SchoolBoardController implements Initializable {
 
     public void setGUI(GUI gui) {
         this.gui = gui;
+        if (gui.getGame().getPlayers().size() > 2) {
+            otherBoardButton.setVisible(true);
+            otherBoardButton.setDisable(false);
+        }
+    }
+    public void setBackButton(boolean backButtonBool) {
+        this.backButtonBool = backButtonBool;
+    }
+
+    public void setMessage(String msg) {
+        messageLabel.setText(msg);
+    }
+    public void setBackMessage(String msg) {
+        backLabel.setText(msg);
+    }
+
+    public void enableMoveToIslandPane(boolean enable) {
+        if (enable) {
+            moveToIslandPane.setDisable(false);
+            moveToIslandPane.setVisible(true);
+        }
     }
 }

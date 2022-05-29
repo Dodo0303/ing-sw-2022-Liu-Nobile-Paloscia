@@ -1,15 +1,18 @@
 package it.polimi.ingsw.Client.GUI;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.GUI.Controllers.ChooseAssistantController;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
 import it.polimi.ingsw.Client.GUI.Controllers.GameBoardController;
 import it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController;
 import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.ChooseWizardController;
+import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Model.*;
-import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,6 +37,7 @@ public class GUI {
     private boolean expert;
     private List<Wizard> wizards;
     private Assistant assistant;
+    private int ap1Moves;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -41,6 +45,7 @@ public class GUI {
 
     public void start() {
         try {
+            ap1Moves = 0;
             stage.getIcons().add(new Image("icon.png"));
             stage.setResizable(false);
             stage.setTitle("Eriantys");
@@ -223,6 +228,11 @@ public class GUI {
                     chooseAssistantController.disableRadio(i);
                 }
             }
+            for (Player player : game.getPlayers()) {
+                if (!player.getNickName().equals(nickname) && player.getUsedAssistant() != null) {
+                    chooseAssistantController.disableRadio(player.getUsedAssistant().getValue());
+                }
+            }
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
@@ -238,14 +248,20 @@ public class GUI {
         }
     }
 
-    public void checkBoard() {
+    public void moveStudentsFromEntrance(String msg) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
             Parent root = fxmlLoader.load();
-            GameBoardController gameBoardController = fxmlLoader.getController();
-            gameBoardController.setGUI(this);
-            gameBoardController.drawIslands(getGame().getIslands().size());
-            gameBoardController.drawClouds(game.getPlayers().size());
+            SchoolBoardController schoolBoardController = fxmlLoader.getController();
+            schoolBoardController.setGUI(this);
+            schoolBoardController.enableMoveToIslandPane(true);
+            schoolBoardController.setBackMessage("View game board");
+            if (!Objects.equals(msg, "")) {
+                schoolBoardController.setMessage(msg);
+            }
+            schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
+            schoolBoardController.drawSchoolBoard(game.getPlayers().get(0));
+            schoolBoardController.drawSchoolBoard(game.getPlayers().get(1));
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -258,17 +274,123 @@ public class GUI {
         }
     }
 
-    public void viewSchoolBoard(boolean twoPlayer) {
+    public void moveStudentToIsland(String msg, int studentIndex) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            GameBoardController gameBoardController = fxmlLoader.getController();
+            gameBoardController.setGUI(this);
+            gameBoardController.setMoveStudent(true);
+            gameBoardController.drawIslands(getGame().getIslands().size());
+            gameBoardController.drawClouds(game.getPlayers().size());
+            if (!Objects.equals(msg, "")) {
+                gameBoardController.setMessage(msg);
+            }
+            gameBoardController.setStudentIndex(studentIndex);
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void moveMotherNature(String msg) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            GameBoardController gameBoardController = fxmlLoader.getController();
+            gameBoardController.setGUI(this);
+            gameBoardController.setMoveMotherNature(true);
+            gameBoardController.disableBack();
+            gameBoardController.drawIslands(getGame().getIslands().size());
+            gameBoardController.drawClouds(game.getPlayers().size());
+            if (!Objects.equals(msg, "")) {
+                gameBoardController.setMessage(msg);
+            }
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void chooseCloud(String msg) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            GameBoardController gameBoardController = fxmlLoader.getController();
+            gameBoardController.setGUI(this);
+            gameBoardController.setChooseCloud(true);
+            gameBoardController.disableBack();
+            gameBoardController.drawIslands(getGame().getIslands().size());
+            gameBoardController.drawClouds(game.getPlayers().size());
+            if (!Objects.equals(msg, "")) {
+                gameBoardController.setMessage(msg);
+            }
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkBoard(String msg) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            GameBoardController gameBoardController = fxmlLoader.getController();
+            gameBoardController.setGUI(this);
+            if (!currPhase.equals(Phase_GUI.Planning) && game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
+                gameBoardController.disableBack();
+            }
+            gameBoardController.drawIslands(game.getIslands().size());
+            gameBoardController.drawClouds(game.getPlayers().size());
+            if (!Objects.equals(msg, "")) {
+                gameBoardController.setMessage(msg);
+            }
+            if (!currPhase.equals(Phase_GUI.Planning) && game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
+                gameBoardController.disableBack();
+            }
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewSchoolBoard(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
             Parent root = fxmlLoader.load();
             SchoolBoardController schoolBoardController = fxmlLoader.getController();
             schoolBoardController.setGUI(this);
+            schoolBoardController.setBackButton(true);//todo
+            if (!Objects.equals(msg, "")) {
+                schoolBoardController.setMessage(msg);
+            }
             schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
-            if (twoPlayer) {
-                schoolBoardController.drawSchoolBoard(game.getPlayers().get(0));
-                schoolBoardController.drawSchoolBoard(game.getPlayers().get(1));
-            } //todo
+            schoolBoardController.drawSchoolBoard(game.getPlayers().get(0));
+            schoolBoardController.drawSchoolBoard(game.getPlayers().get(1));
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -294,7 +416,7 @@ public class GUI {
         serverHandlerThread.start();
     }
 
-    public void messageReceived(Object message) {
+    public void messageReceived(Object message) throws EmptyCloudException {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase_GUI.PickingNickname)) {
                 ((NickResponseMessage) message).GUIprocess(this.serverHandler);
@@ -323,6 +445,26 @@ public class GUI {
             ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof UsedAssistantMessage) {
             ((UsedAssistantMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof ConfirmMovementFromEntranceMessage) {
+            ((ConfirmMovementFromEntranceMessage) message).processGUI(this.serverHandler);
+            if (currPhase.equals(Phase_GUI.Action1)) {
+                ap1Moves++;
+                if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
+                    currPhase = Phase_GUI.Action2;
+                    ap1Moves = 0;
+                    moveMotherNature("Move the mother nature");
+                } else {
+                    moveStudentsFromEntrance("move a student.");
+                }
+            } else {
+                viewSchoolBoard("");
+            }
+        } else if (message instanceof DenyMovementMessage) {
+            ((DenyMovementMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof ConfirmMovementMessage) {
+            ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof ConfirmCloudMessage) {
+            ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
         }
     }
 

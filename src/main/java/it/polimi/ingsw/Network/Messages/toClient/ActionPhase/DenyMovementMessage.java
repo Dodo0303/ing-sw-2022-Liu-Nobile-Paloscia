@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class DenyMovementMessage extends MessageToClient {
@@ -16,6 +17,12 @@ public class DenyMovementMessage extends MessageToClient {
             client.getClient().playAssistant();
         } else if (client.getClient().getCurrPhase().equals(Phase.Action1)) {
             client.getClient().moveStudentsFromEntrance();
+        }
+    }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        if (client.getClient().getCurrPhase().equals(Phase_GUI.Action1)) {
+            client.getClient().moveStudentsFromEntrance("Movement denied");
         }
     }
 }

@@ -86,7 +86,7 @@ public class ChooseAssistantController implements Initializable {
     }
 
     public void checkBoard() {
-        gui.checkBoard();
+        gui.checkBoard("");
     }
 
     private boolean checkAssistantAvailability(Assistant assistant) {

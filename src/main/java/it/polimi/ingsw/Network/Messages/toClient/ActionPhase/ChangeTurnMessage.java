@@ -36,23 +36,24 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().setPhase(Phase.Planning);
                 ch.getClient().playAssistant();
             }
-            System.out.println(this.getClass().toString() + " processed."); //TODO delete after test
         }
     }
-//todo
+
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
+            ch.getClient().checkBoard("Your round.");
             if (ch.getClient().getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Planning);
                 ch.getClient().playAssistant("");
             } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Action1);
-                //ch.getClient().moveStudentsFromEntrance();
+                ch.getClient().moveStudentsFromEntrance("Move a student.");
             } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Planning);
-                //ch.getClient().playAssistant();
+                ch.getClient().playAssistant("");
             }
-            System.out.println(this.getClass().toString() + " processed."); //TODO delete after test
+        } else {
+            ch.getClient().checkBoard(ch.getClient().getNickname() + "'s round.");
         }
     }
 
