@@ -15,7 +15,11 @@ public class CharacterUsedMessage extends MessageToClient {
     }
 
     @Override
-    public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+    public void process(ServerHandler client) {
+
+    }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
 
     }
 

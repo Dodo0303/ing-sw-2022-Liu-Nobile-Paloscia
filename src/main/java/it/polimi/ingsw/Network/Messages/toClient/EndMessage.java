@@ -24,4 +24,9 @@ public class EndMessage extends MessageToClient{
         client.getClient().setClosed(true);
         client.shutdown();
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        //todo
+        client.shutdown();
+    }
 }

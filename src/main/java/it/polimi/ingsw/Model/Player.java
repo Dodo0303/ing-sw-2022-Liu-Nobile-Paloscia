@@ -109,7 +109,7 @@ public class Player implements Serializable {
     // ADD AND REMOVE TOWERS
 
     /** Add 1 tower to THIS PLAYER. */
-    void addTower() {
+    public void addTower() {
         if (_towerNum < _maxTowerNum)
             this._towerNum++;
         else
@@ -117,7 +117,7 @@ public class Player implements Serializable {
     }
 
     /** Remove 1 tower from THIS PLAYER. */
-    void removeTower() {
+    public void removeTower() {
         if (this._towerNum > 0) {
             this._towerNum--;
         } else {
@@ -204,7 +204,9 @@ public class Player implements Serializable {
         return res;
     }
 
-
+    public void clearAssistant() {
+        _lastUsedAssistant = null;
+    }
 
     // ADD AND REMOVE FROM DINING TABLE
 

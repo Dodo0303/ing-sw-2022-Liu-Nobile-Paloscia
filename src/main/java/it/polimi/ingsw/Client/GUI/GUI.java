@@ -9,6 +9,8 @@ import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.ChooseWizardControll
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.CharacterUsedMessage;
+import it.polimi.ingsw.Network.Messages.toClient.EndMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
@@ -225,14 +227,16 @@ public class GUI {
             chooseAssistantController.setGUI(this);
             for (int i = 0; i < 10; i++) {
                 if (getGame().getPlayers().get(getGame().getPlayerIndexFromNickname(getNickname())).getAssistants().get(i) == null) {
-                    chooseAssistantController.disableRadio(i);
+                    chooseAssistantController.disableRadio(i + 1);
                 }
             }
+            /** todo need to clear "current assistants" (which are no longer being current) when a new round started
             for (Player player : game.getPlayers()) {
                 if (!player.getNickName().equals(nickname) && player.getUsedAssistant() != null) {
                     chooseAssistantController.disableRadio(player.getUsedAssistant().getValue());
                 }
             }
+             */
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
@@ -465,6 +469,10 @@ public class GUI {
             ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof ConfirmCloudMessage) {
             ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof EndMessage) {
+            ((EndMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof CharacterUsedMessage) {
+            ((CharacterUsedMessage) message).processGUI(this.serverHandler);
         }
     }
 

@@ -28,7 +28,7 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private Button otherBoardButton, backButton;
     @FXML
-    private Label MyNickname, OpponentNickname, messageLabel, backLabel;
+    private Label MyNickname, OpponentNickname, messageLabel, backLabel, opponentCoin, myCoin;
     @FXML
     private ImageView MyCard, OpponentCard;
     private GUI gui;
@@ -95,6 +95,7 @@ public class SchoolBoardController implements Initializable {
         if (players.size() == 1) {
             p = MyBoard;
             MyNickname.setText(player.getNickName());
+            setMyCoinMessage(String.valueOf(player.getCoins())); //todo if expert
             if (player.getUsedAssistant() != null) {
                 int index = player.getUsedAssistant().getValue();
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
@@ -103,6 +104,7 @@ public class SchoolBoardController implements Initializable {
         } else if (players.size() == 2){
             p = OpponentBoard;
             OpponentNickname.setText(player.getNickName());
+            setOpponentCoinMessage(String.valueOf(player.getCoins())); //todo if expert
             if (player.getUsedAssistant() != null) {
                 int index = player.getUsedAssistant().getValue();
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
@@ -351,6 +353,12 @@ public class SchoolBoardController implements Initializable {
     }
     public void setBackMessage(String msg) {
         backLabel.setText(msg);
+    }
+    public void setMyCoinMessage(String msg) {
+        myCoin.setText(msg);
+    }
+    public void setOpponentCoinMessage(String msg) {
+        opponentCoin.setText(msg);
     }
 
     public void enableMoveToIslandPane(boolean enable) {

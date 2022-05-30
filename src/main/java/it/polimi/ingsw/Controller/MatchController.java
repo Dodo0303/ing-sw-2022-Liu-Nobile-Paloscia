@@ -479,6 +479,11 @@ public class MatchController implements Runnable {
         int maxInfluence = 0;
         Player maxInfluencer = null;
         for (int i = 0; i < this.game.getPlayers().size(); i++) {
+            if (!island.getTowerColor().equals(Color.VOID) && this.game.getPlayers().get(i).getColor().equals(island.getTowerColor())) {
+                for (int j = 0; j < island.getNumTower(); j++) {
+                    this.game.getPlayers().get(i).addTower();
+                }
+            }
             influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
             if (influence > maxInfluence) {
                 maxInfluencer = this.game.getPlayers().get(i);
@@ -487,6 +492,7 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
+            maxInfluencer.removeTower();
             System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
             System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
         }

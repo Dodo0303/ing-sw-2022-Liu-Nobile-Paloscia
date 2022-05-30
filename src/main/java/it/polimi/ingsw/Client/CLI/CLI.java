@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.CharacterUsedMessage;
 import it.polimi.ingsw.Network.Messages.toClient.EndMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
@@ -113,6 +114,8 @@ public class CLI {
             ((CloudsUpdateMessage) message).process(this.serverHandler);
         } else if (message instanceof UsedAssistantMessage) {
             ((UsedAssistantMessage) message).process(this.serverHandler);
+        } else if (message instanceof CharacterUsedMessage) {
+            ((CharacterUsedMessage) message).process(this.serverHandler);
         }
     }
 
@@ -251,15 +254,18 @@ public class CLI {
                 currPhase = getCurrPhase();
             }
             int assis = -1;
-            for (int i = 1; i <= 10; i++) {
-                Assistant assistant = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(i - 1);
-                if (assistant != null) {
-                    System.out.println(i + ". MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
-                }
-            }
             while(assis < 0 || assis > 9) {
-                System.out.print("Choose assistant card.\n");
+                for (int i = 1; i <= 10; i++) {
+                    Assistant assistant = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(i - 1);
+                    if (assistant != null) {
+                        System.out.println(i + ". MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
+                    }
+                }
+                System.out.print("Choose assistant card. Or press 'm' to check menu.\n");
                 String in = input.nextLine();
+                if (in.equals("m")){
+                    menu();
+                }
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
@@ -291,14 +297,20 @@ public class CLI {
         }
 
         while (index < 0 || index > entrance.size() - 1) {
-            System.out.print("Which student would you like to move?(Write the index)");
+            System.out.print("Which student would you like to move?(Write the index). Press 'm' to check menu.\n");
             String in = input.nextLine();
+            if (in.equals("m")){
+                menu();
+            }
             if (Utilities.isNumeric(in))
                 index = Integer.parseInt(in);
         }
         while (num != 0 && num != 1) {
-            System.out.print("Where would you like to move the student?(0 for dining table, 1 for island)\n");
+            System.out.print("Where would you like to move the student?(0 for dining table, 1 for island). Press 'm' to check menu.\n");
             String in = input.nextLine();
+            if (in.equals("m")){
+                menu();
+            }
             if (Utilities.isNumeric(in)) {
                 num = Integer.parseInt(in);
             }
@@ -306,8 +318,11 @@ public class CLI {
         if (num == 1) {
             while(islandID < 0 || islandID >= numIslands) {
                 printIslands();
-                System.out.print("To which island would you like to move the student?\n");
+                System.out.print("To which island would you like to move the student?. Press 'm' to check menu.\n");
                 String in = input.nextLine();
+                if (in.equals("m")){
+                    menu();
+                }
                 if (Utilities.isNumeric(in)) {
                     islandID = Integer.parseInt(in);
                 }
@@ -324,8 +339,11 @@ public class CLI {
         int num = -1;
         while (num < 0 || num >= game.getIslands().size()) {
             printIslands();
-            System.out.print("Where would you like to move the mather nature?\n");
+            System.out.print("Where would you like to move the mather nature? Press 'm' to check menu.\n");
             String in = input.nextLine();
+            if (in.equals("m")){
+                menu();
+            }
             if (Utilities.isNumeric(in)) {
                 num = Integer.parseInt(in);
             }
@@ -340,8 +358,11 @@ public class CLI {
         int num = -1;
         while (num < 0 || num >= game.getIslands().size() - 1) {
             printClouds();
-            System.out.print("Which cloud would you like to take students from?\n");
+            System.out.print("Which cloud would you like to take students from? Press 'm' to check menu.\n");
             String in = input.nextLine();
+            if (in.equals("m")){
+                menu();
+            }
             if (Utilities.isNumeric(in)) {
                 num = Integer.parseInt(in);
             }
@@ -383,6 +404,79 @@ public class CLI {
         }
     }
 
+    private void printSchoolBoard(Player player) {
+        System.out.println("Entrance: ");
+        for (int i = 0; i < player.getEntranceStudents().size(); i++) {
+            System.out.print("  " + player.getEntranceStudents().get(i));
+            if (i == player.getEntranceStudents().size() - 1) {
+                System.out.println("  " + player.getEntranceStudents().get(i));
+            }
+        }
+        System.out.println("Dining room:");
+        for (StudentColor color: player.getDiningTables().keySet()) {
+            System.out.println(color + ": " + player.getDiningTables().get(color));
+        }
+        System.out.println("Professors: ");
+        for (int i = 0; i < player.getProfessors().size(); i++) {
+            System.out.print("  " + player.getProfessors().get(i));
+            if (i == player.getEntranceStudents().size() - 1) {
+                System.out.println("  " + player.getProfessors().get(i));
+            }
+        }
+        System.out.println("Towers: There are " + player.getTowerNum() + " in the school board.");
+    }
+
+    private void menu() {
+        clearScreen();
+        int num = -1;
+        while (num != 5) {
+            System.out.println("1. see islands");
+            System.out.println("2. see clouds");
+            System.out.println("3. see your school board");
+            System.out.println("4. see others' school boards");
+            System.out.println("5. continue to play");
+            String in = input.nextLine();
+            if (Utilities.isNumeric(in)) {
+                num = Integer.parseInt(in);
+            }
+            switch (num) {
+                case 1 : {
+                    printIslands();
+                    break;
+                }
+                case 2 : {
+                    printClouds();
+                    break;
+                }
+                case 3 : {
+                    printSchoolBoard(this.game.getPlayerByNickname(this.nickname));
+                    break;
+                }
+                case 4 : {
+                    int index = 1;
+                    int playerChosen = -1;
+                    for (int i = 0; i < game.getPlayers().size(); i++) {
+                        Player player = game.getPlayers().get(i);
+                        if (!player.getNickName().equals(nickname)) {
+                            System.out.println(index + ". player " + player.getNickName());
+                        }
+                    }
+                    String temp = input.nextLine();
+                    if (Utilities.isNumeric(temp)) {
+                        playerChosen = Integer.parseInt(temp);
+                    }
+                    if (playerChosen < game.getPlayers().size()) {
+                        printSchoolBoard(game.getPlayers().get(playerChosen));
+                    } else {
+                        System.out.println("No such player.");
+                    }
+                    break;
+                }
+            }
+        }
+        clearScreen();
+    }
+
     private void printTitle(){
         System.out.println(
                 "███████╗██████╗░██╗░█████╗░███╗░░██╗████████╗██╗░░░██╗░██████╗\n" +
@@ -391,6 +485,11 @@ public class CLI {
                 "██╔══╝░░██╔══██╗██║██╔══██║██║╚████║░░░██║░░░░░╚██╔╝░░░╚═══██╗\n" +
                 "███████╗██║░░██║██║██║░░██║██║░╚███║░░░██║░░░░░░██║░░░██████╔╝\n" +
                 "╚══════╝╚═╝░░╚═╝╚═╝╚═╝░░╚═╝╚═╝░░╚══╝░░░╚═╝░░░░░░╚═╝░░░╚═════╝░");
+    }
+
+    private void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public String getNickname() {

@@ -174,7 +174,7 @@ public class GameBoardController implements Initializable {
     public void drawIslands(int numIslands) {
         int x0 = 846;
         int y0 = 540;
-        for (int i = 0; i < numIslands; i++) {
+        for (int i = 0; i < gui.getGame().getIslands().size(); i++) {
             Island island = gui.getGame().getIslands().get(i);
             double x = 440 * Math.cos(2 * Math.PI * i / numIslands - Math.PI / 2) + x0 - 100;
             double y = 440 * Math.sin(2 * Math.PI * i / numIslands - Math.PI / 2) + y0 - 100;

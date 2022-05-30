@@ -123,9 +123,29 @@
                   <Font name="Papyrus" size="40.0" />
                </font>
             </Label>
-            <Label fx:id="OpponentNickname" alignment="CENTER" layoutX="35.0" layoutY="169.0" prefHeight="100.0" prefWidth="231.0" text="Player 2">
+            <Label fx:id="OpponentNickname" alignment="CENTER" layoutX="11.0" layoutY="168.0" prefHeight="100.0" prefWidth="231.0" text="Player 2">
                <font>
                   <Font name="Papyrus" size="40.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="909.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/Moneta_base.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/Moneta_base.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="opponentCoin" layoutX="127.0" layoutY="281.0" prefHeight="57.0" prefWidth="72.0">
+               <font>
+                  <Font name="Papyrus" size="23.0" />
+               </font>
+            </Label>
+            <Label fx:id="myCoin" layoutX="118.0" layoutY="921.0" prefHeight="57.0" prefWidth="72.0">
+               <font>
+                  <Font name="Papyrus" size="23.0" />
                </font>
             </Label>
             </children>
