@@ -21,9 +21,6 @@ public class GameModel implements Serializable {
     /** All islands */
     private HashMap<Integer, Island> _islands;
 
-    /** Number of islands (merged islands count as 1) */
-    private int _numIslands;
-
     /** The index of the island with mothernature */
     private int _motherNature;
 
@@ -62,7 +59,6 @@ public class GameModel implements Serializable {
         }
         this._bag = new Bag();
         this._spareCoins = 20;
-        this._numIslands = 12;
         this._motherNature = new Random().nextInt(12); // Automatically choose a random island for mothernature.
         initializeIslands();
         initializePlayers(wizards, numOfPlayers, nicknames);
@@ -204,12 +200,6 @@ public class GameModel implements Serializable {
             throw new IllegalArgumentException("The island doesn't exists");
     }
 
-    /** Set _numIslands to x, then return it.*/
-    public int setNumIslands(int x) {
-        this._numIslands = x;
-        return this._numIslands;
-    }
-
     /** @return the players.*/
     public ArrayList<Player> getPlayers() {
         return this._players;
@@ -232,7 +222,7 @@ public class GameModel implements Serializable {
 
     /** @return _numIslands.*/
     public int getNumIslands() {
-        return this._numIslands;
+        return this._islands.size();
     }
 
     /** @return _motherNature.*/
@@ -426,10 +416,6 @@ public class GameModel implements Serializable {
 
     public void set_islands(HashMap<Integer, Island> _islands) {
         this._islands = _islands;
-    }
-
-    public void set_numIslands(int _numIslands) {
-        this._numIslands = _numIslands;
     }
 
     public void set_motherNature(int _motherNature) {

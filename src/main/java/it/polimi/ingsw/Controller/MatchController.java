@@ -535,7 +535,7 @@ public class MatchController implements Runnable {
             }
             System.out.println( x + " merged " + y);//TODO DELETE AFTER TEST
         }
-        this.game.getIslands().remove(this.game.setNumIslands(this.game.getNumIslands()) - 1);
+        this.game.getIslands().remove(this.game.getNumIslands() - 1);
     }
 
     /** This is a method for the Planning phase.
