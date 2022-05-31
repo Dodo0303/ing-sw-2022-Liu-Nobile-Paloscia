@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.ChangeTurnMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.ResetOutputMessage;
@@ -102,13 +103,19 @@ public class ServerHandler implements Runnable {
                     } else if (message instanceof StatusMessage){
                         StatusMessage msg = (StatusMessage)message;
                         clients = msg.clients;
+                    } else if(message instanceof ChangeTurnMessage) {
+                        if (((ChangeTurnMessage) message).getPlayerID().equals(client.getNickname())) {
+                            client.myTurn = true;
+                        } else {
+                            client.myTurn = false;
+                        }
+                        client.messageReceived(message);
                     } else {
                         client.messageReceived(message);
                     }
                 }
             } catch (Exception e) {
-                System.out.print(e.getMessage());
-                //shutdown();
+                e.printStackTrace();
             }
         }
     }
