@@ -4,6 +4,8 @@ import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
+import it.polimi.ingsw.Model.GameModel;
+import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -34,6 +36,13 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-
+        GameModel game = client.getClient().getGame();
+        Player player = game.getPlayerByNickname(playerID);
+        game.updateCharacterById(characterUpdated);
+        player.clearEntrance();
+        for (StudentColor color :
+                entranceUpdated) {
+            player.addStudentToEntrance(color);
+        }
     }
 }

@@ -32,6 +32,7 @@ public class StudentMovedToTableMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-
+        client.getClient().getGame().getPlayerByNickname(playerID).addToDiningTable(tableColor);
+        client.getClient().getGame().updateCharacterById(characterUpdated);
     }
 }

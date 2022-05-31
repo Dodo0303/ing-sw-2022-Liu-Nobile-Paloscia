@@ -28,6 +28,7 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-
+        client.getClient().getGame().updateCharacterById(characterUpdated);
+        client.getClient().getGame().set_islands(islands);
     }
 }

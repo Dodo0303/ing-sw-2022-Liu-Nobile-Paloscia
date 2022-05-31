@@ -33,7 +33,7 @@ public class Player implements Serializable {
     private List<StudentColor> _professors;
 
     /** The numbers of students in entrance of each color. */
-    private List<StudentColor> _entranceStudents; //TODO Hashmap doesn't allow us to know exactly the position of the students in the entrance
+    private List<StudentColor> _entranceStudents;
 
     /** Max amount of students in the entrance */
     private final int _maxEntranceStudents;

@@ -32,7 +32,7 @@ public class CharacterPhase extends Phase{
                 try { //TODO Manage the computation of the influence when there is a no entry tile in an island
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.addNoEntryToIsland(((MoveNoEntryMessage) msg).getIslandID());
-                    match.broadcastMessage(new NoEntryMovedMessage(((MoveNoEntryMessage) msg).getIslandID()));
+                    match.broadcastMessage(new NoEntryMovedMessage(((MoveNoEntryMessage) msg).getIslandID(), match.getGame().getCharacterById(expectedCharacterID)));
                 } catch (NotEnoughNoEntriesException | WrongEffectException e) {
                     match.denyMovement(ch);
                 }
@@ -57,7 +57,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.conquerAndJoinIslands(((ChooseIslandMessage) msg).getIslandID());
-                    match.broadcastMessage(new IslandChosenMessage(match.getGame().getIslands()));
+                    match.broadcastMessage(new IslandChosenMessage(match.getGame().getIslands(), match.getGame().getCharacterById(expectedCharacterID), match.getGame().getPlayers()));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     match.denyMovement(ch);
@@ -102,7 +102,7 @@ public class CharacterPhase extends Phase{
                         for (int i = 0; i < numOfSwap; i++) {
                             match.swapStudentsEntranceAndTable(ch.getNickname(), ((SwapStudentsTableEntranceMessage) msg).getEntrancePosition()[i], ((SwapStudentsTableEntranceMessage) msg).getTable()[i]);
                         }
-                        match.broadcastMessage(new EntranceTableSwappedMessage(match.getCurrentPlayerID(), ((SwapStudentsTableEntranceMessage) msg).getTable(), match.getGame().getEntranceOfPlayer(match.getGame().getPlayerByNickname(match.getCurrentPlayerID()))));
+                        match.broadcastMessage(new EntranceTableSwappedMessage(match.getCurrentPlayerID(), match.getGame().getPlayerByNickname(match.getCurrentPlayerID())));
                     } catch (EmptyTableException | FullTableException | WrongEffectException | NotEnoughNoEntriesException e) {
                         e.printStackTrace();
                         match.denyMovement(ch);

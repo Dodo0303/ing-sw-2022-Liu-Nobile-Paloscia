@@ -357,6 +357,20 @@ public class GameModel implements Serializable {
         throw new GameException("Character not present");
     }
 
+    /**
+     * Update the character card if already present
+     * @param update Character card that should replace the existing one
+     */
+    public void updateCharacterById(CharacterCard update) {
+        for (int i = 0; i < characters.size(); i++) {
+            if (characters.get(i).getID() == update.getID()) {
+                characters.set(i, update);
+                return;
+            }
+        }
+        throw new GameException("Character not present");
+    }
+
     public void removeCoinsToPlayer(String playerNickname, int characterID){
         Player p = null;
         for (Player player :

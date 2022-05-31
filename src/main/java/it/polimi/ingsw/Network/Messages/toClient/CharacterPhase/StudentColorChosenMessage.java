@@ -34,6 +34,10 @@ public class StudentColorChosenMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-
+        if (!isCharacter12)
+            System.out.println("Color " + colorChosen.toString() + " is not considered for the influence in this turn");
+        else {
+            client.getClient().getGame().set_players(playersUpdated);
+        }
     }
 }
