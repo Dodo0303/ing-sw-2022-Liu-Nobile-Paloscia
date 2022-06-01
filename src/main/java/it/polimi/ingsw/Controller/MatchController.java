@@ -549,7 +549,7 @@ public class MatchController implements Runnable {
 
         for (Player p : this.game.getPlayers()) {
             if (!this.currentPlayerID.equals(p.getNickName())) {
-                if  (p.getUsedAssistant() != null && assistant.getValue() == p.getUsedAssistant().getValue() && !p.lastAssistant()) {
+                if  (p.getUsedAssistant() != null && assistant.getValue() == p.getUsedAssistant().getValue() && !this.getCurrentPlayer().lastAssistant()) {
                     throw new GameException("Card was already used.");
                 }
             } else break;
