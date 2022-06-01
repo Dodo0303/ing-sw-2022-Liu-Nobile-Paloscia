@@ -3,15 +3,16 @@ package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 import java.util.List;
 
 public class SendMatchesMessage extends MessageToClient {
     private List<Integer> matchesID;
-    private List<List<String>> players;
+    private List<String[]> players;
 
-    public SendMatchesMessage(List<Integer> matchesID, List<List<String>> players) {
+    public SendMatchesMessage(List<Integer> matchesID, List<String[]> players) {
         this.matchesID = matchesID;
         this.players = players;
     }
@@ -20,11 +21,14 @@ public class SendMatchesMessage extends MessageToClient {
         return matchesID;
     }
 
+    /*
     public List<String> getPlayersByMatchId(int id) {
         return players.get(id);
     }
 
-    public List<List<String>> getPlayers() {
+     */
+
+    public List<String[]> getPlayers() {
         return players;
     }
 
@@ -36,11 +40,15 @@ public class SendMatchesMessage extends MessageToClient {
             client.getClient().chooseGameMode();
         } else {
             System.out.println("Available matches:");
-            for (int m : matchesID) {
-                System.out.println(m);
+            for (int i = 0; i < matchesID.size(); i++) {
+                System.out.println(i+1 + ") Match " + matchesID.get(i));
+                for (int j = 0; j < players.get(i).length; j++) {
+                    System.out.println(players.get(i)[j]);
+                }
+                System.out.println("\n");
             }
             client.getClient().setPhase(Phase.JoiningGame1);
-            client.getClient().joinGame();
+            client.getClient().joinGame(matchesID);
         }
     }
 

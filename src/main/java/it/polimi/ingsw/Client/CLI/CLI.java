@@ -15,6 +15,7 @@ import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -131,12 +132,16 @@ public class CLI {
                 System.out.print("Host?\n");
                 //host = input.nextLine(); //TODO uncomment after tests
                 host = "localhost";
+                port = 12345;
+                /*
                 String in = "";
                 while (!Utilities.isNumeric(in)) {
                     System.out.print("Port?\n");
                     in = input.nextLine();
                     port = Integer.parseInt(in);
                 }
+
+                 */
                 try {
                     serverHandler = new ServerHandler(host,port, this);
                 } catch (IOException e) {
@@ -205,7 +210,7 @@ public class CLI {
         }
     }
 
-    public void joinGame() {
+    public void joinGame(List<Integer> matchIDs) {
         try {
             while (!currPhase.equals(Phase.JoiningGame1)) {
                 currPhase = getCurrPhase();
@@ -215,14 +220,13 @@ public class CLI {
                 System.out.print("Choose a match.\n");
                 String in = input.nextLine();
                 if (Utilities.isNumeric(in)) {
-                    match = Integer.parseInt(in) - 1; //todo why minus one to get to correct match id
+                    match = Integer.parseInt(in); //todo why minus one to get to correct match id
                 }
             }
-            send(new MatchChosenMessage(match));
+            send(new MatchChosenMessage(matchIDs.get(match-1)));
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.print("Something went wrong, please try again.\n");
-            joinGame();
+            joinGame(matchIDs);
         }
     }
 
@@ -277,7 +281,7 @@ public class CLI {
             send(new SendAssistantMessage(game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(assis)));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.print("Something went wrong, please try agian.\n");
+            System.out.print("Something went wrong, please try again.\n");
             playAssistant();
         }
     }
@@ -405,36 +409,37 @@ public class CLI {
     }
 
     private void printSchoolBoard(Player player) {
+        System.out.println("\n\n" + player.getNickName().toUpperCase() + "'S SCHOOLBOARD\n");
         System.out.println("Entrance: ");
         for (int i = 0; i < player.getEntranceStudents().size(); i++) {
-            System.out.print("  " + player.getEntranceStudents().get(i));
-            if (i == player.getEntranceStudents().size() - 1) {
-                System.out.println("  " + player.getEntranceStudents().get(i));
-            }
+            System.out.print(i + ")" + player.getEntranceStudents().get(i) + " ");
         }
+        System.out.println("\n");
+
         System.out.println("Dining room:");
         for (StudentColor color: player.getDiningTables().keySet()) {
-            System.out.println(color + ": " + player.getDiningTables().get(color));
+            System.out.println(color + ": " + player.getDiningTables().get(color).getNumOfStudents());
         }
+
         System.out.println("Professors: ");
         for (int i = 0; i < player.getProfessors().size(); i++) {
-            System.out.print("  " + player.getProfessors().get(i));
-            if (i == player.getEntranceStudents().size() - 1) {
-                System.out.println("  " + player.getProfessors().get(i));
-            }
+            System.out.print(player.getProfessors().get(i) + " ");
         }
-        System.out.println("Towers: There are " + player.getTowerNum() + " in the school board.");
+        System.out.println("\n");
+
+        System.out.println("Towers: " + player.getTowerNum());
     }
 
     private void menu() {
         clearScreen();
         int num = -1;
         while (num != 5) {
-            System.out.println("1. see islands");
-            System.out.println("2. see clouds");
-            System.out.println("3. see your school board");
-            System.out.println("4. see others' school boards");
-            System.out.println("5. continue to play");
+            System.out.println("\n\nWhat do you want to see?\n ");
+            System.out.println("1. Islands");
+            System.out.println("2. Clouds");
+            System.out.println("3. School board");
+            System.out.println("4. Others' school boards");
+            System.out.println("5. Continue\n");
             String in = input.nextLine();
             if (Utilities.isNumeric(in)) {
                 num = Integer.parseInt(in);
@@ -455,23 +460,28 @@ public class CLI {
                 case 4 : {
                     int index = 1;
                     int playerChosen = -1;
-                    for (int i = 0; i < game.getPlayers().size(); i++) {
-                        Player player = game.getPlayers().get(i);
-                        if (!player.getNickName().equals(nickname)) {
-                            System.out.println(index + ". player " + player.getNickName());
-                        }
+                    List<Player> playersToShow = new ArrayList<>(game.getPlayers());
+                    playersToShow.remove(game.getPlayerByNickname(nickname));
+                    System.out.println("\nAvailable players: ");
+                    for (int i = 0; i < playersToShow.size(); i++) {
+                        Player player = playersToShow.get(i);
+                        System.out.println(index + ". " + player.getNickName());
+                        index++;
                     }
                     String temp = input.nextLine();
                     if (Utilities.isNumeric(temp)) {
-                        playerChosen = Integer.parseInt(temp);
+                        playerChosen = Integer.parseInt(temp) - 1;
                     }
                     if (playerChosen < game.getPlayers().size()) {
+                        System.out.println("Hai inserito " + playerChosen + ": " + game.getPlayers().get(playerChosen).getNickName());
                         printSchoolBoard(game.getPlayers().get(playerChosen));
                     } else {
                         System.out.println("No such player.");
                     }
                     break;
                 }
+                default:
+                    break;
             }
         }
         clearScreen();
