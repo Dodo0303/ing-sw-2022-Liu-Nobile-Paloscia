@@ -492,7 +492,9 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
-            maxInfluencer.removeTower();
+            for (int i = 0; i < island.getNumTower(); i++) {
+                maxInfluencer.removeTower();
+            }
             System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
             System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
         }
@@ -501,15 +503,17 @@ public class MatchController implements Runnable {
     /** First, check if the xth island can merge any adjacent island.
      * If positive, then call mergeIslands().
      * If negative, do nothing. */
-    private synchronized void unifyIslands(int x) {
-        Island island = this.game.getIslands().get(x);
-        int left = (x > 0) ? x - 1 : this.game.getNumIslands() - 1;
+    private synchronized void unifyIslands(int islandIndex) {
+        Island island = this.game.getIslands().get(islandIndex);
+        int left = (islandIndex > 0) ? islandIndex - 1 : this.game.getNumIslands() - 1;
+        System.out.println("Checking the color of island " + left);
         if (island.getTowerColor() != Color.VOID && this.game.getIslands().get(left).getTowerColor().equals(island.getTowerColor())) {
-            mergeIslands(left, x--);
+            mergeIslands(left, islandIndex);
+            if (islandIndex > 0) islandIndex--;
         }
-        int right = (x < this.game.getNumIslands() - 1) ? x + 1 : 0;
+        int right = (islandIndex < this.game.getNumIslands() - 1) ? islandIndex + 1 : 0;
         if (island.getTowerColor() != Color.VOID && this.game.getIslands().get(right).getTowerColor().equals(island.getTowerColor())) {
-            mergeIslands(x, right);
+            mergeIslands(islandIndex, right);
         }
     }
 
@@ -724,7 +728,7 @@ public class MatchController implements Runnable {
         return winner;
     }
 
-    public int endedAtPhase2() {//TODO debug this
+    public int endedAtPhase2() { //TODO debug this
         if (this.getCurrentPlayer().getTowerNum() == 0) return 1;
         if (this.game.getIslands().size() <= 3) return 2;
         return 0;
