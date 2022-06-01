@@ -21,8 +21,6 @@ public class DenyMovementMessage extends MessageToClient {
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
-        if (client.getClient().getCurrPhase().equals(Phase_GUI.Action1)) {
-            client.getClient().moveStudentsFromEntrance("Movement denied");
-        }
+        client.getClient().moveStudentsFromEntrance("Movement denied");
     }
 }

@@ -230,13 +230,11 @@ public class GUI {
                     chooseAssistantController.disableRadio(i + 1);
                 }
             }
-            /** todo need to clear "current assistants" (which are no longer being current) when a new round started
             for (Player player : game.getPlayers()) {
                 if (!player.getNickName().equals(nickname) && player.getUsedAssistant() != null) {
                     chooseAssistantController.disableRadio(player.getUsedAssistant().getValue());
                 }
             }
-             */
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
