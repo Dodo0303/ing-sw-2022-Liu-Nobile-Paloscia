@@ -292,6 +292,7 @@ public class GUI {
             }
             gameBoardController.setStudentIndex(studentIndex);
             Scene scene = new Scene(root, 1920, 1080);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -317,6 +318,7 @@ public class GUI {
                 gameBoardController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -342,6 +344,7 @@ public class GUI {
                 gameBoardController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -359,7 +362,7 @@ public class GUI {
             Parent root = fxmlLoader.load();
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
-            if (!currPhase.equals(Phase_GUI.Planning) && game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
+            if (!currPhase.equals(Phase_GUI.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
                 gameBoardController.disableBack();
             }
             gameBoardController.drawIslands(game.getIslands().size());
@@ -367,10 +370,8 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }
-            if (!currPhase.equals(Phase_GUI.Planning) && game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
-                gameBoardController.disableBack();
-            }
             Scene scene = new Scene(root, 1920, 1080);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -393,8 +394,12 @@ public class GUI {
                 schoolBoardController.setMessage(msg);
             }
             schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
-            schoolBoardController.drawSchoolBoard(game.getPlayers().get(0));
-            schoolBoardController.drawSchoolBoard(game.getPlayers().get(1));
+            for (int i = 0; i < game.getPlayers().size(); i++) {
+                if (!game.getPlayers().get(i).getNickName().equals(nickname)) {
+                    schoolBoardController.drawSchoolBoard(game.getPlayers().get(i));
+                    break;
+                }
+            }
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {

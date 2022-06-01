@@ -30,7 +30,7 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private Label MyNickname, OpponentNickname, messageLabel, backLabel, opponentCoin, myCoin;
     @FXML
-    private ImageView MyCard, OpponentCard;
+    private ImageView MyCard, OpponentCard, opponentCoinImage;
     private GUI gui;
     private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers;
     private ArrayList<String> players;
@@ -78,12 +78,20 @@ public class SchoolBoardController implements Initializable {
         if (gui.getGame().getPlayers().size() != 4) {
             OpponentBoard.setDisable(true);
             OpponentBoard.setVisible(false);
+            OpponentNickname.setDisable(true);
+            OpponentNickname.setVisible(false);
+            opponentCoin.setDisable(true);
+            opponentCoin.setVisible(false);
+            OpponentCard.setVisible(false);
+            opponentCoinImage.setVisible(false);
         }
         for (Player player : gui.getGame().getPlayers()) {
             if (!players.contains(player.getNickName())) {
                 drawSchoolBoard(player);
             }
         }
+        otherBoardButton.setDisable(true);
+        otherBoardButton.setVisible(false);
     }
 
     public void drawSchoolBoard(Player player) {
@@ -92,7 +100,7 @@ public class SchoolBoardController implements Initializable {
         }
         players.add(player.getNickName());
         StackPane p = null;
-        if (players.size() == 1) {
+        if (players.size() == 1 || players.size() == 3) {
             p = MyBoard;
             MyNickname.setText(player.getNickName());
             setMyCoinMessage(String.valueOf(player.getCoins())); //todo if expert
@@ -101,7 +109,7 @@ public class SchoolBoardController implements Initializable {
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
                 MyCard.setImage(image);
             }
-        } else if (players.size() == 2){
+        } else if (players.size() == 2 || players.size() == 4){
             p = OpponentBoard;
             OpponentNickname.setText(player.getNickName());
             setOpponentCoinMessage(String.valueOf(player.getCoins())); //todo if expert

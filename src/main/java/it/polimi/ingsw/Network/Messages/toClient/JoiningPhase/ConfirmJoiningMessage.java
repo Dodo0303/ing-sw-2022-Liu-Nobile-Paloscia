@@ -44,10 +44,11 @@ public class ConfirmJoiningMessage extends MessageToClient {
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
         if (result) {
             if (message.equals("Game created")) {
-                ch.getClient().showGameCreated("You've joined match " + matchID);
+                ch.getClient().showGameCreated("Match: " + matchID);
                 ch.getClient().setCurrPhase(Phase_GUI.GameJoined);
             } else if (message.equals("You joined the game")){
                 ch.getClient().setCurrPhase(Phase_GUI.GameJoined);
+                ch.getClient().showGameCreated("Match: " + matchID);
             } else {
                 ch.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
             }

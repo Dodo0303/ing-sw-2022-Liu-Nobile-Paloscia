@@ -1,28 +1,24 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
-import it.polimi.ingsw.Client.GUI.Controllers.Uncategorized.DraggableMaker;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
-import javafx.application.Platform;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-
-import java.io.IOException;
+import javafx.util.Duration;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -189,6 +185,16 @@ public class GameBoardController implements Initializable {
             imageView.setImage(il);
             imageView.setFitWidth(190);
             imageView.setFitHeight(190);
+            Tooltip tooltip = new Tooltip();
+            StringBuilder stringBuilder = new StringBuilder();
+            for (StudentColor color : island.getStudents().keySet()) {
+                stringBuilder.append(color).append(": ").append(island.getStudents().get(color)).append("\n");
+            }
+            if (!island.getTowerColor().equals(Color.VOID)) {
+                stringBuilder.append("Tower: ").append(island.getNumTower()).append(" ").append(island.getTowerColor());
+            }
+            tooltip.setText(stringBuilder.toString());
+            Tooltip.install(imageView, tooltip);
             if (moveStudent) {
                 imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     int islandChosen = islandImageViews.indexOf(imageView);
@@ -294,11 +300,9 @@ public class GameBoardController implements Initializable {
         backButton.setDisable(true);
         backButton.setVisible(false);
     }
-
     public void setMessage(String msg) {
         messageLabel.setText(msg);
     }
-
 
     public void setMoveStudent(boolean moveStudent) {
         this.moveStudent = moveStudent;
@@ -315,8 +319,6 @@ public class GameBoardController implements Initializable {
     public void setStudentIndex(int studentIndex) {
         this.studentIndex = studentIndex;
     }
-
-
 
 
 }
