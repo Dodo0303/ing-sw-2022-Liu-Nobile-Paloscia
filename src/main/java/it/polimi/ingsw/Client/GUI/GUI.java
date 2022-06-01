@@ -66,7 +66,7 @@ public class GUI {
 
     public boolean settingUpConnection(String host, int port) {
         try {
-            serverHandler = new ServerHandler(host,port, this);
+            serverHandler = new ServerHandler(host,12345, this); //TODO Don't ask the user for the port
             return true;
         } catch (Exception e) {
             e.printStackTrace();

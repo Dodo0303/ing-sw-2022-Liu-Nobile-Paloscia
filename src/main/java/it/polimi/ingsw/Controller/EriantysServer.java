@@ -27,7 +27,8 @@ public class EriantysServer implements Runnable{
     boolean shutdown;
 
     public EriantysServer() {
-        randomPort();
+        //randomPort();
+        port = 12345;
         currentMatches = new ArrayList<>();
         clients = new ArrayList<>();
         shutdown = false;

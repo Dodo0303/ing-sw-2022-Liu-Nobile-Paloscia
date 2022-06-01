@@ -22,7 +22,7 @@ public abstract class ClientHandlerPhase {
     protected void sendAvailableMatchesToClient() throws GameException {
         List<MatchController> availableMatches = ch.getServer().getMatchmakingMatches();
         List<Integer> matchesID = new ArrayList<>();
-        List<List<String>> players = new ArrayList<>();
+        List<String[]> players = new ArrayList<>();
         List<String> matchPlayers = new ArrayList<>();
 
         for (MatchController matchController:
@@ -32,7 +32,7 @@ public abstract class ClientHandlerPhase {
                     matchController.getClients()) {
                 matchPlayers.add(client.getNickname());
             }
-            players.add(matchPlayers);
+            players.add(matchPlayers.toArray(new String[matchPlayers.size()]));
             matchPlayers.clear();
         }
         if (ch.getMatch() == null) {
