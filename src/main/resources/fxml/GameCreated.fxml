@@ -22,7 +22,7 @@
     <right>
         <AnchorPane prefHeight="445.0" prefWidth="363.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="messageLabel" alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="160.0" prefWidth="312.0" text="Game created! Waiting for other players." textAlignment="CENTER">
+                <Label fx:id="messageLabel" alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="160.0" prefWidth="312.0" text="Waiting for other players." textAlignment="CENTER">
                     <font>
                         <Font size="15.0" />
                     </font>

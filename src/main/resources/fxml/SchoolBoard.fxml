@@ -133,19 +133,19 @@
                   <Image url="@../assets/Moneta_base.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentCoinImage" fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/Moneta_base.png" />
                </image>
             </ImageView>
             <Label fx:id="opponentCoin" layoutX="127.0" layoutY="281.0" prefHeight="57.0" prefWidth="72.0">
                <font>
-                  <Font name="Papyrus" size="23.0" />
+                  <Font name="Papyrus" size="30.0" />
                </font>
             </Label>
             <Label fx:id="myCoin" layoutX="118.0" layoutY="921.0" prefHeight="57.0" prefWidth="72.0">
                <font>
-                  <Font name="Papyrus" size="23.0" />
+                  <Font name="Papyrus" size="30.0" />
                </font>
             </Label>
             </children>
