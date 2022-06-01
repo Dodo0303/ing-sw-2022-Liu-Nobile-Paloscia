@@ -19,7 +19,7 @@ public class ActionPhase3 extends Phase {
         } else if (msg instanceof ChooseCloudMessage) {
             try {
                 match.takeStudentsFromCloud(((ChooseCloudMessage) msg).getCloudID());
-            } catch (GameException e) {
+            } catch (GameException | IndexOutOfBoundsException e) {
                 e.printStackTrace();
                 match.denyMovement(ch);
                 return;
