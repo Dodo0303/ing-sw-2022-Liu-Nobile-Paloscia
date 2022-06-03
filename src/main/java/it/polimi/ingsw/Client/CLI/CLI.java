@@ -223,7 +223,7 @@ public class CLI {
                     match = Integer.parseInt(in); //todo why minus one to get to correct match id
                 }
             }
-            send(new MatchChosenMessage(matchIDs.get(match-1)));
+            send(new MatchChosenMessage(matchIDs.get(match)));
         } catch (Exception e) {
             System.out.print("Something went wrong, please try again.\n");
             joinGame(matchIDs);

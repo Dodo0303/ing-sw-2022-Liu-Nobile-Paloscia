@@ -40,7 +40,6 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private Rectangle tableArea;
     private ArrayList<ImageView> imageViews;
-    private boolean backButtonBool;
     private int studentIndex;
 
 
@@ -48,7 +47,6 @@ public class SchoolBoardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initCoords();
-        backButtonBool = true;
         players = new ArrayList<>();
     }
 
@@ -75,6 +73,10 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void otherBoards() {
+        gui.viewSchoolBoard("", true);
+    }
+
+    public void setUpOtherBoards() {
         if (gui.getGame().getPlayers().size() != 4) {
             OpponentBoard.setDisable(true);
             OpponentBoard.setVisible(false);
@@ -84,11 +86,6 @@ public class SchoolBoardController implements Initializable {
             opponentCoin.setVisible(false);
             OpponentCard.setVisible(false);
             opponentCoinImage.setVisible(false);
-        }
-        for (Player player : gui.getGame().getPlayers()) {
-            if (!players.contains(player.getNickName())) {
-                drawSchoolBoard(player);
-            }
         }
         otherBoardButton.setDisable(true);
         otherBoardButton.setVisible(false);
@@ -100,7 +97,8 @@ public class SchoolBoardController implements Initializable {
         }
         players.add(player.getNickName());
         StackPane p = null;
-        if (players.size() == 1 || players.size() == 3) {
+        if (player.getNickName().equals(players.get(0)) ||
+                (players.size() > 2 && player.getNickName().equals(players.get(2)))) {
             p = MyBoard;
             MyNickname.setText(player.getNickName());
             setMyCoinMessage(String.valueOf(player.getCoins())); //todo if expert
@@ -109,7 +107,8 @@ public class SchoolBoardController implements Initializable {
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
                 MyCard.setImage(image);
             }
-        } else if (players.size() == 2 || players.size() == 4){
+        } else if (player.getNickName().equals(players.get(1)) ||
+                (players.size() > 2 && player.getNickName().equals(players.get(3)))) {
             p = OpponentBoard;
             OpponentNickname.setText(player.getNickName());
             setOpponentCoinMessage(String.valueOf(player.getCoins())); //todo if expert
@@ -351,9 +350,6 @@ public class SchoolBoardController implements Initializable {
             otherBoardButton.setVisible(true);
             otherBoardButton.setDisable(false);
         }
-    }
-    public void setBackButton(boolean backButtonBool) {
-        this.backButtonBool = backButtonBool;
     }
 
     public void setMessage(String msg) {

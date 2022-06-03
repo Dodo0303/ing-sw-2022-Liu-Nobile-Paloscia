@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.Joining.LoginController">
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -35,8 +34,8 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="hostField" layoutX="123.0" layoutY="146.0" promptText="Host" />
-            <TextField fx:id="portField" layoutX="123.0" layoutY="206.0" promptText="Port" />
+            <TextField fx:id="hostField" layoutX="123.0" layoutY="146.0" promptText="Host" text="localhost" />
+            <TextField fx:id="portField" layoutX="123.0" layoutY="206.0" promptText="Port" text="12345" />
             <Button fx:id="loginButton" layoutX="120.0" layoutY="277.0" mnemonicParsing="false" onAction="#login" prefHeight="32.0" prefWidth="74.0" style="-fx-background-color: #000000;" text="Log in" textFill="WHITE" />
             <Label fx:id="messageLabel" alignment="CENTER" layoutX="1.0" layoutY="49.0" prefHeight="72.0" prefWidth="312.0" text="Welcome" textAlignment="CENTER">
                <font>

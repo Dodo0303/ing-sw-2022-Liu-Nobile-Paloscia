@@ -26,7 +26,11 @@ public class EndMessage extends MessageToClient{
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
-        //todo
+        if (winnerID == -1) {
+            client.getClient().gameOver("Game ended with a draw.\nGood bye.\n");
+        } else {
+            client.getClient().gameOver("Player " + winnerID + " has won the game.\n");
+        }
         client.shutdown();
     }
 }

@@ -63,7 +63,7 @@ public class ActionPhase1 extends Phase {
                     break;
             }
 
-            if (this.moves == 3) {
+            if (this.moves == ((match.getGame().getPlayers().size() == 3)? 4 : 3)) {
                 this.nextPhase();
             }
 

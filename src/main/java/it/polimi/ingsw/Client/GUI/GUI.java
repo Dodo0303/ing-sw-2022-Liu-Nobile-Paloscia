@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.GUI.Controllers.ChooseAssistantController;
+import it.polimi.ingsw.Client.GUI.Controllers.GameOverController;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
 import it.polimi.ingsw.Client.GUI.Controllers.GameBoardController;
 import it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController;
@@ -24,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,6 +42,7 @@ public class GUI {
     private List<Wizard> wizards;
     private Assistant assistant;
     private int ap1Moves;
+    private boolean myTurn;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -66,7 +69,7 @@ public class GUI {
 
     public boolean settingUpConnection(String host, int port) {
         try {
-            serverHandler = new ServerHandler(host,12345, this); //TODO Don't ask the user for the port
+            serverHandler = new ServerHandler(host, port, this);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,8 +265,12 @@ public class GUI {
                 schoolBoardController.setMessage(msg);
             }
             schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
-            schoolBoardController.drawSchoolBoard(game.getPlayers().get(0));
-            schoolBoardController.drawSchoolBoard(game.getPlayers().get(1));
+            for (int i = 0; i < game.getPlayers().size(); i++) {
+                if (!game.getPlayers().get(i).getNickName().equals(nickname)) {
+                    schoolBoardController.drawSchoolBoard(game.getPlayers().get(i));
+                    break;
+                }
+            }
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -302,47 +309,16 @@ public class GUI {
         }
     }
 
-    public void moveMotherNature(String msg) {
+    public void gameOver(String msg) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameOver.fxml"));
             Parent root = fxmlLoader.load();
-            GameBoardController gameBoardController = fxmlLoader.getController();
-            gameBoardController.setGUI(this);
-            gameBoardController.setMoveMotherNature(true);
-            gameBoardController.disableBack();
-            gameBoardController.drawIslands(getGame().getIslands().size());
-            gameBoardController.drawClouds(game.getPlayers().size());
+            GameOverController gameOverController = fxmlLoader.getController();
+            gameOverController.setGUI(this);
             if (!Objects.equals(msg, "")) {
-                gameBoardController.setMessage(msg);
+                gameOverController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void chooseCloud(String msg) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
-            Parent root = fxmlLoader.load();
-            GameBoardController gameBoardController = fxmlLoader.getController();
-            gameBoardController.setGUI(this);
-            gameBoardController.setChooseCloud(true);
-            gameBoardController.disableBack();
-            gameBoardController.drawIslands(getGame().getIslands().size());
-            gameBoardController.drawClouds(game.getPlayers().size());
-            if (!Objects.equals(msg, "")) {
-                gameBoardController.setMessage(msg);
-            }
-            Scene scene = new Scene(root, 1920, 1080);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -363,6 +339,15 @@ public class GUI {
             if (!currPhase.equals(Phase_GUI.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
                 gameBoardController.disableBack();
             }
+            if (myTurn && currPhase.equals(Phase_GUI.Action1)) {
+                gameBoardController.setMoveStudent(true);
+            } else if (myTurn && currPhase.equals(Phase_GUI.Action2)) {
+                gameBoardController.setMoveStudent(true);
+                gameBoardController.disableBack();
+            } else if (myTurn && currPhase.equals(Phase_GUI.Action3)) {
+                gameBoardController.setChooseCloud(true);
+                gameBoardController.disableBack();
+            }
             gameBoardController.drawIslands(game.getIslands().size());
             gameBoardController.drawClouds(game.getPlayers().size());
             if (!Objects.equals(msg, "")) {
@@ -381,21 +366,30 @@ public class GUI {
         }
     }
 
-    public void viewSchoolBoard(String msg) {
+    public void viewSchoolBoard(String msg, boolean other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
             Parent root = fxmlLoader.load();
             SchoolBoardController schoolBoardController = fxmlLoader.getController();
             schoolBoardController.setGUI(this);
-            schoolBoardController.setBackButton(true);//todo
             if (!Objects.equals(msg, "")) {
                 schoolBoardController.setMessage(msg);
             }
-            schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
+            ArrayList<Player> players = new ArrayList<>();
+            players.add(game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)));
             for (int i = 0; i < game.getPlayers().size(); i++) {
-                if (!game.getPlayers().get(i).getNickName().equals(nickname)) {
-                    schoolBoardController.drawSchoolBoard(game.getPlayers().get(i));
-                    break;
+                if (!players.contains(game.getPlayers().get(i))) {
+                    players.add(game.getPlayers().get(i));
+                }
+            }
+            if (!other) {
+                for (int i = 0; i < 2; i++) {
+                    schoolBoardController.drawSchoolBoard(players.get(i));
+                }
+            } else {
+                schoolBoardController.setUpOtherBoards();
+                for (int i = 2; i < players.size(); i++) {
+                    schoolBoardController.drawSchoolBoard(players.get(i));
                 }
             }
             Scene scene = new Scene(root, 1920, 1080);
@@ -409,6 +403,7 @@ public class GUI {
             e.printStackTrace();
         }
     }
+
 
     public void send(Object message) {
         if (message == null) {
@@ -459,12 +454,12 @@ public class GUI {
                 if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
                     currPhase = Phase_GUI.Action2;
                     ap1Moves = 0;
-                    moveMotherNature("Move the mother nature");
+                    checkBoard("Move the mother nature");
                 } else {
                     moveStudentsFromEntrance("move a student.");
                 }
             } else {
-                viewSchoolBoard("");
+                viewSchoolBoard("", false);
             }
         } else if (message instanceof DenyMovementMessage) {
             ((DenyMovementMessage) message).processGUI(this.serverHandler);
@@ -547,4 +542,9 @@ public class GUI {
     public void setAssistant(Assistant assistant) {
         this.assistant = assistant;
     }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
+    }
+
 }

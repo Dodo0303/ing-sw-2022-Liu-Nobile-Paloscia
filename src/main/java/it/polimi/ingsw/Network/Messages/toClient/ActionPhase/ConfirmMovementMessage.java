@@ -39,7 +39,7 @@ public class ConfirmMovementMessage extends MessageToClient {
         client.getClient().getGame().setMothernature(islandIndex);
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Action2)) {
             client.getClient().setCurrPhase(Phase_GUI.Action3);
-            client.getClient().chooseCloud("Choose a cloud");
+            client.getClient().checkBoard("Choose a cloud");
         } else {
             client.getClient().checkBoard("Mother nature is at" + islandIndex);
         }

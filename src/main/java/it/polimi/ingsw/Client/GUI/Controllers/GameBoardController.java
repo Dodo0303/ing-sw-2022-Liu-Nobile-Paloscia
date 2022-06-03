@@ -60,7 +60,7 @@ public class GameBoardController implements Initializable {
         if (gui.getCurrPhase().equals(Phase_GUI.Action1)) {
             gui.moveStudentsFromEntrance("");
         } else {
-            gui.viewSchoolBoard("");
+            gui.viewSchoolBoard("", false);
         }
     }
 
@@ -112,19 +112,23 @@ public class GameBoardController implements Initializable {
     }
 
     public void cloud0Chosen() {
-        gui.send(new ChooseCloudMessage(0));
+        if (chooseCloud)
+            gui.send(new ChooseCloudMessage(0));
     }
 
     public void cloud1Chosen() {
-        gui.send(new ChooseCloudMessage(1));
+        if (chooseCloud)
+            gui.send(new ChooseCloudMessage(1));
     }
 
     public void cloud2Chosen() {
-        gui.send(new ChooseCloudMessage(2));
+        if (chooseCloud)
+            gui.send(new ChooseCloudMessage(2));
     }
 
     public void cloud3Chosen() {
-        gui.send(new ChooseCloudMessage(3));
+        if (chooseCloud)
+            gui.send(new ChooseCloudMessage(3));
     }
 
     public void drawClouds(int numClouds) {
