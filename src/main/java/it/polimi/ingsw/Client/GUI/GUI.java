@@ -23,9 +23,11 @@ import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessa
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -56,14 +58,18 @@ public class GUI {
         try {
             ap1Moves = 0;
             stage.getIcons().add(new Image("icon.png"));
-            stage.setResizable(false);
             stage.setTitle("Eriantys");
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = fxmlLoader.load();
+            Group group = new Group();
             LoginController loginController = fxmlLoader.getController();
             loginController.setGUI(this);
             Scene scene = new Scene(root, 600, 402);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/login.css")).toExternalForm());
+            BorderPane borderPane = new BorderPane();
+            borderPane.prefHeightProperty().bind(scene.heightProperty());
+            borderPane.prefWidthProperty().bind(scene.widthProperty());
+            //borderPane.setCenter(tabPane);
             stage.setScene(scene);
             stage.setResizable(true);
             stage.show();
@@ -245,7 +251,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -357,7 +363,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 1920, 1080);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -414,6 +420,15 @@ public class GUI {
         } else {
             serverHandler.send(message);
         }
+    }
+
+    public void changeScreenSize(){
+        Group root = new Group();
+        Scene scene = new Scene(root, 450, 250);
+        BorderPane borderPane = new BorderPane();
+        borderPane.prefHeightProperty().bind(scene.heightProperty());
+        borderPane.prefWidthProperty().bind(scene.widthProperty());
+        root.getChildren().add(borderPane);
     }
 
     public void startServerHandler() {

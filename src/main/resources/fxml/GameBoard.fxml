@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.GameBoardController">
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.GameBoardController">
    <right>
-      <Pane prefHeight="1080.0" prefWidth="313.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
+      <Pane maxHeight="1080.0" maxWidth="320.0" prefHeight="1080.0" prefWidth="320.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
          <children>
             <StackPane layoutX="5.0" layoutY="807.0" prefHeight="155.0" prefWidth="343.0">
                <children>
@@ -71,7 +71,7 @@
       </Pane>
    </right>
    <left>
-        <Pane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1557.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
+        <Pane fx:id="anchorPane" maxHeight="1080.0" maxWidth="1600.0" prefHeight="1080.0" prefWidth="1600.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
             <children>
             <StackPane fx:id="cloud1" layoutX="819.0" layoutY="333.0" onMouseClicked="#cloud1Chosen" prefHeight="150.0" prefWidth="200.0">
                <children>
