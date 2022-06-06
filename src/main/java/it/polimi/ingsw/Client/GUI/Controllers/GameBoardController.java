@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import java.lang.reflect.Field;
@@ -25,7 +26,7 @@ import java.util.ResourceBundle;
 
 public class GameBoardController implements Initializable {
     @FXML
-    private AnchorPane anchorPane;
+    private Pane anchorPane;
     @FXML
     private StackPane cloud0, cloud1, cloud2, cloud3;
     @FXML
@@ -62,6 +63,10 @@ public class GameBoardController implements Initializable {
         } else {
             gui.viewSchoolBoard("", false);
         }
+    }
+
+    public void fullScreen() {
+        gui.getStage().setFullScreen(true);
     }
 
     public void setGUI(GUI gui) {

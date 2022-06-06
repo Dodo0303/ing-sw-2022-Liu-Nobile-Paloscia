@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.GUI.Controllers.Uncategorized;
+package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Model.Wizard;
@@ -102,6 +102,4 @@ public class ChooseWizardController implements Initializable {
     public void setNewgame(boolean newgame) {
         this.newgame = newgame;
     }
-
-
 }

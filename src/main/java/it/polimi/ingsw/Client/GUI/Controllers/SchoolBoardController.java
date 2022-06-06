@@ -50,6 +50,10 @@ public class SchoolBoardController implements Initializable {
         players = new ArrayList<>();
     }
 
+    public void fullScreen() {
+        gui.getStage().setFullScreen(true);
+    }
+
     public void handleDropOver(DragEvent dragEvent) {
         if (dragEvent.getDragboard().hasImage()) {
             dragEvent.acceptTransferModes(TransferMode.COPY);

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,5 +26,9 @@ public class GameOverController {
     }
     public void setMessage(String message) {
         messageLabel.setText(message);
+    }
+
+    public void fullScreen() {
+        gui.getStage().setFullScreen(true);
     }
 }
