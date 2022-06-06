@@ -6,18 +6,16 @@ import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
-import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.CharacterUsedMessage;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.EndMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
-import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -467,6 +465,20 @@ public class GUI {
             ((EndMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof CharacterUsedMessage) {
             ((CharacterUsedMessage) message).processGUI(this.serverHandler);
+        }else if (message instanceof CharacterEntranceSwappedMessage){
+
+        } else if (message instanceof EntranceTableSwappedMessage){
+
+        } else if (message instanceof IslandChosenMessage){
+
+        } else if (message instanceof NoEntryMovedMessage){
+
+        } else if (message instanceof StudentColorChosenMessage){
+
+        } else if (message instanceof StudentMovedFromCharacterMessage){
+
+        } else if (message instanceof StudentMovedToTableMessage){
+
         }
     }
 

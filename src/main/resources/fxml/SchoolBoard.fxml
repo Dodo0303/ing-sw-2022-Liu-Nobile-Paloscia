@@ -12,9 +12,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.AnchorPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController">
     <right>
-        <Pane prefHeight="1080.0" prefWidth="313.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="1080.0" prefWidth="313.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
             <children>
                 <StackPane layoutX="2.0" layoutY="785.0" prefHeight="155.0" prefWidth="343.0">
                     <children>
@@ -83,10 +84,10 @@
                </children>
             </StackPane>
             </children>
-        </Pane>
+        </AnchorPane>
     </right>
     <left>
-        <Pane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1557.0" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1557.0" BorderPane.alignment="CENTER">
             <children>
                 <StackPane layoutX="1316.0" layoutY="79.0" prefHeight="150.0" prefWidth="200.0">
                <children>
@@ -149,7 +150,7 @@
             </Label>
             </children>
             <Button mnemonicParsing="false" onAction="#fullScreen" style="-fx-background-color: transparent;" text="Go fullscreen" />
-        </Pane>
+        </AnchorPane>
     </left>
     <center>
         <Separator orientation="VERTICAL" prefHeight="1080.0" prefWidth="0.0" style="-fx-border-width: 5; -fx-border-color: black; -fx-padding: 0;" stylesheets="@../CSS/Separator.css" BorderPane.alignment="CENTER" />
