@@ -42,8 +42,6 @@ public class SchoolBoardController implements Initializable {
     private ArrayList<ImageView> imageViews;
     private int studentIndex;
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initCoords();

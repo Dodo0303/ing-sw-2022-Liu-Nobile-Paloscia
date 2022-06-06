@@ -245,7 +245,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920, 1080);
+            Scene scene = new Scene(root);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -357,7 +357,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920, 1080);
+            Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
