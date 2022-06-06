@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -12,12 +13,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.AnchorPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController">
     <right>
         <AnchorPane prefHeight="1080.0" prefWidth="313.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
             <children>
-                <StackPane layoutX="2.0" layoutY="785.0" prefHeight="155.0" prefWidth="343.0">
+                <StackPane layoutX="6.0" layoutY="911.0" prefHeight="155.0" prefWidth="343.0">
                     <children>
                         <Button fx:id="backButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#back" prefHeight="120.0" prefWidth="266.0">
                             <graphic>
@@ -40,7 +40,7 @@
                         </Button>
                     </children>
                 </StackPane>
-            <StackPane layoutX="6.0" layoutY="614.0" prefHeight="155.0" prefWidth="343.0">
+            <StackPane layoutX="7.0" layoutY="715.0" prefHeight="155.0" prefWidth="343.0">
                <children>
                   <Button fx:id="otherBoardButton" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" onAction="#otherBoards" prefHeight="120.0" prefWidth="266.0" style="-fx-base: #166796;" visible="false">
                      <graphic>
@@ -68,7 +68,7 @@
                   <Font name="Papyrus" size="20.0" />
                </font>
             </Label>
-            <StackPane fx:id="moveToIslandPane" disable="true" layoutX="75.0" layoutY="344.0" prefHeight="150.0" prefWidth="200.0" visible="false">
+            <StackPane fx:id="moveToIslandPane" disable="true" layoutX="73.0" layoutY="245.0" prefHeight="150.0" prefWidth="200.0" visible="false">
                <children>
                   <ImageView fitHeight="201.0" fitWidth="213.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -83,11 +83,34 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="200.0" onDragDropped="#handleIslandDrop" onDragOver="#handleDropOver" stroke="BLACK" strokeType="INSIDE" width="200.0" />
                </children>
             </StackPane>
+            <StackPane layoutX="7.0" layoutY="540.0" prefHeight="155.0" prefWidth="343.0">
+               <children>
+                  <Button fx:id="useCharacterButton" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" onAction="#useCharacter" prefHeight="120.0" prefWidth="266.0" style="-fx-base: #166796;" visible="false">
+                     <graphic>
+                        <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefHeight="116.0" prefWidth="208.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="47.0" prefWidth="206.0" text="Use character">
+                                 <font>
+                                    <Font name="Papyrus" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <ImageView fitHeight="44.0" fitWidth="41.0">
+                                 <image>
+                                    <Image url="@../assets/eye.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </Button>
+               </children>
+            </StackPane>
             </children>
         </AnchorPane>
     </right>
     <left>
-        <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1557.0" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1561.0" BorderPane.alignment="CENTER">
             <children>
                 <StackPane layoutX="1316.0" layoutY="79.0" prefHeight="150.0" prefWidth="200.0">
                <children>
@@ -128,28 +151,27 @@
                   <Font name="Papyrus" size="40.0" />
                </font>
             </Label>
-            <ImageView fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="909.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="myCoinImage" fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="909.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../assets/Moneta_base.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="opponentCoinImage" fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentCoinImage" fitHeight="80.0" fitWidth="74.0" layoutX="48.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../assets/Moneta_base.png" />
                </image>
             </ImageView>
-            <Label fx:id="opponentCoin" layoutX="127.0" layoutY="281.0" prefHeight="57.0" prefWidth="72.0">
+            <Label fx:id="opponentCoin" layoutX="127.0" layoutY="281.0" prefHeight="57.0" prefWidth="72.0" visible="false">
                <font>
                   <Font name="Papyrus" size="30.0" />
                </font>
             </Label>
-            <Label fx:id="myCoin" layoutX="118.0" layoutY="921.0" prefHeight="57.0" prefWidth="72.0">
+            <Label fx:id="myCoin" layoutX="118.0" layoutY="921.0" prefHeight="57.0" prefWidth="72.0" visible="false">
                <font>
                   <Font name="Papyrus" size="30.0" />
                </font>
             </Label>
             </children>
-            <Button mnemonicParsing="false" onAction="#fullScreen" style="-fx-background-color: transparent;" text="Go fullscreen" />
         </AnchorPane>
     </left>
     <center>

@@ -160,7 +160,6 @@ public class GUI {
         chooseWizard(true);
     }
 
-
     public void chooseWizard(boolean newGame) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseWizard.fxml"));
@@ -336,7 +335,7 @@ public class GUI {
             if (myTurn && currPhase.equals(Phase_GUI.Action1)) {
                 gameBoardController.setMoveStudent(true);
             } else if (myTurn && currPhase.equals(Phase_GUI.Action2)) {
-                gameBoardController.setMoveStudent(true);
+                gameBoardController.setMoveMotherNature(true);
                 gameBoardController.disableBack();
             } else if (myTurn && currPhase.equals(Phase_GUI.Action3)) {
                 gameBoardController.setChooseCloud(true);
@@ -380,6 +379,10 @@ public class GUI {
                 for (int i = 0; i < 2; i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
+                if (myTurn && expert) {
+                    schoolBoardController.enableCharacterButton();
+                }
+
             } else {
                 schoolBoardController.setUpOtherBoards();
                 for (int i = 2; i < players.size(); i++) {
@@ -532,6 +535,10 @@ public class GUI {
 
     public boolean isExpert() {
         return expert;
+    }
+
+    public void setExpert() {
+        this.expert = true;
     }
 
     public void setWizards(List<Wizard> wizards) {

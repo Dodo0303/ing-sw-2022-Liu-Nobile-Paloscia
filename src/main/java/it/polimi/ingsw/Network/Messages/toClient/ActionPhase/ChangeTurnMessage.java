@@ -41,6 +41,7 @@ public class ChangeTurnMessage extends MessageToClient {
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
+            ch.getClient().setMyTurn(true);
             ch.getClient().checkBoard("Your round.");
             if (ch.getClient().getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Planning);
@@ -56,6 +57,7 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().playAssistant("");
             }
         } else {
+            ch.getClient().setMyTurn(false);
             ch.getClient().checkBoard(ch.getClient().getNickname() + "'s round.");
         }
     }

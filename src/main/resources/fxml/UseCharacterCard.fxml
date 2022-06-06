@@ -15,7 +15,6 @@
     <center>
         <Pane prefHeight="996.0" prefWidth="1761.0" BorderPane.alignment="CENTER">
             <children>
-                <Button mnemonicParsing="false" onAction="#fullScreen" style="-fx-background-color: transparent;" text="Go fullscreen" />
                 <ImageView fx:id="pic1" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="222.0" onMouseClicked="#choose1">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front.jpg" />
@@ -83,7 +82,7 @@
                 <RadioButton fx:id="radio10" layoutX="1226.0" layoutY="772.0" mnemonicParsing="false" />
                 <StackPane layoutX="688.0" layoutY="860.0" prefHeight="70.0" prefWidth="214.0">
                     <children>
-                        <Button fx:id="CheckBoardButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#checkBoard" prefHeight="120.0" prefWidth="266.0" style="-fx-base: #F2F4F4;">
+                        <Button fx:id="CheckBoardButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#back" prefHeight="120.0" prefWidth="266.0" style="-fx-base: #F2F4F4;">
                             <graphic>
                                 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefHeight="98.0" prefWidth="233.0">
                                     <children>

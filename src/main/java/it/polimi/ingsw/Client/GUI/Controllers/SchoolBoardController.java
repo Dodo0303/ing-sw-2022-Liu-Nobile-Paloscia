@@ -19,18 +19,17 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SchoolBoardController implements Initializable {
     @FXML
-    private Button otherBoardButton, backButton;
+    private Button otherBoardButton, backButton, useCharacterButton;
     @FXML
     private Label MyNickname, OpponentNickname, messageLabel, backLabel, opponentCoin, myCoin;
     @FXML
-    private ImageView MyCard, OpponentCard, opponentCoinImage;
+    private ImageView MyCard, OpponentCard, opponentCoinImage, myCoinImage;
     private GUI gui;
     private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers;
     private ArrayList<String> players;
@@ -50,6 +49,10 @@ public class SchoolBoardController implements Initializable {
 
     public void fullScreen() {
         gui.getStage().setFullScreen(true);
+    }
+
+    public void useCharacter() {
+        //todo
     }
 
     public void handleDropOver(DragEvent dragEvent) {
@@ -103,7 +106,12 @@ public class SchoolBoardController implements Initializable {
                 (players.size() > 2 && player.getNickName().equals(players.get(2)))) {
             p = MyBoard;
             MyNickname.setText(player.getNickName());
-            setMyCoinMessage(String.valueOf(player.getCoins())); //todo if expert
+            if (gui.isExpert()) {
+                myCoin.setVisible(true);
+                myCoinImage.setVisible(true);
+                setMyCoinMessage(String.valueOf(player.getCoins()));
+            }
+
             if (player.getUsedAssistant() != null) {
                 int index = player.getUsedAssistant().getValue();
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
@@ -113,7 +121,11 @@ public class SchoolBoardController implements Initializable {
                 (players.size() > 2 && player.getNickName().equals(players.get(3)))) {
             p = OpponentBoard;
             OpponentNickname.setText(player.getNickName());
-            setOpponentCoinMessage(String.valueOf(player.getCoins())); //todo if expert
+            if (gui.isExpert()) {
+                opponentCoin.setVisible(true);
+                opponentCoinImage.setVisible(true);
+                setOpponentCoinMessage(String.valueOf(player.getCoins()));
+            }
             if (player.getUsedAssistant() != null) {
                 int index = player.getUsedAssistant().getValue();
                 Image image = new Image("/assets/Assistenti/3x/Animali_1_" + index + "@3x.png");
@@ -372,5 +384,10 @@ public class SchoolBoardController implements Initializable {
             moveToIslandPane.setDisable(false);
             moveToIslandPane.setVisible(true);
         }
+    }
+
+    public void enableCharacterButton() {
+        useCharacterButton.setDisable(false);
+        useCharacterButton.setVisible(true);
     }
 }

@@ -92,11 +92,20 @@ public class ChooseCharacterController implements Initializable {
         } else {
             setMessage("This card is not available");
         }
+    }
 
+    public void back() {
+        gui.checkBoard("");
     }
 
     private boolean check(int x) {
-        //TODO
+        try {
+            gui.getGame().canAffordCharacter(gui.getNickname(),x);
+            gui.getGame().useEffectOfCharacter(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
 

@@ -6,12 +6,13 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.AnchorPane?>
+
 <BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.GameBoardController">
    <right>
       <AnchorPane maxHeight="1080.0" maxWidth="320.0" prefHeight="1080.0" prefWidth="320.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
@@ -71,7 +72,7 @@
       </AnchorPane>
    </right>
    <left>
-        <AnchorPane fx:id="anchorPane" maxHeight="1080.0" maxWidth="1600.0" prefHeight="1080.0" prefWidth="1600.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="anchorPane" maxHeight="1080.0" maxWidth="1600.0" prefHeight="1080.0" prefWidth="1562.0" style="-fx-background-color: #69bae9;" BorderPane.alignment="CENTER">
             <children>
             <StackPane fx:id="cloud1" layoutX="819.0" layoutY="333.0" onMouseClicked="#cloud1Chosen" prefHeight="150.0" prefWidth="200.0">
                <children>
@@ -118,7 +119,6 @@
                   </ImageView>
                </children>
             </StackPane>
-            <Button mnemonicParsing="false" onAction="#fullScreen" style="-fx-background-color: transparent;" text="Go fullscreen" textFill="WHITE" />
             </children>
         </AnchorPane>
    </left>

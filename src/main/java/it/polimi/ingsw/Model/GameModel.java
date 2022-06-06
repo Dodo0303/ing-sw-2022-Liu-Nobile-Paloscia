@@ -446,6 +446,10 @@ public class GameModel implements Serializable {
         this._professors = _professors;
     }
 
+    public List<CharacterCard> getCharacters() {
+        return characters;
+    }
+
     private class PlayerComparator implements Comparator<Player> {
 
         @Override

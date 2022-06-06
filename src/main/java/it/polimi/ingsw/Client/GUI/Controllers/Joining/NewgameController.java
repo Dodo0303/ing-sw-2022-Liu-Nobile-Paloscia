@@ -35,6 +35,7 @@ public class NewgameController implements Initializable {
                 setMessage("Please choose a number.");
             } else {
                 boolean mode = expertBox.isSelected();
+                gui.setExpert();
                 int x = Integer.parseInt(numPlayerBox.getValue());
                 sendNewGameInfo(x, mode);
             }

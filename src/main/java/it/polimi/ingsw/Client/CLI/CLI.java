@@ -11,6 +11,7 @@ import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMess
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
@@ -30,6 +31,7 @@ public class CLI {
     private Phase currPhase;
     private List<Wizard> wizards;
     private int ap1Moves;
+    private boolean expert;
 
     public void start() {
         printTitle();
@@ -173,8 +175,6 @@ public class CLI {
             newgame();
         } else {
             send(new CreateMatchMessage(false));
-            //joinGame();
-            //chooseWizard();
         }
     }
 
@@ -195,6 +195,11 @@ public class CLI {
             while(!mode.equals("true") && !mode.equals("false")) {
                 System.out.print("turn on expert mode? Respond with true or false.\n");
                 mode = input.nextLine().toLowerCase();
+                if (mode.equals("true")) {
+                    this.expert = true;
+                } else {
+                    this.expert = false;
+                }
             }
             while(wiz > 3 || wiz < 0) {
                 System.out.print("Choose a wizard for yourself. Type in 1,2,3, or 4.\n");
@@ -204,6 +209,7 @@ public class CLI {
                 }
             }
             send(new SendStartInfoMessage(numPlayer, Boolean.parseBoolean(mode), Wizard.values()[wiz]));
+
         } catch (Exception e) {
             System.out.print("Something went wrong, please try again.\n");
             newgame();
@@ -430,16 +436,32 @@ public class CLI {
         System.out.println("Towers: " + player.getTowerNum());
     }
 
+    private void printCharacters() {
+        for (int i = 1; i <= game.getCharacters().size(); i++) {
+            System.out.println(i + ". character" + game.getCharacters().get(i).getID() + "; cost: " + game.getCharacters().get(i).getPrice());
+        }
+    }
+
+    private void useCharacter(int characterIndex) {
+        int realCharacterIndex = game.getCharacters().get(characterIndex).getID();
+        send(new UseCharacterMessage(realCharacterIndex));
+    }
+
     private void menu() {
         clearScreen();
         int num = -1;
-        while (num != 5) {
+        while ((expert && num!= 6) || (!expert && num != 5)) {
             System.out.println("\n\nWhat do you want to see?\n ");
             System.out.println("1. Islands");
             System.out.println("2. Clouds");
             System.out.println("3. School board");
-            System.out.println("4. Others' school boards");
-            System.out.println("5. Continue\n");
+            System.out.println("4. Others' school boards");;
+            if (expert) {
+                System.out.println("5. Use character card");
+                System.out.println("6. Continue\n");
+            } else {
+                System.out.println("5. Continue\n");
+            }
             String in = input.nextLine();
             if (Utilities.isNumeric(in)) {
                 num = Integer.parseInt(in);
@@ -477,6 +499,22 @@ public class CLI {
                         printSchoolBoard(game.getPlayers().get(playerChosen));
                     } else {
                         System.out.println("No such player.");
+                    }
+                    break;
+                }
+                case 5 : {
+                    if (expert) {
+                        int characterIndex = -1;
+                        printCharacters();
+                        String temp = input.nextLine();
+                        if (Utilities.isNumeric(temp)) {
+                            characterIndex = Integer.parseInt(temp);
+                        }
+                        if (characterIndex <= game.getCharacters().size()) {
+                            useCharacter(characterIndex);
+                        } else {
+                            System.out.println("No such character card.");
+                        }
                     }
                     break;
                 }
