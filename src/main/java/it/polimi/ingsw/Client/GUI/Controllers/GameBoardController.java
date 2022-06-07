@@ -309,6 +309,7 @@ public class GameBoardController implements Initializable {
         backButton.setDisable(true);
         backButton.setVisible(false);
     }
+
     public void setMessage(String msg) {
         messageLabel.setText(msg);
     }
