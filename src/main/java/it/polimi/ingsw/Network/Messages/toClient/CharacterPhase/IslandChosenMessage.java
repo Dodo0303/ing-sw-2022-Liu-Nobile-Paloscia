@@ -33,4 +33,10 @@ public class IslandChosenMessage extends MessageToClient {
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().set_players(playersUpdated);
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        client.getClient().getGame().updateCharacterById(characterUpdated);
+        client.getClient().getGame().set_islands(islands);
+        client.getClient().getGame().set_players(playersUpdated);
+    }
 }

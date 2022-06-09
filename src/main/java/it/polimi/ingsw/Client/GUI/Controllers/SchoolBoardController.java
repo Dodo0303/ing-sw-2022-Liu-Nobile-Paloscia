@@ -29,7 +29,7 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private Label MyNickname, OpponentNickname, messageLabel, backLabel, opponentCoin, myCoin;
     @FXML
-    private ImageView MyCard, OpponentCard, opponentCoinImage, myCoinImage;
+    private ImageView MyCard, OpponentCard, opponentCoinImage, myCoinImage, characterCardImage;
     private GUI gui;
     private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers;
     private ArrayList<String> players;
@@ -52,7 +52,7 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void useCharacter() {
-        //todo
+        gui.showCharacter("");
     }
 
     public void handleDropOver(DragEvent dragEvent) {

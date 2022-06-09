@@ -3,6 +3,8 @@ package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
+import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
+import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class CharacterUsedMessage extends MessageToClient {
@@ -19,7 +21,8 @@ public class CharacterUsedMessage extends MessageToClient {
 
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
+        client.getClient().getGame().useEffectOfCharacter(characterID);
 
     }
 

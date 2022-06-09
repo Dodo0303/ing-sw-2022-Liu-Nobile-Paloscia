@@ -35,4 +35,9 @@ public class StudentMovedToTableMessage extends MessageToClient {
         client.getClient().getGame().getPlayerByNickname(playerID).addToDiningTable(tableColor);
         client.getClient().getGame().updateCharacterById(characterUpdated);
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        client.getClient().getGame().getPlayerByNickname(playerID).addToDiningTable(tableColor);
+        client.getClient().getGame().updateCharacterById(characterUpdated);
+    }
 }

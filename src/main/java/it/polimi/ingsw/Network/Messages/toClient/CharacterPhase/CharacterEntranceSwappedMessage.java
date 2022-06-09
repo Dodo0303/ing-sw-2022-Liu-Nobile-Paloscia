@@ -45,4 +45,15 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
             player.addStudentToEntrance(color);
         }
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        GameModel game = client.getClient().getGame();
+        Player player = game.getPlayerByNickname(playerID);
+        game.updateCharacterById(characterUpdated);
+        player.clearEntrance();
+        for (StudentColor color :
+                entranceUpdated) {
+            player.addStudentToEntrance(color);
+        }
+    }
 }

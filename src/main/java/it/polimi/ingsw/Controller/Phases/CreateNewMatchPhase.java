@@ -18,7 +18,8 @@ public class CreateNewMatchPhase extends ClientHandlerPhase{
             return;
         } //TODO Check that the parameter for creating a match are correct
         ch.createMatchController(((SendStartInfoMessage) msg).getNumOfPlayers(), ((SendStartInfoMessage) msg).getWizard(), ((SendStartInfoMessage) msg).getExpertMode());
-        MessageToClient confirm = new ConfirmJoiningMessage(true, "Game created", ch.getMatch().getID());
+        ch.getMatch().setExpert(((SendStartInfoMessage) msg).getExpertMode());
+        MessageToClient confirm = new ConfirmJoiningMessage(true, "Game created", ch.getMatch().getID(), ((SendStartInfoMessage) msg).getExpertMode());
         ch.send(confirm);
         ch.setPhase(new GameStartedPhase(ch));
     }

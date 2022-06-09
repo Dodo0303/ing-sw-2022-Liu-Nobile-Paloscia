@@ -15,52 +15,52 @@
     <center>
         <Pane prefHeight="996.0" prefWidth="1761.0" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fx:id="pic1" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="222.0" onMouseClicked="#choose1">
+                <ImageView fx:id="pic1" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="222.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic2" fitHeight="200.0" fitWidth="136.0" layoutX="486.0" layoutY="222.0" onMouseClicked="#choose2">
+                <ImageView fx:id="pic2" fitHeight="200.0" fitWidth="136.0" layoutX="486.0" layoutY="222.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front2.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic3" fitHeight="200.0" fitWidth="136.0" layoutX="727.0" layoutY="222.0" onMouseClicked="#choose3">
+                <ImageView fx:id="pic3" fitHeight="200.0" fitWidth="136.0" layoutX="727.0" layoutY="222.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front3.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic4" fitHeight="200.0" fitWidth="136.0" layoutX="953.0" layoutY="222.0" onMouseClicked="#choose4">
+                <ImageView fx:id="pic4" fitHeight="200.0" fitWidth="136.0" layoutX="953.0" layoutY="222.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front4.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic5" fitHeight="200.0" fitWidth="136.0" layoutX="1174.0" layoutY="222.0" onMouseClicked="#choose5">
+                <ImageView fx:id="pic5" fitHeight="200.0" fitWidth="136.0" layoutX="1174.0" layoutY="222.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front5.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic6" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="540.0" onMouseClicked="#choose6">
+                <ImageView fx:id="pic6" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="540.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front6.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic7" fitHeight="200.0" fitWidth="136.0" layoutX="486.0" layoutY="540.0" onMouseClicked="#choose7">
+                <ImageView fx:id="pic7" fitHeight="200.0" fitWidth="136.0" layoutX="486.0" layoutY="540.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front7.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic8" fitHeight="200.0" fitWidth="136.0" layoutX="727.0" layoutY="540.0" onMouseClicked="#choose8">
+                <ImageView fx:id="pic8" fitHeight="200.0" fitWidth="136.0" layoutX="727.0" layoutY="540.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front8.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic9" fitHeight="200.0" fitWidth="136.0" layoutX="953.0" layoutY="540.0" onMouseClicked="#choose9">
+                <ImageView fx:id="pic9" fitHeight="200.0" fitWidth="136.0" layoutX="953.0" layoutY="540.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front9.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="pic10" fitHeight="200.0" fitWidth="136.0" layoutX="1174.0" layoutY="540.0" onMouseClicked="#choose10">
+                <ImageView fx:id="pic10" fitHeight="200.0" fitWidth="136.0" layoutX="1174.0" layoutY="540.0">
                     <image>
                         <Image url="@../assets/Personaggi/CarteTOT_front10.jpg" />
                     </image>
@@ -128,12 +128,12 @@
                 </StackPane>
             <RadioButton fx:id="radio12" layoutX="1465.0" layoutY="764.0" mnemonicParsing="false" />
             <RadioButton fx:id="radio11" layoutX="1473.0" layoutY="448.0" mnemonicParsing="false" />
-            <ImageView fx:id="pic51" fitHeight="200.0" fitWidth="136.0" layoutX="1405.0" layoutY="222.0" onMouseClicked="#choose5">
+            <ImageView fx:id="pic51" fitHeight="200.0" fitWidth="136.0" layoutX="1405.0" layoutY="222.0" >
                <image>
                   <Image url="@../assets/Personaggi/CarteTOT_front11.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="pic101" fitHeight="200.0" fitWidth="136.0" layoutX="1405.0" layoutY="540.0" onMouseClicked="#choose10">
+            <ImageView fx:id="pic101" fitHeight="200.0" fitWidth="136.0" layoutX="1405.0" layoutY="540.0" >
                <image>
                   <Image url="@../assets/Personaggi/CarteTOT_front12.jpg" />
                </image>

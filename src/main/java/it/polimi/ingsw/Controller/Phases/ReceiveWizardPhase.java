@@ -26,12 +26,12 @@ public class ReceiveWizardPhase extends ClientHandlerPhase{
             System.out.println("Received " + ((SendChosenWizardMessage) msg).getWizard().toString());
             ch.setWizard(((SendChosenWizardMessage) msg).getWizard());
             ch.getMatch().setWizardOfPlayer(ch, ((SendChosenWizardMessage) msg).getWizard());
-            MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game", ch.getMatch().getID());
+            MessageToClient confirm = new ConfirmJoiningMessage(true, "You joined the game", ch.getMatch().getID(), ch.getMatch().isExpert());
             ch.send(confirm);
         } catch (GameException e) {
             System.out.println(e.getMessage());
             ch.setWizard(null);
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available", ch.getMatch().getID());
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Wizard not available", ch.getMatch().getID(), false);
             ch.send(denyJoining);
             try {
                 ch.sendAvailableWizards();

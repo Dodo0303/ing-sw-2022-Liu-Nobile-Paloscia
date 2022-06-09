@@ -226,7 +226,7 @@ public class CLI {
                 System.out.print("Choose a match.\n");
                 String in = input.nextLine();
                 if (Utilities.isNumeric(in)) {
-                    match = Integer.parseInt(in); //todo why minus one to get to correct match id
+                    match = Integer.parseInt(in);
                 }
             }
             send(new MatchChosenMessage(matchIDs.get(match)));
@@ -586,5 +586,13 @@ public class CLI {
 
     public GameModel getGame() {
         return game;
+    }
+
+    public boolean isExpert() {
+        return expert;
+    }
+
+    public void setExpert(boolean expert) {
+        this.expert = expert;
     }
 }

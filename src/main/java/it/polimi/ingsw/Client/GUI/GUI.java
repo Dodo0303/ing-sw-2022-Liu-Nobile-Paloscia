@@ -4,6 +4,9 @@ import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.GUI.Controllers.*;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
+import it.polimi.ingsw.Exceptions.FullTableException;
+import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
+import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.*;
@@ -401,6 +404,27 @@ public class GUI {
         }
     }
 
+    public void showCharacter(String msg) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
+            Parent root = fxmlLoader.load();
+            GameOverController gameOverController = fxmlLoader.getController();
+            gameOverController.setGUI(this);
+            if (!Objects.equals(msg, "")) {
+                gameOverController.setMessage(msg);
+            }
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void send(Object message) {
         if (message == null) {
@@ -415,7 +439,7 @@ public class GUI {
         serverHandlerThread.start();
     }
 
-    public void messageReceived(Object message) throws EmptyCloudException {
+    public void messageReceived(Object message) {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase_GUI.PickingNickname)) {
                 ((NickResponseMessage) message).GUIprocess(this.serverHandler);
@@ -438,7 +462,6 @@ public class GUI {
         } else if (message instanceof GameModelUpdateMessage) {
             ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
         }  else if (message instanceof ChangeTurnMessage) {
-            System.out.println(currPhase.toString() + " to " + ((ChangeTurnMessage) message).getPhase().toString());//TODO DELETE AFTER TESTS
             ((ChangeTurnMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof CloudsUpdateMessage) {
             ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
@@ -463,25 +486,97 @@ public class GUI {
         } else if (message instanceof ConfirmMovementMessage) {
             ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof ConfirmCloudMessage) {
-            ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
+            try {
+                ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
+            } catch (EmptyCloudException e){
+                checkBoard("The cloud is empty");
+            }
+
         } else if (message instanceof EndMessage) {
             ((EndMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof CharacterUsedMessage) {
-            ((CharacterUsedMessage) message).processGUI(this.serverHandler);
-        }else if (message instanceof CharacterEntranceSwappedMessage){
+            try {
+                ((CharacterUsedMessage) message).processGUI(this.serverHandler);
+            } catch (WrongEffectException e3) {
+                viewSchoolBoard("Wrong effect", false);
+            } catch (NotEnoughNoEntriesException e4) {
+                viewSchoolBoard("No enough no entries", false);
+            }
+        } else if (message instanceof CharacterEntranceSwappedMessage){
+            try {
+                ((CharacterEntranceSwappedMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
 
         } else if (message instanceof EntranceTableSwappedMessage){
+            try {
+                ((EntranceTableSwappedMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
 
         } else if (message instanceof IslandChosenMessage){
+            try {
+                ((IslandChosenMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
 
         } else if (message instanceof NoEntryMovedMessage){
+            try {
+                ((NoEntryMovedMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
 
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
         } else if (message instanceof StudentColorChosenMessage){
+            try {
+                ((StudentColorChosenMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
 
         } else if (message instanceof StudentMovedFromCharacterMessage){
+            try {
+                ((StudentMovedFromCharacterMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
 
         } else if (message instanceof StudentMovedToTableMessage){
+            try {
+                ((StudentMovedToTableMessage) message).processGUI(this.serverHandler);
+            } catch (InterruptedException ignored){
 
+            } catch (EmptyCloudException e1) {
+                checkBoard("The cloud is empty");
+            } catch (FullTableException e2) {
+                viewSchoolBoard("The table is full.", false);
+            }
         }
     }
 
@@ -537,8 +632,8 @@ public class GUI {
         return expert;
     }
 
-    public void setExpert() {
-        this.expert = true;
+    public void setExpert(boolean expert) {
+        this.expert = expert;
     }
 
     public void setWizards(List<Wizard> wizards) {

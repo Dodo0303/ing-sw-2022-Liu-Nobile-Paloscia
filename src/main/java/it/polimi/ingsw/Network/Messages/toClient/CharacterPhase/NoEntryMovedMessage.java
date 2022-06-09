@@ -29,4 +29,9 @@ public class NoEntryMovedMessage extends MessageToClient {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         client.getClient().getGame().addNoEntry(client.getClient().getGame().getIslands().get(islandID));
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        client.getClient().getGame().updateCharacterById(characterUpdated);
+        client.getClient().getGame().addNoEntry(client.getClient().getGame().getIslands().get(islandID));
+    }
 }

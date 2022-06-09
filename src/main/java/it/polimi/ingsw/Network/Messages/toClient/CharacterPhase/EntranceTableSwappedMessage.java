@@ -30,4 +30,12 @@ public class EntranceTableSwappedMessage extends MessageToClient {
             }
         }
     }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        for (int i = 0; i < client.getClient().getGame().getPlayers().size(); i++) {
+            if (client.getClient().getGame().getPlayers().get(i).getNickName().equals(playerID)) {
+                client.getClient().getGame().getPlayers().set(i, playerUpdated);
+            }
+        }
+    }
 }

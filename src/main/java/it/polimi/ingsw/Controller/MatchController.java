@@ -35,6 +35,7 @@ public class MatchController implements Runnable {
     private final ArrayList<ClientHandler> clients;
     private Wizard[] wizards;
     private Phase gamePhase;
+    private boolean expert;
 
     private GameModel game;
 
@@ -122,6 +123,15 @@ public class MatchController implements Runnable {
         this.additionalMoves = 0;
         this.professorChecker = new StandardProfessorChecker();
     }
+
+    public boolean isExpert() {
+        return expert;
+    }
+
+    public void setExpert(boolean expert) {
+        this.expert = expert;
+    }
+
 
     // PLAYERS
 

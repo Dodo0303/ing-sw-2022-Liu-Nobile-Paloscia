@@ -90,7 +90,7 @@ public class ChooseCharacterController implements Initializable {
             CheckBoardButton.setDisable(true);
             gui.send(new UseCharacterMessage(res));
         } else {
-            setMessage("This card is not available");
+            setMessage("You cannot use this card.");
         }
     }
 
@@ -101,7 +101,6 @@ public class ChooseCharacterController implements Initializable {
     private boolean check(int x) {
         try {
             gui.getGame().canAffordCharacter(gui.getNickname(),x);
-            gui.getGame().useEffectOfCharacter(x);
         } catch (Exception e) {
             e.printStackTrace();
         }

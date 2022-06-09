@@ -31,7 +31,7 @@ public class JoinMatchPhase extends ClientHandlerPhase{
             ch.setMatch(ch.getServer().getMatchById(((MatchChosenMessage) msg).getMatchID()));
             ch.getMatch().addPlayer(ch);
         } catch (NoSuchMatchException e) {
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists", -1);
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match doesn't exists", -1, false);
             ch.send(denyJoining);
             try {
                 sendAvailableMatchesToClient();
@@ -40,7 +40,7 @@ public class JoinMatchPhase extends ClientHandlerPhase{
             }
             return;
         } catch (MatchMakingException e) {
-            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match full", ch.getMatch().getID());
+            MessageToClient denyJoining = new ConfirmJoiningMessage(false, "Match full", ch.getMatch().getID(), false);
             ch.send(denyJoining);
             try {
                 sendAvailableMatchesToClient();

@@ -7,14 +7,15 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class ConfirmJoiningMessage extends MessageToClient {
 
-    private boolean result;
+    private boolean result, expert;
     private String message;
     private int matchID;
 
-    public ConfirmJoiningMessage(boolean result, String message, int matchID) {
+    public ConfirmJoiningMessage(boolean result, String message, int matchID, boolean expert) {
         this.result = result;
         this.message = message;
         this.matchID = matchID;
+        this.expert = expert;
     }
 
     public boolean isResult() {
@@ -28,6 +29,7 @@ public class ConfirmJoiningMessage extends MessageToClient {
     @Override
     public void process(ServerHandler ch) {
         if (result) {
+            ch.getClient().setExpert(expert);
             System.out.println("You've joined match " + matchID);
             if (message.equals("Game created")) {
                 ch.getClient().setPhase(Phase.GameJoined);
@@ -40,9 +42,10 @@ public class ConfirmJoiningMessage extends MessageToClient {
             System.out.println(this.message);
         }
     }
-    //todo
+
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
         if (result) {
+            ch.getClient().setExpert(expert);
             if (message.equals("Game created")) {
                 ch.getClient().showGameCreated("Match: " + matchID);
                 ch.getClient().setCurrPhase(Phase_GUI.GameJoined);
