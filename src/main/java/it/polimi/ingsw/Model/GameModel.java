@@ -146,6 +146,7 @@ public class GameModel implements Serializable {
         characters = new ArrayList<>();
         CharacterFactory factory = new CharacterFactory(this);
         List<Integer> characterIDs = new ArrayList<>();
+        /** TODO uncomment after tests
         Random rnd = new Random();
         int id;
         for (int i = 0; i < 3; i++) {
@@ -157,6 +158,14 @@ public class GameModel implements Serializable {
             characterIDs.add(i, id);
             characters.add(factory.createCharacter(id));
         }
+         */
+
+        //TODO delete below after tests
+        for (int i = 0; i < 12; i++) {
+            characterIDs.add(i, i + 1);
+            characters.add(factory.createCharacter(i + 1));
+        }
+
     }
 
     /** Extract 7/9 students from bag and add to the entrance of each player.
@@ -247,8 +256,13 @@ public class GameModel implements Serializable {
         } else {
         for (CharacterCard character:
              characters) {
-            if (character.getID() == characterID && p.getCoins() >= character.getPrice())
-                return true;
+            if (character.getID() == characterID) {
+                if (p.getCoins() >= character.getPrice()) {
+                    return true;
+                } else {
+                    break;
+                }
+            }
         }
         return false;
         }

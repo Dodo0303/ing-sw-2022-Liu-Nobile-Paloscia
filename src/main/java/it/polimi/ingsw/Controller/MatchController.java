@@ -256,6 +256,10 @@ public class MatchController implements Runnable {
 
         StudentColor color = game.removeStudentFromEntrance(p, studentIndex);
         game.addToDiningTable(p, color);
+        int numStudents = game.getPlayerByNickname(getCurrentPlayer().getNickName()).getDiningTables().get(color).getNumOfStudents();
+        if (numStudents == 3 || numStudents == 6 || numStudents == 9) {
+            addCoinsToPlayer(getCurrentPlayer().getNickName(), 1);
+        }
 
 
         moveProfessorIfNeeded(p, color);
@@ -338,11 +342,11 @@ public class MatchController implements Runnable {
         return game.useEffectOfCharacter(characterId, studentIndex, studentToAdd);
     }
 
-     /*
+
     public void addCoinsToPlayer(String nickname, int coins){
         game.addCoinsToPlayer(nickname, coins);
     }
-    */
+
     public void addNoEntryToIsland(int islandID) throws GameException, NotEnoughNoEntriesException {
         CharacterCard character = game.getCharacterById(5);
         try {

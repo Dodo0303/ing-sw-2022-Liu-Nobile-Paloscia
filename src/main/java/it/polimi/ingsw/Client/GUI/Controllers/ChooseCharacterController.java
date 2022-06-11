@@ -57,8 +57,10 @@ public class ChooseCharacterController implements Initializable {
     }
 
     public void execute() {
+        gui.setPrevPhase(gui.getCurrPhase());
         if (radio1.isSelected()) {
             res = 1;
+            gui.setCurrPhase(Phase_GUI.Character1);
         } else if (radio2.isSelected()) {
             res = 2;
         } else if (radio3.isSelected()) {
@@ -102,9 +104,8 @@ public class ChooseCharacterController implements Initializable {
             ConfirmButton.setDisable(true);
             CheckBoardButton.setDisable(true);
             gui.send(new UseCharacterMessage(res));
-            gui.setPrevPhase(gui.getCurrPhase());
-            gui.setCurrPhase(Phase_GUI.Character1);
         } else {
+            gui.setCurrPhase(gui.getPrevPhase());
             setMessage("You cannot use this card.");
         }
     }
