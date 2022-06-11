@@ -40,6 +40,7 @@ public class GUI {
     private Assistant assistant;
     private int ap1Moves;
     private boolean myTurn;
+    private Phase_GUI prevPhase;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -249,36 +250,6 @@ public class GUI {
         }
     }
 
-    public void moveStudentsFromEntrance(String msg) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
-            Parent root = fxmlLoader.load();
-            SchoolBoardController schoolBoardController = fxmlLoader.getController();
-            schoolBoardController.setGUI(this);
-            schoolBoardController.enableMoveToIslandPane(true);
-            schoolBoardController.setBackMessage("View game board");
-            if (!Objects.equals(msg, "")) {
-                schoolBoardController.setMessage(msg);
-            }
-            schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
-            for (int i = 0; i < game.getPlayers().size(); i++) {
-                if (!game.getPlayers().get(i).getNickName().equals(nickname)) {
-                    schoolBoardController.drawSchoolBoard(game.getPlayers().get(i));
-                    break;
-                }
-            }
-            Scene scene = new Scene(root, 1920, 1080);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void moveStudentToIsland(String msg, int studentIndex) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
@@ -362,6 +333,38 @@ public class GUI {
         }
     }
 
+    /**
+    public void moveStudentsFromEntrance(String msg) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
+            Parent root = fxmlLoader.load();
+            SchoolBoardController schoolBoardController = fxmlLoader.getController();
+            schoolBoardController.setGUI(this);
+            schoolBoardController.enableMoveToIslandPane(true);
+            schoolBoardController.setBackMessage("View game board");
+            if (!Objects.equals(msg, "")) {
+                schoolBoardController.setMessage(msg);
+            }
+            schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
+            for (int i = 0; i < game.getPlayers().size(); i++) {
+                if (!game.getPlayers().get(i).getNickName().equals(nickname)) {
+                    schoolBoardController.drawSchoolBoard(game.getPlayers().get(i));
+                    break;
+                }
+            }
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+     */
+
     public void viewSchoolBoard(String msg, boolean other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
@@ -382,8 +385,15 @@ public class GUI {
                 for (int i = 0; i < 2; i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
+                //&& (currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3)
                 if (myTurn && expert) {
                     schoolBoardController.enableCharacterButton();
+                }
+                if (currPhase.equals(Phase_GUI.Character1)) {
+                    schoolBoardController.enableCharacter1();
+                } else if (currPhase.equals(Phase_GUI.Action1)) {
+                    schoolBoardController.enableMoveToIslandPane(true);
+                    schoolBoardController.setBackMessage("View game board");
                 }
 
             } else {
@@ -408,10 +418,11 @@ public class GUI {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
             Parent root = fxmlLoader.load();
-            GameOverController gameOverController = fxmlLoader.getController();
-            gameOverController.setGUI(this);
+            ChooseCharacterController chooseCharacterController = fxmlLoader.getController();
+            chooseCharacterController.setGUI(this);
+            chooseCharacterController.setAvailableCharacters();
             if (!Objects.equals(msg, "")) {
-                gameOverController.setMessage(msg);
+                chooseCharacterController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
             Platform.runLater(new Runnable() {
@@ -424,6 +435,7 @@ public class GUI {
             e.printStackTrace();
         }
     }
+
 
 
     public void send(Object message) {
@@ -476,7 +488,7 @@ public class GUI {
                     ap1Moves = 0;
                     checkBoard("Move the mother nature");
                 } else {
-                    moveStudentsFromEntrance("move a student.");
+                    viewSchoolBoard("move a student.", false);
                 }
             } else {
                 viewSchoolBoard("", false);
@@ -555,7 +567,6 @@ public class GUI {
             } catch (FullTableException e2) {
                 viewSchoolBoard("The table is full.", false);
             }
-
         } else if (message instanceof StudentMovedFromCharacterMessage){
             try {
                 ((StudentMovedFromCharacterMessage) message).processGUI(this.serverHandler);
@@ -566,7 +577,6 @@ public class GUI {
             } catch (FullTableException e2) {
                 viewSchoolBoard("The table is full.", false);
             }
-
         } else if (message instanceof StudentMovedToTableMessage){
             try {
                 ((StudentMovedToTableMessage) message).processGUI(this.serverHandler);
@@ -598,6 +608,10 @@ public class GUI {
 
     public void setCurrPhase(Phase_GUI currPhase) {
         this.currPhase = currPhase;
+    }
+
+    public Phase_GUI getPrevPhase() {
+        return this.prevPhase;
     }
 
     public String getNickname() {
@@ -657,4 +671,7 @@ public class GUI {
         this.myTurn = myTurn;
     }
 
+    public void setPrevPhase(Phase_GUI phase) {
+        this.prevPhase = phase;
+    }
 }

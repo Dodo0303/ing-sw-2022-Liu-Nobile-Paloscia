@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -51,18 +52,14 @@ public class GameBoardController implements Initializable {
 
     public void back() {
         if (moveStudent) {
-            gui.moveStudentsFromEntrance("Move a student");
+            gui.viewSchoolBoard("Move a student", false);
         } else {
             gui.playAssistant("");
         }
     }
 
     public void viewSchoolBoard() {
-        if (gui.getCurrPhase().equals(Phase_GUI.Action1)) {
-            gui.moveStudentsFromEntrance("");
-        } else {
-            gui.viewSchoolBoard("", false);
-        }
+        gui.viewSchoolBoard("", false);
     }
 
     public void fullScreen() {
@@ -207,6 +204,9 @@ public class GameBoardController implements Initializable {
             if (moveStudent) {
                 imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     int islandChosen = islandImageViews.indexOf(imageView);
+                    if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
+                        gui.send(new MoveStudentFromCharacterMessage(studentIndex, islandChosen));
+                    }
                     gui.send(new MoveStudentFromEntranceMessage(studentIndex, 1, islandChosen));
                     event.consume();
                 });

@@ -48,7 +48,7 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().playAssistant("");
             } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Action1);
-                ch.getClient().moveStudentsFromEntrance("Move a student.");
+                ch.getClient().viewSchoolBoard("Move a student.", false);
             } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Planning);
                 for (int i = 0; i < ch.getClient().getGame().getPlayers().size(); i++) {

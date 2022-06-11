@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Model.Assistant;
 import it.polimi.ingsw.Model.Character.CharacterCard;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
@@ -41,6 +42,18 @@ public class ChooseCharacterController implements Initializable {
         radio10.setToggleGroup(toggleGroup);
         radio11.setToggleGroup(toggleGroup);
         radio12.setToggleGroup(toggleGroup);
+        radio1.setDisable(true);
+        radio2.setDisable(true);
+        radio3.setDisable(true);
+        radio4.setDisable(true);
+        radio5.setDisable(true);
+        radio6.setDisable(true);
+        radio7.setDisable(true);
+        radio8.setDisable(true);
+        radio9.setDisable(true);
+        radio10.setDisable(true);
+        radio11.setDisable(true);
+        radio12.setDisable(true);
     }
 
     public void execute() {
@@ -89,6 +102,8 @@ public class ChooseCharacterController implements Initializable {
             ConfirmButton.setDisable(true);
             CheckBoardButton.setDisable(true);
             gui.send(new UseCharacterMessage(res));
+            gui.setPrevPhase(gui.getCurrPhase());
+            gui.setCurrPhase(Phase_GUI.Character1);
         } else {
             setMessage("You cannot use this card.");
         }
@@ -106,6 +121,36 @@ public class ChooseCharacterController implements Initializable {
         }
 
         return true;
+    }
+
+    public void setAvailableCharacters() {
+        for (int i = 0; i < gui.getGame().getCharacters().size(); i++) {
+            if (gui.getGame().getCharacters().get(i).getID() == 1) {
+                radio1.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 2) {
+                radio2.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 3) {
+                radio3.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 4) {
+                radio4.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 5) {
+                radio5.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 6) {
+                radio6.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 7) {
+                radio7.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 8) {
+                radio8.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 9) {
+                radio9.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 10) {
+                radio10.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 11) {
+                radio11.setDisable(false);
+            } else if (gui.getGame().getCharacters().get(i).getID() == 12) {
+                radio12.setDisable(false);
+            }
+        }
     }
 
     public void setGUI(GUI gui) {

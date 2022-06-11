@@ -2,11 +2,13 @@ package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.Color;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.StudentMovedToTableMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -31,11 +33,11 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private ImageView MyCard, OpponentCard, opponentCoinImage, myCoinImage, characterCardImage;
     private GUI gui;
-    private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers;
+    private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers, character1;
     private ArrayList<String> players;
     private Point greenProf, redProf, yellowProf, pinkProf, blueProf;
     @FXML
-    private StackPane OpponentBoard, MyBoard, moveToIslandPane;
+    private StackPane OpponentBoard, MyBoard, moveToIslandPane, CharacterPane;
     @FXML
     private Rectangle tableArea;
     private ArrayList<ImageView> imageViews;
@@ -389,5 +391,62 @@ public class SchoolBoardController implements Initializable {
     public void enableCharacterButton() {
         useCharacterButton.setDisable(false);
         useCharacterButton.setVisible(true);
+    }
+
+    public void enableCharacter1() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+        Image stuImage = null;
+        ArrayList<Point> character1 = new ArrayList<>();
+        character1.add(new Point(-40, -40));
+        character1.add(new Point(-40, 40));
+        character1.add(new Point(40, -40));
+        character1.add(new Point(40, 40));
+        try {
+            for (int i = 0; i < gui.getGame().getCharacterById(1).getStudents().size(); i++) {
+                StudentColor stud = gui.getGame().getCharacterById(1).getStudents().get(i);
+                imageViews.add(new ImageView());
+                ImageView imageView1 = imageViews.get(imageViews.size() - 1);
+                if (stud.equals(StudentColor.GREEN)) {
+                    stuImage = new Image("/assets/Students/green.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.RED)) {
+                    stuImage = new Image("/assets/Students/red.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.YELLOW)) {
+                    stuImage = new Image("/assets/Students/yellow.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.PINK)) {
+                    stuImage = new Image("/assets/Students/pink.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.BLUE)) {
+                    stuImage = new Image("/assets/Students/blue.png");
+                    imageView1.setImage(stuImage);
+                }
+                imageView1.setFitHeight(35);
+                imageView1.setFitWidth(35);
+                Point temp = character1.get(i);
+                imageView1.setTranslateX(temp.getX());
+                imageView1.setTranslateY(temp.getY());
+                Image finalStuImage = stuImage;
+                imageView1.setOnDragDetected(evt -> {
+                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(finalStuImage);
+                    dragboard.setContent(content);
+                    for (Point point : character1) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            studentIndex = character1.indexOf(point);
+                        }
+                    }
+                });
+            }
+            tableArea.setDisable(true);
+            enableMoveToIslandPane(true);
+        } catch (WrongEffectException e) {
+            e.printStackTrace();
+        }
+
     }
 }

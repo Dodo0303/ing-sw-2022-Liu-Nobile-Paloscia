@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -30,10 +31,14 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         client.getClient().getGame().set_islands(islands);
+        //todo
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         client.getClient().getGame().set_islands(islands);
+        if (client.getClient().getCurrPhase().equals(Phase_GUI.Character1)) {
+
+        }
     }
 }
