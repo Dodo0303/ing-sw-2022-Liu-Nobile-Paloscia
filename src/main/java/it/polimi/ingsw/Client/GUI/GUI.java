@@ -366,33 +366,35 @@ public class GUI {
                 }
                 if (myTurn && expert && (currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3)) {
                     schoolBoardController.enableCharacterButton();
+                } else if (!myTurn && expert) {
+                    //todo see characters
                 }
-                if (currPhase.equals(Phase_GUI.Action1)) {
+                if (myTurn && expert && currPhase.equals(Phase_GUI.Action1)) {
                     schoolBoardController.enableMoveToIslandPane(true);
                     schoolBoardController.setBackMessage("View game board");
-                } else if (currPhase.equals(Phase_GUI.Character1)) {
+                } else if (currPhase.equals(Phase_GUI.Character1)|| currCharacter == 1) {
                     schoolBoardController.enableCharacter1();
                 } else if (currPhase.equals(Phase_GUI.Character2) || currCharacter == 2) {
                     schoolBoardController.enableCharacter2();
-                } else if (currPhase.equals(Phase_GUI.Character3)) {
+                } else if (currPhase.equals(Phase_GUI.Character3)|| currCharacter == 3) {
                     schoolBoardController.enableCharacter3();
                 } else if (currPhase.equals(Phase_GUI.Character4) || currCharacter == 4) {
                     schoolBoardController.enableCharacter4();
-                } else if (currPhase.equals(Phase_GUI.Character5)) {
+                } else if (currPhase.equals(Phase_GUI.Character5) || currCharacter == 5) {
                     schoolBoardController.enableCharacter5();
                 } else if (currPhase.equals(Phase_GUI.Character6) || currCharacter == 6) {
                     schoolBoardController.enableCharacter6();
-                } else if (currPhase.equals(Phase_GUI.Character7)) {
+                } else if (currPhase.equals(Phase_GUI.Character7) || currCharacter == 7) {
                     schoolBoardController.enableCharacter7();
                 } else if (currPhase.equals(Phase_GUI.Character8) || currCharacter == 8) {
                     schoolBoardController.enableCharacter8();
-                } else if (currPhase.equals(Phase_GUI.Character9)) {
+                } else if (currPhase.equals(Phase_GUI.Character9) || currCharacter == 9) {
                     schoolBoardController.enableCharacter9();
-                } else if (currPhase.equals(Phase_GUI.Character10)) {
+                } else if (currPhase.equals(Phase_GUI.Character10) || currCharacter == 10) {
                     schoolBoardController.enableCharacter10();
-                } else if (currPhase.equals(Phase_GUI.Character11)) {
+                } else if (currPhase.equals(Phase_GUI.Character11) || currCharacter == 11) {
                     schoolBoardController.enableCharacter11();
-                } else if (currPhase.equals(Phase_GUI.Character12)) {
+                } else if (currPhase.equals(Phase_GUI.Character12) || currCharacter == 12) {
                     schoolBoardController.enableCharacter12();
                 }
 
@@ -679,6 +681,10 @@ public class GUI {
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
+    }
+
+    public boolean isMyTurn() {
+        return myTurn;
     }
 
     public void setPrevPhase(Phase_GUI phase) {

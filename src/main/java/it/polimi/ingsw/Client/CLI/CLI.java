@@ -1,11 +1,12 @@
 package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
+import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
-import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.CharacterUsedMessage;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.EndMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
@@ -55,7 +56,7 @@ public class CLI {
         }
     }
 
-    public void messageReceived(Object message) throws InterruptedException, EmptyCloudException, WrongEffectException, NotEnoughNoEntriesException {
+    public void messageReceived(Object message) throws InterruptedException, EmptyCloudException{
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
                 ((NickResponseMessage) message).process(this.serverHandler);
@@ -120,7 +121,70 @@ public class CLI {
         } else if (message instanceof UsedAssistantMessage) {
             ((UsedAssistantMessage) message).process(this.serverHandler);
         } else if (message instanceof CharacterUsedMessage) {
-            ((CharacterUsedMessage) message).process(this.serverHandler);
+            try {
+                ((CharacterUsedMessage) message).process(this.serverHandler);
+            } catch (WrongEffectException | NotEnoughNoEntriesException e3) {
+                System.out.println(e3.getMessage());
+            }
+        } else if (message instanceof CharacterEntranceSwappedMessage){
+            try {
+                ((CharacterEntranceSwappedMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
+
+        } else if (message instanceof EntranceTableSwappedMessage){
+            try {
+                ((EntranceTableSwappedMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
+
+        } else if (message instanceof IslandChosenMessage){
+            try {
+                ((IslandChosenMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
+
+        } else if (message instanceof NoEntryMovedMessage){
+            try {
+                ((NoEntryMovedMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
+        } else if (message instanceof StudentColorChosenMessage){
+            try {
+                ((StudentColorChosenMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
+        } else if (message instanceof StudentMovedFromCharacterMessage){
+            try {
+                ((StudentMovedFromCharacterMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
+        } else if (message instanceof StudentMovedToTableMessage){
+            try {
+                ((StudentMovedToTableMessage) message).process(this.serverHandler);
+            } catch (InterruptedException ignored){
+
+            } catch (EmptyCloudException | FullTableException e1) {
+                System.out.println(e1.getMessage());
+            }
         }
     }
 
@@ -396,6 +460,9 @@ public class CLI {
             System.out.println("No ♜ on this island");
         else
             System.out.println(game.getIslands().get(index).getTowerColor() + " owns " + game.getIslands().get(index).getNumTower() + " ♜");
+        if (expert) {
+            System.out.println("No Entries: " + game.getIslands().get(index).getNoEntries());
+        }
         if (game.getMotherNatureIndex() == index)
             System.out.println("Mother nature is here");
         System.out.println("Students:");
@@ -436,6 +503,10 @@ public class CLI {
         System.out.println("\n");
 
         System.out.println("Towers: " + player.getTowerNum());
+        System.out.println("\n");
+        if (expert) {
+            System.out.println("Coins: " + player.getCoins());
+        }
     }
 
     private void printCharacters() {
@@ -447,6 +518,48 @@ public class CLI {
     private void useCharacter(int characterIndex) {
         int realCharacterIndex = game.getCharacters().get(characterIndex).getID();
         send(new UseCharacterMessage(realCharacterIndex));
+        if (characterIndex == 1) {
+            character1();
+        } else if (characterIndex == 3) {
+            character3();
+        } else if (characterIndex == 5) {
+            character5();
+        } else if (characterIndex == 7) {
+            character7();
+        } else if (characterIndex == 9) {
+            character9();
+        } else if (characterIndex == 10) {
+            character10();
+        } else if (characterIndex == 11) {
+            character11();
+        } else if (characterIndex == 12) {
+            character12();
+        }
+    }
+
+    private void character1() {
+
+    }
+    private void character3() {
+
+    }
+    private void character5() {
+
+    }
+    private void character7() {
+
+    }
+    private void character9() {
+
+    }
+    private void character10() {
+
+    }
+    private void character11() {
+
+    }
+    private void character12() {
+
     }
 
     private void menu() {

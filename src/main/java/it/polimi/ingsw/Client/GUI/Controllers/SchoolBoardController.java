@@ -459,23 +459,27 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                Image finalStuImage = stuImage;
-                imageView1.setOnDragDetected(evt -> {
-                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(finalStuImage);
-                    dragboard.setContent(content);
-                    for (Point point : character1) {
-                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
-                            studentIndex = character1.indexOf(point);
+                if (gui.isMyTurn()) {
+                    Image finalStuImage = stuImage;
+                    imageView1.setOnDragDetected(evt -> {
+                        Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(finalStuImage);
+                        dragboard.setContent(content);
+                        for (Point point : character1) {
+                            if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                                studentIndex = character1.indexOf(point);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 characterPane.getChildren().add(imageView1);
             }
-            tableArea.setDisable(true);
-            tableArea.setVisible(false);
-            enableMoveToIslandPane(true);
+            if (gui.isMyTurn()) {
+                tableArea.setDisable(true);
+                tableArea.setVisible(false);
+                enableMoveToIslandPane(true);
+            }
         } catch (WrongEffectException e) {
             e.printStackTrace();
         }
@@ -516,22 +520,26 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                Image finalStuImage = noEntryImage;
-                imageView1.setOnDragDetected(evt -> {
-                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(finalStuImage);
-                    dragboard.setContent(content);
-                    for (Point point : character1) {
-                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
-                            studentIndex = character1.indexOf(point);
+                if (gui.isMyTurn()) {
+                    Image finalStuImage = noEntryImage;
+                    imageView1.setOnDragDetected(evt -> {
+                        Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(finalStuImage);
+                        dragboard.setContent(content);
+                        for (Point point : character1) {
+                            if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                                studentIndex = character1.indexOf(point);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 characterPane.getChildren().add(imageView1);
             }
-            tableArea.setDisable(true);
-            enableMoveToIslandPane(true);
+            if (gui.isMyTurn()) {
+                tableArea.setDisable(true);
+                enableMoveToIslandPane(true);
+            }
         } catch (WrongEffectException e) {
             e.printStackTrace();
         }
@@ -582,26 +590,30 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                    for (Point point : character1) {
-                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
-                            if (characterStudentIndex.size() < 3) {
-                                characterStudentIndex.add(character1.indexOf(point));
-                                if (characterStudentIndex.size() == 3) {
-                                    characterPane.setDisable(true);
-                                    setMessage("Now choose entrance students.");
+                if (gui.isMyTurn()) {
+                    imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                        for (Point point : character1) {
+                            if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                                if (characterStudentIndex.size() < 3) {
+                                    characterStudentIndex.add(character1.indexOf(point));
+                                    if (characterStudentIndex.size() == 3) {
+                                        characterPane.setDisable(true);
+                                        setMessage("Now choose entrance students.");
+                                    }
+                                } else {
+                                    setMessage("U already picked 3 students!");
                                 }
-                            } else {
-                                setMessage("U already picked 3 students!");
-                            }
 
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 characterPane.getChildren().add(imageView1);
             }
-            tableArea.setDisable(true);
-            tableArea.setVisible(false);
+            if (gui.isMyTurn()) {
+                tableArea.setDisable(true);
+                tableArea.setVisible(false);
+            }
         } catch (WrongEffectException e) {
             e.printStackTrace();
         }
@@ -662,18 +674,20 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                Image finalStuImage = stuImage;
-                imageView1.setOnDragDetected(evt -> {
-                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(finalStuImage);
-                    dragboard.setContent(content);
-                    for (Point point : character1) {
-                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
-                            studentIndex = character1.indexOf(point);
+                if (gui.isMyTurn()) {
+                    Image finalStuImage = stuImage;
+                    imageView1.setOnDragDetected(evt -> {
+                        Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(finalStuImage);
+                        dragboard.setContent(content);
+                        for (Point point : character1) {
+                            if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                                studentIndex = character1.indexOf(point);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 characterPane.getChildren().add(imageView1);
             }
         } catch (WrongEffectException e) {

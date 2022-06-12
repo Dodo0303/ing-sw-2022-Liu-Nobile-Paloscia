@@ -70,6 +70,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character1);
+            gui.setCurrCharacter(1);
             gui.viewSchoolBoard("Move a student from card.", false);
         } else if (radio2.isSelected()) {
             res = 2;
@@ -86,6 +87,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character3);
+            gui.setCurrCharacter(3);
             gui.checkBoard("Choose an island.");
         } else if (radio4.isSelected()) {
             res = 4;
@@ -102,6 +104,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character5);
+            gui.setCurrCharacter(5);
             gui.viewSchoolBoard("Move a noEntry tile.", false);
         } else if (radio6.isSelected()) {
             res = 6;
@@ -118,6 +121,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character7);
+            gui.setCurrCharacter(7);
             gui.viewSchoolBoard("Move a student from card. ", false);
         } else if (radio8.isSelected()) {
             res = 8;
@@ -134,6 +138,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character9);
+            gui.setCurrCharacter(9);
             gui.pickColor();
         } else if (radio10.isSelected()) {
             res = 10;
@@ -142,6 +147,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character10);
+            gui.setCurrCharacter(10);
             gui.viewSchoolBoard("swap students", false);
         } else if (radio11.isSelected()) {
             res = 11;
@@ -150,6 +156,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character11);
+            gui.setCurrCharacter(11);
             gui.viewSchoolBoard("take a student to dining room.", false);
         } else if (radio12.isSelected()) {
             res = 12;
@@ -158,6 +165,7 @@ public class ChooseCharacterController implements Initializable {
                 return;
             }
             gui.setCurrPhase(Phase_GUI.Character12);
+            gui.setCurrCharacter(12);
             gui.pickColor();
         }
         else {

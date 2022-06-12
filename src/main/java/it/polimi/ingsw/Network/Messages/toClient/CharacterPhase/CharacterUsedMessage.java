@@ -28,6 +28,9 @@ public class CharacterUsedMessage extends MessageToClient {
             client.getClient().getGame().useEffectOfCharacter(characterID);
             client.getClient().viewSchoolBoard("", false);
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+        } else {
+            client.getClient().setCurrCharacter(characterID);
+            client.getClient().viewSchoolBoard("", false);
         }
     }
 
