@@ -618,7 +618,7 @@ public class MatchController implements Runnable {
 
     public void broadcastMovementFromEntrance(int studentIndex, String playerID, int destination, int destinationID) {
         for (ClientHandler client : this.clients) {
-            client.send(new ConfirmMovementFromEntranceMessage(studentIndex, playerID, destination, destinationID));
+            client.send(new ConfirmMovementFromEntranceMessage(studentIndex, playerID, destination, destinationID, game.getPlayerByNickname(playerID).getCoins()));
         }
     }
 
@@ -699,7 +699,7 @@ public class MatchController implements Runnable {
 
     public void broadcastMovement(int islandIndex) {
         for (ClientHandler client : this.clients) {
-            client.send(new ConfirmMovementMessage(islandIndex, game.getIslands()));
+            client.send(new ConfirmMovementMessage(islandIndex, game.getIslands(), currentPlayerID, game.getPlayerByNickname(currentPlayerID).getTowerNum()));
         }
     }
 

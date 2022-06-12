@@ -11,10 +11,14 @@ import java.util.HashMap;
 public class ConfirmMovementMessage extends MessageToClient {
     private final int islandIndex;
     private HashMap<Integer, Island> islands;
+    private final String playerNickname;
+    private final int towerNum;
 
-    public ConfirmMovementMessage(int islandIndex, HashMap<Integer, Island> islands) {
+    public ConfirmMovementMessage(int islandIndex, HashMap<Integer, Island> islands, String playerNickname, int towerNum) {
         this.islandIndex = islandIndex;
         this.islands = islands;
+        this.playerNickname = playerNickname;
+        this.towerNum = towerNum;
     }
 
     public int getIslandIndex() {
@@ -28,6 +32,7 @@ public class ConfirmMovementMessage extends MessageToClient {
     public void process(ServerHandler client) {
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().setMothernature(islandIndex);
+        client.getClient().getGame().getPlayerByNickname(playerNickname).setTowers(towerNum);
         if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
             client.getClient().setPhase(Phase.Action3);
             client.getClient().chooseCloud();
@@ -37,6 +42,7 @@ public class ConfirmMovementMessage extends MessageToClient {
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().setMothernature(islandIndex);
+        client.getClient().getGame().getPlayerByNickname(playerNickname).setTowers(towerNum);
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Action2)) {
             client.getClient().setCurrPhase(Phase_GUI.Action3);
             client.getClient().checkBoard("Choose a cloud");

@@ -54,60 +54,131 @@ public class ChooseCharacterController implements Initializable {
         radio10.setDisable(true);
         radio11.setDisable(true);
         radio12.setDisable(true);
+        //todo character 1, 5, 7, 11 setup
+        //1. 4 students on card
+        //5. noEntries
+        //7. 6 students on card
+        //11. 4 students on card
     }
 
     public void execute() {
         gui.setPrevPhase(gui.getCurrPhase());
         if (radio1.isSelected()) {
             res = 1;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
             gui.setCurrPhase(Phase_GUI.Character1);
+            gui.viewSchoolBoard("Move a student from card.", false);
         } else if (radio2.isSelected()) {
             res = 2;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character2);
+            gui.setCurrCharacter(2);
         } else if (radio3.isSelected()) {
             res = 3;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character3);
+            gui.checkBoard("Choose an island.");
         } else if (radio4.isSelected()) {
             res = 4;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character4);
+            gui.setCurrCharacter(4);
         } else if (radio5.isSelected()) {
             res = 5;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character5);
+            gui.viewSchoolBoard("Move a noEntry tile.", false);
         } else if (radio6.isSelected()) {
             res = 6;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character6);
+            gui.setCurrCharacter(6);
         } else if (radio7.isSelected()) {
             res = 7;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character7);
+            gui.viewSchoolBoard("Move a student from card. ", false);
         } else if (radio8.isSelected()) {
             res = 8;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character8);
+            gui.setCurrCharacter(8);
         } else if (radio9.isSelected()) {
             res = 9;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character9);
+            gui.pickColor();
         } else if (radio10.isSelected()) {
             res = 10;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character10);
+            gui.viewSchoolBoard("swap students", false);
         } else if (radio11.isSelected()) {
             res = 11;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character11);
+            gui.viewSchoolBoard("take a student to dining room.", false);
         } else if (radio12.isSelected()) {
             res = 12;
+            if (!check(res)) {
+                setMessage("You cannot use this card.");
+                return;
+            }
+            gui.setCurrPhase(Phase_GUI.Character12);
+            gui.pickColor();
         }
         else {
             setMessage("Please choose a card.");
             return;
         }
-        if (check(res)) {
-            radio1.setDisable(true);
-            radio2.setDisable(true);
-            radio3.setDisable(true);
-            radio4.setDisable(true);
-            radio5.setDisable(true);
-            radio6.setDisable(true);
-            radio7.setDisable(true);
-            radio8.setDisable(true);
-            radio9.setDisable(true);
-            radio10.setDisable(true);
-            radio11.setDisable(true);
-            radio12.setDisable(true);
-            ConfirmButton.setDisable(true);
-            CheckBoardButton.setDisable(true);
-            gui.send(new UseCharacterMessage(res));
-        } else {
-            gui.setCurrPhase(gui.getPrevPhase());
-            setMessage("You cannot use this card.");
-        }
+        radio1.setDisable(true);
+        radio2.setDisable(true);
+        radio3.setDisable(true);
+        radio4.setDisable(true);
+        radio5.setDisable(true);
+        radio6.setDisable(true);
+        radio7.setDisable(true);
+        radio8.setDisable(true);
+        radio9.setDisable(true);
+        radio10.setDisable(true);
+        radio11.setDisable(true);
+        radio12.setDisable(true);
+        ConfirmButton.setDisable(true);
+        CheckBoardButton.setDisable(true);
+        gui.send(new UseCharacterMessage(res));
     }
 
     public void back() {

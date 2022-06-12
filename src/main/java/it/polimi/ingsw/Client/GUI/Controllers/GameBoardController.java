@@ -6,6 +6,8 @@ import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.ChooseIslandMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveNoEntryMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -39,7 +41,7 @@ public class GameBoardController implements Initializable {
     private ArrayList<StackPane> clouds;
     private Point motherNature;
     private GUI gui;
-    private boolean moveStudent, moveMotherNature, chooseCloud;
+    private boolean moveStudent, moveMotherNature, chooseCloud, character;//character for both character3 and character5
     private int studentIndex;
 
     @Override
@@ -48,11 +50,14 @@ public class GameBoardController implements Initializable {
         moveStudent = false;
         moveMotherNature = false;
         chooseCloud = false;
+        character = false;
     }
 
     public void back() {
         if (moveStudent) {
             gui.viewSchoolBoard("Move a student", false);
+        } else if (gui.getCurrPhase().equals(Phase_GUI.Character9) || gui.getCurrPhase().equals(Phase_GUI.Character12)) {
+            gui.pickColor();
         } else {
             gui.playAssistant("");
         }
@@ -108,8 +113,12 @@ public class GameBoardController implements Initializable {
         students.add(new Point(35, 60));
         students.add(new Point(60, 60));
         towers.add(new Point(-20, -80));
+        towers.add(new Point(25, -100));
         towers.add(new Point(-10, -40));
+        towers.add(new Point(-10, -100));
         towers.add(new Point(25, -80));
+        towers.add(new Point(25, -100));
+        //todo more spots for towers
         motherNature = new Point(-50, -50);
     }
 
@@ -194,20 +203,26 @@ public class GameBoardController implements Initializable {
             Tooltip tooltip = new Tooltip();
             StringBuilder stringBuilder = new StringBuilder();
             for (StudentColor color : island.getStudents().keySet()) {
-                stringBuilder.append(color).append(": ").append(island.getStudents().get(color)).append("\n");
+                stringBuilder.append(color.toString()).append(": ").append(island.getStudents().get(color)).append("\n");
             }
             if (!island.getTowerColor().equals(Color.VOID)) {
                 stringBuilder.append("Tower: ").append(island.getNumTower()).append(" ").append(island.getTowerColor());
             }
             tooltip.setText(stringBuilder.toString());
             Tooltip.install(imageView, tooltip);
-            if (moveStudent) {
+            if (moveStudent || character) {
                 imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     int islandChosen = islandImageViews.indexOf(imageView);
                     if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
                         gui.send(new MoveStudentFromCharacterMessage(studentIndex, islandChosen));
+                    } else if (gui.getCurrPhase().equals(Phase_GUI.Character3)) {
+                        gui.send(new ChooseIslandMessage(islandChosen));
+                    } else if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
+                        gui.send(new MoveNoEntryMessage(islandChosen));
                     }
-                    gui.send(new MoveStudentFromEntranceMessage(studentIndex, 1, islandChosen));
+                    else {
+                        gui.send(new MoveStudentFromEntranceMessage(studentIndex, 1, islandChosen));
+                    }
                     event.consume();
                 });
             }
@@ -232,6 +247,16 @@ public class GameBoardController implements Initializable {
                 });
             }
             stackPane.getChildren().add(imageView);
+            if (island.getNoEntries() > 0) {
+                Image noEntryImage = new Image("/assets/NoEntry.png");
+                ImageView noEntryImageView = new ImageView(noEntryImage);
+                noEntryImageView.setFitHeight(15);
+                noEntryImageView.setFitWidth(15);
+                noEntryImageView.setTranslateX(190);
+                noEntryImageView.setTranslateY(190);
+                imageViews.add(noEntryImageView);
+                stackPane.getChildren().add(noEntryImageView);
+            }
             ArrayList<Point> tempStudents = new ArrayList<>(students);
             for (StudentColor color : island.getStudents().keySet()) {
                 for (int j = 0; j < island.getStudents().get(color); j++) {
@@ -255,10 +280,12 @@ public class GameBoardController implements Initializable {
                     }
                     imageView1.setFitHeight(25);
                     imageView1.setFitWidth(25);
-                    Point temp = tempStudents.remove((int)(Math.random() * tempStudents.size()));
-                    imageView1.setTranslateX(temp.getX());
-                    imageView1.setTranslateY(temp.getY());
-                    stackPane.getChildren().add(imageView1);
+                    if (tempStudents.size() > 0) {
+                        Point temp = tempStudents.remove((int)(Math.random() * tempStudents.size()));
+                        imageView1.setTranslateX(temp.getX());
+                        imageView1.setTranslateY(temp.getY());
+                        stackPane.getChildren().add(imageView1);
+                    }
                 }
             }
             ArrayList<Point> tempTowers = new ArrayList<>(towers);
@@ -275,12 +302,14 @@ public class GameBoardController implements Initializable {
                     Image tow = new Image("/assets/Towers/black.png");
                     imageView2.setImage(tow);
                 }
-                Point temp = tempTowers.remove((int)(Math.random() * tempTowers.size()));
-                imageView2.setTranslateX(temp.getX());
-                imageView2.setTranslateY(temp.getY());
                 imageView2.setFitWidth(20);
                 imageView2.setFitHeight(40);
-                stackPane.getChildren().add(imageView2);
+                if (tempTowers.size() > 0) {
+                    Point temp = tempTowers.remove((int)(Math.random() * tempTowers.size()));
+                    imageView2.setTranslateX(temp.getX());
+                    imageView2.setTranslateY(temp.getY());
+                    stackPane.getChildren().add(imageView2);
+                }
             }
             if (gui.getGame().getMotherNatureIndex() == i) {
                 Image mot = new Image("/assets/mothernature.png");
@@ -305,9 +334,15 @@ public class GameBoardController implements Initializable {
         }
     }
 
-    public void disableBack() {
-        backButton.setDisable(true);
-        backButton.setVisible(false);
+    public void disableBack(boolean disable) {
+        if (disable) {
+            backButton.setDisable(true);
+            backButton.setVisible(false);
+        } else {
+            backButton.setDisable(false);
+            backButton.setVisible(true);
+        }
+
     }
 
     public void setMessage(String msg) {
@@ -330,5 +365,7 @@ public class GameBoardController implements Initializable {
         this.studentIndex = studentIndex;
     }
 
-
+    public void setCharacter(boolean Character) {
+        this.character = character;
+    }
 }

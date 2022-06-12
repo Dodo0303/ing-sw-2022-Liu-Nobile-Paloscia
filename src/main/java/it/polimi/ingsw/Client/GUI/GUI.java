@@ -14,6 +14,7 @@ import it.polimi.ingsw.Network.Messages.toClient.EndMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.SwapStudentsCharacterEntranceMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,10 +38,10 @@ public class GUI {
     private int numPlayer;
     private boolean expert;
     private List<Wizard> wizards;
-    private Assistant assistant;
     private int ap1Moves;
     private boolean myTurn;
     private Phase_GUI prevPhase;
+    private int currCharacter;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -304,16 +305,26 @@ public class GUI {
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
             if (!currPhase.equals(Phase_GUI.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
-                gameBoardController.disableBack();
+                gameBoardController.disableBack(true);
             }
             if (myTurn && currPhase.equals(Phase_GUI.Action1)) {
                 gameBoardController.setMoveStudent(true);
             } else if (myTurn && currPhase.equals(Phase_GUI.Action2)) {
                 gameBoardController.setMoveMotherNature(true);
-                gameBoardController.disableBack();
+                gameBoardController.disableBack(true);
             } else if (myTurn && currPhase.equals(Phase_GUI.Action3)) {
                 gameBoardController.setChooseCloud(true);
-                gameBoardController.disableBack();
+                gameBoardController.disableBack(true);
+            } else if (myTurn && currPhase.equals(Phase_GUI.Character3)) {
+                gameBoardController.setCharacter(true);
+                gameBoardController.disableBack(true);
+            } else if (myTurn && currPhase.equals(Phase_GUI.Character5)) {
+                gameBoardController.setCharacter(true);
+                gameBoardController.disableBack(true);
+            } else if (myTurn && currPhase.equals(Phase_GUI.Character9)) {
+                gameBoardController.disableBack(false);
+            } else if (myTurn && currPhase.equals(Phase_GUI.Character12)) {
+                gameBoardController.disableBack(false);
             }
             gameBoardController.drawIslands(game.getIslands().size());
             gameBoardController.drawClouds(game.getPlayers().size());
@@ -332,38 +343,6 @@ public class GUI {
             e.printStackTrace();
         }
     }
-
-    /**
-    public void moveStudentsFromEntrance(String msg) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
-            Parent root = fxmlLoader.load();
-            SchoolBoardController schoolBoardController = fxmlLoader.getController();
-            schoolBoardController.setGUI(this);
-            schoolBoardController.enableMoveToIslandPane(true);
-            schoolBoardController.setBackMessage("View game board");
-            if (!Objects.equals(msg, "")) {
-                schoolBoardController.setMessage(msg);
-            }
-            schoolBoardController.drawSchoolBoard(game.getPlayerByNickname(nickname));
-            for (int i = 0; i < game.getPlayers().size(); i++) {
-                if (!game.getPlayers().get(i).getNickName().equals(nickname)) {
-                    schoolBoardController.drawSchoolBoard(game.getPlayers().get(i));
-                    break;
-                }
-            }
-            Scene scene = new Scene(root, 1920, 1080);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     */
 
     public void viewSchoolBoard(String msg, boolean other) {
         try {
@@ -385,15 +364,36 @@ public class GUI {
                 for (int i = 0; i < 2; i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
-                //&& (currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3)
-                if (myTurn && expert) {
+                if (myTurn && expert && (currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3)) {
                     schoolBoardController.enableCharacterButton();
                 }
-                if (currPhase.equals(Phase_GUI.Character1)) {
-                    schoolBoardController.enableCharacter1();
-                } else if (currPhase.equals(Phase_GUI.Action1)) {
+                if (currPhase.equals(Phase_GUI.Action1)) {
                     schoolBoardController.enableMoveToIslandPane(true);
                     schoolBoardController.setBackMessage("View game board");
+                } else if (currPhase.equals(Phase_GUI.Character1)) {
+                    schoolBoardController.enableCharacter1();
+                } else if (currPhase.equals(Phase_GUI.Character2) || currCharacter == 2) {
+                    schoolBoardController.enableCharacter2();
+                } else if (currPhase.equals(Phase_GUI.Character3)) {
+                    schoolBoardController.enableCharacter3();
+                } else if (currPhase.equals(Phase_GUI.Character4) || currCharacter == 4) {
+                    schoolBoardController.enableCharacter4();
+                } else if (currPhase.equals(Phase_GUI.Character5)) {
+                    schoolBoardController.enableCharacter5();
+                } else if (currPhase.equals(Phase_GUI.Character6) || currCharacter == 6) {
+                    schoolBoardController.enableCharacter6();
+                } else if (currPhase.equals(Phase_GUI.Character7)) {
+                    schoolBoardController.enableCharacter7();
+                } else if (currPhase.equals(Phase_GUI.Character8) || currCharacter == 8) {
+                    schoolBoardController.enableCharacter8();
+                } else if (currPhase.equals(Phase_GUI.Character9)) {
+                    schoolBoardController.enableCharacter9();
+                } else if (currPhase.equals(Phase_GUI.Character10)) {
+                    schoolBoardController.enableCharacter10();
+                } else if (currPhase.equals(Phase_GUI.Character11)) {
+                    schoolBoardController.enableCharacter11();
+                } else if (currPhase.equals(Phase_GUI.Character12)) {
+                    schoolBoardController.enableCharacter12();
                 }
 
             } else {
@@ -436,7 +436,23 @@ public class GUI {
         }
     }
 
-
+    public void pickColor() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
+            Parent root = fxmlLoader.load();
+            PickColorController pickColorController = fxmlLoader.getController();
+            pickColorController.setGUI(this);
+            Scene scene = new Scene(root, 1920, 1080);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void send(Object message) {
         if (message == null) {
@@ -503,7 +519,6 @@ public class GUI {
             } catch (EmptyCloudException e){
                 checkBoard("The cloud is empty");
             }
-
         } else if (message instanceof EndMessage) {
             ((EndMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof CharacterUsedMessage) {
@@ -662,11 +677,6 @@ public class GUI {
         this.game = game;
     }
 
-
-    public void setAssistant(Assistant assistant) {
-        this.assistant = assistant;
-    }
-
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
@@ -674,4 +684,14 @@ public class GUI {
     public void setPrevPhase(Phase_GUI phase) {
         this.prevPhase = phase;
     }
+
+    public int getCurrCharacter() {
+        return currCharacter;
+    }
+
+    public void setCurrCharacter(int currCharacter) {
+        this.currCharacter = currCharacter;
+    }
+
+
 }

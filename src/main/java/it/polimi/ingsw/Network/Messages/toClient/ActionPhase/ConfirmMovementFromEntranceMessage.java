@@ -11,12 +11,14 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
     private final String playerID;
     private final int destination;
     private final int destinationID;
+    private final int coin;
 
-    public ConfirmMovementFromEntranceMessage(int studentPosition, String playerID, int destination, int destinationID) {
+    public ConfirmMovementFromEntranceMessage(int studentPosition, String playerID, int destination, int destinationID, int coin) {
         this.studentPosition = studentPosition;
         this.playerID = playerID;
         this.destination = destination;
         this.destinationID = destinationID;
+        this.coin = coin;
     }
 
     public int getStudentPosition() {
@@ -41,6 +43,7 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
             StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
             try {
                 client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), color);
+                client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coin);
             } catch (FullTableException e) {
                 e.printStackTrace();
             }
@@ -55,6 +58,7 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
             StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
             try {
                 client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), color);
+                client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coin);
             } catch (FullTableException e) {
                 e.printStackTrace();
             }

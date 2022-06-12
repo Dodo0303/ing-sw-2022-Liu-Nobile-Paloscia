@@ -36,6 +36,8 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().setPhase(Phase.Planning);
                 ch.getClient().playAssistant();
             }
+        } else {
+
         }
     }
 
@@ -58,6 +60,7 @@ public class ChangeTurnMessage extends MessageToClient {
             }
         } else {
             ch.getClient().setMyTurn(false);
+            ch.getClient().setCurrCharacter(-1);
             ch.getClient().checkBoard(ch.getClient().getNickname() + "'s round.");
         }
     }

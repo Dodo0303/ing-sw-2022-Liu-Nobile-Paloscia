@@ -37,5 +37,9 @@ public class EntranceTableSwappedMessage extends MessageToClient {
                 client.getClient().getGame().getPlayers().set(i, playerUpdated);
             }
         }
+        if (client.getClient().getNickname().equals(playerID)) {
+            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+            client.getClient().viewSchoolBoard("Students swapped", false);
+        }
     }
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
+import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
+import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.CharacterUsedMessage;
@@ -53,7 +55,7 @@ public class CLI {
         }
     }
 
-    public void messageReceived(Object message) throws InterruptedException, EmptyCloudException {
+    public void messageReceived(Object message) throws InterruptedException, EmptyCloudException, WrongEffectException, NotEnoughNoEntriesException {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
                 ((NickResponseMessage) message).process(this.serverHandler);
@@ -451,16 +453,16 @@ public class CLI {
         clearScreen();
         int num = -1;
         while ((expert && num!= 6) || (!expert && num != 5)) {
-            System.out.println("\n\nWhat do you want to see?\n ");
+            System.out.println("\n\nMenu:\n ");
             System.out.println("1. Islands");
             System.out.println("2. Clouds");
             System.out.println("3. School board");
             System.out.println("4. Others' school boards");;
             if (expert) {
                 System.out.println("5. Use character card");
-                System.out.println("6. Continue\n");
+                System.out.println("6. Continue/Refresh\n");
             } else {
-                System.out.println("5. Continue\n");
+                System.out.println("5. Continue/Refresh\n");
             }
             String in = input.nextLine();
             if (Utilities.isNumeric(in)) {

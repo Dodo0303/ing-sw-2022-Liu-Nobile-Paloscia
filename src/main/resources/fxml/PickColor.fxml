@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.PickColorController">
+    <center>
+        <AnchorPane prefHeight="996.0" prefWidth="1761.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="messageLabel" alignment="CENTER" layoutX="605.0" layoutY="2.0" prefHeight="147.0" prefWidth="695.0" text="Pick a color">
+                    <font>
+                        <Font name="Papyrus" size="36.0" />
+                    </font>
+                </Label>
+                <RadioButton fx:id="radio1" layoutX="411.0" layoutY="700.0" mnemonicParsing="false" />
+                <RadioButton fx:id="radio2" layoutX="664.0" layoutY="700.0" mnemonicParsing="false" />
+                <RadioButton fx:id="radio3" layoutX="945.0" layoutY="700.0" mnemonicParsing="false" />
+                <RadioButton fx:id="radio4" layoutX="1234.0" layoutY="700.0" mnemonicParsing="false" />
+                <RadioButton fx:id="radio5" layoutX="1493.0" layoutY="700.0" mnemonicParsing="false" />
+                <StackPane layoutX="688.0" layoutY="860.0" prefHeight="70.0" prefWidth="214.0">
+                    <children>
+                        <Button fx:id="CheckBoardButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#checkBoard" prefHeight="120.0" prefWidth="266.0" style="-fx-base: #F2F4F4;">
+                            <graphic>
+                                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefHeight="98.0" prefWidth="233.0">
+                                    <children>
+                                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="213.0" text="View board">
+                                            <font>
+                                                <Font name="Papyrus" size="19.0" />
+                                            </font>
+                                        </Label>
+                                        <Pane HBox.hgrow="ALWAYS" />
+                                        <ImageView fitHeight="44.0" fitWidth="41.0">
+                                            <image>
+                                                <Image url="@../assets/eye.png" />
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </children>
+                </StackPane>
+                <StackPane layoutX="1028.0" layoutY="860.0" prefHeight="70.0" prefWidth="214.0">
+                    <children>
+                        <Button fx:id="ConfirmButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#execute" prefHeight="120.0" prefWidth="266.0" style="-fx-base: #F2F4F4;">
+                            <graphic>
+                                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefHeight="98.0" prefWidth="233.0">
+                                    <children>
+                                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="213.0" text="Confirm">
+                                            <font>
+                                                <Font name="Papyrus" size="19.0" />
+                                            </font>
+                                        </Label>
+                                        <Pane HBox.hgrow="ALWAYS" />
+                                        <ImageView fitHeight="44.0" fitWidth="41.0">
+                                            <image>
+                                                <Image url="@../assets/rightArrow.png" />
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </children>
+                </StackPane>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00ff1a" height="200.0" layoutX="311.0" layoutY="378.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="572.0" layoutY="378.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e7ff71" height="200.0" layoutX="845.0" layoutY="378.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="200.0" layoutX="1142.0" layoutY="384.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1fe3" height="200.0" layoutX="1409.0" layoutY="384.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

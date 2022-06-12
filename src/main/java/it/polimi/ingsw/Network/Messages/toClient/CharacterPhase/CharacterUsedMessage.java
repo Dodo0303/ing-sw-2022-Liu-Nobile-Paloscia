@@ -17,13 +17,18 @@ public class CharacterUsedMessage extends MessageToClient {
     }
 
     @Override
-    public void process(ServerHandler client) {
-
+    public void process(ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
+        if (client.getClient().getNickname().equals(playerID)) {
+            client.getClient().getGame().useEffectOfCharacter(characterID);
+        }
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
-        client.getClient().getGame().useEffectOfCharacter(characterID);
-
+        if (client.getClient().getNickname().equals(playerID)) {
+            client.getClient().getGame().useEffectOfCharacter(characterID);
+            client.getClient().viewSchoolBoard("", false);
+            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+        }
     }
 
     public String getPlayerID() {

@@ -6,23 +6,23 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.Color;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Model.StudentColor;
-import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.StudentMovedToTableMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
-import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentsToTableMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.SwapStudentsCharacterEntranceMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.SwapStudentsTableEntranceMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class SchoolBoardController implements Initializable {
@@ -33,15 +33,16 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private ImageView MyCard, OpponentCard, opponentCoinImage, myCoinImage, characterCardImage;
     private GUI gui;
-    private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers, character1;
+    private ArrayList<Point> greenStudents, redStudents, yellowStudents, pinkStudents, blueStudents, entrance, towers;
     private ArrayList<String> players;
     private Point greenProf, redProf, yellowProf, pinkProf, blueProf;
     @FXML
-    private StackPane OpponentBoard, MyBoard, moveToIslandPane, CharacterPane;
+    private StackPane OpponentBoard, MyBoard, moveToIslandPane, characterPane;
     @FXML
     private Rectangle tableArea;
     private ArrayList<ImageView> imageViews;
-    private int studentIndex;
+    private int studentIndex, swapStudentsTimes;
+    private ArrayList<Integer> characterStudentIndex, entranceStudentsIndex;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -75,15 +76,23 @@ public class SchoolBoardController implements Initializable {
         MyBoard.setDisable(true);
         backButton.setDisable(true);
         otherBoardButton.setDisable(true);
-        gui.send(new MoveStudentFromEntranceMessage(studentIndex, 0, -1));
+        if (gui.getCurrPhase().equals(Phase_GUI.Character11)) {
+            gui.send(new MoveStudentsToTableMessage(studentIndex));
+        } else {
+            gui.send(new MoveStudentFromEntranceMessage(studentIndex, 0, -1));
+        }
         studentIndex = -1;
     }
+
+
 
     public void otherBoards() {
         gui.viewSchoolBoard("", true);
     }
 
     public void setUpOtherBoards() {
+        characterPane.setVisible(false);
+        characterPane.setDisable(true);
         if (gui.getGame().getPlayers().size() != 4) {
             OpponentBoard.setDisable(true);
             OpponentBoard.setVisible(false);
@@ -176,6 +185,48 @@ public class SchoolBoardController implements Initializable {
                 });
             } else if (players.size() == 3 || !gui.getCurrPhase().equals(Phase_GUI.Action1)){
                 tableArea.setDisable(true);
+                tableArea.setVisible(false);
+            } else if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character7)) {
+                imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    for (Point point : entrance) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            if (entranceStudentsIndex.size() < 3) {
+                                entranceStudentsIndex.add(entrance.indexOf(point));
+                                setMessage("A entrance student has been picked.");
+                                if (entranceStudentsIndex.size() == 3) {
+                                    if (characterStudentIndex.size() == 3) {
+                                        gui.send(new SwapStudentsCharacterEntranceMessage(characterStudentIndex.stream().mapToInt(j -> j).toArray(), entranceStudentsIndex.stream().mapToInt(j -> j).toArray()));
+                                        MyBoard.setDisable(true);
+                                        characterPane.setDisable(true);
+                                    }
+                                }
+                            } else {
+                                setMessage("You already picked 3 students.");
+                            }
+                        }
+                    }
+                });
+            } else if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+                imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    for (Point point : entrance) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            if (entranceStudentsIndex.size() < 2) {
+                                entranceStudentsIndex.add(entrance.indexOf(point));
+                                setMessage("A entrance student has been picked.");
+                                if (entranceStudentsIndex.size() == 2) {
+                                    StudentColor[] tempSt = new StudentColor[2];
+                                    tempSt[0] = gui.getGame().getPlayerByNickname(gui.getNickname()).getEntranceStudents().get(entranceStudentsIndex.get(0));
+                                    tempSt[1] = gui.getGame().getPlayerByNickname(gui.getNickname()).getEntranceStudents().get(entranceStudentsIndex.get(1));
+                                    gui.send(new SwapStudentsTableEntranceMessage(tempSt, entranceStudentsIndex.stream().mapToInt(j -> j).toArray()));
+                                    MyBoard.setDisable(true);
+                                    characterPane.setDisable(true);
+                                }
+                            } else {
+                                setMessage("You already picked 2 students.");
+                            }
+                        }
+                    }
+                });
             }
             p.getChildren().add(imageView1);
         }
@@ -247,8 +298,8 @@ public class SchoolBoardController implements Initializable {
             imageView1.setTranslateY(temp.getY());
             p.getChildren().add(imageView1);
         }
-
-        for (int i = 0; i < player.getTowerNum(); i++) {//todo towernum does not update
+        //draw towers
+        for (int i = 0; i < player.getTowerNum(); i++) {
             imageViews.add(new ImageView());
             ImageView imageView1 = imageViews.get(imageViews.size() - 1);
             Point temp = null;
@@ -360,27 +411,6 @@ public class SchoolBoardController implements Initializable {
         towers.add(new Point(420, 110));
     }
 
-    public void setGUI(GUI gui) {
-        this.gui = gui;
-        if (gui.getGame().getPlayers().size() > 2) {
-            otherBoardButton.setVisible(true);
-            otherBoardButton.setDisable(false);
-        }
-    }
-
-    public void setMessage(String msg) {
-        messageLabel.setText(msg);
-    }
-    public void setBackMessage(String msg) {
-        backLabel.setText(msg);
-    }
-    public void setMyCoinMessage(String msg) {
-        myCoin.setText(msg);
-    }
-    public void setOpponentCoinMessage(String msg) {
-        opponentCoin.setText(msg);
-    }
-
     public void enableMoveToIslandPane(boolean enable) {
         if (enable) {
             moveToIslandPane.setDisable(false);
@@ -441,6 +471,64 @@ public class SchoolBoardController implements Initializable {
                         }
                     }
                 });
+                characterPane.getChildren().add(imageView1);
+            }
+            tableArea.setDisable(true);
+            tableArea.setVisible(false);
+            enableMoveToIslandPane(true);
+        } catch (WrongEffectException e) {
+            e.printStackTrace();
+        }
+    }
+    public void enableCharacter2() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front12.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+    public void enableCharacter3() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front2.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+    public void enableCharacter4() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front3.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+    public void enableCharacter5() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front4.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+        Image noEntryImage = null;
+        ArrayList<Point> character1 = new ArrayList<>();
+        character1.add(new Point(-40, -40));
+        character1.add(new Point(-40, 40));
+        character1.add(new Point(40, -40));
+        character1.add(new Point(40, 40));
+        try {
+            for (int i = 0; i < gui.getGame().getCharacterById(5).getNumberOfNoEntries(); i++) {
+                imageViews.add(new ImageView());
+                ImageView imageView1 = imageViews.get(imageViews.size() - 1);
+                noEntryImage = new Image("/assets/NoEntry.png");
+                imageView1.setImage(noEntryImage);
+                imageView1.setFitHeight(35);
+                imageView1.setFitWidth(35);
+                Point temp = character1.get(i);
+                imageView1.setTranslateX(temp.getX());
+                imageView1.setTranslateY(temp.getY());
+                Image finalStuImage = noEntryImage;
+                imageView1.setOnDragDetected(evt -> {
+                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(finalStuImage);
+                    dragboard.setContent(content);
+                    for (Point point : character1) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            studentIndex = character1.indexOf(point);
+                        }
+                    }
+                });
+                characterPane.getChildren().add(imageView1);
             }
             tableArea.setDisable(true);
             enableMoveToIslandPane(true);
@@ -448,5 +536,178 @@ public class SchoolBoardController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+    public void enableCharacter6() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front5.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+    public void enableCharacter7() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+        characterStudentIndex = new ArrayList<>();
+        entranceStudentsIndex = new ArrayList<>();
+        Image stuImage = null;
+        ArrayList<Point> character1 = new ArrayList<>();
+        character1.add(new Point(-40, -40));
+        character1.add(new Point(-40, 40));
+        character1.add(new Point(40, -40));
+        character1.add(new Point(40, 40));
+        character1.add(new Point(0, 0));
+        character1.add(new Point(0, 40));
+        try {
+            for (int i = 0; i < gui.getGame().getCharacterById(7).getStudents().size(); i++) {
+                StudentColor stud = gui.getGame().getCharacterById(7).getStudents().get(i);
+                imageViews.add(new ImageView());
+                ImageView imageView1 = imageViews.get(imageViews.size() - 1);
+                if (stud.equals(StudentColor.GREEN)) {
+                    stuImage = new Image("/assets/Students/green.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.RED)) {
+                    stuImage = new Image("/assets/Students/red.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.YELLOW)) {
+                    stuImage = new Image("/assets/Students/yellow.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.PINK)) {
+                    stuImage = new Image("/assets/Students/pink.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.BLUE)) {
+                    stuImage = new Image("/assets/Students/blue.png");
+                    imageView1.setImage(stuImage);
+                }
+                imageView1.setFitHeight(25);
+                imageView1.setFitWidth(25);
+                Point temp = character1.get(i);
+                imageView1.setTranslateX(temp.getX());
+                imageView1.setTranslateY(temp.getY());
+                imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    for (Point point : character1) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            if (characterStudentIndex.size() < 3) {
+                                characterStudentIndex.add(character1.indexOf(point));
+                                if (characterStudentIndex.size() == 3) {
+                                    characterPane.setDisable(true);
+                                    setMessage("Now choose entrance students.");
+                                }
+                            } else {
+                                setMessage("U already picked 3 students!");
+                            }
+
+                        }
+                    }
+                });
+                characterPane.getChildren().add(imageView1);
+            }
+            tableArea.setDisable(true);
+            tableArea.setVisible(false);
+        } catch (WrongEffectException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void enableCharacter8() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front7.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+
+    public void enableCharacter9() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front8.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+
+    public void enableCharacter10() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front9.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+        entranceStudentsIndex = new ArrayList<>();
+    }
+
+    public void enableCharacter11() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front10.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+        Image stuImage = null;
+        ArrayList<Point> character1 = new ArrayList<>();
+        character1.add(new Point(-40, -40));
+        character1.add(new Point(-40, 40));
+        character1.add(new Point(40, -40));
+        character1.add(new Point(40, 40));
+        try {
+            for (int i = 0; i < gui.getGame().getCharacterById(11).getStudents().size(); i++) {
+                StudentColor stud = gui.getGame().getCharacterById(11).getStudents().get(i);
+                imageViews.add(new ImageView());
+                ImageView imageView1 = imageViews.get(imageViews.size() - 1);
+                if (stud.equals(StudentColor.GREEN)) {
+                    stuImage = new Image("/assets/Students/green.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.RED)) {
+                    stuImage = new Image("/assets/Students/red.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.YELLOW)) {
+                    stuImage = new Image("/assets/Students/yellow.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.PINK)) {
+                    stuImage = new Image("/assets/Students/pink.png");
+                    imageView1.setImage(stuImage);
+                } else if (stud.equals(StudentColor.BLUE)) {
+                    stuImage = new Image("/assets/Students/blue.png");
+                    imageView1.setImage(stuImage);
+                }
+                imageView1.setFitHeight(25);
+                imageView1.setFitWidth(25);
+                Point temp = character1.get(i);
+                imageView1.setTranslateX(temp.getX());
+                imageView1.setTranslateY(temp.getY());
+                Image finalStuImage = stuImage;
+                imageView1.setOnDragDetected(evt -> {
+                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(finalStuImage);
+                    dragboard.setContent(content);
+                    for (Point point : character1) {
+                        if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
+                            studentIndex = character1.indexOf(point);
+                        }
+                    }
+                });
+                characterPane.getChildren().add(imageView1);
+            }
+        } catch (WrongEffectException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void enableCharacter12() {
+        characterCardImage.setImage(new Image("/assets/Personaggi/CarteTOT_front11.jpg"));
+        characterCardImage.setDisable(false);
+        characterCardImage.setVisible(true);
+    }
+
+    public void setGUI(GUI gui) {
+        this.gui = gui;
+        if (gui.getGame().getPlayers().size() > 2) {
+            otherBoardButton.setVisible(true);
+            otherBoardButton.setDisable(false);
+        }
+    }
+
+    public void setMessage(String msg) {
+        messageLabel.setText(msg);
+    }
+
+    public void setBackMessage(String msg) {
+        backLabel.setText(msg);
+    }
+
+    public void setMyCoinMessage(String msg) {
+        myCoin.setText(msg);
+    }
+
+    public void setOpponentCoinMessage(String msg) {
+        opponentCoin.setText(msg);
     }
 }

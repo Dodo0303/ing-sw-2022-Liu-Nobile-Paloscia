@@ -75,7 +75,7 @@
                         <Image url="@../assets/cerchi.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER" prefHeight="57.0" prefWidth="164.0" text="Move Student to Island">
+                  <Label alignment="CENTER" prefHeight="57.0" prefWidth="164.0" text="Move to Island">
                      <font>
                         <Font name="Papyrus" size="15.0" />
                      </font>
@@ -171,7 +171,7 @@
                   <Font name="Papyrus" size="30.0" />
                </font>
             </Label>
-            <StackPane fx:id="CharacterPane" layoutX="1316.0" layoutY="402.0" prefHeight="200.0" prefWidth="200.0">
+            <StackPane fx:id="characterPane" layoutX="1316.0" layoutY="402.0" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ImageView fx:id="characterCardImage" fitHeight="277.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                </children>

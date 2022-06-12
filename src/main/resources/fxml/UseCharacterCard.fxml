@@ -27,17 +27,17 @@
                 </ImageView>
                 <ImageView fx:id="pic3" fitHeight="200.0" fitWidth="136.0" layoutX="727.0" layoutY="222.0">
                     <image>
-                        <Image url="@../assets/Personaggi/CarteTOT_front3.jpg" />
+                        <Image url="@../assets/Personaggi/CarteTOT_front2.jpg" />
                     </image>
                 </ImageView>
                 <ImageView fx:id="pic4" fitHeight="200.0" fitWidth="136.0" layoutX="953.0" layoutY="222.0">
                     <image>
-                        <Image url="@../assets/Personaggi/CarteTOT_front4.jpg" />
+                        <Image url="@../assets/Personaggi/CarteTOT_front3.jpg" />
                     </image>
                 </ImageView>
                 <ImageView fx:id="pic5" fitHeight="200.0" fitWidth="136.0" layoutX="1174.0" layoutY="222.0">
                     <image>
-                        <Image url="@../assets/Personaggi/CarteTOT_front5.jpg" />
+                        <Image url="@../assets/Personaggi/CarteTOT_front4.jpg" />
                     </image>
                 </ImageView>
                 <ImageView fx:id="pic6" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="540.0">
@@ -130,12 +130,12 @@
             <RadioButton fx:id="radio11" layoutX="1473.0" layoutY="448.0" mnemonicParsing="false" />
             <ImageView fx:id="pic51" fitHeight="200.0" fitWidth="136.0" layoutX="1405.0" layoutY="222.0">
                <image>
-                  <Image url="@../assets/Personaggi/CarteTOT_front11.jpg" />
+                  <Image url="@../assets/Personaggi/CarteTOT_front8.jpg" />
                </image>
             </ImageView>
             <ImageView fx:id="pic101" fitHeight="200.0" fitWidth="136.0" layoutX="1405.0" layoutY="540.0">
                <image>
-                  <Image url="@../assets/Personaggi/CarteTOT_front12.jpg" />
+                  <Image url="@../assets/Personaggi/CarteTOT_front11.jpg" />
                </image>
             </ImageView>
             </children>

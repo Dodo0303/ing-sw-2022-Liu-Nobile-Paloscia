@@ -55,5 +55,7 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
                 entranceUpdated) {
             player.addStudentToEntrance(color);
         }
+        client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+        client.getClient().viewSchoolBoard("", false);
     }
 }

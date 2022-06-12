@@ -38,7 +38,7 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         client.getClient().getGame().set_islands(islands);
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Character1)) {
-
+            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
         }
     }
 }

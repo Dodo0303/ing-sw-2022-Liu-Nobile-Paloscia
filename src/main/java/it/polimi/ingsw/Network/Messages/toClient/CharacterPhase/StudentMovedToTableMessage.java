@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -39,5 +40,9 @@ public class StudentMovedToTableMessage extends MessageToClient {
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         client.getClient().getGame().getPlayerByNickname(playerID).addToDiningTable(tableColor);
         client.getClient().getGame().updateCharacterById(characterUpdated);
+        if (client.getClient().getCurrPhase().equals(Phase_GUI.Character11)) {
+            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+            client.getClient().viewSchoolBoard("Student moved successfully", false);
+        }
     }
 }

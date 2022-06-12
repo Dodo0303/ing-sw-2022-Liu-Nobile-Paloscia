@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -38,5 +39,9 @@ public class IslandChosenMessage extends MessageToClient {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().set_players(playersUpdated);
+        if (client.getClient().getCurrPhase().equals(Phase_GUI.Character3)) {
+            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+            client.getClient().viewSchoolBoard("", false);
+        }
     }
 }

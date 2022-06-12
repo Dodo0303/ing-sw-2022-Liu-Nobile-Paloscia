@@ -262,6 +262,7 @@ public class Player implements Serializable {
         return this._coins;
     }
 
+
     /** The getter of nickname.
      * @return the nickname of THIS PLAYER. */
     public String getNickName() {
@@ -319,5 +320,13 @@ public class Player implements Serializable {
 
     public boolean lastAssistant() {
         return this._assistants.size() == 1;
+    }
+
+    public void setCoins(int coin) {
+        this._coins = coin;
+    }
+
+    public void setTowers(int tower) {
+        this._towerNum = tower;
     }
 }
