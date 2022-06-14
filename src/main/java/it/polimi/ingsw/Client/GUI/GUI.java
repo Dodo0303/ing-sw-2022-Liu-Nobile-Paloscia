@@ -364,15 +364,14 @@ public class GUI {
                 for (int i = 0; i < 2; i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
-                if (myTurn && expert && (currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3)) {
+                if (expert && ((currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3) || !myTurn)) {
                     schoolBoardController.enableCharacterButton();
-                } else if (!myTurn && expert) {
-                    //todo see characters
                 }
                 if (myTurn && expert && currPhase.equals(Phase_GUI.Action1)) {
                     schoolBoardController.enableMoveToIslandPane(true);
                     schoolBoardController.setBackMessage("View game board");
-                } else if (currPhase.equals(Phase_GUI.Character1)|| currCharacter == 1) {
+                }
+                if (currPhase.equals(Phase_GUI.Character1)|| currCharacter == 1) {
                     schoolBoardController.enableCharacter1();
                 } else if (currPhase.equals(Phase_GUI.Character2) || currCharacter == 2) {
                     schoolBoardController.enableCharacter2();
@@ -423,6 +422,11 @@ public class GUI {
             ChooseCharacterController chooseCharacterController = fxmlLoader.getController();
             chooseCharacterController.setGUI(this);
             chooseCharacterController.setAvailableCharacters();
+            chooseCharacterController.showDetails();
+            if (!myTurn) {
+                chooseCharacterController.disableChoose(true);
+                chooseCharacterController.setMessage("You are looking at character cards.");
+            }
             if (!Objects.equals(msg, "")) {
                 chooseCharacterController.setMessage(msg);
             }

@@ -459,7 +459,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.isMyTurn()) {
+                if (gui.getCurrPhase().equals(Phase_GUI.Character2)) {
                     Image finalStuImage = stuImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
@@ -520,7 +520,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.isMyTurn()) {
+                if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
                     Image finalStuImage = noEntryImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
@@ -590,7 +590,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.isMyTurn()) {
+                if (gui.getCurrPhase().equals(Phase_GUI.Character7)) {
                     imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                         for (Point point : character1) {
                             if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
@@ -674,7 +674,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.isMyTurn()) {
+                if (gui.getCurrPhase().equals(Phase_GUI.Character11)) {
                     Image finalStuImage = stuImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);

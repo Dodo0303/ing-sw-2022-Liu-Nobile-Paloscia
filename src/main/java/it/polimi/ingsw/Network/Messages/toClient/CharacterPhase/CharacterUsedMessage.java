@@ -9,11 +9,12 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class CharacterUsedMessage extends MessageToClient {
     private String playerID;
-    private int characterID;
+    private int characterID, coins;
 
-    public CharacterUsedMessage(String playerID, int characterID) {
+    public CharacterUsedMessage(String playerID, int characterID, int coins) {
         this.playerID = playerID;
         this.characterID = characterID;
+        this.coins = coins;
     }
 
     @Override
@@ -26,12 +27,11 @@ public class CharacterUsedMessage extends MessageToClient {
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
         if (client.getClient().getNickname().equals(playerID)) {
             client.getClient().getGame().useEffectOfCharacter(characterID);
-            client.getClient().viewSchoolBoard("", false);
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
-        } else {
-            client.getClient().setCurrCharacter(characterID);
-            client.getClient().viewSchoolBoard("", false);
         }
+        client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coins);
+        client.getClient().setCurrCharacter(characterID);
+        client.getClient().viewSchoolBoard("", false);
     }
 
     public String getPlayerID() {

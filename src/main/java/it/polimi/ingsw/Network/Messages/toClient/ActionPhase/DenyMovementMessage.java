@@ -21,9 +21,14 @@ public class DenyMovementMessage extends MessageToClient {
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
-        client.getClient().viewSchoolBoard("Movement denied", false);
-        if (client.getClient().getCurrPhase().equals(Phase_GUI.Character1)) {
+        if (!client.getClient().getCurrPhase().equals(Phase_GUI.Planning) &&
+                !client.getClient().getCurrPhase().equals(Phase_GUI.Action1) &&
+                !client.getClient().getCurrPhase().equals(Phase_GUI.Action2) &&
+                !client.getClient().getCurrPhase().equals(Phase_GUI.Action3)) {
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+            client.getClient().viewSchoolBoard("Character not available", false);
+        } else {
+            client.getClient().viewSchoolBoard("Movement denied", false);
         }
     }
 }

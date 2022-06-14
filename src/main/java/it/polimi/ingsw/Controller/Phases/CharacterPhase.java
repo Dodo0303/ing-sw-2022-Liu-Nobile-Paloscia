@@ -158,7 +158,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setProfessorChecker(new SpecialProfessorChecker());
-                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID, match.getGame().getPlayerByNickname(ch.getNickname()).getCoins()));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
@@ -168,7 +168,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setAdditionalMoves();
-                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID, match.getGame().getPlayerByNickname(ch.getNickname()).getCoins()));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
@@ -178,7 +178,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new NoTowerInfluenceCalculator());
-                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID, match.getGame().getPlayerByNickname(ch.getNickname()).getCoins()));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();
@@ -188,7 +188,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.setInfluenceCalculator(new AdditionalPointsInfluenceCalculator(ch.getNickname()));
-                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID));
+                    match.broadcastMessage(new CharacterUsedMessage(match.getCurrentPlayerID(), expectedCharacterID, match.getGame().getPlayerByNickname(ch.getNickname()).getCoins()));
 
                 } catch (WrongEffectException | NotEnoughNoEntriesException e) {
                     e.printStackTrace();

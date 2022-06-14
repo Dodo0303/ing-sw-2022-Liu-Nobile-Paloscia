@@ -18,6 +18,18 @@ public enum StudentColor implements Serializable {
 
     @Override
     public String toString() {
-        return color;
+        if (color.equals("\uD83D\uDFE2")) {
+            return "Green";
+        } else if (color.equals("\uD83D\uDD35")) {
+            return "Blue";
+        }  else if (color.equals("\uD83D\uDD34")) {
+            return "Red";
+        } else if (color.equals("\uD83D\uDFE1")) {
+            return "Yellow";
+        } else if (color.equals("\uD83D\uDFE3")) {
+            return "Pink";
+        } else {
+            return color;
+        }
     }
 }

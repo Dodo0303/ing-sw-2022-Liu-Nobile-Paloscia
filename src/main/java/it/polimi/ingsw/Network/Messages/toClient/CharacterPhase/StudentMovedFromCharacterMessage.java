@@ -14,7 +14,7 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
     private CharacterCard characterUpdated;
     private HashMap<Integer, Island> islands;
 
-    public StudentMovedFromCharacterMessage(CharacterCard characterUpdated, HashMap<Integer, Island> islands) {
+    public StudentMovedFromCharacterMessage(CharacterCard characterUpdated, HashMap<Integer, Island> islands) {//todo update coin!
         this.characterUpdated = characterUpdated;
         this.islands = islands;
     }
@@ -40,5 +40,6 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Character1)) {
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
         }
+        client.getClient().checkBoard("");
     }
 }

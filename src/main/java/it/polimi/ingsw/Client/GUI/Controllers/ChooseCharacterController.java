@@ -8,10 +8,8 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,6 +23,8 @@ public class ChooseCharacterController implements Initializable {
     private Label messageLabel;
     @FXML
     ToggleGroup toggleGroup = new ToggleGroup();
+    @FXML
+    private ImageView pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9, pic10, pic11, pic12;
     GUI gui;
     int res;
 
@@ -54,11 +54,6 @@ public class ChooseCharacterController implements Initializable {
         radio10.setDisable(true);
         radio11.setDisable(true);
         radio12.setDisable(true);
-        //todo character 1, 5, 7, 11 setup
-        //1. 4 students on card
-        //5. noEntries
-        //7. 6 students on card
-        //11. 4 students on card
     }
 
     public void execute() {
@@ -189,6 +184,56 @@ public class ChooseCharacterController implements Initializable {
         gui.send(new UseCharacterMessage(res));
     }
 
+    public void showDetails() {
+        for (int h = 0; h < gui.getGame().getCharacters().size(); h++) {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (gui.getGame().getCharacters().get(h).getID() == 1) {
+                Tooltip tooltip1 = new Tooltip();
+                try {
+                    for (int i = 0; i < gui.getGame().getCharacterById(1).getStudents().size(); i++) {
+                        stringBuilder.append(gui.getGame().getCharacterById(1).getStudents().get(i).toString()).append(" ");
+                    }
+                    tooltip1.setText(stringBuilder.toString());
+                    Tooltip.install(pic1, tooltip1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (gui.getGame().getCharacters().get(h).getID() == 5) {
+                Tooltip tooltip5 = new Tooltip();
+                try {
+                    stringBuilder.append("No entries: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(5).getNumberOfNoEntries()).append(" ");
+                    tooltip5.setText(stringBuilder.toString());
+                    Tooltip.install(pic5, tooltip5);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (gui.getGame().getCharacters().get(h).getID() == 7) {
+                Tooltip tooltip7 = new Tooltip();
+                try {
+                    for (int i = 0; i < gui.getGame().getCharacterById(7).getStudents().size(); i++) {
+                        stringBuilder.append(gui.getGame().getCharacterById(7).getStudents().get(i).toString()).append(" ");
+                    }
+                    tooltip7.setText(stringBuilder.toString());
+                    Tooltip.install(pic7, tooltip7);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (gui.getGame().getCharacters().get(h).getID() == 11) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    for (int i = 0; i < gui.getGame().getCharacterById(11).getStudents().size(); i++) {
+                        stringBuilder.append(gui.getGame().getCharacterById(11).getStudents().get(i).toString()).append(" ");
+                    }
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void back() {
         gui.checkBoard("");
     }
@@ -230,6 +275,24 @@ public class ChooseCharacterController implements Initializable {
             } else if (gui.getGame().getCharacters().get(i).getID() == 12) {
                 radio12.setDisable(false);
             }
+        }
+    }
+
+    public void disableChoose(boolean disable) {
+        if (disable) {
+            radio1.setDisable(true);
+            radio2.setDisable(true);
+            radio3.setDisable(true);
+            radio4.setDisable(true);
+            radio5.setDisable(true);
+            radio6.setDisable(true);
+            radio7.setDisable(true);
+            radio8.setDisable(true);
+            radio9.setDisable(true);
+            radio10.setDisable(true);
+            radio11.setDisable(true);
+            radio12.setDisable(true);
+            ConfirmButton.setDisable(true);
         }
     }
 
