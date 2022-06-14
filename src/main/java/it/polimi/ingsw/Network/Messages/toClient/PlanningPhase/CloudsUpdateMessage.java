@@ -21,7 +21,6 @@ public class CloudsUpdateMessage extends MessageToClient {
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
         client.getClient().getGame().set_clouds((ArrayList<Cloud>) clouds);
-        //todo update view
     }
 
     public List<Cloud> getClouds() {

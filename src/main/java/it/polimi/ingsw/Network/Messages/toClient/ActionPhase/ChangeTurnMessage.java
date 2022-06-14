@@ -6,6 +6,8 @@ import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Utilities;
 
+import java.util.ArrayList;
+
 public class ChangeTurnMessage extends MessageToClient {
     private String playerNickname;
     private Phase gamePhase;
@@ -43,6 +45,7 @@ public class ChangeTurnMessage extends MessageToClient {
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
+            ch.getClient().setChangeTurnNums(0);
             ch.getClient().setMyTurn(true);
             ch.getClient().checkBoard("Your round.");
             if (ch.getClient().getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
@@ -53,9 +56,23 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().viewSchoolBoard("Move a student.", false);
             } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setCurrPhase(Phase_GUI.Planning);
-                for (int i = 0; i < ch.getClient().getGame().getPlayers().size(); i++) {
-                    ch.getClient().getGame().getPlayers().get(i).clearAssistant();
+                /*
+                if (ch.getClient().getPlayerPlayedAssistant() != null) {
+                    for (int i = 0; i < ch.getClient().getGame().getPlayers().size(); i++) {
+                        if (!ch.getClient().getPlayerPlayedAssistant().contains(ch.getClient().getGame().getPlayers().get(i).getNickName())) {
+                            ch.getClient().getGame().getPlayers().get(i).clearAssistant();
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < ch.getClient().getGame().getPlayers().size(); i++) {
+                        ch.getClient().getGame().getPlayers().get(i).clearAssistant();
+                    }
+                    ch.getClient().setPlayerPlayedAssistant(new ArrayList<>());
+                    ch.getClient().getPlayerPlayedAssistant().add(ch.getClient().getNickname());
                 }
+
+                 */
+
                 ch.getClient().playAssistant("");
             }
         } else {

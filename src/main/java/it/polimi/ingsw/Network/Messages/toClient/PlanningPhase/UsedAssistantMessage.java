@@ -22,10 +22,10 @@ public class UsedAssistantMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayers().get(ch.getClient().getGame().getPlayerIndexFromNickname(playerID)).getAssistants().get(assistantValue - 1));
+        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
-        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayers().get(ch.getClient().getGame().getPlayerIndexFromNickname(playerID)).getAssistants().get(assistantValue - 1));
+        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
     }
 }

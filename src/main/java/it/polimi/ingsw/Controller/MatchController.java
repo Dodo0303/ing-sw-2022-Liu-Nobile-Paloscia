@@ -56,7 +56,7 @@ public class MatchController implements Runnable {
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
         this.lastRound = false;
-        this.influenceCalculator = new StandardInfluenceCalculator(); //TODO the special one
+        this.influenceCalculator = new StandardInfluenceCalculator();
         this.professorChecker = new StandardProfessorChecker();
         this.additionalMoves = 0;
     }
@@ -359,7 +359,6 @@ public class MatchController implements Runnable {
         }
     }
 
-
     /**
      * Methods used by the 3nd character. Computes the influence on an island without moving mother nature
      * @param islandID island in which computing the influence
@@ -531,7 +530,6 @@ public class MatchController implements Runnable {
         }
     }
 
-
     /** In the case that x == numIslands - 1 (e.g. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
@@ -542,7 +540,6 @@ public class MatchController implements Runnable {
             if (x == this.game.getMotherNatureIndex()) {
                 this.game.setMothernature(y);
             }
-            System.out.println( y + " merged " + x);//TODO DELETE AFTER TEST
         } else {
             this.game.getIslands().get(x).copyFrom(this.game.getIslands().get(y));
             if (y == this.game.getMotherNatureIndex()) {
@@ -551,7 +548,6 @@ public class MatchController implements Runnable {
             for (int i = y; i < this.game.getNumIslands() - 1; i++) {
                 this.game.getIslands().put(i, this.game.getIslands().get(i + 1)); // move islands after the yth forward by 1.
             }
-            System.out.println( x + " merged " + y);//TODO DELETE AFTER TEST
         }
         this.game.getIslands().remove(this.game.getNumIslands() - 1);
     }
@@ -720,7 +716,7 @@ public class MatchController implements Runnable {
         }
     }
 
-    public Player getWinner() {
+    public Player getWinner() { //todo check rules. At least the one which says the game should end when any player runs out of his assistant card does not work here
 
         Player winner = null;
         int maxTow = 0;
@@ -742,7 +738,7 @@ public class MatchController implements Runnable {
         return winner;
     }
 
-    public int endedAtPhase2() { //TODO debug this
+    public int endedAtPhase2() {
         if (this.getCurrentPlayer().getTowerNum() == 0) return 1;
         if (this.game.getIslands().size() <= 3) return 2;
         return 0;

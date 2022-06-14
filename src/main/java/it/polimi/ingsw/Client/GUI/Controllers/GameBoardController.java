@@ -36,6 +36,8 @@ public class GameBoardController implements Initializable {
     private Label messageLabel;
     @FXML
     private Button backButton;
+    @FXML
+    private ImageView bag;
     private ArrayList<Point> students, towers, cloudStudents;
     private ArrayList<ImageView> islandImageViews, imageViews;
     private ArrayList<StackPane> clouds;
@@ -332,6 +334,14 @@ public class GameBoardController implements Initializable {
             }
             anchorPane.getChildren().add(stackPane);
         }
+    }
+
+    public void drawBag() {
+        Tooltip tooltip = new Tooltip();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Number of students in the bag").append(": ").append(gui.getGame().getBag().getRemainingNum()).append("\n");
+        tooltip.setText(stringBuilder.toString());
+        Tooltip.install(bag, tooltip);
     }
 
     public void disableBack(boolean disable) {

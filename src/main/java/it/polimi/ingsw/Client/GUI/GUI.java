@@ -38,10 +38,11 @@ public class GUI {
     private int numPlayer;
     private boolean expert;
     private List<Wizard> wizards;
-    private int ap1Moves;
+    private int ap1Moves, changeTurnNums;
     private boolean myTurn;
     private Phase_GUI prevPhase;
     private int currCharacter;
+    private ArrayList<String> playerPlayedAssistant;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -260,6 +261,7 @@ public class GUI {
             gameBoardController.setMoveStudent(true);
             gameBoardController.drawIslands(getGame().getIslands().size());
             gameBoardController.drawClouds(game.getPlayers().size());
+            gameBoardController.drawBag();
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }
@@ -701,6 +703,21 @@ public class GUI {
 
     public void setCurrCharacter(int currCharacter) {
         this.currCharacter = currCharacter;
+    }
+
+    public int getChangeTurnNums() {
+        return this.changeTurnNums;
+    }
+    public void setChangeTurnNums(int changeTurnNums){
+        this.changeTurnNums = changeTurnNums;
+    }
+
+    public ArrayList<String> getPlayerPlayedAssistant() {
+        return playerPlayedAssistant;
+    }
+
+    public void setPlayerPlayedAssistant(ArrayList<String> playerPlayedAssistant) {
+        this.playerPlayedAssistant = playerPlayedAssistant;
     }
 
 
