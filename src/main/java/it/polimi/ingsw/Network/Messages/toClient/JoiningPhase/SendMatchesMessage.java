@@ -43,9 +43,8 @@ public class SendMatchesMessage extends MessageToClient {
             for (int i = 0; i < matchesID.size(); i++) {
                 System.out.println(i+1 + ") Match " + matchesID.get(i));
                 for (int j = 0; j < players.get(i).length; j++) {
-                    System.out.println(players.get(i)[j]);
+                    System.out.println("    Joined players: " + players.get(i)[j]);
                 }
-                System.out.println("\n");
             }
             client.getClient().setPhase(Phase.JoiningGame1);
             client.getClient().joinGame(matchesID);

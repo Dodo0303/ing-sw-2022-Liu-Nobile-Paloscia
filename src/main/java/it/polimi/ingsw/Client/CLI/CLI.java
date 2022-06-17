@@ -15,12 +15,14 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class CLI {
@@ -31,10 +33,11 @@ public class CLI {
     private int port;
     private Scanner input = new Scanner(System.in);
     private ServerHandler serverHandler;
-    private Phase currPhase;
+    private Phase currPhase, prevPhase;
     private List<Wizard> wizards;
     private int ap1Moves;
     private boolean expert;
+    private boolean myTurn;
 
     public void start() {
         printTitle();
@@ -224,9 +227,6 @@ public class CLI {
     }
 
     public void chooseGameMode() {
-        while (!getCurrPhase().equals(Phase.ChoosingGameMode)) {
-            currPhase = getCurrPhase();
-        }
         int temp = 0;
         while(temp != 1 && temp != 2) {
             System.out.print("Press 1 for new game, press 2 for joining an existing game.\n");
@@ -246,9 +246,6 @@ public class CLI {
 
     private void newgame() {
         try {
-            while (!currPhase.equals(Phase.CreatingGame)) {
-                currPhase = getCurrPhase();
-            }
             int numPlayer = 0, wiz = -1;
             String mode = "";
             while(numPlayer > 4 || numPlayer < 2) {
@@ -284,9 +281,6 @@ public class CLI {
 
     public void joinGame(List<Integer> matchIDs) {
         try {
-            while (!currPhase.equals(Phase.JoiningGame1)) {
-                currPhase = getCurrPhase();
-            }
             int match = -1;
             while (match < 0) {
                 System.out.print("Choose a match.\n");
@@ -295,9 +289,10 @@ public class CLI {
                     match = Integer.parseInt(in);
                 }
             }
-            send(new MatchChosenMessage(matchIDs.get(match)));
+            send(new MatchChosenMessage(matchIDs.get(match - 1)));
         } catch (Exception e) {
             System.out.print("Something went wrong, please try again.\n");
+            e.printStackTrace();
             joinGame(matchIDs);
         }
     }
@@ -484,7 +479,7 @@ public class CLI {
     }
 
     private void printSchoolBoard(Player player) {
-        System.out.println("\n\n" + player.getNickName().toUpperCase() + "'S SCHOOLBOARD\n");
+        System.out.println("\n" + player.getNickName().toUpperCase() + "'S school board:\n");
         System.out.println("Entrance: ");
         for (int i = 0; i < player.getEntranceStudents().size(); i++) {
             System.out.print(i + ")" + player.getEntranceStudents().get(i) + " ");
@@ -497,21 +492,59 @@ public class CLI {
         }
 
         System.out.println("Professors: ");
+        if (player.getProfessors().size() == 0) {
+            System.out.print("none");
+        }
         for (int i = 0; i < player.getProfessors().size(); i++) {
             System.out.print(player.getProfessors().get(i) + " ");
         }
-        System.out.println("\n");
-
-        System.out.println("Towers: " + player.getTowerNum());
-        System.out.println("\n");
+        System.out.println("Towers: " + player.getTowerNum()+ player.getColor().toString());
         if (expert) {
             System.out.println("Coins: " + player.getCoins());
         }
     }
 
-    private void printCharacters() {
+    private void printCharacters()  {
         for (int i = 1; i <= game.getCharacters().size(); i++) {
-            System.out.println(i + ". character" + game.getCharacters().get(i).getID() + "; cost: " + game.getCharacters().get(i).getPrice());
+            if(game.getCharacters().get(i - 1).getID() == 1 ) {
+                System.out.print(i + ". character" + i + ": cost: " + game.getCharacterById(i).getPrice() + "; Students: ");
+                try {
+                    for(StudentColor color : game.getCharacterById(1).getStudents()) {
+                        System.out.print(color.toString() + " ");
+                    }
+                    System.out.println("");
+                } catch (WrongEffectException e) {
+                    e.printStackTrace();
+                }
+            } else if (game.getCharacters().get(i - 1).getID() == 5) {
+                try {
+                    System.out.println(i + ". character" + i + ": cost: " + game.getCharacterById(i).getPrice() + "; Number of no entries: " + game.getCharacterById(5).getNumberOfNoEntries());
+                } catch (WrongEffectException e) {
+                    e.printStackTrace();
+                }
+            } else if (game.getCharacters().get(i - 1).getID() == 7) {
+                System.out.print(i + ". character" + i + ": cost: " + game.getCharacterById(i).getPrice() + "; Students: ");
+                try {
+                    for(StudentColor color : game.getCharacterById(7).getStudents()) {
+                        System.out.print(color.toString() + " ");
+                    }
+                    System.out.println("");
+                } catch (WrongEffectException e) {
+                    e.printStackTrace();
+                }
+            } else if (game.getCharacters().get(i - 1).getID() == 11) {
+                System.out.print(i + ". character" + i + ": cost: " + game.getCharacterById(i).getPrice() + "; Students: ");
+                try {
+                    for(StudentColor color : game.getCharacterById(11).getStudents()) {
+                        System.out.print(color.toString() + " ");
+                    }
+                    System.out.println("");
+                } catch (WrongEffectException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println(i + ". character" + game.getCharacters().get(i - 1).getID() + ": cost: " + game.getCharacterById(i).getPrice());
+            }
         }
     }
 
@@ -519,6 +552,8 @@ public class CLI {
         int realCharacterIndex = game.getCharacters().get(characterIndex).getID();
         send(new UseCharacterMessage(realCharacterIndex));
         if (characterIndex == 1) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character1;
             character1();
         } else if (characterIndex == 3) {
             character3();
@@ -538,7 +573,39 @@ public class CLI {
     }
 
     private void character1() {
+        int numStudent = -1;
+        while (numStudent < 0) {
+            System.out.print("Students: ");
+            try {
+                for(StudentColor color : game.getCharacterById(1).getStudents()) {
+                    System.out.print(color.toString() + " ");
+                }
+                System.out.println("");
+            } catch (WrongEffectException e) {
+                e.printStackTrace();
+            }
+            System.out.print("Which Student would you like to take? Enter 'm' to see menu.\n");
+            String in = input.nextLine();
+            if (in.equals("m")){
+                menu();
+            } else if (Utilities.isNumeric(in)) {
+                numStudent = Integer.parseInt(in);
+            }
+        }
+        int numIsland = -1;
+        while (numIsland < 0 || numIsland >= game.getIslands().size()) {
+            printIslands();
+            System.out.print("Where would you like to put the student? Press 'm' to check menu.\n");
+            String in = input.nextLine();
+            if (in.equals("m")){
+                menu();
+            }
+            if (Utilities.isNumeric(in)) {
+                numIsland = Integer.parseInt(in);
+            }
+        }
 
+        send(new MoveStudentFromCharacterMessage(numStudent, numIsland));
     }
     private void character3() {
 
@@ -569,10 +636,13 @@ public class CLI {
             System.out.println("\n\nMenu:\n ");
             System.out.println("1. Islands");
             System.out.println("2. Clouds");
-            System.out.println("3. School board");
+            System.out.println("3. My school board");
             System.out.println("4. Others' school boards");;
-            if (expert) {
+            if (expert && myTurn) {
                 System.out.println("5. Use character card");
+                System.out.println("6. Continue/Refresh\n");
+            } else if ((expert && !myTurn)|| (currPhase.equals(Phase.Character1)) || currPhase.equals(Phase.Character5)|| currPhase.equals(Phase.Character7)|| currPhase.equals(Phase.Character11)){
+                System.out.println("5. See character cards");
                 System.out.println("6. Continue/Refresh\n");
             } else {
                 System.out.println("5. Continue/Refresh\n");
@@ -608,12 +678,12 @@ public class CLI {
                     String temp = input.nextLine();
                     if (Utilities.isNumeric(temp)) {
                         playerChosen = Integer.parseInt(temp) - 1;
-                    }
-                    if (playerChosen < game.getPlayers().size()) {
-                        System.out.println("Hai inserito " + playerChosen + ": " + game.getPlayers().get(playerChosen).getNickName());
-                        printSchoolBoard(game.getPlayers().get(playerChosen));
-                    } else {
-                        System.out.println("No such player.");
+                        if (playerChosen < game.getPlayers().size()) {
+                            System.out.println("Hai inserito " + playerChosen + ": " + game.getPlayers().get(playerChosen).getNickName());
+                            printSchoolBoard(game.getPlayers().get(playerChosen));
+                        } else {
+                            System.out.println("No such player.");
+                        }
                     }
                     break;
                 }
@@ -621,14 +691,22 @@ public class CLI {
                     if (expert) {
                         int characterIndex = -1;
                         printCharacters();
-                        String temp = input.nextLine();
-                        if (Utilities.isNumeric(temp)) {
-                            characterIndex = Integer.parseInt(temp);
-                        }
-                        if (characterIndex <= game.getCharacters().size()) {
-                            useCharacter(characterIndex);
-                        } else {
-                            System.out.println("No such character card.");
+                        System.out.println("Enter to return.");
+                        input.nextLine();
+                        if (myTurn) {
+                            System.out.println("Choose a character, or enter 'e' to go back.");
+                            String temp = input.nextLine();
+                            if (temp.equals("e")) {
+                                break;
+                            }
+                            if (Utilities.isNumeric(temp)) {
+                                characterIndex = Integer.parseInt(temp);
+                                if (characterIndex <= game.getCharacters().size()) {
+                                    useCharacter(characterIndex);
+                                } else {
+                                    System.out.println("No such character card.");
+                                }
+                            }
                         }
                     }
                     break;
@@ -709,5 +787,22 @@ public class CLI {
 
     public void setExpert(boolean expert) {
         this.expert = expert;
+    }
+
+
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
+    }
+
+    public Phase getPrevPhase() {
+        return prevPhase;
+    }
+
+    public void setPrevPhase(Phase prevPhase) {
+        this.prevPhase = prevPhase;
     }
 }
