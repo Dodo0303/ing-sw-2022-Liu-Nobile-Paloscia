@@ -446,7 +446,6 @@ public class CLI {
         send(new ChooseCloudMessage(num));
     }
 
-
     void useCharacter(int characterIndex) {
         int realCharacterIndex = game.getCharacters().get(characterIndex).getID();
         send(new UseCharacterMessage(realCharacterIndex));
@@ -473,11 +472,12 @@ public class CLI {
 
     private void character1() {
         int numStudent = -1;
+        int i = 1;
         while (numStudent < 0) {
             System.out.print("Students: ");
             try {
                 for(StudentColor color : game.getCharacterById(1).getStudents()) {
-                    System.out.print(color.toString() + " ");
+                    System.out.print(i + ") " + color.toString() + " ");
                 }
                 System.out.println("");
             } catch (WrongEffectException e) {
@@ -503,7 +503,6 @@ public class CLI {
                 numIsland = Integer.parseInt(in);
             }
         }
-
         send(new MoveStudentFromCharacterMessage(numStudent, numIsland));
     }
 

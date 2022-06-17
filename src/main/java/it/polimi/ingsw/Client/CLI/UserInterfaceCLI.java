@@ -103,8 +103,6 @@ public class UserInterfaceCLI implements Runnable{
                     if (cli.isExpert()) {
                         int characterIndex = -1;
                         printCharacters();
-                        System.out.println("Enter to return.");
-                        requireUserInput();
                         if (cli.isMyTurn()) {
                             System.out.println("Choose a character, or enter 'e' to go back.");
                             String temp = requireUserInput();
@@ -119,6 +117,9 @@ public class UserInterfaceCLI implements Runnable{
                                     System.out.println("No such character card.");
                                 }
                             }
+                        } else {
+                            System.out.println("Enter to return.");
+                            requireUserInput();
                         }
                     }
                     break;
