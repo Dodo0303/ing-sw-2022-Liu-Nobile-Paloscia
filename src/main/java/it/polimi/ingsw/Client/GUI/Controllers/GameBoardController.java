@@ -221,8 +221,7 @@ public class GameBoardController implements Initializable {
                         gui.send(new ChooseIslandMessage(islandChosen));
                     } else if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
                         gui.send(new MoveNoEntryMessage(islandChosen));
-                    }
-                    else {
+                    } else {
                         gui.send(new MoveStudentFromEntranceMessage(studentIndex, 1, islandChosen));
                     }
                     event.consume();

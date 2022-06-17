@@ -7,10 +7,12 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 public class MoveProfessorMessage extends MessageToClient {
     private StudentColor color;
     private boolean remove;
+    private String playerID;
 
-    public MoveProfessorMessage(StudentColor color, boolean remove) {
+    public MoveProfessorMessage(StudentColor color, boolean remove, String playerID) {
         this.color = color;
         this.remove = remove;
+        this.playerID = playerID;
     }
 
     public StudentColor getColor() {
@@ -20,6 +22,19 @@ public class MoveProfessorMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
+        if (!remove) {
+            client.getClient().getGame().getPlayerByNickname(playerID).addProfessor(color);
+        } else {
+            client.getClient().getGame().getPlayerByNickname(playerID).removeProfessor(color);
+        }
 
+    }
+
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        if (!remove) {
+            client.getClient().getGame().getPlayerByNickname(playerID).addProfessor(color);
+        } else {
+            client.getClient().getGame().getPlayerByNickname(playerID).removeProfessor(color);
+        }
     }
 }

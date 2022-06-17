@@ -15,7 +15,7 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntranceMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
-import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
+import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
@@ -40,6 +40,7 @@ public class CLI {
     private boolean myTurn;
     private UserInterfaceCLI view;
     public Thread viewThread;
+    private int currCharacter, character7Counter;
 
     public void start() {
         ap1Moves = 0;
@@ -109,9 +110,7 @@ public class CLI {
                 ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
             }
         } else if (message instanceof MoveProfessorMessage) {
-            if (currPhase.equals(Phase.Action2)) {
-                ((MoveProfessorMessage) message).process(this.serverHandler);
-            }
+            ((MoveProfessorMessage) message).process(this.serverHandler);
         } else if (message instanceof DenyMovementMessage) {
             ((DenyMovementMessage) message).process(this.serverHandler);
         } else if (message instanceof ConfirmMovementMessage) {
@@ -454,18 +453,32 @@ public class CLI {
             currPhase = Phase.Character1;
             character1();
         } else if (characterIndex == 3) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character3;
             character3();
         } else if (characterIndex == 5) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character5;
             character5();
         } else if (characterIndex == 7) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character7;
             character7();
-        } else if (characterIndex == 9) {
+        }  else if (characterIndex == 9) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character9;
             character9();
         } else if (characterIndex == 10) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character10;
             character10();
         } else if (characterIndex == 11) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character11;
             character11();
         } else if (characterIndex == 12) {
+            prevPhase = currPhase;
+            currPhase = Phase.Character12;
             character12();
         }
     }
@@ -507,25 +520,171 @@ public class CLI {
     }
 
     private void character3() {
-
+        int numIsland = -1;
+        while (numIsland < 0 || numIsland >= game.getIslands().size()) {
+            view.printIslands();
+            System.out.print("Which island would you like to choose for your character effect?? Press 'm' to check menu.\n");
+            String in = view.requireUserInput();
+            if (in.equals("m")){
+                view.menu();
+            }
+            if (Utilities.isNumeric(in)) {
+                numIsland = Integer.parseInt(in);
+            }
+        }
+        send(new ChooseIslandMessage(numIsland));
     }
     private void character5() {
-
+        int numIsland = -1;
+        while (numIsland < 0 || numIsland >= game.getIslands().size()) {
+            view.printIslands();
+            System.out.print("Which island would you like to choose for your character effect?? Press 'm' to check menu.\n");
+            String in = view.requireUserInput();
+            if (in.equals("m")){
+                view.menu();
+            }
+            if (Utilities.isNumeric(in)) {
+                numIsland = Integer.parseInt(in);
+            }
+        }
+        send(new MoveNoEntryMessage(numIsland));
     }
-    private void character7() {
 
+    private void character7() {
+        int i = 1;
+        int[] characterStudents = new int[3];
+        int[] entranceStudents = new int[3];
+        int index1 = 0, index2 = 0;
+        for (int j = 0; j < 3; j++) {
+            int numStudent = -1;
+            int numIsland = -1;
+            while (numStudent < 0) {
+                System.out.print("Students: ");
+                try {
+                    for(StudentColor color : game.getCharacterById(7).getStudents()) {
+                        System.out.print(i + ") " + color.toString() + " ");
+                    }
+                    System.out.println("");
+                } catch (WrongEffectException e) {
+                    e.printStackTrace();
+                }
+                System.out.print("Which Student would you like to take? Enter 'm' to see menu.\n");
+                String in = view.requireUserInput();
+                if (in.equals("m")){
+                    view.menu();
+                } else if (Utilities.isNumeric(in)) {
+                    numStudent = Integer.parseInt(in);
+                    characterStudents[index1++] = numStudent;
+                }
+            }
+            while (numIsland < 0 || numIsland >= game.getIslands().size()) {
+                view.printIslands();
+                System.out.print("Where would you like to put the student? Press 'm' to check menu.\n");
+                String in = view.requireUserInput();
+                if (in.equals("m")){
+                    view.menu();
+                }
+                if (Utilities.isNumeric(in)) {
+                    numIsland = Integer.parseInt(in);
+                    entranceStudents[index2++] = numIsland;
+                }
+            }
+        }
+        send(new SwapStudentsCharacterEntranceMessage(characterStudents, entranceStudents));
     }
     private void character9() {
+        StudentColor res;
+        while (true) {
+            System.out.println("Choose a color.");
+            for (StudentColor color : StudentColor.values()) {
+                System.out.println(color.toString());
+            }
+            String in = view.requireUserInput();
+            if (Utilities.existInStudentColor(in)) {
+                res = Utilities.getColor(in);
+                send(new ChooseStudentColorMessage(res));
+                break;
+            }
+        }
 
     }
     private void character10() {
-
+        int i = 1;
+        StudentColor[] colors = new StudentColor[2];
+        int[] entranceStudents = new int[2];
+        int index1 = 0, index2 = 0;
+        for (int j = 0; j < 2; j++) {
+            int numEntranceStudent = -1;
+            while (true) {
+                System.out.print("Dining room: ");
+                for (StudentColor color: game.getPlayerByNickname(nickname).getDiningTables().keySet()) {
+                    System.out.println(color + ": " + game.getPlayerByNickname(nickname).getDiningTables().get(color).getNumOfStudents());
+                }
+                System.out.println("");
+                System.out.print("Which color of student would you like to choose? Enter 'm' to see menu.\n");
+                String in = view.requireUserInput();
+                if (in.equals("m")){
+                    view.menu();
+                } else if (Utilities.existInStudentColor(in)) {
+                    colors[index1++] = Utilities.getColor(in);
+                    break;
+                }
+            }
+            while (numEntranceStudent < 0) {
+                System.out.print("Entrance students: ");
+                for(StudentColor color : game.getPlayerByNickname(nickname).getEntranceStudents()) {
+                    System.out.print(i + ") " + color.toString() + " ");
+                }
+                System.out.println("");
+                System.out.print("Which Student would you like to take? Enter 'm' to see menu.\n");
+                String in = view.requireUserInput();
+                if (in.equals("m")){
+                    view.menu();
+                } else if (Utilities.isNumeric(in)) {
+                    numEntranceStudent = Integer.parseInt(in);
+                    entranceStudents[index1++] = numEntranceStudent;
+                }
+            }
+        }
+        send(new SwapStudentsTableEntranceMessage(colors, entranceStudents));
     }
     private void character11() {
-
+        int numStudent = -1;
+        int i = 1;
+        while (numStudent < 0) {
+            System.out.print("Students: ");
+            try {
+                for(StudentColor color : game.getCharacterById(7).getStudents()) {
+                    System.out.print(i + ") " + color.toString() + " ");
+                }
+                System.out.println("");
+            } catch (WrongEffectException e) {
+                e.printStackTrace();
+            }
+            System.out.print("Which Student would you like to take to your dining room? Enter 'm' to see menu.\n");
+            String in = view.requireUserInput();
+            if (in.equals("m")){
+                view.menu();
+            } else if (Utilities.isNumeric(in)) {
+                numStudent = Integer.parseInt(in);
+            }
+        }
+        send(new MoveStudentsToTableMessage(numStudent));
     }
     private void character12() {
-
+        StudentColor res;
+        while (true) {
+            System.out.println("Choose a color.");
+            for (StudentColor color : StudentColor.values()) {
+                System.out.println(color.toString());
+            }
+            String in = view.requireUserInput();
+            if (Utilities.existInStudentColor(in)) {
+                res = Utilities.getColor(in);
+                send(new ChooseStudentColorMessage(res));
+                break;
+            }
+        }
     }
 
     public String getNickname() {
@@ -610,4 +769,13 @@ public class CLI {
     public Thread getViewThread() {
         return viewThread;
     }
+
+    public void setCurrCharacter(int characterID) {
+        this.currCharacter = characterID;
+    }
+
+    public int getCharacter7Counter() {
+        return character7Counter;
+    }
+
 }

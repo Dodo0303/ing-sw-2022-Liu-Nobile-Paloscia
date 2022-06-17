@@ -261,7 +261,6 @@ public class MatchController implements Runnable {
             addCoinsToPlayer(getCurrentPlayer().getNickName(), 1);
         }
 
-
         moveProfessorIfNeeded(p, color);
 
     }
@@ -271,6 +270,7 @@ public class MatchController implements Runnable {
         if (this.game.getProfessors().contains(color)) {
             this.game.removeSpareProfessor(color);
             p.addProfessor(color);
+            broadCastProfessorsChange(p.getNickName(), color, false);
         }
 
         if (!p.hasProfessor(color)) {
@@ -283,11 +283,13 @@ public class MatchController implements Runnable {
                 if (isOther && hasProf && shouldNotHaveProf) {
                     p_other.removeProfessor(color);
                     p.addProfessor(color);
+                    broadCastProfessorsChange(p_other.getNickName(), color, true);
+                    broadCastProfessorsChange(p.getNickName(), color, false);
                 }
             }
         }
-    }
 
+    }
     /**
      * Method called when a player uses a character. It removes the price of the character from the money of the player
      * @param nickname of the player that is using the character
@@ -584,6 +586,12 @@ public class MatchController implements Runnable {
         for (ClientHandler client :
                 clients) {
             client.send(gameModelMessage);
+        }
+    }
+
+    public void broadCastProfessorsChange(String playerID, StudentColor color, boolean remove) {
+        for (ClientHandler client : this.clients) {
+            client.send(new MoveProfessorMessage(color, remove, playerID));
         }
     }
 

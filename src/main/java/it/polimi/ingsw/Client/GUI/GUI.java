@@ -529,6 +529,8 @@ public class GUI {
             }
         } else if (message instanceof EndMessage) {
             ((EndMessage) message).processGUI(this.serverHandler);
+        } else if (message instanceof MoveProfessorMessage) {
+            ((MoveProfessorMessage) message).processGUI(this.serverHandler);
         } else if (message instanceof CharacterUsedMessage) {
             try {
                 ((CharacterUsedMessage) message).processGUI(this.serverHandler);

@@ -17,6 +17,9 @@ public class DenyMovementMessage extends MessageToClient {
             client.getClient().playAssistant();
         } else if (client.getClient().getCurrPhase().equals(Phase.Action1)) {
             client.getClient().moveStudentsFromEntrance();
+        } else {
+            client.getClient().setPhase(client.getClient().getPrevPhase());
+            System.out.println("Failed to use character cards.");
         }
     }
 

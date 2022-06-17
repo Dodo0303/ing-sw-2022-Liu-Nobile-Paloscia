@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -44,6 +46,9 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
                 entranceUpdated) {
             player.addStudentToEntrance(color);
         }
+        if (client.getClient().getNickname().equals(playerID)) {
+            client.getClient().setPhase(client.getClient().getPrevPhase());
+        }
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
@@ -55,7 +60,9 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
                 entranceUpdated) {
             player.addStudentToEntrance(color);
         }
-        client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+        if (client.getClient().getNickname().equals(playerID)) {
+            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+        }
         client.getClient().viewSchoolBoard("", false);
     }
 }

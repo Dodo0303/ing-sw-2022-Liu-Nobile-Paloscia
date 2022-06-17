@@ -44,12 +44,20 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
             try {
                 client.getClient().getGame().addToDiningTable(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), color);
                 client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coin);
+                if (!playerID.equals(client.getClient().getNickname())) {
+                    System.out.println(playerID + " moved a student to his dining table.");
+                    client.getClient().getView().printSchoolBoard(client.getClient().getGame().getPlayerByNickname(playerID));
+                }
             } catch (FullTableException e) {
                 e.printStackTrace();
             }
         } else if (destination == 1) {
             StudentColor color = client.getClient().getGame().removeStudentFromEntrance(client.getClient().getGame().getPlayers().get(client.getClient().getGame().getPlayerIndexFromNickname(playerID)), studentPosition);
             client.getClient().getGame().addStudentToIsland(color, client.getClient().getGame().getIslands().get(destinationID));
+            if (!playerID.equals(client.getClient().getNickname())) {
+                System.out.println(playerID + " moved a student to the following island.");
+                client.getClient().getView().printIsland(destinationID);
+            }
         }
     }
 

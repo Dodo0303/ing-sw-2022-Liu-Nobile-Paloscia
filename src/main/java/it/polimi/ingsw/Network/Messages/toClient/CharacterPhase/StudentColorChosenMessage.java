@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
@@ -35,9 +36,16 @@ public class StudentColorChosenMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-        if (!isCharacter12)
+        if (!isCharacter12) {
             System.out.println("Color " + colorChosen.toString() + " is not considered for the influence in this turn");
+            if (client.getClient().getCurrPhase().equals(Phase.Character9)) {
+                client.getClient().setPhase(client.getClient().getPrevPhase());
+            }
+        }
         else {
+            if (client.getClient().getCurrPhase().equals(Phase.Character12)) {
+                client.getClient().setPhase(client.getClient().getPrevPhase());
+            }
             client.getClient().getGame().set_players(playersUpdated);
         }
     }

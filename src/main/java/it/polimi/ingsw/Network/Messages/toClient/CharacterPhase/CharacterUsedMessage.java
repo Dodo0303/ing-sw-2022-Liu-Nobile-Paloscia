@@ -21,7 +21,12 @@ public class CharacterUsedMessage extends MessageToClient {
     public void process(ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
         if (client.getClient().getNickname().equals(playerID)) {
             client.getClient().getGame().useEffectOfCharacter(characterID);
+            client.getClient().setPhase(client.getClient().getPrevPhase());
+        } else {
+            System.out.println(playerID + " used character" + characterID);
         }
+        client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coins);
+        client.getClient().setCurrCharacter(characterID);
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {

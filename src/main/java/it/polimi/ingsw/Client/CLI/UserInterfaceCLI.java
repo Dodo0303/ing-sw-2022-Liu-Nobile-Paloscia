@@ -140,7 +140,7 @@ public class UserInterfaceCLI implements Runnable{
     }
 
 
-    private void printIsland(int index){
+    public void printIsland(int index){
         System.out.println("Island " + index);
         if (cli.getGame().getIslands().get(index).getTowerColor().equals(Color.VOID))
             System.out.println("No ♜ on this island");
@@ -159,7 +159,7 @@ public class UserInterfaceCLI implements Runnable{
         System.out.println("\uD83D\uDFE3: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.PINK));
     }
 
-    void printClouds() {
+    public void printClouds() {
         for (int i = 0; i < cli.getGame().getClouds().size(); i++) {
             System.out.print("cloud " + i + " :\n");
             System.out.print("Students:\n");
@@ -169,7 +169,7 @@ public class UserInterfaceCLI implements Runnable{
         }
     }
 
-    private void printSchoolBoard(Player player) {
+    public void printSchoolBoard(Player player) {
         System.out.println("\n" + player.getNickName().toUpperCase() + "'S school board:\n");
         System.out.println("Entrance: ");
         for (int i = 0; i < player.getEntranceStudents().size(); i++) {
@@ -195,7 +195,7 @@ public class UserInterfaceCLI implements Runnable{
         }
     }
 
-    private void printCharacters()  {
+    public void printCharacters()  {
         for (int i = 1; i <= cli.getGame().getCharacters().size(); i++) {
             if(cli.getGame().getCharacters().get(i - 1).getID() == 1 ) {
                 System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(i).getPrice() + "; Students: ");
@@ -239,7 +239,7 @@ public class UserInterfaceCLI implements Runnable{
         }
     }
 
-    void printTitle(){
+    public void printTitle(){
         System.out.println(
                 "███████╗██████╗░██╗░█████╗░███╗░░██╗████████╗██╗░░░██╗░██████╗\n" +
                         "██╔════╝██╔══██╗██║██╔══██╗████╗░██║╚══██╔══╝╚██╗░██╔╝██╔════╝\n" +

@@ -41,7 +41,7 @@ public class ChangeTurnMessage extends MessageToClient {
             }
         } else {
             ch.getClient().setMyTurn(false);
-            ch.getClient().getView().menu();
+            ch.getClient().setCurrCharacter(-1);
         }
     }
 

@@ -36,6 +36,8 @@ public class ConfirmMovementMessage extends MessageToClient {
         if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
             client.getClient().setPhase(Phase.Action3);
             client.getClient().chooseCloud();
+        } else {
+            System.out.println(playerNickname + " moved the mother nature to island" + islandIndex);
         }
     }
 

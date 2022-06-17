@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
@@ -29,6 +30,9 @@ public class NoEntryMovedMessage extends MessageToClient {
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         client.getClient().getGame().addNoEntry(client.getClient().getGame().getIslands().get(islandID));
+        if (client.getClient().getCurrPhase().equals(Phase.Character5)) {
+            client.getClient().setPhase(client.getClient().getPrevPhase());
+        }
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
