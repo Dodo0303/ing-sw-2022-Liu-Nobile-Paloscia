@@ -28,6 +28,7 @@ public class ChangeTurnMessage extends MessageToClient {
     @Override
     public void process(ServerHandler ch) {
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
+            ch.getClient().setMyTurn(true);
             if (ch.getClient().getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 ch.getClient().setPhase(Phase.Planning);
                 ch.getClient().playAssistant();
@@ -39,7 +40,8 @@ public class ChangeTurnMessage extends MessageToClient {
                 ch.getClient().playAssistant();
             }
         } else {
-
+            ch.getClient().setMyTurn(false);
+            ch.getClient().getView().menu();
         }
     }
 
