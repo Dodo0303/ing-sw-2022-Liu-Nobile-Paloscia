@@ -172,6 +172,7 @@ public class GUI {
             Parent root = fxmlLoader.load();
             ChooseWizardController chooseWizardController = fxmlLoader.getController();
             chooseWizardController.setGUI(this);
+            chooseWizardController.setFourPlayerGame(getGame().getPlayers().size() == 4);
             if (newGame) {
                 chooseWizardController.setNewgame(true);
                 chooseWizardController.setMessageForNewGame(numPlayer, expert);
@@ -252,7 +253,7 @@ public class GUI {
         }
     }
 
-    public void moveStudentToIsland(String msg, int studentIndex) {
+    public void moveStudentToIsland(String msg, int studentIndex) {//this differs from checkBoard because of int studentIndex
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
             Parent root = fxmlLoader.load();
@@ -330,6 +331,7 @@ public class GUI {
             }
             gameBoardController.drawIslands(game.getIslands().size());
             gameBoardController.drawClouds(game.getPlayers().size());
+            gameBoardController.drawBag();
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }

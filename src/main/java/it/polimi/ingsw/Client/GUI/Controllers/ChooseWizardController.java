@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleGroup;
 
 import java.net.URL;
@@ -20,9 +21,11 @@ public class ChooseWizardController implements Initializable {
     @FXML
     private Button ConfirmButton;
     @FXML
-    private Label messageLabel;
+    private Label messageLabel, label1, label2,label3, label4, labelTeam1, labelTeam2;
     @FXML
     ToggleGroup toggleGroup = new ToggleGroup();
+    @FXML
+    Separator teamSeparator;
     GUI gui;
     Wizard wizard;
     int numPlayer;
@@ -88,6 +91,28 @@ public class ChooseWizardController implements Initializable {
     public void setMessageForNewGame(int numPlayer, boolean expert) {
         this.numPlayer = numPlayer;
         this.expert = expert;
+    }
+
+    public void setFourPlayerGame(boolean fourPlayers) {
+        label1.setVisible(true);
+        label2.setVisible(true);
+        label3.setVisible(true);
+        label4.setVisible(true);
+        if (fourPlayers){
+            labelTeam1.setVisible(true); labelTeam2.setVisible(true);
+        }
+        if (radio1.isDisabled()) {
+            //todo display nickname on every chosen wizard cards
+        }
+        if (radio2.isDisabled()) {
+
+        }
+        if (radio3.isDisabled()) {
+
+        }
+        if (radio4.isDisabled()) {
+
+        }
     }
 
     public Wizard getWizard() {

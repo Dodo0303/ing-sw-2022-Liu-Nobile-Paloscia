@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -43,6 +44,13 @@
             <RadioButton fx:id="radio1" layoutX="72.0" layoutY="298.0" mnemonicParsing="false" />
             <RadioButton fx:id="radio3" layoutX="365.0" layoutY="298.0" mnemonicParsing="false" />
             <RadioButton fx:id="radio4" layoutX="513.0" layoutY="297.0" mnemonicParsing="false" />
+            <Label fx:id="label3" layoutX="344.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
+            <Label fx:id="label4" layoutX="493.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
+            <Label fx:id="label2" layoutX="208.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
+            <Label fx:id="label1" layoutX="51.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
+            <Label fx:id="labelTeam1" alignment="CENTER" layoutX="88.0" layoutY="31.0" prefHeight="39.0" prefWidth="134.0" text="Team 1" visible="false" />
+            <Label fx:id="labelTeam2" alignment="CENTER" layoutX="388.0" layoutY="28.0" prefHeight="39.0" prefWidth="134.0" text="Team 2" visible="false" />
+            <Separator fx:id="teamSeparator" layoutX="296.0" layoutY="48.0" orientation="VERTICAL" prefHeight="303.0" prefWidth="11.0" />
             </children>
         </AnchorPane>
    </bottom>
