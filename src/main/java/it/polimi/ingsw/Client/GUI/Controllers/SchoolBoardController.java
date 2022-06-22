@@ -462,7 +462,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.getCurrPhase().equals(Phase_GUI.Character2)) {
+                if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
                     Image finalStuImage = stuImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
@@ -478,7 +478,7 @@ public class SchoolBoardController implements Initializable {
                 }
                 characterPane.getChildren().add(imageView1);
             }
-            if (gui.isMyTurn()) {
+            if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
                 enableMoveToIslandPane(true);
@@ -539,7 +539,7 @@ public class SchoolBoardController implements Initializable {
                 }
                 characterPane.getChildren().add(imageView1);
             }
-            if (gui.isMyTurn()) {
+            if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
                 tableArea.setDisable(true);
                 enableMoveToIslandPane(true);
             }
@@ -613,7 +613,7 @@ public class SchoolBoardController implements Initializable {
                 }
                 characterPane.getChildren().add(imageView1);
             }
-            if (gui.isMyTurn()) {
+            if (gui.getCurrPhase().equals(Phase_GUI.Character7)) {
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
             }

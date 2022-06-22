@@ -32,6 +32,7 @@ public class NoEntryMovedMessage extends MessageToClient {
         client.getClient().getGame().addNoEntry(client.getClient().getGame().getIslands().get(islandID));
         if (client.getClient().getCurrPhase().equals(Phase.Character5)) {
             client.getClient().setPhase(client.getClient().getPrevPhase());
+            client.getClient().setCurrCharacter(-1);
         }
     }
 
@@ -40,6 +41,7 @@ public class NoEntryMovedMessage extends MessageToClient {
         client.getClient().getGame().addNoEntry(client.getClient().getGame().getIslands().get(islandID));
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Character5)) {
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+            client.getClient().setCurrCharacter(-1);
             client.getClient().viewSchoolBoard("", false);
         }
     }

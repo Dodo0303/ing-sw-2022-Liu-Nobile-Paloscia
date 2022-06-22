@@ -38,6 +38,7 @@ public class StudentMovedToTableMessage extends MessageToClient {
         client.getClient().getGame().updateCharacterById(characterUpdated);
         if (client.getClient().getCurrPhase().equals(Phase.Character11)) {
             client.getClient().setPhase(client.getClient().getPrevPhase());
+            client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).setCoins(client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).getCoins() - 2);
         }
     }
 
@@ -47,6 +48,7 @@ public class StudentMovedToTableMessage extends MessageToClient {
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Character11)) {
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
             client.getClient().viewSchoolBoard("Student moved successfully", false);
+            client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).setCoins(client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).getCoins() - 2);
         }
     }
 }

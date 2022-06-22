@@ -208,7 +208,10 @@ public class GameBoardController implements Initializable {
                 stringBuilder.append(color.toString()).append(": ").append(island.getStudents().get(color)).append("\n");
             }
             if (!island.getTowerColor().equals(Color.VOID)) {
-                stringBuilder.append("Tower: ").append(island.getNumTower()).append(" ").append(island.getTowerColor());
+                stringBuilder.append("Tower: ").append(island.getNumTower()).append(" ").append(island.getTowerColor()).append("\n");
+            }
+            if (island.getNoEntries() != 0) {
+                stringBuilder.append("NoEntry: ").append(island.getNoEntries());
             }
             tooltip.setText(stringBuilder.toString());
             Tooltip.install(imageView, tooltip);
@@ -251,10 +254,10 @@ public class GameBoardController implements Initializable {
             if (island.getNoEntries() > 0) {
                 Image noEntryImage = new Image("/assets/NoEntry.png");
                 ImageView noEntryImageView = new ImageView(noEntryImage);
-                noEntryImageView.setFitHeight(15);
-                noEntryImageView.setFitWidth(15);
-                noEntryImageView.setTranslateX(190);
-                noEntryImageView.setTranslateY(190);
+                noEntryImageView.setFitHeight(30);
+                noEntryImageView.setFitWidth(30);
+                noEntryImageView.setTranslateX(110);
+                noEntryImageView.setTranslateY(110);
                 imageViews.add(noEntryImageView);
                 stackPane.getChildren().add(noEntryImageView);
             }

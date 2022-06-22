@@ -34,6 +34,7 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
         client.getClient().getGame().set_islands(islands);
         if (client.getClient().getCurrPhase().equals(Phase.Character1)) {
             client.getClient().setPhase(client.getClient().getPrevPhase());
+            client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).setCoins(client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).getCoins() - 1);
         }
     }
 
@@ -42,7 +43,8 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
         client.getClient().getGame().set_islands(islands);
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Character1)) {
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+            client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).setCoins(client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).getCoins() - 1);
         }
-        client.getClient().checkBoard("");
+        client.getClient().viewSchoolBoard("Character used", false);
     }
 }

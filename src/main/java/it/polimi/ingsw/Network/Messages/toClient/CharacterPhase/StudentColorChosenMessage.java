@@ -41,13 +41,13 @@ public class StudentColorChosenMessage extends MessageToClient {
             if (client.getClient().getCurrPhase().equals(Phase.Character9)) {
                 client.getClient().setPhase(client.getClient().getPrevPhase());
             }
-        }
-        else {
+        } else {
             if (client.getClient().getCurrPhase().equals(Phase.Character12)) {
                 client.getClient().setPhase(client.getClient().getPrevPhase());
             }
             client.getClient().getGame().set_players(playersUpdated);
         }
+        client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).setCoins(client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).getCoins() - 3);
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
@@ -56,13 +56,13 @@ public class StudentColorChosenMessage extends MessageToClient {
                 client.getClient().setCurrPhase(client.getClient().getPrevPhase());
                 client.getClient().viewSchoolBoard("Color " + colorChosen.toString() + " is not considered for the influence in this turn", false);
             }
-        }
-        else {
+        } else {
             if (client.getClient().getCurrPhase().equals(Phase_GUI.Character12)) {
                 client.getClient().setCurrPhase(client.getClient().getPrevPhase());
             }
             client.getClient().getGame().set_players(playersUpdated);
             client.getClient().viewSchoolBoard("Character12 used!", false);
         }
+        client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).setCoins(client.getClient().getGame().getPlayerByNickname(client.getClient().getNickname()).getCoins() - 3);
     }
 }
