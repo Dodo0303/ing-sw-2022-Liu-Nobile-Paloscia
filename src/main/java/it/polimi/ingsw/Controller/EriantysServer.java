@@ -4,7 +4,6 @@ import it.polimi.ingsw.Client.EriantysClient;
 import it.polimi.ingsw.Exceptions.NoSuchMatchException;
 import it.polimi.ingsw.Network.Messages.ConnectionStatusMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.StatusMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;

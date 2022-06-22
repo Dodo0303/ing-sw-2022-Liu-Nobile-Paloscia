@@ -31,7 +31,11 @@ public class DenyMovementMessage extends MessageToClient {
             client.getClient().setCurrPhase(client.getClient().getPrevPhase());
             client.getClient().viewSchoolBoard("Character not available", false);
         } else {
-            client.getClient().viewSchoolBoard("Movement denied", false);
+            if (client.getClient().getCurrPhase().equals(Phase_GUI.Planning)) {
+                client.getClient().playAssistant("Assistant not available.");
+            } else {
+                client.getClient().viewSchoolBoard("Movement denied", false);
+            }
         }
     }
 }

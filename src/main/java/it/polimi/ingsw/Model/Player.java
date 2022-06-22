@@ -109,7 +109,14 @@ public class Player implements Serializable {
 
     // ADD AND REMOVE TOWERS
 
-    /** Add 1 tower to THIS PLAYER. */
+    /** Add x towers to THIS PLAYER. */
+    public void addTower(int x) {
+        if (_towerNum < _maxTowerNum)
+            this._towerNum+=x;
+        else
+            throw new GameException("Too many towers");
+    }
+
     public void addTower() {
         if (_towerNum < _maxTowerNum)
             this._towerNum++;
@@ -117,7 +124,15 @@ public class Player implements Serializable {
             throw new GameException("Too many towers");
     }
 
-    /** Remove 1 tower from THIS PLAYER. */
+    /** Remove x towers from THIS PLAYER. */
+    public void removeTower(int x) {
+        if (this._towerNum > 0) {
+            this._towerNum-=x;
+        } else {
+            throw new GameException("Invalid operation.");
+        }
+    }
+
     public void removeTower() {
         if (this._towerNum > 0) {
             this._towerNum--;
@@ -330,4 +345,5 @@ public class Player implements Serializable {
     public void setTowers(int tower) {
         this._towerNum = tower;
     }
+
 }

@@ -3,9 +3,6 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.ResetOutputMessage;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.StatusMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -62,7 +59,6 @@ public class ServerHandler implements Runnable {
         sendThread.interrupt();
         receiveThread.interrupt();
         try {
-            output.writeObject(new DisconnectMessage());
             socket.close();
         }
         catch (Exception e) {
@@ -75,13 +71,9 @@ public class ServerHandler implements Runnable {
             try {
                 while(!closed) {
                     Object message = outgoingMessages.take();
-                    if (message instanceof ResetOutputMessage) {
-                        output.reset();
-                    } else {
-                        output.writeObject(message);
-                        output.flush();
-                        System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
-                    }
+                    output.writeObject(message);
+                    output.flush();
+                    System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
                 }
             } catch (Exception e) {
                 System.out.print(e.getMessage());
@@ -97,14 +89,7 @@ public class ServerHandler implements Runnable {
                 while(!closed) {
                     Object message = input.readObject();
                     System.out.print(message.getClass().toString() + " received from server" + "\n"); //TODO delete after tests
-                    if (message instanceof DisconnectMessage) {
-                        shutdown();
-                    } else if (message instanceof StatusMessage){
-                        StatusMessage msg = (StatusMessage)message;
-                        clients = msg.clients;
-                    } else {
-                        client.messageReceived(message);
-                    }
+                    client.messageReceived(message);
                 }
             } catch (Exception e) {
                 System.out.print(e.getMessage());

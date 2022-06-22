@@ -172,7 +172,6 @@ public class GUI {
             Parent root = fxmlLoader.load();
             ChooseWizardController chooseWizardController = fxmlLoader.getController();
             chooseWizardController.setGUI(this);
-            chooseWizardController.setFourPlayerGame(getGame().getPlayers().size() == 4);
             if (newGame) {
                 chooseWizardController.setNewgame(true);
                 chooseWizardController.setMessageForNewGame(numPlayer, expert);
@@ -233,11 +232,13 @@ public class GUI {
                     chooseAssistantController.disableRadio(i + 1);
                 }
             }
+            /*
             for (Player player : game.getPlayers()) {
                 if (!player.getNickName().equals(nickname) && player.getUsedAssistant() != null) {
                     chooseAssistantController.disableRadio(player.getUsedAssistant().getValue());
                 }
             }
+            */
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
@@ -371,7 +372,7 @@ public class GUI {
                 if (expert && ((currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3) || !myTurn)) {
                     schoolBoardController.enableCharacterButton();
                 }
-                if (myTurn && expert && currPhase.equals(Phase_GUI.Action1)) {
+                if (myTurn && currPhase.equals(Phase_GUI.Action1)) {
                     schoolBoardController.enableMoveToIslandPane(true);
                     schoolBoardController.setBackMessage("View game board");
                 }

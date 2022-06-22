@@ -6,7 +6,6 @@ import it.polimi.ingsw.Exceptions.MatchMakingException;
 import it.polimi.ingsw.Model.Wizard;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendAvailableWizardsMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
-import it.polimi.ingsw.Network.Messages.toClient.Uncategorized.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.io.IOException;
@@ -116,21 +115,12 @@ public class ClientHandler implements Runnable {
             while(!closed) {
                 try {
                     Object msg = objectInputStream.readObject();
-                    if (msg instanceof DisconnectMessage) {
-                        closed = true;
-                        outgoingMessages.clear();
-                        objectOutputStream.writeObject("*goodbye*");
-                        objectOutputStream.flush();
-                        server.clientDisconnected(playerID);
-                        close();
-                    } else {
-                        incomingMessages.put(msg);
-                        System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
-                    }
+                    incomingMessages.put(msg);
+                    System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Connection with " + nickname +" lost.");
-                    closeWithError(e.getMessage());
+                    //closeWithError(e.getMessage());
                 }
             }
         }
@@ -163,8 +153,6 @@ public class ClientHandler implements Runnable {
     public void send(Object msg) {
         if (msg == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.");
-        } else if (msg instanceof DisconnectMessage){
-            outgoingMessages.clear();
         }
         while (!outgoingMessages.offer(msg));
     }

@@ -299,6 +299,9 @@ public class SchoolBoardController implements Initializable {
             p.getChildren().add(imageView1);
         }
         //draw towers
+        for (int j = 0; j < gui.getGame().getIslands().size(); j++) {
+
+        }
         for (int i = 0; i < player.getTowerNum(); i++) {
             imageViews.add(new ImageView());
             ImageView imageView1 = imageViews.get(imageViews.size() - 1);

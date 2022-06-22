@@ -407,6 +407,32 @@ public class GameModel implements Serializable {
         }
     }
 
+    public void calculateNumIslandsForPlayers() {
+        int numWhite = 0;
+        int numBlack = 0;
+        int numGray = 0;
+        for (int i = 0; i < _islands.size(); i++) {
+            if (!_islands.get(i).getTowerColor().equals(Color.VOID)) {
+                if (_islands.get(i).getTowerColor().equals(Color.WHITE)) {
+                    numWhite += _islands.get(i).getNumTower();
+                } else if (_islands.get(i).getTowerColor().equals(Color.BLACK)) {
+                    numBlack += _islands.get(i).getNumTower();
+                } else if (_islands.get(i).getTowerColor().equals(Color.GRAY)) {
+                    numGray += _islands.get(i).getNumTower();
+                }
+            }
+            for (Player player : _players) {
+                if (player.getColor().equals(Color.WHITE)) {
+                    player.setTowers(player.getMaxTowerNum() - numWhite);
+                } else if (player.getColor().equals(Color.BLACK)) {
+                    player.setTowers(player.getMaxTowerNum() - numBlack);
+                } else if (player.getColor().equals(Color.GRAY)) {
+                    player.setTowers(player.getMaxTowerNum() - numGray);
+                }
+            }
+        }
+    }
+
     public void useEffectOfCharacter(int characterID) throws WrongEffectException, NotEnoughNoEntriesException {
         getCharacterById(characterID).useEffect();
     }

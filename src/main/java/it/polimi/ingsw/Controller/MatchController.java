@@ -464,6 +464,7 @@ public class MatchController implements Runnable {
             this.game.setMothernature(x);
             controlIsland(x);
             unifyIslands(x);
+            this.game.calculateNumIslandsForPlayers();
         }
     }
 
@@ -494,11 +495,6 @@ public class MatchController implements Runnable {
         int maxInfluence = 0;
         Player maxInfluencer = null;
         for (int i = 0; i < this.game.getPlayers().size(); i++) {
-            if (!island.getTowerColor().equals(Color.VOID) && this.game.getPlayers().get(i).getColor().equals(island.getTowerColor())) {
-                for (int j = 0; j < island.getNumTower(); j++) {
-                    this.game.getPlayers().get(i).addTower();
-                }
-            }
             influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
             if (influence > maxInfluence) {
                 maxInfluencer = this.game.getPlayers().get(i);
@@ -507,9 +503,6 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
-            for (int i = 0; i < island.getNumTower(); i++) {
-                maxInfluencer.removeTower();
-            }
             System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
             System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
         }
@@ -521,7 +514,7 @@ public class MatchController implements Runnable {
     private synchronized void unifyIslands(int islandIndex) {
         Island island = this.game.getIslands().get(islandIndex);
         int left = (islandIndex > 0) ? islandIndex - 1 : this.game.getNumIslands() - 1;
-        System.out.println("Checking the color of island " + left);
+        System.out.println("Checking the color of island " + left);//todo delete after tested
         if (island.getTowerColor() != Color.VOID && this.game.getIslands().get(left).getTowerColor().equals(island.getTowerColor())) {
             mergeIslands(left, islandIndex);
             if (islandIndex > 0) islandIndex--;
@@ -542,6 +535,7 @@ public class MatchController implements Runnable {
             if (x == this.game.getMotherNatureIndex()) {
                 this.game.setMothernature(y);
             }
+            System.out.println(y + " merged " + x);//todo delete after tested
         } else {
             this.game.getIslands().get(x).copyFrom(this.game.getIslands().get(y));
             if (y == this.game.getMotherNatureIndex()) {
@@ -550,6 +544,7 @@ public class MatchController implements Runnable {
             for (int i = y; i < this.game.getNumIslands() - 1; i++) {
                 this.game.getIslands().put(i, this.game.getIslands().get(i + 1)); // move islands after the yth forward by 1.
             }
+            System.out.println(x + " merged " + y);//todo delete after tested
         }
         this.game.getIslands().remove(this.game.getNumIslands() - 1);
     }
@@ -703,7 +698,7 @@ public class MatchController implements Runnable {
 
     public void broadcastMovement(int islandIndex) {
         for (ClientHandler client : this.clients) {
-            client.send(new ConfirmMovementMessage(islandIndex, game.getIslands(), currentPlayerID, game.getPlayerByNickname(currentPlayerID).getTowerNum()));
+            client.send(new ConfirmMovementMessage(islandIndex, game.getIslands(), currentPlayerID, getCurrentPlayer().getTowerNum()));
         }
     }
 
@@ -724,7 +719,7 @@ public class MatchController implements Runnable {
         }
     }
 
-    public Player getWinner() { //todo check rules. At least the one which says the game should end when any player runs out of his assistant card does not work here
+    public Player getWinner() {
 
         Player winner = null;
         int maxTow = 0;

@@ -62,6 +62,9 @@ public class ChooseWizardController implements Initializable {
         }
         if (newgame) {
             gui.send(new SendStartInfoMessage(numPlayer, expert, wizard));
+            if (numPlayer == 4) {
+                setFourPlayerGame(true);
+            }
         } else {
             gui.send(new SendChosenWizardMessage(wizard));
         }

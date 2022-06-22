@@ -130,9 +130,9 @@ class PlayerTest {
     @Test
     public void testAddTower(){
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
-        p.removeTower();
+        p.removeTower(1);
         int towers = p.getTowerNum();
-        p.addTower();
+        p.addTower(1);
         assertEquals(towers + 1, p.getTowerNum());
     }
 

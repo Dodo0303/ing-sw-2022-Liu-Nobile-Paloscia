@@ -90,11 +90,9 @@ public class ChooseAssistantController implements Initializable {
     }
 
     private boolean checkAssistantAvailability(Assistant assistant) {
-        for (Player p : gui.getGame().getPlayers()) {
-            if  (p.getUsedAssistant() != null && assistant.getValue() == p.getUsedAssistant().getValue() && !p.lastAssistant()) {
+            if  (gui.getGame().getPlayerByNickname(gui.getNickname()).getUsedAssistant() != null && assistant.getValue() == gui.getGame().getPlayerByNickname(gui.getNickname()).getUsedAssistant().getValue() && !gui.getGame().getPlayerByNickname(gui.getNickname()).lastAssistant()) {
                 return false;
             }
-        }
         return true;
     }
 
