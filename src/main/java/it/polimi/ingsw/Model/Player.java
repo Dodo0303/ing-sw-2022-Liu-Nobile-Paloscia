@@ -55,7 +55,7 @@ public class Player implements Serializable {
     Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
         this._nickName = nickname;
         this._color = color;
-        this._coins = 3;//todo delete after tested
+        this._coins = 0;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 8; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
             this._maxTowerNum = 8;

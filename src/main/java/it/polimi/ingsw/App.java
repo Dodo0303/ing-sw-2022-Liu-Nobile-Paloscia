@@ -4,40 +4,31 @@ import it.polimi.ingsw.Client.EriantysClient;
 import it.polimi.ingsw.Client.EriantysClientGUI;
 import it.polimi.ingsw.Controller.EriantysServer;
 
+import java.util.Scanner;
+
 import static it.polimi.ingsw.Utilities.*;
 
 /** The Eriantys game.
  */
 public class App {
 
-    /** Location of usage messages. */
-    static final String USAGE = "src/Usage.txt";
-
     public static void main(String[] args) {
-        int inputLength = args.length;
-        if (inputLength == 0) {
-            usage();
-            return;
-        }
-        switch (args[0].toLowerCase()) {
-            case "-gui": {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter '0' to start server, enter '1' to start CLI, '2' to start GUI.");
+        switch (scanner.nextLine()) {
+            case "2": {
                 launchGUI(args);
                 break;
             }
-            case "-cli": {
+            case "1": {
                 launchCLI(args);
                 break;
             }
-            case "-server": {
+            case "0": {
                 launchServer(args);
                 break;
                 }
             }
-    }
-
-    /** Print usage message. */
-    private static void usage() {
-        printUsage(USAGE);
     }
 
     private static void launchServer(String[] args) {
