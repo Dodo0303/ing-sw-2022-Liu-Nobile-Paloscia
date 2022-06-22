@@ -752,7 +752,6 @@ public class MatchController implements Runnable {
 
         for (ClientHandler client : this.clients) {
             client.send(new EndMessage(winner.getNickName(), reason));
-            client.close();
 
             //TODO: Remove from server.
         }

@@ -32,7 +32,8 @@ public class ConfirmMovementMessage extends MessageToClient {
     public void process(ServerHandler client) {
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().setMothernature(islandIndex);
-        client.getClient().getGame().getPlayerByNickname(playerNickname).setTowers(towerNum);
+        //client.getClient().getGame().getPlayerByNickname(playerNickname).setTowers(towerNum);
+        client.getClient().getGame().calculateNumIslandsForPlayers();
         if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
             client.getClient().setPhase(Phase.Action3);
             client.getClient().chooseCloud();
@@ -44,7 +45,8 @@ public class ConfirmMovementMessage extends MessageToClient {
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
         client.getClient().getGame().set_islands(islands);
         client.getClient().getGame().setMothernature(islandIndex);
-        client.getClient().getGame().getPlayerByNickname(playerNickname).setTowers(towerNum);
+        //client.getClient().getGame().getPlayerByNickname(playerNickname).setTowers(towerNum);
+        client.getClient().getGame().calculateNumIslandsForPlayers();
         if (client.getClient().getCurrPhase().equals(Phase_GUI.Action2)) {
             client.getClient().setCurrPhase(Phase_GUI.Action3);
             client.getClient().checkBoard("Choose a cloud");
