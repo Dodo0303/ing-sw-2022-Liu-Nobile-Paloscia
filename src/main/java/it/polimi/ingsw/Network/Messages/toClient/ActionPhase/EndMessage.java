@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class EndMessage extends MessageToClient {
@@ -22,7 +24,21 @@ public class EndMessage extends MessageToClient {
     }
 
     @Override
-    public void process(ServerHandler ch) {
+    public void process(ServerHandler client) {
+        client.getClient().setPhase(Phase.Ending);
+        if (winnerID == null) {
+            System.out.print("Game ended with a draw.\nGood bye.\n");
+        } else {
+            System.out.print("Player " + winnerID + " has won the game.\n");
+        }
+    }
 
+    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+        client.getClient().setCurrPhase(Phase_GUI.Ending);
+        if (winnerID == null) {
+            client.getClient().gameOver("Game ended with a draw.\nGood bye.\n");
+        } else {
+            client.getClient().gameOver("Player " + winnerID + " has won the game.\n");
+        }
     }
 }

@@ -464,7 +464,6 @@ public class MatchController implements Runnable {
             this.game.setMothernature(x);
             controlIsland(x);
             unifyIslands(x);
-            this.game.calculateNumIslandsForPlayers();
         }
     }
 
@@ -495,6 +494,11 @@ public class MatchController implements Runnable {
         int maxInfluence = 0;
         Player maxInfluencer = null;
         for (int i = 0; i < this.game.getPlayers().size(); i++) {
+            if (!island.getTowerColor().equals(Color.VOID) && this.game.getPlayers().get(i).getColor().equals(island.getTowerColor())) {
+                for (int j = 0; j < island.getNumTower(); j++) {
+                    this.game.getPlayers().get(i).addTower();
+                }
+            }
             influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
             if (influence > maxInfluence) {
                 maxInfluencer = this.game.getPlayers().get(i);
@@ -503,6 +507,9 @@ public class MatchController implements Runnable {
         }
         if (maxInfluencer != null) {
             island.setTowerColor(maxInfluencer.getColor());
+            for (int i = 0; i < island.getNumTower(); i++) {
+                maxInfluencer.removeTower();
+            }
             System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
             System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
         }
@@ -742,7 +749,12 @@ public class MatchController implements Runnable {
     }
 
     public int endedAtPhase2() {
-        if (this.getCurrentPlayer().getTowerNum() == 0) return 1;
+        this.game.calculateNumIslandsForPlayers();
+        for (Player player : game.getPlayers()) {
+            if (player.getTowerNum() == 0) {
+                return 1;
+            }
+        }
         if (this.game.getIslands().size() <= 3) return 2;
         return 0;
     }
@@ -752,7 +764,6 @@ public class MatchController implements Runnable {
 
         for (ClientHandler client : this.clients) {
             client.send(new EndMessage(winner.getNickName(), reason));
-
             //TODO: Remove from server.
         }
     }

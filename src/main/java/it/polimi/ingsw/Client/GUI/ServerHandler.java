@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -68,14 +69,13 @@ public class ServerHandler implements Runnable {
             try {
                 while(!closed) {
                     Object message = outgoingMessages.take();
-                        output.writeObject(message);
-                        output.flush();
-                        System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
+                    output.writeObject(message);
+                    output.flush();
+                    System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
                     }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.print(e.getMessage());
-                 //shutdown();
+                shutdown();
             }
         }
     }
@@ -87,12 +87,14 @@ public class ServerHandler implements Runnable {
                 while(!closed) {
                     Object message = input.readObject();
                     System.out.print(message.getClass().toString() + " received by client" + "\n"); //TODO delete after tests
+                    if (message instanceof DisconnectMessage) {
+                        shutdown();
+                    }
                     client.messageReceived(message);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.print(e.getMessage());
-                //shutdown();
+                shutdown();
             }
         }
     }

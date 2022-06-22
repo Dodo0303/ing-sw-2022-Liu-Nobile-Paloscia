@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ public class GameOverController {
     GUI gui;
 
     public void execute() {
+        gui.send(new DisconnectMessage());
         System.exit(0);
     }
 

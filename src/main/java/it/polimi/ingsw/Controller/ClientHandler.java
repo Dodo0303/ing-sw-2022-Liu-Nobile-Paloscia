@@ -6,6 +6,7 @@ import it.polimi.ingsw.Exceptions.MatchMakingException;
 import it.polimi.ingsw.Model.Wizard;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendAvailableWizardsMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.io.IOException;
@@ -90,21 +91,13 @@ public class ClientHandler implements Runnable {
                         objectOutputStream.reset();
                         System.out.print(msg.getClass().toString() + " sent by server" + "\n"); //TODO delete after tests
                     } catch (InterruptedException e) {
-                        System.out.println("Error while sending message to client: " + e + "\n");
                         return;
                     }
                 }
-            } catch (IOException e) {
-                if (!closed) {
-                    closeWithError("Error while sending message to client: " + e + "\n");
-                    System.out.println("Server sendThread terminated by IOException: " + e + "\n");
-                }
             } catch (Exception e) {
-                if (!closed) {
-                    closeWithError("Internal Error: Unexpected exception in output thread: " + e + "\n");
-                    System.out.println("Unexpected error shuts down server's sendThread:\n");
-                    e.printStackTrace();
-                }
+                System.out.println("Unexpected error shuts down server's sendThread:\n");
+                e.printStackTrace();
+                close();
             }
         }
     }
@@ -115,12 +108,21 @@ public class ClientHandler implements Runnable {
             while(!closed) {
                 try {
                     Object msg = objectInputStream.readObject();
-                    incomingMessages.put(msg);
-                    System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
+                    if (msg instanceof DisconnectMessage) {
+                        closed = true;
+                        outgoingMessages.clear();
+                        objectOutputStream.writeObject(new DisconnectMessage());
+                        objectOutputStream.flush();
+                        server.clientDisconnected(playerID);
+                        close();
+                    } else {
+                        incomingMessages.put(msg);
+                        System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Connection with " + nickname +" lost.");
-                    //closeWithError(e.getMessage());
+                    close();
                 }
             }
         }
