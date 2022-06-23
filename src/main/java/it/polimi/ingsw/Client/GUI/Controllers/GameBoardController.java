@@ -41,8 +41,8 @@ public class GameBoardController implements Initializable {
     private ArrayList<Point> students, towers, cloudStudents;
     private ArrayList<ImageView> islandImageViews, imageViews;
     private ArrayList<StackPane> clouds;
-    private Point motherNature;
     private GUI gui;
+    private Point motherNature;
     private boolean moveStudent, moveMotherNature, chooseCloud, character;//character for both character3 and character5
     private int studentIndex;
 
@@ -120,7 +120,6 @@ public class GameBoardController implements Initializable {
         towers.add(new Point(-10, -100));
         towers.add(new Point(25, -80));
         towers.add(new Point(25, -100));
-        //todo more spots for towers
         motherNature = new Point(-50, -50);
     }
 
@@ -256,8 +255,8 @@ public class GameBoardController implements Initializable {
                 ImageView noEntryImageView = new ImageView(noEntryImage);
                 noEntryImageView.setFitHeight(30);
                 noEntryImageView.setFitWidth(30);
-                noEntryImageView.setTranslateX(110);
-                noEntryImageView.setTranslateY(110);
+                noEntryImageView.setTranslateX(100);
+                noEntryImageView.setTranslateY(100);
                 imageViews.add(noEntryImageView);
                 stackPane.getChildren().add(noEntryImageView);
             }
@@ -365,6 +364,10 @@ public class GameBoardController implements Initializable {
         this.moveStudent = moveStudent;
     }
 
+    public void setCharacter(boolean bool) {
+        this.character = bool;
+    }
+
     public void setMoveMotherNature(boolean moveMotherNature) {
         this.moveMotherNature = moveMotherNature;
     }
@@ -377,7 +380,4 @@ public class GameBoardController implements Initializable {
         this.studentIndex = studentIndex;
     }
 
-    public void setCharacter(boolean Character) {
-        this.character = character;
-    }
 }

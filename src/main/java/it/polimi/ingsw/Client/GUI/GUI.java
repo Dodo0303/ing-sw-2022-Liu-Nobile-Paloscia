@@ -323,24 +323,32 @@ public class GUI {
             if (!currPhase.equals(Phase_GUI.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
                 gameBoardController.disableBack(true);
             }
-            if (myTurn && currPhase.equals(Phase_GUI.Action1)) {
-                gameBoardController.setMoveStudent(true);
-            } else if (myTurn && currPhase.equals(Phase_GUI.Action2)) {
-                gameBoardController.setMoveMotherNature(true);
-                gameBoardController.disableBack(true);
-            } else if (myTurn && currPhase.equals(Phase_GUI.Action3)) {
-                gameBoardController.setChooseCloud(true);
-                gameBoardController.disableBack(true);
-            } else if (myTurn && currPhase.equals(Phase_GUI.Character3)) {
-                gameBoardController.setCharacter(true);
-                gameBoardController.disableBack(true);
-            } else if (myTurn && currPhase.equals(Phase_GUI.Character5)) {
-                gameBoardController.setCharacter(true);
-                gameBoardController.disableBack(true);
-            } else if (myTurn && currPhase.equals(Phase_GUI.Character9)) {
-                gameBoardController.disableBack(false);
-            } else if (myTurn && currPhase.equals(Phase_GUI.Character12)) {
-                gameBoardController.disableBack(false);
+            if (myTurn) {
+                if (currPhase.equals(Phase_GUI.Action1)) {
+                    gameBoardController.setMoveStudent(true);
+                }
+                if (currPhase.equals(Phase_GUI.Action2)) {
+                    gameBoardController.setMoveMotherNature(true);
+                    gameBoardController.disableBack(true);
+                }
+                if (currPhase.equals(Phase_GUI.Action3)) {
+                    gameBoardController.setChooseCloud(true);
+                    gameBoardController.disableBack(true);
+                }
+                if (currPhase.equals(Phase_GUI.Character3)) {
+                    gameBoardController.setCharacter(true);
+                    gameBoardController.disableBack(true);
+                }
+                if (currPhase.equals(Phase_GUI.Character5)) {
+                    gameBoardController.setCharacter(true);
+                    gameBoardController.disableBack(true);
+                }
+                if (currPhase.equals(Phase_GUI.Character9)) {
+                    gameBoardController.disableBack(false);
+                }
+                if (currPhase.equals(Phase_GUI.Character12)) {
+                    gameBoardController.disableBack(false);
+                }
             }
             gameBoardController.drawIslands(game.getIslands().size());
             gameBoardController.drawClouds(game.getPlayers().size());

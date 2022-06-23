@@ -10,6 +10,8 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntr
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentsToTableMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.SwapStudentsCharacterEntranceMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.SwapStudentsTableEntranceMessage;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,10 +41,11 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private StackPane OpponentBoard, MyBoard, moveToIslandPane, characterPane;
     @FXML
-    private Rectangle tableArea;
+    private Rectangle tableArea, redArea, blueArea, pinkArea, yellowArea, greenArea;
     private ArrayList<ImageView> imageViews;
     private int studentIndex, swapStudentsTimes;
     private ArrayList<Integer> characterStudentIndex, entranceStudentsIndex;
+    private ArrayList<StudentColor> colors;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,7 +87,35 @@ public class SchoolBoardController implements Initializable {
         studentIndex = -1;
     }
 
+    public void handleRedDrop(DragEvent dragEvent) {
+         if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            colors.add(StudentColor.RED);
+        }
+    }
 
+    public void handlePinkDrop(DragEvent dragEvent) {
+        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            colors.add(StudentColor.PINK);
+        }
+    }
+
+    public void handleYellowDrop(DragEvent dragEvent) {
+        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            colors.add(StudentColor.YELLOW);
+        }
+    }
+
+    public void handleGreenDrop(DragEvent dragEvent) {
+        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            colors.add(StudentColor.GREEN);
+        }
+    }
+
+    public void handleBlueDrop(DragEvent dragEvent) {
+        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            colors.add(StudentColor.BLUE);
+        }
+    }
 
     public void otherBoards() {
         gui.viewSchoolBoard("", true);
@@ -186,13 +217,14 @@ public class SchoolBoardController implements Initializable {
             } else if (players.size() == 3 || !gui.getCurrPhase().equals(Phase_GUI.Action1)){
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
-            } else if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character7)) {
+            }
+            if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character7)) {
                 imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     for (Point point : entrance) {
                         if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
                             if (entranceStudentsIndex.size() < 3) {
                                 entranceStudentsIndex.add(entrance.indexOf(point));
-                                setMessage("A entrance student has been picked.");
+                                setMessage("picked " + entranceStudentsIndex.size() + " entrance students. ");
                                 if (entranceStudentsIndex.size() == 3) {
                                     if (characterStudentIndex.size() == 3) {
                                         gui.send(new SwapStudentsCharacterEntranceMessage(characterStudentIndex.stream().mapToInt(j -> j).toArray(), entranceStudentsIndex.stream().mapToInt(j -> j).toArray()));
@@ -206,17 +238,22 @@ public class SchoolBoardController implements Initializable {
                         }
                     }
                 });
-            } else if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character10)) {
-                imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            }
+            if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+                imageView1.setOnDragDetected(evt -> {
+                    Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(finalStuImage);
+                    dragboard.setContent(content);
                     for (Point point : entrance) {
                         if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
                             if (entranceStudentsIndex.size() < 2) {
                                 entranceStudentsIndex.add(entrance.indexOf(point));
-                                setMessage("A entrance student has been picked.");
+                                setMessage("Picked " + entranceStudentsIndex.size() + " students");
                                 if (entranceStudentsIndex.size() == 2) {
                                     StudentColor[] tempSt = new StudentColor[2];
-                                    tempSt[0] = gui.getGame().getPlayerByNickname(gui.getNickname()).getEntranceStudents().get(entranceStudentsIndex.get(0));
-                                    tempSt[1] = gui.getGame().getPlayerByNickname(gui.getNickname()).getEntranceStudents().get(entranceStudentsIndex.get(1));
+                                    tempSt[0] = colors.get(0);
+                                    tempSt[1] = colors.get(1);
                                     gui.send(new SwapStudentsTableEntranceMessage(tempSt, entranceStudentsIndex.stream().mapToInt(j -> j).toArray()));
                                     MyBoard.setDisable(true);
                                     characterPane.setDisable(true);
@@ -599,8 +636,9 @@ public class SchoolBoardController implements Initializable {
                             if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
                                 if (characterStudentIndex.size() < 3) {
                                     characterStudentIndex.add(character1.indexOf(point));
+                                    setMessage("picked " + characterStudentIndex.size() + " character students. ");
                                     if (characterStudentIndex.size() == 3) {
-                                        characterPane.setDisable(true);
+                                        imageView1.setDisable(true);
                                         setMessage("Now choose entrance students.");
                                     }
                                 } else {
@@ -616,6 +654,33 @@ public class SchoolBoardController implements Initializable {
             if (gui.getCurrPhase().equals(Phase_GUI.Character7)) {
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
+                Button done = new Button();
+                done.setText("done");
+                done.setTranslateX(0);
+                done.setTranslateY(90);
+                EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e)
+                    {
+                        if (entranceStudentsIndex.size() != characterStudentIndex.size()) {
+                            if (entranceStudentsIndex.size() > characterStudentIndex.size()) {
+                                for (int i = entranceStudentsIndex.size() - characterStudentIndex.size(); i > 0; i--) {
+                                    characterStudentIndex.remove(characterStudentIndex.size() - 1);
+                                }
+                            } else {
+                                for (int i = characterStudentIndex.size() - entranceStudentsIndex.size(); i > 0; i--) {
+                                    entranceStudentsIndex.remove(entranceStudentsIndex.size() - 1);
+                                }
+                            }
+                        }
+                        gui.send(new SwapStudentsCharacterEntranceMessage(characterStudentIndex.stream().mapToInt(j -> j).toArray(), entranceStudentsIndex.stream().mapToInt(j -> j).toArray()));
+                        MyBoard.setDisable(true);
+                        characterPane.setDisable(true);
+                        done.setDisable(true);
+                        done.setVisible(false);
+                    }
+                };
+                done.setOnAction(event);
+                characterPane.getChildren().add(done);
             }
         } catch (WrongEffectException e) {
             e.printStackTrace();
@@ -639,6 +704,47 @@ public class SchoolBoardController implements Initializable {
         characterCardImage.setDisable(false);
         characterCardImage.setVisible(true);
         entranceStudentsIndex = new ArrayList<>();
+        colors = new ArrayList<StudentColor>();
+        redArea.setDisable(false);
+        redArea.setVisible(true);
+        greenArea.setDisable(false);
+        greenArea.setVisible(true);
+        blueArea.setDisable(false);
+        blueArea.setVisible(true);
+        pinkArea.setDisable(false);
+        pinkArea.setVisible(true);
+        yellowArea.setDisable(false);
+        yellowArea.setVisible(true);
+        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            tableArea.setDisable(true);
+            tableArea.setVisible(false);
+            Button done = new Button();
+            done.setText("done");
+            done.setTranslateX(0);
+            done.setTranslateY(90);
+            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e)
+                {
+                    if (entranceStudentsIndex.size() < 2) {
+                        StudentColor[] tempSt = new StudentColor[entranceStudentsIndex.size()];
+                        if (entranceStudentsIndex.size() == 1) {
+                            tempSt[0] = colors.get(0);
+                            gui.send(new SwapStudentsTableEntranceMessage(tempSt, entranceStudentsIndex.stream().mapToInt(j -> j).toArray()));
+                        } else {
+                            gui.send(new SwapStudentsTableEntranceMessage(null, null));
+                        }
+                        MyBoard.setDisable(true);
+                        characterPane.setDisable(true);
+                    }
+                    MyBoard.setDisable(true);
+                    characterPane.setDisable(true);
+                    done.setDisable(true);
+                    done.setVisible(false);
+                }
+            };
+            done.setOnAction(event);
+            characterPane.getChildren().add(done);
+        }
     }
 
     public void enableCharacter11() {

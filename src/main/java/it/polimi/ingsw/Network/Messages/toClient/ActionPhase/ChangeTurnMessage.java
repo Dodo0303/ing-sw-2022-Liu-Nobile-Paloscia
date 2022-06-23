@@ -46,6 +46,7 @@ public class ChangeTurnMessage extends MessageToClient {
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
+        ch.getClient().setCurrCharacter(-1);
         if (this.playerNickname.equals(ch.getClient().getNickname())) {
             ch.getClient().setChangeTurnNums(0);
             ch.getClient().setMyTurn(true);
@@ -79,7 +80,6 @@ public class ChangeTurnMessage extends MessageToClient {
             }
         } else {
             ch.getClient().setMyTurn(false);
-            ch.getClient().setCurrCharacter(-1);
             ch.getClient().checkBoard(ch.getClient().getNickname() + "'s round.");
         }
     }
