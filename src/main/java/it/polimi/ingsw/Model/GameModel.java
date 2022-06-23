@@ -199,13 +199,10 @@ public class GameModel implements Serializable {
 
     /** Set position of mothernature */
     public void setMothernature(int x) {
-        this._motherNature = x;
-    }
-
-
-    public void setInfluences(Island island, Integer[] influences) {
-        if (this.influences.replace(island, influences) == null)
-            throw new IllegalArgumentException("The island doesn't exists");
+        if (_islands.containsKey(x))
+            this._motherNature = x;
+        else
+            throw new GameException("The island " + x + " doesn't exist");
     }
 
     /** @return the players.*/
@@ -244,27 +241,24 @@ public class GameModel implements Serializable {
     }
 
     public boolean canAffordCharacter(String playerNickname, int characterID){
-        Player p = null;
-        for (Player player :
-                _players) {
-            if (player.getNickName().equals(playerNickname))
-                p = player;
-        }
-        if (p==null) {
-            throw new GameException("That player doesn't exist");
-        } else {
-        for (CharacterCard character:
-             characters) {
-            if (character.getID() == characterID) {
-                if (p.getCoins() >= character.getPrice()) {
-                    return true;
-                } else {
-                    break;
+        try {
+            Player p = getPlayerByNickname(playerNickname);
+            for (CharacterCard character:
+                    characters) {
+                if (character.getID() == characterID) {
+                    if (p.getCoins() >= character.getPrice()) {
+                        return true;
+                    } else {
+                        break;
+                    }
                 }
             }
+        } catch (GameException e) {
+            e.printStackTrace();
+            return false;
         }
+
         return false;
-        }
     }
 
     /**
@@ -440,7 +434,7 @@ public class GameModel implements Serializable {
         return getCharacterById(characterID).useEffect(studentIndex, studentToAdd);
     }
 
-    public Player getPlayerByNickname(String playerNickname) {
+    public Player getPlayerByNickname(String playerNickname) throws GameException{
         for (Player player :
                 _players) {
             if (player.getNickName().equals(playerNickname))

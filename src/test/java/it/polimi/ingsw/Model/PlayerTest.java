@@ -44,6 +44,7 @@ class PlayerTest {
         ArrayList<Assistant> ass = player.getAssistants();
         for (int i = 0; i < 10; i++) {
             assertEquals(i+1, ass.get(i).getValue());
+            assertEquals(Wizard.WIZARD1, ass.get(i).getWizard());
             //Using the switch so we don't use any algorithm that could be wrong
             switch (i){
                 case 0:

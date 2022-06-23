@@ -26,10 +26,8 @@ public enum StudentColor implements Serializable {
             return "Red";
         } else if (color.equals("\uD83D\uDFE1")) {
             return "Yellow";
-        } else if (color.equals("\uD83D\uDFE3")) {
-            return "Pink";
         } else {
-            return color;
+            return "Pink";
         }
     }
 }
