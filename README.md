@@ -18,14 +18,14 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 |:-----------------------|:------------------------------------:|
 | Simplified Ruleset | 🟢 |
 | Complete Ruleset | 🟢 |
-| Socket |🟠 |
-| CLI | 🟠 |
-| GUI | 🟠 |
-| All character cards | 🟠 |
-| 4 Player Game | 🔴 |
+| Socket |🟢 |
+| CLI | 🟢 |
+| GUI | 🟢 |
+| All character cards | 🟢 |
+| 4 Player Game | 🟢 |
+| Multiple matches | 🟢 |
 | Persistence | 🔴 |
 | Resilience to disconnections | 🔴 |
-| Multiple matches | 🟢 |
 
 ## Game Rules
 
