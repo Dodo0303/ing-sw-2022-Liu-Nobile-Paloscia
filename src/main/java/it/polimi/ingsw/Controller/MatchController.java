@@ -508,25 +508,31 @@ public class MatchController implements Runnable {
         int influence;
         int maxInfluence = 0;
         Player maxInfluencer = null;
-        for (int i = 0; i < this.game.getPlayers().size(); i++) {
-            if (!island.getTowerColor().equals(Color.VOID) && this.game.getPlayers().get(i).getColor().equals(island.getTowerColor())) {
-                for (int j = 0; j < island.getNumTower(); j++) {
-                    this.game.getPlayers().get(i).addTower();
+        if (island.getNoEntries() == 0) {
+            for (int i = 0; i < this.game.getPlayers().size(); i++) {
+                if (!island.getTowerColor().equals(Color.VOID) && this.game.getPlayers().get(i).getColor().equals(island.getTowerColor())) {
+                    for (int j = 0; j < island.getNumTower(); j++) {
+                        this.game.getPlayers().get(i).addTower();
+                    }
+                }
+                influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
+                if (influence > maxInfluence) {
+                    maxInfluencer = this.game.getPlayers().get(i);
+                    maxInfluence = influence;
                 }
             }
-            influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
-            if (influence > maxInfluence) {
-                maxInfluencer = this.game.getPlayers().get(i);
-                maxInfluence = influence;
+            if (maxInfluencer != null) {
+                island.setTowerColor(maxInfluencer.getColor());
+                for (int i = 0; i < island.getNumTower(); i++) {
+                    maxInfluencer.removeTower();
+                }
+                System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
+                System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
             }
-        }
-        if (maxInfluencer != null) {
-            island.setTowerColor(maxInfluencer.getColor());
-            for (int i = 0; i < island.getNumTower(); i++) {
-                maxInfluencer.removeTower();
-            }
-            System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
-            System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
+        } else {
+            System.out.println("The island " + x + " had a no-entry on it");
+            island.removeNoEntry();
+            System.out.println("The island has now " + island.getNoEntries() + " no-entry tiles.");
         }
     }
 
