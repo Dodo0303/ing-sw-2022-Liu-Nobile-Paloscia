@@ -13,6 +13,7 @@ import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
+import javafx.stage.WindowEvent;
 
 
 import java.io.IOException;
@@ -62,6 +64,13 @@ public class GUI {
             loginController.setGUI(this);
             Scene scene = new Scene(root, 600, 402);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/login.css")).toExternalForm());
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    Platform.exit();
+                    System.exit(0);
+                }
+            });
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
