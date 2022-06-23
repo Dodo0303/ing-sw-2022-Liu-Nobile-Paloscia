@@ -396,9 +396,11 @@ public class MatchController implements Runnable {
             if (playerToCheck.hasProfessor(color)) player.removeProfessor(color);
             if (playerToCheck.hasProfessor(table)) player.removeProfessor(table);
         }
+        if(newOwnerOfColor != null)
+            newOwnerOfColor.addProfessor(color);
+        if(newOwnerOfTable != null)
+            newOwnerOfTable.addProfessor(table);
 
-        newOwnerOfColor.addProfessor(color);
-        newOwnerOfTable.addProfessor(table);
     }
 
     /**

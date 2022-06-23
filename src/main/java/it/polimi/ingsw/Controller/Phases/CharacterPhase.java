@@ -29,7 +29,7 @@ public class CharacterPhase extends Phase{
             if (expectedCharacterID != 5) {
                 match.denyMovement(ch);
             } else {
-                try { //TODO Manage the computation of the influence when there is a no entry tile in an island
+                try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.addNoEntryToIsland(((MoveNoEntryMessage) msg).getIslandID());
                     match.broadcastMessage(new NoEntryMovedMessage(((MoveNoEntryMessage) msg).getIslandID(), match.getGame().getCharacterById(expectedCharacterID)));
