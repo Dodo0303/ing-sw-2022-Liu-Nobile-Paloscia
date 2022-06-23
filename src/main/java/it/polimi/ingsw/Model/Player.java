@@ -220,10 +220,6 @@ public class Player implements Serializable {
         return res;
     }
 
-    public void clearAssistant() {
-        _lastUsedAssistant = null;
-    }
-
     // ADD AND REMOVE FROM DINING TABLE
 
     /** Add student to the correspondent dining table. */
@@ -289,11 +285,6 @@ public class Player implements Serializable {
      * @return the numbers of professors of each color. */
     public List<StudentColor> getProfessors() {
         return new ArrayList<>(this._professors);
-    }
-
-    /** Set professors. */
-    public void setProfessors(StudentColor color) {
-        this._professors.add(color);
     }
 
     /** The getter of _entranceStudents

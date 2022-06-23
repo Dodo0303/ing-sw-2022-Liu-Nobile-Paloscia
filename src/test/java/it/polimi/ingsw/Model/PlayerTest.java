@@ -97,6 +97,12 @@ class PlayerTest {
         assertTrue(professors.isEmpty());
     }
 
+    @Test
+    public void createPlayer_checkName() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        assertEquals("Test", p.getNickName());
+    }
+
     @ParameterizedTest
     @ValueSource( ints = {2,3,4})
     public void createPlayer_CheckDiningTables(int players){
@@ -125,21 +131,28 @@ class PlayerTest {
             p.removeTower();
         }
         assertThrows(GameException.class, p::removeTower);
+        assertThrows(GameException.class, ()->{p.removeTower(1);});
+
     }
 
     @Test
     public void testAddTower(){
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
-        p.removeTower(1);
+        p.removeTower(2);
         int towers = p.getTowerNum();
         p.addTower(1);
         assertEquals(towers + 1, p.getTowerNum());
+        p.addTower();
+        assertEquals(towers+2, p.getTowerNum());
+
     }
 
     @Test
     public void addTower_TooManyTowers_ShouldThrowException() {
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 3);
+        assertThrows(GameException.class, () -> {p.addTower(1);});
         assertThrows(GameException.class, p::addTower);
+
     }
 
     @Test
@@ -319,6 +332,75 @@ class PlayerTest {
     public void testColor(Color color){
         Player p = new Player("Test", color, Wizard.WIZARD1, 3);
         assertEquals(color, p.getColor());
+    }
+
+    @Test
+    public void testClearEntrance() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        p.clearEntrance();
+        assertEquals(0, p.getEntranceStudents().size());
+    }
+
+    @Test
+    public void testEquals() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        Player p1 = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        assertEquals(p, p1);
+        assertEquals(p,p);
+    }
+
+    @Test
+    public void testEquals_NotEquals(){
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        Player p1 = new Player("Test1", Color.BLACK, Wizard.WIZARD1, 2);
+        assertNotEquals(p, p1);
+        assertNotEquals(p, null);
+    }
+
+    @Test
+    public void testHasProfessor(){
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        p.addProfessor(StudentColor.BLUE);
+        assertTrue(p.hasProfessor(StudentColor.BLUE));
+    }
+
+    @Test
+    public void testHasProfessor_NoProfessor(){
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        for (StudentColor color :
+                StudentColor.values()) {
+            assertFalse(p.hasProfessor(color));
+        }
+    }
+
+    @Test
+    public void testLastAssistant() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        int index = 0;
+        for (int maxSteps = 1; maxSteps <= 5; maxSteps++) {
+            for (int j = 0; j < 2; j++) {
+                if (maxSteps == 5 && j == 1) {
+                    break;
+                }
+                assertFalse(p.lastAssistant());
+                p.useAssistant(new Assistant(++index, maxSteps, Wizard.WIZARD1));
+            }
+        }
+        assertTrue(p.lastAssistant());
+    }
+
+    @Test
+    public void testSetCoins() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        p.setCoins(10);
+        assertEquals(10, p.getCoins());
+    }
+
+    @Test
+    public void testSetTowers() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 2);
+        p.setTowers(5);
+        assertEquals(5, p.getTowerNum());
     }
 
 }

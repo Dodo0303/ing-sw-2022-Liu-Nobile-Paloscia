@@ -144,7 +144,7 @@ public class GameModel implements Serializable {
         characters = new ArrayList<>();
         CharacterFactory factory = new CharacterFactory(this);
         List<Integer> characterIDs = new ArrayList<>();
-        /**
+
         Random rnd = new Random();
         int id;
         for (int i = 0; i < 3; i++) {
@@ -157,14 +157,13 @@ public class GameModel implements Serializable {
             characterIDs.add(i, id);
             characters.add(factory.createCharacter(id));
         }
-         **/
 
-
-        //TODO delete below after tests
+        /**
         for (int i = 0; i < 12; i++) {
             characterIDs.add(i, i + 1);
             characters.add(factory.createCharacter(i + 1));
         }
+         */
 
     }
 
