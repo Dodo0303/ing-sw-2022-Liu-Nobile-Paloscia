@@ -35,7 +35,7 @@ class GameModelTest {
 
     @Test
     void testGetMotherNature() {
-        Island islandWithMothernature = game2.getMotherNature();
+        Island islandWithMothernature = game2.getIslandWithMotherNature();
         assertEquals(game2.getIslands().get(game2.getMotherNatureIndex()), islandWithMothernature);
     }
 
@@ -79,7 +79,7 @@ class GameModelTest {
     @Test
     public void testSetMotherNature() {
         game2.setMothernature(2);
-        assertEquals(game2.getIslands().get(2), game2.getMotherNature());
+        assertEquals(game2.getIslands().get(2), game2.getIslandWithMotherNature());
     }
 
     @ParameterizedTest

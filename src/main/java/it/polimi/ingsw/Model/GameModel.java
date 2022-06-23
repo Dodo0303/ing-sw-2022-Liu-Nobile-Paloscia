@@ -12,20 +12,12 @@ import java.util.*;
 
 public class GameModel implements Serializable {
 
-    /** An uninitialized GameModel.  Only for use by subtypes. */
-    protected GameModel() {
-    }
-
     /** All islands */
     private HashMap<Integer, Island> _islands;
 
     /** The index of the island with mothernature */
     private int _motherNature;
 
-    /**
-     * Maps each island with an array of integers representing the influence of each player in that island
-     */
-    private Map<Island, Integer[]> influences;
 
     /** Current players */
     private ArrayList<Player> _players;
@@ -63,7 +55,6 @@ public class GameModel implements Serializable {
         initializeCharacters();
         this._professors = new ArrayList<>(Arrays.asList(StudentColor.BLUE, StudentColor.GREEN, StudentColor.PINK, StudentColor.RED, StudentColor.YELLOW));
         initializeClouds(numOfPlayers);
-        initializeInfluences();
         setEntranceStudents(numOfPlayers);
     }
 
@@ -115,18 +106,6 @@ public class GameModel implements Serializable {
         }
     }
 
-    /**
-     * Initialize the map of influences with all zeros
-     */
-    private void initializeInfluences() {
-        influences = new HashMap<>();
-        for (Island island :
-                _islands.values()) {
-            Integer[] values = {0,0,0,0};
-            influences.put(island, values);
-        }
-    }
-
     /** Initialize clouds.
      * @param numOfPlayers number of players in the game, to decide number of students on each Cloud.
      */
@@ -167,7 +146,8 @@ public class GameModel implements Serializable {
 
     }
 
-    /** Extract 7/9 students from bag and add to the entrance of each player.
+    /** 
+     * Extract 7/9 students from bag and add to the entrance of each player.
      */
     void setEntranceStudents(int numOfPlayers){
         int x = (numOfPlayers == 3)? 9 : 7;
@@ -182,22 +162,32 @@ public class GameModel implements Serializable {
         }
     }
 
+    /**
+     * Get the entrance of a specific player.
+     * @param player Player instance.
+     * @return the entrance of the specified player.
+     */
     public List<StudentColor> getEntranceOfPlayer(Player player) {
         return player.getEntranceStudents();
     }
 
-    /** @return number of coins not obtained by any player */
+    /** 
+     * @return number of coins not obtained by any player 
+     */
     int getSpareCoins() {
         return this._spareCoins;
     }
 
     /** @return the island with mothernature */
-    public Island getMotherNature() {
+    public Island getIslandWithMotherNature() {
         return this._islands.get(_motherNature);
     }
 
 
-    /** Set position of mothernature */
+    /**
+     * Set the position of mothernature
+     * @param x index of the island that will receive mothernature
+     */
     public void setMothernature(int x) {
         if (_islands.containsKey(x))
             this._motherNature = x;
@@ -220,17 +210,17 @@ public class GameModel implements Serializable {
         return this._islands;
     }
 
-    /** @return _bag.*/
+    /** @return the bag.*/
     public Bag getBag() {
         return this._bag;
     }
 
-    /** @return _numIslands.*/
+    /** @return the total number of islands*/
     public int getNumIslands() {
         return this._islands.size();
     }
 
-    /** @return _motherNature.*/
+    /** @return the index of the island that has mothernature*/
     public int getMotherNatureIndex() {
         return this._motherNature;
     }
@@ -240,6 +230,12 @@ public class GameModel implements Serializable {
         return new ArrayList<>(this._professors);
     }
 
+    /**
+     * Checks whether the player can afford a character.
+     * @param playerNickname player nickname that wants to use the character.
+     * @param characterID ID of the character that has to be used.
+     * @return true if the player can use this character. False if not.
+     */
     public boolean canAffordCharacter(String playerNickname, int characterID){
         try {
             Player p = getPlayerByNickname(playerNickname);
@@ -268,30 +264,6 @@ public class GameModel implements Serializable {
     public void removeSpareProfessor(StudentColor color) {
         this._professors.remove(color);
     }
-
-    /**
-     *
-     * @param island island of interest
-     * @return the influence of each player in that island
-
-    public List<Integer> getInfluences(Island island) {
-        List<Integer> res = new ArrayList<>();
-        Integer[] values = influences.get(island);
-        Collections.addAll(res, values);
-        return res;
-    } TODO Delete if not used
-    */
-    /**
-     * Return the influence of a certain player in a certain island
-     * @param island island of interest
-     * @param player player of interest
-     * @return the influence of that player in that island
-
-    public int getInfluenceOfPlayer(Island island, Player player) {
-        int index = _players.indexOf(player);
-        return influences.get(island)[index];
-    } TODO Delete if not used
-    */
 
     /**
      * Method called from controller to use an assistant and to set it as last assistant used
