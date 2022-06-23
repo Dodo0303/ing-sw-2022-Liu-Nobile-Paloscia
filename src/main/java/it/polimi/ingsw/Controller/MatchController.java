@@ -10,6 +10,7 @@ import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Character.CharacterCard;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.GameModelUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
@@ -594,6 +595,14 @@ public class MatchController implements Runnable {
     public void broadCastProfessorsChange(String playerID, StudentColor color, boolean remove) {
         for (ClientHandler client : this.clients) {
             client.send(new MoveProfessorMessage(color, remove, playerID));
+        }
+    }
+
+    public void broadCastDisconnection(String nickname) {
+        for (ClientHandler client : this.clients) {
+            if (!nickname.equals(client.getNickname())) {
+                client.send(new DropConnectionMessage(nickname));
+            }
         }
     }
 

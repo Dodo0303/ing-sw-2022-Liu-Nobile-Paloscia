@@ -122,6 +122,7 @@ public class ClientHandler implements Runnable {
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Connection with " + nickname +" lost.");
+                    match.broadCastDisconnection(nickname);
                     close();
                 }
             }
@@ -162,7 +163,6 @@ public class ClientHandler implements Runnable {
     public void createMatchController(int numOfPlayers, Wizard wizard, boolean expertMode) {
         match = new MatchController(server.generateMatchID(), numOfPlayers);
         new Thread(match).start();
-        //TODO Manage game mode
         this.wizard = wizard;
         server.addMatch(match);
         try {

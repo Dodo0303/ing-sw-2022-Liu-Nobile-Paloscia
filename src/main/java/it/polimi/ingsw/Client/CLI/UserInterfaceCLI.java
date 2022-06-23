@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserInterfaceCLI implements Runnable{
+public class UserInterfaceCLI{
 
     private CLI cli;
     private BufferedReader input;
@@ -24,11 +24,6 @@ public class UserInterfaceCLI implements Runnable{
         this.callMethod =callMethod;
         shutDown = false;
         input = new BufferedReader(new InputStreamReader(System.in));
-    }
-
-    @Override
-    public void run() {
-        //menu();
     }
 
     public String requireUserInput() {

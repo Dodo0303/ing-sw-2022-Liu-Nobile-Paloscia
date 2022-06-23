@@ -57,8 +57,6 @@ public class CLI {
         view = new UserInterfaceCLI(str);
         view.setCli(this);
         view.setNickname(this.nickname);
-        viewThread = new Thread(view);
-        viewThread.start();
     }
 
     public void send(Object message) {
@@ -438,6 +436,10 @@ public class CLI {
             }
         }
         send(new ChooseCloudMessage(num));
+    }
+
+    public void shutDown() {
+        System.exit(0);
     }
 
     void useCharacter(int characterIndex) {

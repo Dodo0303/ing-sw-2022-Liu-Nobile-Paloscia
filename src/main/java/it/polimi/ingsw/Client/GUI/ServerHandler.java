@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
 import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 
 import java.io.IOException;
@@ -88,6 +89,9 @@ public class ServerHandler implements Runnable {
                     Object message = input.readObject();
                     System.out.print(message.getClass().toString() + " received by client" + "\n"); //TODO delete after tests
                     if (message instanceof DisconnectMessage) {
+                        shutdown();
+                    } else if (message instanceof DropConnectionMessage) {
+                        client.gameOver("Player " + ((DropConnectionMessage) message).getNickname() + " lost connection. Game over.");
                         shutdown();
                     }
                     client.messageReceived(message);

@@ -2,7 +2,9 @@ package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -77,7 +79,7 @@ public class ServerHandler implements Runnable {
                 }
             } catch (Exception e) {
                 System.out.print(e.getMessage());
-                //shutdown();
+                shutdown();
             }
         }
     }
@@ -89,11 +91,18 @@ public class ServerHandler implements Runnable {
                 while(!closed) {
                     Object message = input.readObject();
                     System.out.print(message.getClass().toString() + " received from server" + "\n"); //TODO delete after tests
+                    if (message instanceof DisconnectMessage) {
+                        shutdown();
+                    } else if (message instanceof DropConnectionMessage) {
+                        System.out.println("Player " + ((DropConnectionMessage) message).getNickname() + " lost connection. Game over.");
+                        client.shutDown();
+                        shutdown();
+                    }
                     client.messageReceived(message);
                 }
             } catch (Exception e) {
                 System.out.print(e.getMessage());
-                //shutdown();
+                shutdown();
             }
         }
     }
