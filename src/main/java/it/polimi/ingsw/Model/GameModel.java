@@ -422,38 +422,32 @@ public class GameModel implements Serializable {
     }
 
 
-    public void removeCoinsToPlayer(String playerNickname, int characterID){
-        Player p = null;
-        for (Player player :
-                _players) {
-            if (player.getNickName().equals(playerNickname))
-                p = player;
-        }
-        if (p==null) {
-            throw new GameException("That player doesn't exist");
-        } else {
-
-            p.removeCoins(getCharacterById(characterID).getPrice());
-
-        }
+    /**
+     * Remove the coins to a player given the character that he wants to use
+     * @param playerNickname nickname of the player
+     * @param characterID character ID
+     * @throws GameException if the player doesn't exist
+     */
+    public void removeCoinsToPlayer(String playerNickname, int characterID) throws GameException{
+        Player p = getPlayerByNickname(playerNickname);
+        p.removeCoins(getCharacterById(characterID).getPrice());
     }
 
+    /**
+     * Add coins to the player
+     * @param playerNickname player nickname
+     * @param coins coins to be added
+     */
     public void addCoinsToPlayer(String playerNickname, int coins){
-        Player p = null;
-        for (Player player :
-                _players) {
-            if (player.getNickName().equals(playerNickname))
-                p = player;
-        }
-        if (p==null) {
-            throw new GameException("That player doesn't exist");
-        } else {
-            for (int i = 0; i < coins; i++) {
-                p.addCoin();
-            }
+        Player p = getPlayerByNickname(playerNickname);
+        for (int i = 0; i < coins; i++) {
+            p.addCoin();
         }
     }
 
+    /**
+     * Set the correct number of towers to each player, checking how many islands have been conquered
+     */
     public void calculateNumIslandsForPlayers() {
         int numWhite = 0;
         int numBlack = 0;
@@ -480,14 +474,34 @@ public class GameModel implements Serializable {
         }
     }
 
+    /**
+     * Use the effect of a character
+     * @param characterID character to be used
+     * @throws WrongEffectException if the effect expects some parameters
+     * @throws NotEnoughNoEntriesException if the character has no no-entry tiles left to use
+     */
     public void useEffectOfCharacter(int characterID) throws WrongEffectException, NotEnoughNoEntriesException {
         getCharacterById(characterID).useEffect();
     }
 
+    /**
+     * Use effect of a character
+     * @param characterID character to be used
+     * @param studentIndex index of the student to be moved from the character
+     * @param studentToAdd student that will replace the one that has been removed
+     * @return the color of the student removed from the character
+     * @throws WrongEffectException if the character doesn't expect these parameters
+     */
     public StudentColor useEffectOfCharacter(int characterID, int studentIndex, StudentColor studentToAdd) throws WrongEffectException {
         return getCharacterById(characterID).useEffect(studentIndex, studentToAdd);
     }
 
+    /**
+     * Get the Player object given the nickname
+     * @param playerNickname nickname of the player that has to be retrieved
+     * @return the Player instance
+     * @throws GameException if there is no player with such nickname
+     */
     public Player getPlayerByNickname(String playerNickname) throws GameException{
         for (Player player :
                 _players) {
@@ -497,22 +511,44 @@ public class GameModel implements Serializable {
         throw new GameException("The player doesn't exist");
     }
 
+    /**
+     * Sort the player based on the last assistant that they used
+     */
     public void sortPlayers() {
         this._players.sort(new PlayerComparator());
     }
 
+    /**
+     * Set the island to the ones given.
+     * This method is used from the client.
+     * @param _islands islands to be set.
+     */
     public void set_islands(HashMap<Integer, Island> _islands) {
         this._islands = _islands;
     }
 
+    /**
+     * Set the players to the ones given.
+     * This method is used from the client.
+     * @param _players players to be set.
+     */
     public void set_players(ArrayList<Player> _players) {
         this._players = _players;
     }
 
+    /**
+     * Set the clouds to the ones given.
+     * This method is used from the client.
+     * @param _clouds clouds to be set.
+     */
     public void set_clouds(ArrayList<Cloud> _clouds) {
         this._clouds = _clouds;
     }
 
+    /**
+     * Get the characters allowed for this game.
+     * @return the list of the characters.
+     */
     public List<CharacterCard> getCharacters() {
         return characters;
     }
@@ -523,6 +559,15 @@ public class GameModel implements Serializable {
         public int compare(Player p1, Player p2) {
             return Integer.compare(p1.getUsedAssistant().getValue(), p2.getUsedAssistant().getValue());
         }
+    }
+
+    /**
+     * Set the characters for this game.
+     * This method is used for test purposes only.
+     * @param characters characters to be set
+     */
+    protected void setCharacters(List<CharacterCard> characters) {
+        this.characters = characters;
     }
 
 }

@@ -8,10 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,13 +29,19 @@ class GameModelTest {
     }
 
     @Test
-    void getSpareCoins() {
+    void testGetSpareCoins() {
         assertEquals(20, game2.getSpareCoins());
     }
 
     @Test
-    void getMotherNature() {
-        assertNotNull(game2.getMotherNature());
+    void testGetMotherNature() {
+        Island islandWithMothernature = game2.getMotherNature();
+        assertEquals(game2.getIslands().get(game2.getMotherNatureIndex()), islandWithMothernature);
+    }
+
+    @Test
+    public void createNewGame_CheckNumIslands() {
+        assertEquals(12, game2.getNumIslands());
     }
 
     @ParameterizedTest
@@ -251,5 +254,139 @@ class GameModelTest {
                 break;
             }
         }
+    }
+
+    @Test
+    public void testRemoveCoinsToPlayer() {
+        Player player = game2.getPlayers().get(0);
+        player.setCoins(100);
+        CharacterCard character = game2.getCharacters().get(0);
+        int price = character.getPrice();
+        game2.removeCoinsToPlayer(player.getNickName(), character.getID());
+        assertEquals(100-price, player.getCoins());
+    }
+
+    @Test
+    public void testAddCoinsToPlayer(){
+        Player player = game2.getPlayers().get(0);
+        int initialCoins = player.getCoins();
+        game2.addCoinsToPlayer(player.getNickName(), 10);
+        assertEquals(initialCoins + 10, player.getCoins());
+    }
+    
+    @Test
+    public void testCalculateNumIslandForPlayers(){
+        for (int i = 0; i < 12; i++) {
+            if (i%3 == 0) {
+                game3.getIslands().get(i).setTowerColor(Color.GRAY);
+                game3.getIslands().get(i).setNumTower(1);
+            } else if (i%3 == 1) {
+                game3.getIslands().get(i).setTowerColor(Color.BLACK);
+                game3.getIslands().get(i).setNumTower(1);
+            } else {
+                game3.getIslands().get(i).setTowerColor(Color.WHITE);
+                game3.getIslands().get(i).setNumTower(1);
+            }
+        }
+        
+        game3.calculateNumIslandsForPlayers();
+
+        for (Player player :
+                game3.getPlayers()) {
+            assertEquals(player.getMaxTowerNum() - 4, player.getTowerNum());
+        }
+    }
+
+    @Test
+    public void testUseEffectOfCharacter() {
+        List<CharacterCard> characters = new ArrayList<>();
+        CharacterFactory factory = new CharacterFactory(game2);
+        characters.add(factory.createCharacter(5));
+        game2.setCharacters(characters);
+        try {
+            game2.useEffectOfCharacter(5);
+        } catch (WrongEffectException | NotEnoughNoEntriesException e) {
+            fail();
+        }
+        try {
+            assertEquals(3, game2.getCharacterById(5).getNumberOfNoEntries());
+        } catch (WrongEffectException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testUseEffectOfCharacterWithParameters() {
+        List<CharacterCard> characters = new ArrayList<>();
+        CharacterFactory factory = new CharacterFactory(game2);
+        CharacterCard newCharacter = factory.createCharacter(1);
+        characters.add(newCharacter);
+        game2.setCharacters(characters);
+        StudentColor colorToAdd = StudentColor.BLUE;
+        try {
+            StudentColor colorToRemove = newCharacter.getStudents().get(0);
+            assertEquals(colorToRemove, game2.useEffectOfCharacter(1, 0, colorToAdd));
+        } catch (WrongEffectException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSortPlayers(){
+        Player player1 = game2.getPlayers().get(0);
+        Player player2 = game2.getPlayers().get(1);
+
+        player1.setLastUsedAssistant(1);
+        player2.setLastUsedAssistant(2);
+
+        game2.sortPlayers();
+
+        assertEquals(player1, game2.getPlayers().get(0));
+        assertEquals(player2, game2.getPlayers().get(1));
+    }
+
+    @Test
+    public void testSortPlayers_reverse(){
+        Player player1 = game2.getPlayers().get(0);
+        Player player2 = game2.getPlayers().get(1);
+
+        player1.setLastUsedAssistant(2);
+        player2.setLastUsedAssistant(1);
+
+        game2.sortPlayers();
+
+        assertEquals(player1, game2.getPlayers().get(1));
+        assertEquals(player2, game2.getPlayers().get(0));
+    }
+
+    @Test
+    public void testSetIslands() {
+        HashMap<Integer, Island> newIslands = new HashMap<>();
+        Island island = new Island();
+        newIslands.put(0, island);
+        game2.set_islands(newIslands);
+        assertSame(island, game2.getIslands().get(0));
+    }
+
+    @Test
+    public void testSetPlayers() {
+        Player newPlayer = new Player("NuovoPlayer", Color.BLACK, Wizard.WIZARD1, 2);
+        ArrayList<Player> newPlayers = new ArrayList<>();
+        newPlayers.add(newPlayer);
+
+        game2.set_players(newPlayers);
+
+        assertSame(newPlayer, game2.getPlayers().get(0));
+    }
+
+    @Test
+    public void testSetClouds() {
+        Cloud newCloud = new Cloud(2);
+        ArrayList<Cloud> newClouds = new ArrayList<>();
+        newClouds.add(newCloud);
+
+        game2.set_clouds(newClouds);
+
+        assertSame(newCloud, game2.getClouds().get(0));
     }
 }

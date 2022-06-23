@@ -357,4 +357,13 @@ public class Player implements Serializable {
         this._towerNum = tower;
     }
 
+    /**
+     * Sets the last used assistant to the given one.
+     * This method is used for test purposes only.
+     * @param value value of the assistant to be set
+     */
+    protected void setLastUsedAssistant(int value) {
+        this._lastUsedAssistant = this._assistants.remove(value-1);
+    }
+
 }

@@ -86,6 +86,15 @@ public class Island implements Serializable {
         return new HashMap<>(_students);
     }
 
+    /**
+     * Set the number of tower for this island.
+     * This method is used for test purposes
+     * @param numTower number of tower to be set
+     */
+    protected void setNumTower(int numTower) {
+        this._numTower = numTower;
+    }
+
     /** The color of tower(s) on THIS island. */
     private Color _towerColor;
 
