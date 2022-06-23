@@ -22,7 +22,7 @@ public class StandardProfessorChecker implements ProfessorChecker{
             if (game.getTableNumber(player, color) > max) {
                 max = game.getTableNumber(player, color);
                 newOwner = player;
-            } else if ((game.getTableNumber(player, color) == max) && player.hasProfessor(color)) {
+            } else if ((game.getTableNumber(player, color) == max) && player.hasProfessor(color) && max != 0) {
                 newOwner = player;
             }
 
