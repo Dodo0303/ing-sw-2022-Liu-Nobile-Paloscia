@@ -106,25 +106,10 @@ public class ServerHandler implements Runnable {
             }
         }
     }
-    public void removeMessage(Object obj) {
-        incomingMessages.remove(obj);
-    }
-
-    public ObjectOutputStream getOutput() {
-        return output;
-    }
-
-    public ObjectInputStream getInput() {
-        return input;
-    }
-
     public Socket getSocket() {
         return socket;
     }
 
-    public LinkedBlockingQueue<Object> getOutgoingMessages() {
-        return outgoingMessages;
-    }
 
     public Boolean getClosed() {
         return closed;
@@ -146,9 +131,6 @@ public class ServerHandler implements Runnable {
         return client;
     }
 
-    public void setClients(ArrayList<ClientHandler> clients) {
-        this.clients = clients;
-    }
 
     public void setNickName(String str) {
         getClient().setNickName(str);

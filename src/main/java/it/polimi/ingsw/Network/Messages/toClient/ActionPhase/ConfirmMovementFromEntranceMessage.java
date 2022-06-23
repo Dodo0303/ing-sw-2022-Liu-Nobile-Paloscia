@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Client.CLI.ServerHandler;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.StudentColor;
@@ -58,6 +59,14 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
                 System.out.println(playerID + " moved a student to the following island.");
                 client.getClient().getView().printIsland(destinationID);
             }
+        }
+        client.getClient().setAp1Moves(client.getClient().getAp1Moves() + 1);
+        if (client.getClient().getAp1Moves() == ((client.getClient().getGame().getPlayers().size() == 3) ? 4 : 3)) {
+            client.getClient().setPhase(Phase.Action2);
+            client.getClient().setAp1Moves(0);
+            client.getClient().moveMotherNature();
+        } else {
+            client.getClient().moveStudentsFromEntrance();
         }
     }
 

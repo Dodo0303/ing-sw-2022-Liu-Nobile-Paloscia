@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.Color;
 import it.polimi.ingsw.Model.GameModel;
@@ -17,12 +18,8 @@ public class UserInterfaceCLI{
 
     private CLI cli;
     private BufferedReader input;
-    private String nickname, callMethod;
-    private boolean shutDown;
 
     public UserInterfaceCLI(String callMethod) {
-        this.callMethod =callMethod;
-        shutDown = false;
         input = new BufferedReader(new InputStreamReader(System.in));
     }
 
@@ -68,14 +65,14 @@ public class UserInterfaceCLI{
                     break;
                 }
                 case 3 : {
-                    printSchoolBoard(cli.getGame().getPlayerByNickname(this.nickname));
+                    printSchoolBoard(cli.getGame().getPlayerByNickname(cli.getNickname()));
                     break;
                 }
                 case 4 : {
                     int index = 1;
                     int playerChosen = -1;
                     List<Player> playersToShow = new ArrayList<>(cli.getGame().getPlayers());
-                    playersToShow.remove(cli.getGame().getPlayerByNickname(nickname));
+                    playersToShow.remove(cli.getGame().getPlayerByNickname(cli.getNickname()));
                     System.out.println("\nAvailable players: ");
                     for (int i = 0; i < playersToShow.size(); i++) {
                         Player player = playersToShow.get(i);
@@ -107,7 +104,7 @@ public class UserInterfaceCLI{
                             if (Utilities.isNumeric(temp)) {
                                 characterIndex = Integer.parseInt(temp);
                                 if (characterIndex <= cli.getGame().getCharacters().size()) {
-                                    cli.useCharacter(characterIndex);
+                                    cli.useCharacter(characterIndex - 1);
                                 } else {
                                     System.out.println("No such character card.");
                                 }
@@ -191,47 +188,55 @@ public class UserInterfaceCLI{
     }
 
     public void printCharacters()  {
-        for (int i = 1; i <= cli.getGame().getCharacters().size(); i++) {
-            if(cli.getGame().getCharacters().get(i - 1).getID() == 1 ) {
-                System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(i).getPrice() + "; Students: ");
-                try {
-                    for(StudentColor color : cli.getGame().getCharacterById(1).getStudents()) {
-                        System.out.print(color.toString() + " ");
+        try {
+            for (int i = 1; i <= cli.getGame().getCharacters().size(); i++) {
+                if (cli.getGame().getCharacters().get(i - 1) == null) {
+                    continue;
+                }
+                if (cli.getGame().getCharacters().get(i - 1).getID() == 1 ) {
+                    System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(1).getPrice() + "; Students: ");
+                    try {
+                        for(StudentColor color : cli.getGame().getCharacterById(1).getStudents()) {
+                            System.out.print(color.toString() + " ");
+                        }
+                        System.out.println("");
+                    } catch (WrongEffectException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println("");
-                } catch (WrongEffectException e) {
-                    e.printStackTrace();
-                }
-            } else if (cli.getGame().getCharacters().get(i - 1).getID() == 5) {
-                try {
-                    System.out.println(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(i).getPrice() + "; Number of no entries: " + cli.getGame().getCharacterById(5).getNumberOfNoEntries());
-                } catch (WrongEffectException e) {
-                    e.printStackTrace();
-                }
-            } else if (cli.getGame().getCharacters().get(i - 1).getID() == 7) {
-                System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(i).getPrice() + "; Students: ");
-                try {
-                    for(StudentColor color : cli.getGame().getCharacterById(7).getStudents()) {
-                        System.out.print(color.toString() + " ");
+                } else if (cli.getGame().getCharacters().get(i - 1).getID() == 5) {
+                    try {
+                        System.out.println(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(5).getPrice() + "; Number of no entries: " + cli.getGame().getCharacterById(5).getNumberOfNoEntries());
+                    } catch (WrongEffectException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println("");
-                } catch (WrongEffectException e) {
-                    e.printStackTrace();
-                }
-            } else if (cli.getGame().getCharacters().get(i - 1).getID() == 11) {
-                System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(i).getPrice() + "; Students: ");
-                try {
-                    for(StudentColor color : cli.getGame().getCharacterById(11).getStudents()) {
-                        System.out.print(color.toString() + " ");
+                } else if (cli.getGame().getCharacters().get(i - 1).getID() == 7) {
+                    System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(7).getPrice() + "; Students: ");
+                    try {
+                        for(StudentColor color : cli.getGame().getCharacterById(7).getStudents()) {
+                            System.out.print(color.toString() + " ");
+                        }
+                        System.out.println("");
+                    } catch (WrongEffectException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println("");
-                } catch (WrongEffectException e) {
-                    e.printStackTrace();
+                } else if (cli.getGame().getCharacters().get(i - 1).getID() == 11) {
+                    System.out.print(i + ". character" + i + ": cost: " + cli.getGame().getCharacterById(11).getPrice() + "; Students: ");
+                    try {
+                        for(StudentColor color : cli.getGame().getCharacterById(11).getStudents()) {
+                            System.out.print(color.toString() + " ");
+                        }
+                        System.out.println("");
+                    } catch (WrongEffectException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println(i + ". character" + cli.getGame().getCharacters().get(i - 1).getID() + ": cost: " + cli.getGame().getCharacters().get(i - 1).getPrice());
                 }
-            } else {
-                System.out.println(i + ". character" + cli.getGame().getCharacters().get(i - 1).getID() + ": cost: " + cli.getGame().getCharacterById(i).getPrice());
             }
+        } catch (GameException e) {
+            e.printStackTrace();
         }
+
     }
 
     public void printTitle(){
@@ -253,7 +258,4 @@ public class UserInterfaceCLI{
         this.cli = cli;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
 }

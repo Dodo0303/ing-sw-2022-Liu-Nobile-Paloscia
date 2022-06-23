@@ -55,7 +55,6 @@ public class CLI {
     public void startUI(String str) {
         view = new UserInterfaceCLI(str);
         view.setCli(this);
-        view.setNickname(this.nickname);
     }
 
     public void send(Object message) {
@@ -90,19 +89,9 @@ public class CLI {
             System.out.println(currPhase.toString() + " to " + ((ChangeTurnMessage) message).getPhase().toString());//TODO DELETE AFTER TESTS
             ((ChangeTurnMessage) message).process(this.serverHandler);
         } else if (message instanceof ConfirmMovementFromEntranceMessage) {
-            if (currPhase.equals(Phase.Action1)) {
-                ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
-                ap1Moves++;
-                if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
-                    currPhase = Phase.Action2;
-                    ap1Moves = 0;
-                    moveMotherNature();
-                } else {
-                    moveStudentsFromEntrance();
-                }
-            } else {
-                ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
-            }
+            ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
+        } else if (message instanceof MoveMothernatureMessage) {
+            ((MoveMothernatureMessage) message).process(this.serverHandler);
         } else if (message instanceof MoveProfessorMessage) {
             ((MoveProfessorMessage) message).process(this.serverHandler);
         } else if (message instanceof DenyMovementMessage) {
@@ -113,7 +102,6 @@ public class CLI {
             ((ConfirmCloudMessage) message).process(this.serverHandler);
         } else if(message instanceof EndMessage) {
             ((EndMessage) message).process(this.serverHandler);
-            currPhase = Phase.Ending;
         } else if (message instanceof GameModelUpdateMessage) {
             ((GameModelUpdateMessage) message).process(this.serverHandler);
         } else if (message instanceof CloudsUpdateMessage) {
@@ -329,11 +317,8 @@ public class CLI {
                         System.out.println(i + ". MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
                     }
                 }
-                System.out.print("Choose assistant card. Or press 'm' to check menu.\n");
+                System.out.print("Choose assistant card.\n");
                 String in = view.requireUserInput();
-                if (in.equals("m")){
-                    view.menu();
-                }
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
@@ -354,17 +339,17 @@ public class CLI {
         while (!currPhase.equals(Phase.Action1)) {
             currPhase = getCurrPhase();
         }
-        int num = -1, islandID = -1, i = 0, index = -1;
+        int num = -1, islandID = -1, i, index = -1;
         List<StudentColor>  entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
         int numIslands = game.getIslands().size();
         StudentColor tempColor;
-        System.out.print("You have in your entrance:\n");
-        for (StudentColor color: entrance) {
-            System.out.print(i + ")" + color + " ");
-            i++;
-        }
-
         while (index < 0 || index > entrance.size() - 1) {
+            i = 0;
+            System.out.print("You have in your entrance:\n");
+            for (StudentColor color: entrance) {
+                System.out.print(i + ")" + color + " ");
+                i++;
+            }
             System.out.print("Which student would you like to move?(Write the index). Press 'm' to check menu.\n");
             String in = view.requireUserInput();
             if (in.equals("m")){
@@ -443,36 +428,40 @@ public class CLI {
 
     void useCharacter(int characterIndex) {
         int realCharacterIndex = game.getCharacters().get(characterIndex).getID();
+        if (game.getPlayerByNickname(nickname).getCoins() < game.getCharacterById(realCharacterIndex).getPrice()) {
+            System.out.println("The character is too expensive for you.");
+            return;
+        }
         send(new UseCharacterMessage(realCharacterIndex));
-        if (characterIndex == 1) {
+        if (realCharacterIndex == 1) {
             prevPhase = currPhase;
             currPhase = Phase.Character1;
             character1();
-        } else if (characterIndex == 3) {
+        } else if (realCharacterIndex == 3) {
             prevPhase = currPhase;
             currPhase = Phase.Character3;
             character3();
-        } else if (characterIndex == 5) {
+        } else if (realCharacterIndex == 5) {
             prevPhase = currPhase;
             currPhase = Phase.Character5;
             character5();
-        } else if (characterIndex == 7) {
+        } else if (realCharacterIndex == 7) {
             prevPhase = currPhase;
             currPhase = Phase.Character7;
             character7();
-        }  else if (characterIndex == 9) {
+        }  else if (realCharacterIndex == 9) {
             prevPhase = currPhase;
             currPhase = Phase.Character9;
             character9();
-        } else if (characterIndex == 10) {
+        } else if (realCharacterIndex == 10) {
             prevPhase = currPhase;
             currPhase = Phase.Character10;
             character10();
-        } else if (characterIndex == 11) {
+        } else if (realCharacterIndex == 11) {
             prevPhase = currPhase;
             currPhase = Phase.Character11;
             character11();
-        } else if (characterIndex == 12) {
+        } else if (realCharacterIndex == 12) {
             prevPhase = currPhase;
             currPhase = Phase.Character12;
             character12();
@@ -687,18 +676,6 @@ public class CLI {
         return nickname;
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public Scanner getInput() {
-        return input;
-    }
-
     public Phase getCurrPhase() {
         return this.currPhase;
     }
@@ -719,10 +696,6 @@ public class CLI {
         this.wizards = wizards;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
-    }
-
     public void setGame(GameModel game) {
         this.game = game;
     }
@@ -738,7 +711,6 @@ public class CLI {
     public void setExpert(boolean expert) {
         this.expert = expert;
     }
-
 
     public boolean isMyTurn() {
         return myTurn;
@@ -756,22 +728,20 @@ public class CLI {
         this.prevPhase = prevPhase;
     }
 
-
     public UserInterfaceCLI getView() {
         return view;
-    }
-
-
-    public Thread getViewThread() {
-        return viewThread;
     }
 
     public void setCurrCharacter(int characterID) {
         this.currCharacter = characterID;
     }
-
-    public int getCharacter7Counter() {
-        return character7Counter;
+    public int getAp1Moves() {
+        return ap1Moves;
     }
+
+    public void setAp1Moves(int ap1Moves) {
+        this.ap1Moves = ap1Moves;
+    }
+
 
 }

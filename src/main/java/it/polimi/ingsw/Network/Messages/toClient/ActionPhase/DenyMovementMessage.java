@@ -8,14 +8,17 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 public class DenyMovementMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) {
-        System.out.print("Your movement has been denied, please try again.\n");
         if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
+            System.out.print("Your movement has been denied, please try again.\n");
             client.getClient().moveMotherNature();
         } else if (client.getClient().getCurrPhase().equals(Phase.Action3)) {
+            System.out.print("Your movement has been denied, please try again.\n");
             client.getClient().chooseCloud();
         } else if (client.getClient().getCurrPhase().equals(Phase.Planning)) {
+            System.out.print("Your movement has been denied, please try again.\n");
             client.getClient().playAssistant();
         } else if (client.getClient().getCurrPhase().equals(Phase.Action1)) {
+            System.out.print("Your movement has been denied, please try again.\n");
             client.getClient().moveStudentsFromEntrance();
         } else {
             client.getClient().setPhase(client.getClient().getPrevPhase());
