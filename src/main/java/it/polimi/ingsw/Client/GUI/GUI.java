@@ -17,7 +17,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.geometry.Rectangle2D;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +43,8 @@ public class GUI {
     private Phase_GUI prevPhase;
     private int currCharacter;
     private ArrayList<String> playerPlayedAssistant;
+    private Screen screen;
+    private Rectangle2D bounds;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -219,8 +224,9 @@ public class GUI {
     }
 
     public void playAssistant(String msg) {
+        enterFullscreen();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant2.fxml"));
             Parent root = fxmlLoader.load();
             ChooseAssistantController chooseAssistantController = fxmlLoader.getController();
             chooseAssistantController.setGUI(this);
@@ -720,6 +726,16 @@ public class GUI {
 
     public void setPlayerPlayedAssistant(ArrayList<String> playerPlayedAssistant) {
         this.playerPlayedAssistant = playerPlayedAssistant;
+    }
+
+    private void enterFullscreen() {
+        screen = Screen.getPrimary();
+        bounds = screen.getBounds();
+
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
     }
 
 
