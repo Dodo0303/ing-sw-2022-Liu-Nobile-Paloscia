@@ -233,7 +233,7 @@ public class GUI {
     }
 
     public void playAssistant(String msg) {
-        enterFullscreen();
+        //enterFullscreen();
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant2.fxml"));
             Parent root = fxmlLoader.load();
