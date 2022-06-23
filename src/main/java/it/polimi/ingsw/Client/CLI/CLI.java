@@ -50,7 +50,6 @@ public class CLI {
         startUI("");
         view.printTitle();
         requireNickname();
-        chooseGameMode();
     }
 
     public void startUI(String str) {

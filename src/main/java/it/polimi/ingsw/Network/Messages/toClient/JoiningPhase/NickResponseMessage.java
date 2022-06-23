@@ -28,6 +28,7 @@ public class NickResponseMessage extends MessageToClient {
         } else {
             client.setNickName(nickname);
             client.getClient().setPhase(Phase.ChoosingGameMode);
+            client.getClient().chooseGameMode();
         }
     }
 
