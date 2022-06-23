@@ -1,15 +1,17 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Exceptions.EmptyBagException;
-import it.polimi.ingsw.Exceptions.FullCloudException;
-import it.polimi.ingsw.Exceptions.GameException;
+import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.Character.CharacterCard;
+import it.polimi.ingsw.Model.Character.CharacterFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -100,4 +102,154 @@ class GameModelTest {
         assertFalse(game2.canAffordCharacter("unexistingnickname", game2.getCharacters().get(0).getID()));
     }
 
+    @Test
+    public void testRemoveSpareProfessor(){
+        assertTrue(game2.getProfessors().contains(StudentColor.BLUE));
+        game2.removeSpareProfessor(StudentColor.BLUE);
+        assertFalse(game2.getProfessors().contains(StudentColor.BLUE));
+    }
+
+    @Test
+    public void testSetAssistantOfPlayer(){
+        Assistant assistantToBeUsed = new Assistant(1,1,Wizard.WIZARD1);
+        Player player = game2.getPlayers().get(0);
+        game2.setAssistantOfPlayer(player.getNickName(), assistantToBeUsed);
+        assertEquals(player.getUsedAssistant(), assistantToBeUsed);
+    }
+
+    @Test
+    public void testGetPlayerIndexFromNickname(){
+        assertEquals(0, game2.getPlayerIndexFromNickname(game2.getPlayers().get(0).getNickName()));
+    }
+
+    @Test
+    public void testGetPlayerIndexFromNickname_WrongNickname_ShouldThrowException() {
+        assertThrows(NoSuchElementException.class, ()->{
+            game2.getPlayerIndexFromNickname("unexistingNickname");
+        });
+    }
+
+    @Test
+    public void testRemoveStudentFromEntrance(){
+        Player player = game2.getPlayers().get(0);
+        StudentColor colorToBeRemoved = player.getEntranceStudents().get(0);
+        StudentColor followingColor = player.getEntranceStudents().get(1);
+        assertEquals(colorToBeRemoved, game2.removeStudentFromEntrance(player, 0));
+        assertEquals(followingColor, player.getEntranceStudents().get(0));
+    }
+
+    @Test
+    public void testAddStudentToEntrance() {
+        Player player = game2.getPlayers().get(0);
+        player.removeStudentFromEntrance(0);
+        game2.addStudentToEntrance(player, StudentColor.BLUE);
+        assertEquals(StudentColor.BLUE, player.getEntranceStudents().get(player.getEntranceStudents().size() - 1));
+    }
+
+    @Test
+    public void testRemoveStudentFromTable(){
+        Player player = game2.getPlayers().get(0);
+        try {
+            player.addToDiningTable(StudentColor.BLUE);
+        } catch (FullTableException e) {
+            fail();
+        }
+        try {
+            game2.removeStudentFromTable(player, StudentColor.BLUE);
+        } catch (EmptyTableException e) {
+            fail();
+        }
+        for (StudentColor color :
+                StudentColor.values()) {
+            assertEquals(0, player.getDiningTables().get(StudentColor.BLUE).getNumOfStudents());
+        }
+
+    }
+
+    @Test
+    public void testAddToDiningTable(){
+        Player player = game2.getPlayers().get(0);
+        try {
+            game2.addToDiningTable(player, StudentColor.BLUE);
+        } catch (FullTableException e) {
+            fail();
+        }
+        for (StudentColor color :
+                StudentColor.values()) {
+            if (color != StudentColor.BLUE)
+                assertEquals(0, player.getDiningTables().get(color).getNumOfStudents());
+        }
+        assertEquals(1, player.getDiningTables().get(StudentColor.BLUE).getNumOfStudents());
+
+    }
+
+    @Test
+    public void testAddStudentToIsland(){
+        StudentColor color = StudentColor.BLUE;
+        Island island = game2.getIslands().get(0);
+        int oldStudents = island.getStudents().get(color);
+        game2.addStudentToIsland(color, island);
+        assertEquals(oldStudents + 1, island.getStudents().get(color));
+    }
+
+    @Test
+    public void testGetTableNumber() {
+        Player player = game2.getPlayers().get(0);
+        try {
+            player.addToDiningTable(StudentColor.BLUE);
+        } catch (FullTableException e) {
+            fail();
+        }
+        assertEquals(game2.getTableNumber(player, StudentColor.BLUE), player.getDiningTables().get(StudentColor.BLUE).getNumOfStudents());
+    }
+
+    @Test
+    public void testAddNoEntry(){
+        Island island = game2.getIslands().get(0);
+        int oldValue = island.getNoEntries();
+        game2.addNoEntry(island);
+        assertEquals(oldValue + 1, island.getNoEntries());
+    }
+
+    @Test
+    public void testGetCharacterById(){
+        CharacterCard character = game2.getCharacters().get(0);
+        assertEquals(character, game2.getCharacterById(character.getID()));
+    }
+
+    @Test
+    public void testGetCharacterById_WrongId_ShouldThrowException(){
+        assertThrows(GameException.class, ()->{
+            game2.getCharacterById(13);
+        });
+    }
+
+    @Test
+    public void testUpdateCharacter(){
+        CharacterCard character = game2.getCharacters().get(0);
+        int id = character.getID();
+        CharacterFactory newFactory = new CharacterFactory(game2);
+        CharacterCard newCharacter = newFactory.createCharacter(id);
+        game2.updateCharacterById(newCharacter);
+        assertSame(newCharacter, game2.getCharacters().get(0));
+    }
+
+    @Test
+    public void testUpdateCharacter_WrongCharacter_ShouldThrowException(){
+        List<CharacterCard> characters = game2.getCharacters();
+        List<Integer> ids = new ArrayList<>();
+        for (CharacterCard character :
+                characters) {
+            ids.add(character.getID());
+        }
+
+        CharacterFactory factory = new CharacterFactory(game2);
+        for (int i = 1; i < 13; i++) {
+            if (!ids.contains(i)) {
+                CharacterCard newCharacter = factory.createCharacter(i);
+                assertThrows(GameException.class, ()->{game2.updateCharacterById(newCharacter);});
+                break;
+            }
+        }
+    }
 }

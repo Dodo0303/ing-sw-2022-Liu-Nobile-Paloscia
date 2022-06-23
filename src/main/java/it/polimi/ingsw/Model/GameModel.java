@@ -273,34 +273,41 @@ public class GameModel implements Serializable {
      *
      * @param island island of interest
      * @return the influence of each player in that island
-     */
+
     public List<Integer> getInfluences(Island island) {
         List<Integer> res = new ArrayList<>();
         Integer[] values = influences.get(island);
         Collections.addAll(res, values);
         return res;
-    }
-
+    } TODO Delete if not used
+    */
     /**
      * Return the influence of a certain player in a certain island
      * @param island island of interest
      * @param player player of interest
      * @return the influence of that player in that island
-     */
+
     public int getInfluenceOfPlayer(Island island, Player player) {
         int index = _players.indexOf(player);
         return influences.get(island)[index];
-    }
+    } TODO Delete if not used
+    */
 
+    /**
+     * Method called from controller to use an assistant and to set it as last assistant used
+     * @param playerNickname nickname of the player that is using the assistant
+     * @param assistant assistant used by the player
+     */
     public void setAssistantOfPlayer(String playerNickname, Assistant assistant) {
-        for (Player player : _players) {
-            if (player.getNickName().equals(playerNickname)) {
-                player.useAssistant(assistant);
-                break;
-            }
-        }
+        Player player = getPlayerByNickname(playerNickname);
+        player.useAssistant(assistant);
     }
 
+    /**
+     * Get the current index of the player given its nickname
+     * @param nickname nickname of the player
+     * @return the current index of the player
+     */
     public int getPlayerIndexFromNickname(String nickname) {
         for (Player player : this._players) {
             if (player.getNickName().equals(nickname)) return this._players.indexOf(player);
@@ -308,26 +315,61 @@ public class GameModel implements Serializable {
         throw new NoSuchElementException();
     }
 
+    /**
+     * Remove a student from the entrance of a player given the player and the index of the student
+     * @param p player
+     * @param studentIndex index of the student to be removed
+     * @return  the color of the removed student
+     */
     public StudentColor removeStudentFromEntrance(Player p, int studentIndex) {
         return p.removeStudentFromEntrance(studentIndex);
     }
 
-    public void addStudentToEntrance(Player p, StudentColor student){
+    /**
+     * Add a student to the entrance of a player
+     * @param p player
+     * @param student student to be added
+     * @throws GameException if the entrance is full
+     */
+    public void addStudentToEntrance(Player p, StudentColor student) throws GameException{
         p.addStudentToEntrance(student);
     }
 
+    /**
+     * Removes a student from the table of a player
+     * @param p player
+     * @param color color of the student (and table) to be removed
+     * @throws EmptyTableException if the table has no students
+     */
     public void removeStudentFromTable(Player p, StudentColor color) throws EmptyTableException {
         p.removeFromDiningTable(color);
     }
 
+    /**
+     * Adds a student to the dining table of the player
+     * @param p player
+     * @param student student color to be added
+     * @throws FullTableException if the table has too many students
+     */
     public void addToDiningTable(Player p, StudentColor student) throws FullTableException {
         p.addToDiningTable(student);
     }
 
+    /**
+     * This method adds a student to an island
+     * @param student student color that has to be added
+     * @param island island that will receive the student
+     */
     public void addStudentToIsland(StudentColor student, Island island) {
         island.addStudent(student);
     }
 
+    /**
+     * Get the number of students that are in the table of a player
+     * @param p player
+     * @param color color of the students
+     * @return the number of students in the table
+     */
     public int getTableNumber(Player p, StudentColor color) {
         return p.getDiningTables().get(color).getNumOfStudents();
     }
@@ -341,11 +383,21 @@ public class GameModel implements Serializable {
         return _bag.extractStudent();
     }
 
+    /**
+     * This method adds a new-entry tile to an island
+     * @param island island that will receive the no-entry tile
+     */
     public void addNoEntry(Island island){
         island.addNoEntry();
     }
 
-    public CharacterCard getCharacterById(int ID){
+    /**
+     *
+     * @param ID ID of the character
+     * @return the CharacterCard that has the given ID, if present
+     * @throws GameException if there are no characters with the given ID
+     */
+    public CharacterCard getCharacterById(int ID) throws GameException{
         for (CharacterCard character:
              characters) {
             if (character.getID() == ID)
@@ -357,8 +409,9 @@ public class GameModel implements Serializable {
     /**
      * Update the character card if already present
      * @param update Character card that should replace the existing one
+     * @throws GameException if the character doesn't exist
      */
-    public void updateCharacterById(CharacterCard update) {
+    public void updateCharacterById(CharacterCard update) throws GameException{
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getID() == update.getID()) {
                 characters.set(i, update);
@@ -367,6 +420,7 @@ public class GameModel implements Serializable {
         }
         throw new GameException("Character not present");
     }
+
 
     public void removeCoinsToPlayer(String playerNickname, int characterID){
         Player p = null;
@@ -451,32 +505,12 @@ public class GameModel implements Serializable {
         this._islands = _islands;
     }
 
-    public void set_motherNature(int _motherNature) {
-        this._motherNature = _motherNature;
-    }
-
-    public void setInfluences(Map<Island, Integer[]> influences) {
-        this.influences = influences;
-    }
-
     public void set_players(ArrayList<Player> _players) {
         this._players = _players;
     }
 
-    public void set_bag(Bag _bag) {
-        this._bag = _bag;
-    }
-
     public void set_clouds(ArrayList<Cloud> _clouds) {
         this._clouds = _clouds;
-    }
-
-    public void set_spareCoins(int _spareCoins) {
-        this._spareCoins = _spareCoins;
-    }
-
-    public void set_professors(ArrayList<StudentColor> _professors) {
-        this._professors = _professors;
     }
 
     public List<CharacterCard> getCharacters() {
