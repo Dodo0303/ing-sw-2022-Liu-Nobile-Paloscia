@@ -7,8 +7,6 @@ import it.polimi.ingsw.Model.Character.CharacterFactory;
 import java.io.Serializable;
 import java.util.*;
 
-import static it.polimi.ingsw.Exceptions.GameException.error;
-
 /** A new game.
  */
 
@@ -146,7 +144,7 @@ public class GameModel implements Serializable {
         characters = new ArrayList<>();
         CharacterFactory factory = new CharacterFactory(this);
         List<Integer> characterIDs = new ArrayList<>();
-        /** TODO uncomment after tests
+        /**
         Random rnd = new Random();
         int id;
         for (int i = 0; i < 3; i++) {
@@ -154,11 +152,13 @@ public class GameModel implements Serializable {
             id++;
             while(characterIDs.contains(id)){
                 id = rnd.nextInt(12);
+                id++;
             }
             characterIDs.add(i, id);
             characters.add(factory.createCharacter(id));
         }
-         */
+         **/
+
 
         //TODO delete below after tests
         for (int i = 0; i < 12; i++) {

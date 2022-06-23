@@ -29,7 +29,7 @@ public class ActionPhase3 extends Phase {
             match.nextTurn();
             if (match.getCurrentPlayerID().equals(match.getFirstOfTurn()) && (match.noMoreStudents() || match.noMoreAssistants())) {
                 if (match.noMoreStudents()) match.endGame("There are no students in the bag.");
-                else if (match.noMoreAssistants()) match.endGame("All assistants were played");
+                else match.endGame("All assistants were played");
             }
             this.nextPhase();
             match.broadcastTurnChange(match.getCurrentPlayerID(), match.getGamePhase().toString());

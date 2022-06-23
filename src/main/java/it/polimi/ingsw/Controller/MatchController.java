@@ -774,7 +774,7 @@ public class MatchController implements Runnable {
 
     public boolean noMoreAssistants() {
         for (Player p : this.game.getPlayers()) {
-            if (p.getAssistants().size() == 0) return true;
+            if (p.assistantsLeft() == 0) return true;
         }
         return false;
     }

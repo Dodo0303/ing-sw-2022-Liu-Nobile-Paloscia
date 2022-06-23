@@ -334,8 +334,28 @@ public class Player implements Serializable {
         return _maxTowerNum;
     }
 
+    /**
+     * Checks whether the player has only one character left
+     * @return true if the player has only one character. false if not.
+     */
     public boolean lastAssistant() {
-        return this._assistants.size() == 1;
+        if (assistantsLeft() == 1) return true;
+        return false;
+    }
+
+
+    /**
+     * Checks how many assistants the player can still use
+     * @return the number of assistants of the player
+     */
+    public int assistantsLeft() {
+        int res = 0;
+        for (Assistant assistant :
+                _assistants) {
+            if (assistant != null) res++;
+        }
+
+        return res;
     }
 
     public void setCoins(int coin) {

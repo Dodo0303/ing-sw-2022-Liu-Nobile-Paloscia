@@ -115,10 +115,8 @@ public class CLI {
         } else if (message instanceof ConfirmCloudMessage) {
             ((ConfirmCloudMessage) message).process(this.serverHandler);
         } else if(message instanceof EndMessage) {
-            if (currPhase.equals(Phase.Action3)) {
-                ((EndMessage) message).process(this.serverHandler);
-                currPhase = Phase.Ending;
-            }
+            ((EndMessage) message).process(this.serverHandler);
+            currPhase = Phase.Ending;
         } else if (message instanceof GameModelUpdateMessage) {
             ((GameModelUpdateMessage) message).process(this.serverHandler);
         } else if (message instanceof CloudsUpdateMessage) {
@@ -411,7 +409,7 @@ public class CLI {
         int num = -1;
         while (num < 0 || num >= game.getIslands().size()) {
             view.printIslands();
-            System.out.print("Where would you like to move the mather nature? Press 'm' to check menu.\n");
+            System.out.print("Where would you like to move the mother nature? Press 'm' to check menu.\n");
             String in = view.requireUserInput();
             if (in.equals("m")){
                 view.menu();
