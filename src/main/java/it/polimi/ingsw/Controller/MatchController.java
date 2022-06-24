@@ -387,18 +387,33 @@ public class MatchController implements Runnable {
         game.addToDiningTable(player, color);
 
         Player newOwnerOfTable = professorChecker.getNewOwnerOfProfessor(this.game, game.getPlayers(), table);
-        Player newOwnerOfColor = professorChecker.getNewOwnerOfProfessor(this.game, game.getPlayers(), table);
+        Player newOwnerOfColor = professorChecker.getNewOwnerOfProfessor(this.game, game.getPlayers(), color);
 
 
         for (Player playerToCheck :
                 game.getPlayers()) {
-            if (playerToCheck.hasProfessor(color)) player.removeProfessor(color);
-            if (playerToCheck.hasProfessor(table)) player.removeProfessor(table);
+            if (playerToCheck.hasProfessor(color)) {
+                playerToCheck.removeProfessor(color);
+                broadCastProfessorsChange(playerToCheck.getNickName(), color, true);
+                System.out.println("removed " + color + " to " + playerToCheck.getNickName());
+            }
+            if (playerToCheck.hasProfessor(table)) {
+                playerToCheck.removeProfessor(table);
+                broadCastProfessorsChange(playerToCheck.getNickName(), table, true);
+                System.out.println("removed " + table + " to " + playerToCheck.getNickName());
+            }
         }
-        if(newOwnerOfColor != null)
+        System.out.println("Il colore " + color + " deve averlo " + newOwnerOfColor);
+        if(newOwnerOfColor != null) {
             newOwnerOfColor.addProfessor(color);
-        if(newOwnerOfTable != null)
+            broadCastProfessorsChange(newOwnerOfColor.getNickName(), color, false);
+            System.out.println("added " + color + " to " + newOwnerOfColor.getNickName());
+        }
+        if(newOwnerOfTable != null) {
             newOwnerOfTable.addProfessor(table);
+            broadCastProfessorsChange(newOwnerOfTable.getNickName(), table, false);
+            System.out.println("added " + table + " to " + newOwnerOfTable.getNickName());
+        }
 
     }
 
