@@ -705,16 +705,7 @@ public class SchoolBoardController implements Initializable {
         characterCardImage.setVisible(true);
         entranceStudentsIndex = new ArrayList<>();
         colors = new ArrayList<StudentColor>();
-        redArea.setDisable(false);
-        redArea.setVisible(true);
-        greenArea.setDisable(false);
-        greenArea.setVisible(true);
-        blueArea.setDisable(false);
-        blueArea.setVisible(true);
-        pinkArea.setDisable(false);
-        pinkArea.setVisible(true);
-        yellowArea.setDisable(false);
-        yellowArea.setVisible(true);
+        disableCharacter10(false);
         if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
             tableArea.setDisable(true);
             tableArea.setVisible(false);
@@ -744,6 +735,32 @@ public class SchoolBoardController implements Initializable {
             };
             done.setOnAction(event);
             characterPane.getChildren().add(done);
+        }
+    }
+
+    public void disableCharacter10(boolean bool) {
+        if (!bool) {
+            redArea.setDisable(false);
+            redArea.setVisible(true);
+            greenArea.setDisable(false);
+            greenArea.setVisible(true);
+            blueArea.setDisable(false);
+            blueArea.setVisible(true);
+            pinkArea.setDisable(false);
+            pinkArea.setVisible(true);
+            yellowArea.setDisable(false);
+            yellowArea.setVisible(true);
+        } else {
+            redArea.setDisable(true);
+            redArea.setVisible(false);
+            greenArea.setDisable(true);
+            greenArea.setVisible(false);
+            blueArea.setDisable(true);
+            blueArea.setVisible(false);
+            pinkArea.setDisable(true);
+            pinkArea.setVisible(false);
+            yellowArea.setDisable(true);
+            yellowArea.setVisible(false);
         }
     }
 

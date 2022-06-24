@@ -24,6 +24,7 @@ public class EntranceTableSwappedMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        client.getClient().setCurrCharacter(-1);
         for (int i = 0; i < client.getClient().getGame().getPlayers().size(); i++) {
             if (client.getClient().getGame().getPlayers().get(i).getNickName().equals(playerID)) {
                 client.getClient().getGame().getPlayers().set(i, playerUpdated);
@@ -35,6 +36,7 @@ public class EntranceTableSwappedMessage extends MessageToClient {
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        client.getClient().setCurrCharacter(-1);
         for (int i = 0; i < client.getClient().getGame().getPlayers().size(); i++) {
             if (client.getClient().getGame().getPlayers().get(i).getNickName().equals(playerID)) {
                 client.getClient().getGame().getPlayers().set(i, playerUpdated);

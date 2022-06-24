@@ -384,7 +384,6 @@ public class MatchController implements Runnable {
         StudentColor color = game.removeStudentFromEntrance(player, entrancePosition );
         game.removeStudentFromTable(player, table);
         game.addStudentToEntrance(player, table);
-
         game.addToDiningTable(player, color);
 
         Player newOwnerOfTable = professorChecker.getNewOwnerOfProfessor(this.game, game.getPlayers(), table);
