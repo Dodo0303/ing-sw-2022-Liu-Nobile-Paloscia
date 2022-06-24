@@ -12,6 +12,7 @@ public class EriantysClientGUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        System.setProperty("prism.allowhidpi", "false");
         GUI gui = new GUI(stage);
         gui.start();
     }
