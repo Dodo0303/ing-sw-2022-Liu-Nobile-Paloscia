@@ -50,6 +50,7 @@ public class GUI {
     private ArrayList<String> playerPlayedAssistant;
     private Screen screen;
     private Rectangle2D bounds;
+    private double scalingRatio;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -74,11 +75,7 @@ public class GUI {
                     System.exit(0);
                 }
             });
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
-            root.getTransforms().add(scale);
+            getScaleFactor();
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
@@ -293,7 +290,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920, 1080);
+            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
@@ -324,7 +321,7 @@ public class GUI {
                 gameBoardController.setMessage(msg);
             }
             gameBoardController.setStudentIndex(studentIndex);
-            Scene scene = new Scene(root, 1920, 1080);
+            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
@@ -351,7 +348,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 gameOverController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920, 1080);
+            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
@@ -410,7 +407,7 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920, 1080);
+            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
@@ -489,15 +486,13 @@ public class GUI {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
             }
-            Scene scene = new Scene(root, 1920, 1080);
-            /*
+            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
 
-             */
             getScaleFactor();//todo
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -527,16 +522,13 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 chooseCharacterController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920, 1080);
-            /*
+            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
             Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
 
-             */
-            getScaleFactor();//todo
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -847,6 +839,7 @@ public class GUI {
         double dpi = screen.getDpi();
         double scaleX = screen.getOutputScaleX();
         double scaleY = screen.getOutputScaleY();
+        this.scalingRatio = scaleX;
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
         System.out.println("- X: " + bounds.getWidth() + " - Y: " + bounds.getHeight());
