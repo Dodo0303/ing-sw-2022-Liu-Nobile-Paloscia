@@ -274,7 +274,7 @@ public class GUI {
     public void playAssistant(String msg) {
         //enterFullscreen();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant2.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant.fxml"));
             Parent root = fxmlLoader.load();
             ChooseAssistantController chooseAssistantController = fxmlLoader.getController();
             chooseAssistantController.setGUI(this);
@@ -420,6 +420,8 @@ public class GUI {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
+                    stage.setX(200);
+                    stage.setY(200);
                     stage.show();
                 }
             });
@@ -496,6 +498,8 @@ public class GUI {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
+                    stage.setX(200);
+                    stage.setY(200);
                     stage.show();
                 }
             });
