@@ -828,6 +828,13 @@ public class GUI {
     }
 
     private double getScaleFactor() {
+        //todo testing
+        Screen screen = Screen.getPrimary();
+        double dpi = screen.getDpi();
+        double scaleX = screen.getOutputScaleX();
+        double scaleY = screen.getOutputScaleY();
+        System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
+
         double trueHorizontalLines = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         double scaledHorizontalLines = Screen.getPrimary().getBounds().getHeight();
         double dpiScaleFactor = trueHorizontalLines / scaledHorizontalLines;
