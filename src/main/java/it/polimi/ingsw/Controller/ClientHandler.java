@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -20,7 +21,6 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private EriantysServer server;
     private MatchController match;
-    private int playerID;
     private String nickname;
     private Wizard wizard;
     ObjectInputStream objectInputStream;
@@ -35,7 +35,6 @@ public class ClientHandler implements Runnable {
     public ClientHandler(EriantysServer server, Socket socket) throws IOException {
         this.server = server;
         this.socket = socket;
-        this.playerID = playerID;
         phase = new NicknamePhase(this);
         wizard = null;
         closed = false;
@@ -43,7 +42,7 @@ public class ClientHandler implements Runnable {
         outgoingMessages = new LinkedBlockingQueue<Object>();
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectInputStream = new ObjectInputStream(socket.getInputStream());
-        sendThread =  new SendThread();
+        sendThread =  new SendThread(this);
         sendThread.start();
     }
 
@@ -62,6 +61,12 @@ public class ClientHandler implements Runnable {
     /** Set up connection and send message when send(Object msg) is called.
      */
     private class SendThread extends Thread {
+        private ClientHandler client;
+
+        public SendThread(ClientHandler client) {
+            this.client = client;
+        }
+
         public void run() {
             //setting up connection with client
             try {
@@ -69,9 +74,10 @@ public class ClientHandler implements Runnable {
                 if (!"Hello Server.".equals(handle)) {
                     throw new IOException("Incorrect string received from client.\n");
                 }
-                objectOutputStream.writeObject(playerID);
+                int temp = 0;
+                objectOutputStream.writeObject(temp);
                 objectOutputStream.flush();
-                receiveThread = new ReceiveThread();
+                receiveThread = new ReceiveThread(client);
                 receiveThread.start();
             } catch (Exception e) {
                 try {
@@ -97,13 +103,19 @@ public class ClientHandler implements Runnable {
             } catch (Exception e) {
                 System.out.println("Unexpected error shuts down server's sendThread:\n");
                 e.printStackTrace();
-                close();
+                if (!closed)
+                    close();
             }
         }
     }
     /** Listen on the chosen port, receive any incoming message
      */
     private class ReceiveThread extends Thread {
+        private ClientHandler client;
+        public ReceiveThread(ClientHandler client) {
+            this.client = client;
+        }
+
         public void run() {
             while(!closed) {
                 try {
@@ -113,16 +125,18 @@ public class ClientHandler implements Runnable {
                         outgoingMessages.clear();
                         objectOutputStream.writeObject(new DisconnectMessage());
                         objectOutputStream.flush();
-                        server.clientDisconnected(playerID);
+                        server.clientDisconnected(client);
                         close();
                     } else {
                         incomingMessages.put(msg);
                         System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
                     }
-                } catch (Exception e) {
+                } catch (IOException | InterruptedException | ClassNotFoundException e) {
                     e.printStackTrace();
-                    System.out.println("Connection with " + nickname +" lost.");
-                    match.broadCastDisconnection(nickname);
+                    System.out.println("Connection with " + nickname + " lost.");
+                    server.clientDisconnected(client);
+                    if (match != null)
+                        match.broadCastDisconnection(nickname);
                     close();
                 }
             }
@@ -131,7 +145,7 @@ public class ClientHandler implements Runnable {
 
     /** Shut down THIS clientHandler.
      */
-    void close() {
+    private synchronized void close() {
         closed = true;
         sendThread.interrupt();
         if (receiveThread != null)
@@ -161,7 +175,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void createMatchController(int numOfPlayers, Wizard wizard, boolean expertMode) {
-        match = new MatchController(server.generateMatchID(), numOfPlayers);
+        match = new MatchController(server.generateMatchID(), numOfPlayers, server);
         new Thread(match).start();
         this.wizard = wizard;
         server.addMatch(match);
@@ -189,10 +203,6 @@ public class ClientHandler implements Runnable {
     }
 
     public Wizard getWizard() { return this.wizard; }
-
-    public int getPlayerID() {
-        return this.playerID;
-    }
 
     public EriantysServer getServer() {
         return this.server;

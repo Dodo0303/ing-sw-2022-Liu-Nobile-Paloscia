@@ -37,6 +37,7 @@ public class MatchController implements Runnable {
     private Wizard[] wizards;
     private Phase gamePhase;
     private boolean expert;
+    private EriantysServer server;
 
     private GameModel game;
 
@@ -49,7 +50,7 @@ public class MatchController implements Runnable {
     private boolean lastRound;
 
 
-    public MatchController(int ID, int totalMatchPlayers) {
+    public MatchController(int ID, int totalMatchPlayers, EriantysServer server) {
         this.ID = ID;
         this.totalMatchPlayers = totalMatchPlayers;
         this.clients = new ArrayList<>(this.totalMatchPlayers);
@@ -60,6 +61,7 @@ public class MatchController implements Runnable {
         this.influenceCalculator = new StandardInfluenceCalculator();
         this.professorChecker = new StandardProfessorChecker();
         this.additionalMoves = 0;
+        this.server = server;
     }
 
     // GETTERS AND SETTERS
@@ -809,8 +811,9 @@ public class MatchController implements Runnable {
 
         for (ClientHandler client : this.clients) {
             client.send(new EndMessage(winner.getNickName(), reason));
-            //TODO: Remove from server.
+            server.removeClient(client);
         }
+        server.removeMatch(this);
     }
 
     public boolean noMoreStudents() {

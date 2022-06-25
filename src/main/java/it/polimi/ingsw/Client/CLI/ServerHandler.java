@@ -58,6 +58,7 @@ public class ServerHandler implements Runnable {
     }
 
     public void shutdown() {
+        System.out.println("\nShutting down");
         sendThread.interrupt();
         receiveThread.interrupt();
         try {
