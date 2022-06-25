@@ -70,7 +70,10 @@ public class GameBoardController implements Initializable {
     }
 
     public void fullScreen() {
-        gui.getStage().setFullScreen(true);
+        if (!gui.getStage().isFullScreen()) {
+            gui.getStage().setFullScreen(true);
+            gui.setFullScreen(true);
+        }
     }
 
     public void setGUI(GUI gui) {

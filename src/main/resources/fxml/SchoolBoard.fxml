@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #f7f7f7;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.SchoolBoardController">
     <right>
         <AnchorPane prefHeight="1080.0" prefWidth="313.0" style="-fx-background-color: #E99869;" BorderPane.alignment="CENTER">
             <children>
@@ -110,7 +110,7 @@
         </AnchorPane>
     </right>
     <left>
-        <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1561.0" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1561.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <StackPane layoutX="1316.0" layoutY="79.0" prefHeight="150.0" prefWidth="200.0">
                <children>

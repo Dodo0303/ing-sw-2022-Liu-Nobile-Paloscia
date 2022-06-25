@@ -12,7 +12,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.Joining.NewgameController">
     <left>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <ImageView fitHeight="402.0" fitWidth="308.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -23,7 +23,7 @@
         </AnchorPane>
     </left>
    <center>
-        <AnchorPane prefHeight="445.0" prefWidth="344.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="445.0" prefWidth="344.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="ConfirmButton" layoutX="121.0" layoutY="306.0" mnemonicParsing="false" onAction="#execute" prefHeight="32.0" prefWidth="74.0" style="-fx-background-color: #000000;" text="Confirm" textFill="WHITE" />
                 <Label fx:id="messageLabel" alignment="CENTER" layoutX="1.0" layoutY="14.0" prefHeight="72.0" prefWidth="312.0" text="New Game" textAlignment="CENTER">

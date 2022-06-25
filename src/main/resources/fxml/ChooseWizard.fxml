@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
@@ -10,48 +11,51 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.ChooseWizardController">
-   <bottom>
-        <AnchorPane prefHeight="445.0" prefWidth="344.0" BorderPane.alignment="CENTER">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.ChooseWizardController">
+   <left>
+        <AnchorPane prefHeight="402.0" prefWidth="600.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="ConfirmButton" layoutX="263.0" layoutY="356.0" mnemonicParsing="false" onAction="#execute" prefHeight="32.0" prefWidth="74.0" style="-fx-background-color: #000000;" text="Confirm" textFill="WHITE" />
-            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="162.0" layoutY="67.0">
+                <Button fx:id="ConfirmButton" layoutX="276.0" layoutY="356.0" mnemonicParsing="false" onAction="#execute" prefHeight="32.0" prefWidth="74.0" style="-fx-background-color: #000000;" text="Confirm" textFill="WHITE" />
+            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="163.0" layoutY="70.0">
                <image>
                   <Image url="@../assets/Assistenti/retro/CarteTOT_back_21@3x.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="307.0" layoutY="67.0">
+            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="323.0" layoutY="70.0">
                <image>
                   <Image url="@../assets/Assistenti/retro/CarteTOT_back_31@3x.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="455.0" layoutY="67.0">
+            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="464.0" layoutY="70.0">
                <image>
                   <Image url="@../assets/Assistenti/retro/CarteTOT_back_11@3x.png" />
                </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
             </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="14.0" layoutY="67.0">
+            <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="15.0" layoutY="70.0">
                <image>
                   <Image url="@../assets/Assistenti/retro/CarteTOT_back_1@3x.png" />
                </image>
             </ImageView>
-            <Label fx:id="messageLabel" alignment="CENTER" layoutX="173.0" layoutY="14.0" prefHeight="36.0" prefWidth="254.0" text="Choose a wizard">
+            <Label fx:id="messageLabel" alignment="CENTER" layoutX="186.0" layoutY="13.0" prefHeight="36.0" prefWidth="254.0" text="Choose a wizard">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <RadioButton fx:id="radio2" layoutX="220.0" layoutY="297.0" mnemonicParsing="false" />
-            <RadioButton fx:id="radio1" layoutX="72.0" layoutY="298.0" mnemonicParsing="false" />
-            <RadioButton fx:id="radio3" layoutX="365.0" layoutY="298.0" mnemonicParsing="false" />
-            <RadioButton fx:id="radio4" layoutX="513.0" layoutY="297.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio2" layoutX="229.0" layoutY="302.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio1" layoutX="72.0" layoutY="302.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio3" layoutX="381.0" layoutY="302.0" mnemonicParsing="false" />
+            <RadioButton fx:id="radio4" layoutX="522.0" layoutY="302.0" mnemonicParsing="false" />
             <Label fx:id="label3" layoutX="344.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
             <Label fx:id="label4" layoutX="493.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
             <Label fx:id="label2" layoutX="208.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
             <Label fx:id="label1" layoutX="51.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
             <Label fx:id="labelTeam1" alignment="CENTER" layoutX="88.0" layoutY="31.0" prefHeight="39.0" prefWidth="134.0" text="Team 1" visible="false" />
             <Label fx:id="labelTeam2" alignment="CENTER" layoutX="388.0" layoutY="28.0" prefHeight="39.0" prefWidth="134.0" text="Team 2" visible="false" />
-            <Separator fx:id="teamSeparator" layoutX="296.0" layoutY="48.0" orientation="VERTICAL" prefHeight="303.0" prefWidth="11.0" />
+            <Separator fx:id="teamSeparator" layoutX="307.0" layoutY="49.0" orientation="VERTICAL" prefHeight="303.0" prefWidth="11.0" />
             </children>
         </AnchorPane>
-   </bottom>
+   </left>
 </BorderPane>

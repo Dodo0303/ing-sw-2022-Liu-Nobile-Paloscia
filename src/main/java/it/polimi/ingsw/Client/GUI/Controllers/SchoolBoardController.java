@@ -54,7 +54,11 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void fullScreen() {
-        gui.getStage().setFullScreen(true);
+        if (!gui.getStage().isFullScreen()) {
+            gui.getStage().setFullScreen(true);
+            gui.setFullScreen(true);
+            gui.viewSchoolBoard(messageLabel.getText(), false);
+        }
     }
 
     public void useCharacter() {

@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
@@ -51,6 +52,7 @@ public class GUI {
     private Screen screen;
     private Rectangle2D bounds;
     private double scalingRatio;
+    private boolean fullScreen;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -58,7 +60,9 @@ public class GUI {
 
     public void start() {
         try {
+            fullScreen = false;
             ap1Moves = 0;
+            getScaleFactor();
             stage.getIcons().add(new Image("icon.png"));
             stage.setResizable(false);
             stage.setTitle("Eriantys");
@@ -66,7 +70,9 @@ public class GUI {
             Parent root = fxmlLoader.load();
             LoginController loginController = fxmlLoader.getController();
             loginController.setGUI(this);
-            Scene scene = new Scene(root, 600, 402);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
+            root.getTransforms().add(scale);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/login.css")).toExternalForm());
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -75,7 +81,6 @@ public class GUI {
                     System.exit(0);
                 }
             });
-            getScaleFactor();
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
@@ -103,11 +108,8 @@ public class GUI {
             if (reset) {
                 nicknameController.setMessage("Nickname has been taken.");
             }
-            Scene scene = new Scene(root, 600, 402);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -129,11 +131,8 @@ public class GUI {
             if (msg != null) {
                 chooseGameModeController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 600, 402);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -152,11 +151,8 @@ public class GUI {
             Parent root = fxmlLoader.load();
             NewgameController newgameController = fxmlLoader.getController();
             newgameController.setGUI(this);
-            Scene scene = new Scene(root, 600, 402);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -179,11 +175,8 @@ public class GUI {
             if (msg != null) {
                 joinGameController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 600, 402);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -204,6 +197,7 @@ public class GUI {
 
     public void chooseWizard(boolean newGame) {
         try {
+            getScaleFactor();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseWizard.fxml"));
             Parent root = fxmlLoader.load();
             ChooseWizardController chooseWizardController = fxmlLoader.getController();
@@ -226,11 +220,8 @@ public class GUI {
                     chooseWizardController.disableRadio(4);
                 }
             }
-            Scene scene = new Scene(root, 600, 402);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -238,7 +229,6 @@ public class GUI {
                     stage.show();
                 }
             });
-            root.getTransforms().add(scale);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -251,7 +241,7 @@ public class GUI {
             GameCreatedController gameCreatedController = fxmlLoader.getController();
             gameCreatedController.setGUI(this);
             gameCreatedController.setMessage(msg);
-            Scene scene = new Scene(root, 600, 402);
+            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
@@ -407,12 +397,11 @@ public class GUI {
             if (!Objects.equals(msg, "")) {
                 gameBoardController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene;
+            scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
+                Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
+                root.getTransforms().add(scale);
+
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -823,14 +812,13 @@ public class GUI {
         this.playerPlayedAssistant = playerPlayedAssistant;
     }
 
-    private void enterFullscreen() {
-        screen = Screen.getPrimary();
-        bounds = screen.getBounds();
 
-        stage.setX(bounds.getMinX());
-        stage.setY(bounds.getMinY());
-        stage.setWidth(bounds.getWidth());
-        stage.setHeight(bounds.getHeight());
+    public boolean isFullScreen() {
+        return fullScreen;
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        this.fullScreen = fullScreen;
     }
 
     private void getScaleFactor() {

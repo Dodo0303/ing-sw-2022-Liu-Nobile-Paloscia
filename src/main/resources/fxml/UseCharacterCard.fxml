@@ -13,7 +13,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.ChooseCharacterController">
     <center>
-        <Pane prefHeight="996.0" prefWidth="1761.0" BorderPane.alignment="CENTER">
+        <Pane prefHeight="996.0" prefWidth="1761.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <ImageView fx:id="pic1" fitHeight="200.0" fitWidth="136.0" layoutX="238.0" layoutY="222.0">
                     <image>

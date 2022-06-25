@@ -9,7 +9,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.Joining.GameCreatedController">
     <left>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <ImageView fitHeight="402.0" fitWidth="308.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -20,7 +20,7 @@
         </AnchorPane>
     </left>
     <right>
-        <AnchorPane prefHeight="445.0" prefWidth="363.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="445.0" prefWidth="363.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="messageLabel" alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="160.0" prefWidth="312.0" text="Waiting for other players." textAlignment="CENTER">
                     <font>

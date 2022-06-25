@@ -15,7 +15,7 @@
 
 <BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.Controllers.PickColorController">
     <center>
-        <AnchorPane prefHeight="996.0" prefWidth="1761.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="996.0" prefWidth="1761.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="messageLabel" alignment="CENTER" layoutX="605.0" layoutY="2.0" prefHeight="147.0" prefWidth="695.0" text="Pick a color">
                     <font>
