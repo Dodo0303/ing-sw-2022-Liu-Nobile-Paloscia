@@ -420,8 +420,8 @@ public class GUI {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
-                    stage.setX(200);
-                    stage.setY(200);
+                    stage.setX(0);
+                    stage.setY(0);
                     stage.show();
                 }
             });
@@ -498,8 +498,8 @@ public class GUI {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
-                    stage.setX(200);
-                    stage.setY(200);
+                    stage.setX(0);
+                    stage.setY(0);
                     stage.show();
                 }
             });
