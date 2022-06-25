@@ -18,12 +18,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,11 @@ public class GUI {
                     System.exit(0);
                 }
             });
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
@@ -99,6 +107,11 @@ public class GUI {
                 nicknameController.setMessage("Nickname has been taken.");
             }
             Scene scene = new Scene(root, 600, 402);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -120,6 +133,11 @@ public class GUI {
                 chooseGameModeController.setMessage(msg);
             }
             Scene scene = new Scene(root, 600, 402);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -138,6 +156,11 @@ public class GUI {
             NewgameController newgameController = fxmlLoader.getController();
             newgameController.setGUI(this);
             Scene scene = new Scene(root, 600, 402);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -160,6 +183,11 @@ public class GUI {
                 joinGameController.setMessage(msg);
             }
             Scene scene = new Scene(root, 600, 402);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -202,12 +230,18 @@ public class GUI {
                 }
             }
             Scene scene = new Scene(root, 600, 402);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
                     stage.show();
                 }
             });
+            root.getTransforms().add(scale);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -221,6 +255,11 @@ public class GUI {
             gameCreatedController.setGUI(this);
             gameCreatedController.setMessage(msg);
             Scene scene = new Scene(root, 600, 402);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -255,6 +294,11 @@ public class GUI {
                 chooseAssistantController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -281,6 +325,11 @@ public class GUI {
             }
             gameBoardController.setStudentIndex(studentIndex);
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -303,6 +352,11 @@ public class GUI {
                 gameOverController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -357,6 +411,11 @@ public class GUI {
                 gameBoardController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -429,6 +488,11 @@ public class GUI {
                 }
             }
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -456,6 +520,11 @@ public class GUI {
                 chooseCharacterController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -474,6 +543,11 @@ public class GUI {
             PickColorController pickColorController = fxmlLoader.getController();
             pickColorController.setGUI(this);
             Scene scene = new Scene(root, 1920, 1080);
+            Screen screen = Screen.getPrimary();
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
