@@ -495,6 +495,7 @@ public class GUI {
             double scaleY = screen.getOutputScaleY();
             Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
+            getScaleFactor();//todo
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -529,6 +530,7 @@ public class GUI {
             double scaleY = screen.getOutputScaleY();
             Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
+            getScaleFactor();//todo
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -833,18 +835,15 @@ public class GUI {
         stage.setHeight(bounds.getHeight());
     }
 
-    private double getScaleFactor() {
+    private void getScaleFactor() {
         //todo testing
         Screen screen = Screen.getPrimary();
         double dpi = screen.getDpi();
         double scaleX = screen.getOutputScaleX();
         double scaleY = screen.getOutputScaleY();
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
+        System.out.println("- X: " + bounds.getWidth() + " - Y: " + bounds.getHeight());
 
-        double trueHorizontalLines = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-        double scaledHorizontalLines = Screen.getPrimary().getBounds().getHeight();
-        double dpiScaleFactor = trueHorizontalLines / scaledHorizontalLines;
-        return dpiScaleFactor;
     }
-
 }
