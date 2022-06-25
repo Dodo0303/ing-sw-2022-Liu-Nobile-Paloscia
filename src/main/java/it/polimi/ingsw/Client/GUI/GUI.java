@@ -820,17 +820,8 @@ public class GUI {
     public void setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
     }
-
     private void getScaleFactor() {
-        //todo testing
         Screen screen = Screen.getPrimary();
-        double dpi = screen.getDpi();
-        double scaleX = screen.getOutputScaleX();
-        double scaleY = screen.getOutputScaleY();
-        this.scalingRatio = scaleX;
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-        System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
-        System.out.println("- X: " + bounds.getWidth() + " - Y: " + bounds.getHeight());
-
+        this.scalingRatio = screen.getOutputScaleX();
     }
 }
