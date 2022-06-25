@@ -181,6 +181,7 @@
                   <ImageView fx:id="characterCardImage" fitHeight="277.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </StackPane>
+            <Button mnemonicParsing="false" onAction="#fullScreen" text="Fullscreen" />
             </children>
         </AnchorPane>
     </left>
