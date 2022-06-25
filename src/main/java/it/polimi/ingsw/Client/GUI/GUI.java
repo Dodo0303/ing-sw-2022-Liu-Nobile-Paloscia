@@ -490,11 +490,14 @@ public class GUI {
                 }
             }
             Scene scene = new Scene(root, 1920, 1080);
+            /*
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
             Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
+
+             */
             getScaleFactor();//todo
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -525,11 +528,14 @@ public class GUI {
                 chooseCharacterController.setMessage(msg);
             }
             Scene scene = new Scene(root, 1920, 1080);
+            /*
             Screen screen = Screen.getPrimary();
             double scaleX = screen.getOutputScaleX();
             double scaleY = screen.getOutputScaleY();
             Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
+
+             */
             getScaleFactor();//todo
             Platform.runLater(new Runnable() {
                 @Override public void run() {
