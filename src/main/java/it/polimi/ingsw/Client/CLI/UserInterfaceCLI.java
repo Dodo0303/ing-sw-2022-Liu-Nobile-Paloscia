@@ -35,9 +35,11 @@ public class UserInterfaceCLI{
 
     public void menu() {
         clearScreen();
+        int coins = cli.getGame().getPlayerByNickname(cli.getNickname()).getCoins();
         int num = -1;
         while ((cli.isExpert() && num!= 6) || (!cli.isExpert() && num != 5)) {
             System.out.println("\n\nMenu:\n ");
+            System.out.println("You have " + coins + " coins\n");
             System.out.println("1. Islands");
             System.out.println("2. Clouds");
             System.out.println("3. My school board");

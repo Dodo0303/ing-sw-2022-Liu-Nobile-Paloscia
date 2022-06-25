@@ -79,17 +79,18 @@ public class EriantysServer implements Runnable{
             cl.send(msg);
     }
 
-    synchronized void clientDisconnected(int playerID) {
-        if (clients.contains(playerID)) {
-            clients.remove(playerID);
-            ConnectionStatusMessage msg = new ConnectionStatusMessage(playerID,false,getClients());
+    synchronized void clientDisconnected(ClientHandler player) {
+        int index = clients.indexOf(player);
+        if (clients.remove(player)) {
+            ConnectionStatusMessage msg = new ConnectionStatusMessage(index, false, getClients());
             sendToAll(msg);
-            playerDisconnected(playerID);
-            System.out.println("Connection with client number " + playerID + " closed.\n");
+            playerDisconnected(player);
+            System.out.println("Connection with client number " + index + " closed.\n");
         }
+
     }
 
-    protected void playerDisconnected(int playerID) {
+    protected void playerDisconnected(ClientHandler player) {
         //TODO Resilienza alle disconnessioni; Persistenza
     }
 
