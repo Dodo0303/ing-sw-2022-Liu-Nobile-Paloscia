@@ -412,7 +412,9 @@ public class GUI {
             }
             Scene scene = new Scene(root, 1920, 1080);
             Screen screen = Screen.getPrimary();
-            Scale scale = new Scale(getScaleFactor(), getScaleFactor(), 0, 0);
+            double scaleX = screen.getOutputScaleX();
+            double scaleY = screen.getOutputScaleY();
+            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
@@ -840,6 +842,5 @@ public class GUI {
         double dpiScaleFactor = trueHorizontalLines / scaledHorizontalLines;
         return dpiScaleFactor;
     }
-
 
 }
