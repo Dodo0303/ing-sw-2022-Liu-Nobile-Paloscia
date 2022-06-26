@@ -28,5 +28,6 @@ public class UsedAssistantMessage extends MessageToClient {
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
         ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
+        ch.getClient().getAssistantPlayer().put(assistantValue, playerID);
     }
 }

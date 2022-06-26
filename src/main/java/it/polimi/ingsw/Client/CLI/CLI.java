@@ -201,8 +201,9 @@ public class CLI {
                  */
                 try {
                     serverHandler = new ServerHandler(host,port, this);
-                } catch (IOException e) {
-                    System.out.print(e.getMessage() + "\n");
+                } catch (Exception e) {
+                    System.out.print("Server not found.\n");
+                    System.exit(1);
                 }
             }
             currPhase = Phase.PickingNickname;

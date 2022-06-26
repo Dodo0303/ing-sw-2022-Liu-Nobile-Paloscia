@@ -79,6 +79,7 @@ public class ChooseAssistantController implements Initializable {
             ConfirmButton.setDisable(true);
             CheckBoardButton.setDisable(true);
             gui.send(new SendAssistantMessage(assistant));
+            gui.getAssistantPlayer().clear();
         } else {
             setMessage("This card is not available");
         }

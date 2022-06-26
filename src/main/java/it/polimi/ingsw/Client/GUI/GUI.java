@@ -27,6 +27,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +48,7 @@ public class GUI {
     private int currCharacter;
     private ArrayList<String> playerPlayedAssistant;
     private String[] nicknames;
+    private HashMap<Integer, String> assistantPlayer;
     private Screen screen;
     private Rectangle2D bounds;
     private double scalingRatio;
@@ -58,20 +60,21 @@ public class GUI {
 
     public void start() {
         try {
+            assistantPlayer = new HashMap<>();
             fullScreen = false;
             ap1Moves = 0;
             getScaleFactor();
             stage.getIcons().add(new Image("icon.png"));
             stage.setResizable(false);
             stage.setTitle("Eriantys");
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/login.fxml"));
             Parent root = fxmlLoader.load();
             LoginController loginController = fxmlLoader.getController();
             loginController.setGUI(this);
             Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
             Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/login.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("CSS/login.css")).toExternalForm());
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
@@ -260,24 +263,21 @@ public class GUI {
     }
 
     public void playAssistant(String msg) {
-        //enterFullscreen();
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant.fxml"));
             Parent root = fxmlLoader.load();
             ChooseAssistantController chooseAssistantController = fxmlLoader.getController();
             chooseAssistantController.setGUI(this);
+            //disable my used assistants
             for (int i = 0; i < 10; i++) {
                 if (getGame().getPlayers().get(getGame().getPlayerIndexFromNickname(getNickname())).getAssistants().get(i) == null) {
                     chooseAssistantController.disableRadio(i + 1);
                 }
             }
-            /*
-            for (Player player : game.getPlayers()) {
-                if (!player.getNickName().equals(nickname) && player.getUsedAssistant() != null) {
-                    chooseAssistantController.disableRadio(player.getUsedAssistant().getValue());
-                }
+            //disable assistants used by other players in the current round
+            for (int i : assistantPlayer.keySet()) {
+                chooseAssistantController.disableRadio(i);
             }
-            */
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
@@ -318,7 +318,7 @@ public class GUI {
             double scaleY = screen.getOutputScaleY();
             Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
             root.getTransforms().add(scale);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -403,7 +403,7 @@ public class GUI {
                 Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
                 root.getTransforms().add(scale);
 
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/GameBoard.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -839,5 +839,11 @@ public class GUI {
     public void setNicknames(String[] nicknames) {
         this.nicknames = nicknames;
     }
+
+
+    public HashMap<Integer, String> getAssistantPlayer() {
+        return assistantPlayer;
+    }
+
 
 }
