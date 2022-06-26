@@ -36,6 +36,13 @@ public class SendAvailableWizardsMessage extends MessageToClient {
         ch.getClient().setNumPlayers(this.numPlayers);
         if (numPlayers == 4) {
             ch.getClient().setNicknames(nicknames);
+            System.out.println("Players with WIZARD1 and WIZARD2 will be assigned to one team, players with WIZARD3 and WIZARD4 will be assigned to another team.");
+            System.out.println("For the current round, ");
+            for (int j = 0; j < 4; j++) {
+                if (nicknames[j] != null) {
+                    System.out.println("Player " + nicknames[j] + " owns wizard" + (j + 1));
+                }
+            }
         }
         System.out.println("Available wizards:");
         for (Wizard w : wizards) {
