@@ -47,6 +47,9 @@ public class Player implements Serializable {
     /** Dining tables of THIS player. */
     private HashMap<StudentColor, DiningTable> _diningTable;
 
+    /** First player of my team. */
+    private Player captain;
+
 
 
     // CONSTRUCTOR
@@ -55,7 +58,7 @@ public class Player implements Serializable {
     Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
         this._nickName = nickname;
         this._color = color;
-        this._coins = 12;
+        this._coins = 12;//todo =0 after tested
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 8; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
             this._maxTowerNum = 8;
@@ -73,7 +76,27 @@ public class Player implements Serializable {
         initDiningTable();
     }
 
-
+    Player(String nickname, Color color, Wizard wizard, int numOfPlayers, Player captain) {
+        this._nickName = nickname;
+        this._color = color;
+        this._coins = 12;//todo =0 after tested
+        this.captain = captain;
+        if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
+            this._towerNum = 0; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
+            this._maxTowerNum = 0;
+            this._maxEntranceStudents = 7;
+        } else if (numOfPlayers == 3 && color != Color.VOID) {
+            this._towerNum = 6;
+            this._maxTowerNum = 6;
+            this._maxEntranceStudents = 9;
+        } else {
+            throw new IllegalArgumentException();
+        }
+        initEntranceStudents();
+        initProfessors();
+        initAssistant(wizard);
+        initDiningTable();
+    }
 
     // INITIALIZATION
 
@@ -105,39 +128,53 @@ public class Player implements Serializable {
         }
     }
 
-
-
     // ADD AND REMOVE TOWERS
 
     /** Add x towers to THIS PLAYER. */
     public void addTower(int x) {
-        if (_towerNum < _maxTowerNum)
-            this._towerNum+=x;
-        else
-            throw new GameException("Too many towers");
+        if (captain != null) {
+            captain.addTower(x);
+        } else {
+            if (_towerNum < _maxTowerNum)
+                this._towerNum+=x;
+            else
+                throw new GameException("Too many towers");
+        }
     }
 
     public void addTower() {
-        if (_towerNum < _maxTowerNum)
-            this._towerNum++;
-        else
-            throw new GameException("Too many towers");
+        if (captain != null) {
+            captain.addTower();
+        } else {
+            if (_towerNum < _maxTowerNum)
+                this._towerNum++;
+            else
+                throw new GameException("Too many towers");
+        }
     }
 
     /** Remove x towers from THIS PLAYER. */
     public void removeTower(int x) {
-        if (this._towerNum > 0) {
-            this._towerNum-=x;
+        if (captain != null) {
+            captain.removeTower(x);
         } else {
-            throw new GameException("Invalid operation.");
+            if (this._towerNum > 0) {
+                this._towerNum -= x;
+            } else {
+                throw new GameException("Invalid operation.");
+            }
         }
     }
 
     public void removeTower() {
-        if (this._towerNum > 0) {
-            this._towerNum--;
+        if (captain != null) {
+            captain.removeTower();
         } else {
-            throw new GameException("Invalid operation.");
+            if (this._towerNum > 0) {
+                this._towerNum --;
+            } else {
+                throw new GameException("Invalid operation.");
+            }
         }
     }
 
@@ -265,7 +302,11 @@ public class Player implements Serializable {
     /**The getter of _towerNum
      * @return number of towers owned by THIS PLAYER. */
     public int getTowerNum() {
-        return this._towerNum;
+        if (captain != null) {
+            return captain.getTowerNum();
+        } else {
+            return this._towerNum;
+        }
     }
 
     /** The getter of coins.
@@ -366,4 +407,7 @@ public class Player implements Serializable {
         this._lastUsedAssistant = this._assistants.remove(value-1);
     }
 
+    public Player getCaptain() {
+        return this.captain;
+    }
 }

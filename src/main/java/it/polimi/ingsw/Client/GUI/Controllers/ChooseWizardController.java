@@ -62,9 +62,6 @@ public class ChooseWizardController implements Initializable {
         }
         if (newgame) {
             gui.send(new SendStartInfoMessage(numPlayer, expert, wizard));
-            if (numPlayer == 4) {
-                setFourPlayerGame(true);
-            }
         } else {
             gui.send(new SendChosenWizardMessage(wizard));
         }
@@ -105,16 +102,32 @@ public class ChooseWizardController implements Initializable {
             labelTeam1.setVisible(true); labelTeam2.setVisible(true);
         }
         if (radio1.isDisabled()) {
-            //todo display nickname on every chosen wizard cards
+            if (gui.getNicknames()[0] != null) {
+                label1.setText(gui.getNicknames()[0]);
+                label1.setVisible(true);
+                label1.setDisable(false);
+            }
         }
         if (radio2.isDisabled()) {
-
+            if (gui.getNicknames()[1] != null) {
+                label2.setText(gui.getNicknames()[1]);
+                label2.setVisible(true);
+                label2.setDisable(false);
+            }
         }
         if (radio3.isDisabled()) {
-
+            if (gui.getNicknames()[2] != null) {
+                label3.setText(gui.getNicknames()[2]);
+                label3.setVisible(true);
+                label3.setDisable(false);
+            }
         }
         if (radio4.isDisabled()) {
-
+            if (gui.getNicknames()[3] != null) {
+                label4.setText(gui.getNicknames()[3]);
+                label4.setVisible(true);
+                label4.setDisable(false);
+            }
         }
     }
 

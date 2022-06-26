@@ -87,7 +87,6 @@ public class EriantysServer implements Runnable{
             playerDisconnected(player);
             System.out.println("Connection with client number " + index + " closed.\n");
         }
-
     }
 
     protected void playerDisconnected(ClientHandler player) {

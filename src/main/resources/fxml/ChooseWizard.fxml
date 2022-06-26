@@ -48,10 +48,10 @@
             <RadioButton fx:id="radio1" layoutX="72.0" layoutY="302.0" mnemonicParsing="false" />
             <RadioButton fx:id="radio3" layoutX="381.0" layoutY="302.0" mnemonicParsing="false" />
             <RadioButton fx:id="radio4" layoutX="522.0" layoutY="302.0" mnemonicParsing="false" />
-            <Label fx:id="label3" layoutX="344.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
-            <Label fx:id="label4" layoutX="493.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
-            <Label fx:id="label2" layoutX="208.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
-            <Label fx:id="label1" layoutX="51.0" layoutY="76.0" prefHeight="32.0" prefWidth="57.0" />
+            <Label fx:id="label3" layoutX="361.0" layoutY="270.0" prefHeight="23.0" prefWidth="57.0" />
+            <Label fx:id="label4" layoutX="502.0" layoutY="278.0" prefHeight="24.0" prefWidth="57.0" />
+            <Label fx:id="label2" layoutX="209.0" layoutY="281.0" prefHeight="21.0" prefWidth="57.0" />
+            <Label fx:id="label1" layoutX="52.0" layoutY="275.0" prefHeight="23.0" prefWidth="57.0" />
             <Label fx:id="labelTeam1" alignment="CENTER" layoutX="88.0" layoutY="31.0" prefHeight="39.0" prefWidth="134.0" text="Team 1" visible="false" />
             <Label fx:id="labelTeam2" alignment="CENTER" layoutX="388.0" layoutY="28.0" prefHeight="39.0" prefWidth="134.0" text="Team 2" visible="false" />
             <Separator fx:id="teamSeparator" layoutX="307.0" layoutY="49.0" orientation="VERTICAL" prefHeight="303.0" prefWidth="11.0" />

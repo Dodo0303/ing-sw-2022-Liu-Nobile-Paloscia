@@ -340,32 +340,32 @@ public class SchoolBoardController implements Initializable {
             p.getChildren().add(imageView1);
         }
         //draw towers
-        for (int j = 0; j < gui.getGame().getIslands().size(); j++) {
-
-        }
-        for (int i = 0; i < player.getTowerNum(); i++) {
-            imageViews.add(new ImageView());
-            ImageView imageView1 = imageViews.get(imageViews.size() - 1);
-            Point temp = null;
-            Color tower = player.getColor();
-            if (tower.equals(Color.BLACK)) {
-                Image stu = new Image("/assets/Towers/black.png");
-                imageView1.setImage(stu);
-            } else if (tower.equals(Color.WHITE)) {
-                Image stu = new Image("/assets/Towers/white.png");
-                imageView1.setImage(stu);
-            } else if (tower.equals(Color.GRAY)) {
-                Image stu = new Image("/assets/Towers/gray.png");
-                imageView1.setImage(stu);
+        if (gui.getGame().getPlayers().size() == 4 && player.getCaptain() != null) {
+            //does not draw towers if I am the second player of a team
+        } else {
+            for (int i = 0; i < player.getTowerNum(); i++) {
+                imageViews.add(new ImageView());
+                ImageView imageView1 = imageViews.get(imageViews.size() - 1);
+                Point temp = null;
+                Color tower = player.getColor();
+                if (tower.equals(Color.BLACK)) {
+                    Image stu = new Image("/assets/Towers/black.png");
+                    imageView1.setImage(stu);
+                } else if (tower.equals(Color.WHITE)) {
+                    Image stu = new Image("/assets/Towers/white.png");
+                    imageView1.setImage(stu);
+                } else if (tower.equals(Color.GRAY)) {
+                    Image stu = new Image("/assets/Towers/gray.png");
+                    imageView1.setImage(stu);
+                }
+                temp = towers.get(i);
+                imageView1.setFitHeight(50);
+                imageView1.setFitWidth(20);
+                imageView1.setTranslateX(temp.getX());
+                imageView1.setTranslateY(temp.getY());
+                p.getChildren().add(imageView1);
             }
-            temp = towers.get(i);
-            imageView1.setFitHeight(50);
-            imageView1.setFitWidth(20);
-            imageView1.setTranslateX(temp.getX());
-            imageView1.setTranslateY(temp.getY());
-            p.getChildren().add(imageView1);
         }
-
     }
 
     public void back() {

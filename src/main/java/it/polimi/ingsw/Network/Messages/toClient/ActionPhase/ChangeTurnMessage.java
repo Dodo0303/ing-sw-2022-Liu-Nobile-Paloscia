@@ -80,7 +80,7 @@ public class ChangeTurnMessage extends MessageToClient {
             }
         } else {
             ch.getClient().setMyTurn(false);
-            ch.getClient().checkBoard(ch.getClient().getNickname() + "'s round.");
+            ch.getClient().checkBoard(playerNickname + "'s round.");
         }
     }
 

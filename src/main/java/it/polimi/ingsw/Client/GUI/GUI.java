@@ -17,17 +17,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +46,7 @@ public class GUI {
     private Phase_GUI prevPhase;
     private int currCharacter;
     private ArrayList<String> playerPlayedAssistant;
+    private String[] nicknames;
     private Screen screen;
     private Rectangle2D bounds;
     private double scalingRatio;
@@ -219,6 +217,9 @@ public class GUI {
                 if (!wizards.contains(Wizard.WIZARD4)) {
                     chooseWizardController.disableRadio(4);
                 }
+            }
+            if (numPlayer == 4) {
+                chooseWizardController.setFourPlayerGame(true);
             }
             Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
             Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
@@ -812,6 +813,10 @@ public class GUI {
         this.playerPlayedAssistant = playerPlayedAssistant;
     }
 
+    public void setNumPlayer(int numPlayer) {
+        this.numPlayer = numPlayer;
+    }
+
 
     public boolean isFullScreen() {
         return fullScreen;
@@ -820,8 +825,19 @@ public class GUI {
     public void setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
     }
+
     private void getScaleFactor() {
         Screen screen = Screen.getPrimary();
         this.scalingRatio = screen.getOutputScaleX();
     }
+
+
+    public String[] getNicknames() {
+        return nicknames;
+    }
+
+    public void setNicknames(String[] nicknames) {
+        this.nicknames = nicknames;
+    }
+
 }

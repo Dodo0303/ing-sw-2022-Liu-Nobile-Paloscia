@@ -29,7 +29,7 @@ public class EndMessage extends MessageToClient {
         if (winnerID == null) {
             System.out.print("Game ended with a draw.\nGood bye.\n");
         } else {
-            System.out.print("Player " + winnerID + " has won the game.\n");
+            System.out.print("Player " + winnerID + " won the game. For" + reason);
         }
     }
 
@@ -38,7 +38,13 @@ public class EndMessage extends MessageToClient {
         if (winnerID == null) {
             client.getClient().gameOver("Game ended with a draw.\nGood bye.\n");
         } else {
-            client.getClient().gameOver("Player " + winnerID + " has won the game.\n");
+            if (client.getClient().getGame().getPlayers().size() == 4) {
+                String teamColor = client.getClient().getGame().getPlayerByNickname(winnerID).getColor().toString();
+                client.getClient().gameOver("Team " + teamColor + " won the game, for" + reason);
+            } else {
+                client.getClient().gameOver("Player " + winnerID + " won the game, for" + reason);
+            }
+
         }
     }
 }

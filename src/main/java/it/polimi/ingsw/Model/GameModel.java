@@ -100,9 +100,9 @@ public class GameModel implements Serializable {
             _players.add(new Player(nicknames[2], Color.GRAY, wizards[2], numOfPlayers));
         } else if (numOfPlayers == 4) {
             _players.add(new Player(nicknames[0], Color.WHITE, wizards[0], numOfPlayers));
-            _players.add(new Player(nicknames[1], Color.WHITE, wizards[1], numOfPlayers));
+            _players.add(new Player(nicknames[1], Color.WHITE, wizards[1], numOfPlayers, _players.get(0)));
             _players.add(new Player(nicknames[2], Color.BLACK, wizards[2], numOfPlayers));
-            _players.add(new Player(nicknames[3], Color.BLACK, wizards[3], numOfPlayers));
+            _players.add(new Player(nicknames[3], Color.BLACK, wizards[3], numOfPlayers, _players.get(2)));
         }
     }
 

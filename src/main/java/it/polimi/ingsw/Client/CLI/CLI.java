@@ -36,8 +36,9 @@ public class CLI {
     private boolean expert;
     private boolean myTurn;
     private UserInterfaceCLI view;
-    public Thread viewThread;
-    private int currCharacter, character7Counter;
+    private int numPlayers;
+    private String[] nicknames;
+    private int currCharacter;
 
     public void start() {
         ap1Moves = 0;
@@ -735,6 +736,7 @@ public class CLI {
     public void setCurrCharacter(int characterID) {
         this.currCharacter = characterID;
     }
+
     public int getAp1Moves() {
         return ap1Moves;
     }
@@ -743,5 +745,22 @@ public class CLI {
         this.ap1Moves = ap1Moves;
     }
 
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
+
+    public String[] getNicknames() {
+        return nicknames;
+    }
+
+    public void setNicknames(String[] nicknames) {
+        this.nicknames = nicknames;
+    }
 
 }

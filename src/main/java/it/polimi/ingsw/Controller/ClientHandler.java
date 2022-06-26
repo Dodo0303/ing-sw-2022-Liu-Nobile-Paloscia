@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -189,8 +190,27 @@ public class ClientHandler implements Runnable {
 
     public void sendAvailableWizards() throws IOException {
         if (!wizardAvailable()) {
-            MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
-            send(availableWizards);
+            if (match.getTotalMatchPlayers() == 4) {
+                String[] nicknames = new String[4];
+                for (int i = 0;i < 4;i ++) {
+                    if (match.getWizards()[i] != null) {
+                        if (match.getWizards()[i]== Wizard.WIZARD1) {
+                            nicknames[0] = match.getClients().get(i).getNickname();
+                        } else if (match.getWizards()[i] == Wizard.WIZARD2) {
+                            nicknames[1] = match.getClients().get(i).getNickname();
+                        } else if (match.getWizards()[i] == Wizard.WIZARD3) {
+                            nicknames[2] = match.getClients().get(i).getNickname();
+                        } else if (match.getWizards()[i] == Wizard.WIZARD4) {
+                            nicknames[3] = match.getClients().get(i).getNickname();
+                        }
+                    }
+                }
+                MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards(), 4, nicknames);
+                send(availableWizards);
+            } else {
+                MessageToClient availableWizards = new SendAvailableWizardsMessage(match.getAvailableWizards());
+                send(availableWizards);
+            }
         }
     }
 
