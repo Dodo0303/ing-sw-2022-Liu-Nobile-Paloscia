@@ -14,12 +14,8 @@ public class PlanningPhase extends Phase {
 
     public PlanningPhase(MatchController match) {
         super(match);
-
-        //TODO: What if bag is empty?
-
         this.match.fillClouds();
         this.match.broadcastClouds();
-
     }
 
     @Override

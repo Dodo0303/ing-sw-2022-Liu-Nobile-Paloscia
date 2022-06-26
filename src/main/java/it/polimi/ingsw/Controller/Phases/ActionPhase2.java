@@ -16,7 +16,6 @@ public class ActionPhase2 extends Phase {
 
     @Override
     public void process(MessageToServer msg, ClientHandler ch) {
-        //TODO: Check character rules: can I use 2 character same turn?
         if (!(msg instanceof MoveMotherNatureMessage || msg instanceof UseCharacterMessage)) {
             match.denyMovement(ch);
         } else if (msg instanceof MoveMotherNatureMessage) {

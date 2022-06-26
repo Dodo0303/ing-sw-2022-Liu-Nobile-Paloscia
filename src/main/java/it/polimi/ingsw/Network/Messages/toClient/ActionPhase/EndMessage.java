@@ -30,7 +30,9 @@ public class EndMessage extends MessageToClient {
             System.out.print("Game ended with a draw.\nGood bye.\n");
         } else {
             System.out.print("Player " + winnerID + " won the game. For" + reason);
+            System.out.print("\nGood bye.\n");
         }
+        System.exit(0);
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {

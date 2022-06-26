@@ -437,12 +437,14 @@ public class GameModel implements Serializable {
                 }
             }
             for (Player player : _players) {
-                if (player.getColor().equals(Color.WHITE)) {
-                    player.setTowers(player.getMaxTowerNum() - numWhite);
-                } else if (player.getColor().equals(Color.BLACK)) {
-                    player.setTowers(player.getMaxTowerNum() - numBlack);
-                } else if (player.getColor().equals(Color.GRAY)) {
-                    player.setTowers(player.getMaxTowerNum() - numGray);
+                if (player.getMaxTowerNum() != 0) {//in case of 4-player game, only change the towerNum of the team captains
+                    if (player.getColor().equals(Color.WHITE)) {
+                        player.setTowers(player.getMaxTowerNum() - numWhite);
+                    } else if (player.getColor().equals(Color.BLACK)) {
+                        player.setTowers(player.getMaxTowerNum() - numBlack);
+                    } else if (player.getColor().equals(Color.GRAY)) {
+                        player.setTowers(player.getMaxTowerNum() - numGray);
+                    }
                 }
             }
         }
