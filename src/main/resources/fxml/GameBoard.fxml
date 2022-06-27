@@ -65,7 +65,7 @@
             </StackPane>
                 <Label fx:id="messageLabel" alignment="CENTER" layoutX="4.0" layoutY="58.0" prefHeight="117.0" prefWidth="339.0">
                     <font>
-                        <Font size="20.0" />
+                        <Font name="Papyrus" size="20.0" />
                     </font>
                 </Label>
          </children>
