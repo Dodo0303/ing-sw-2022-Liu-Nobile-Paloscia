@@ -5,6 +5,8 @@ import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
+import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
+import it.polimi.ingsw.Network.Messages.toServer.PingMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,6 +28,7 @@ public class ServerHandler implements Runnable {
     private ReceiveThread receiveThread;
     private ArrayList<ClientHandler> clients; //clients who are currently connected to the server.
     private ViewController client;
+    private PingThread pingThread;
 
     public ServerHandler(String host, int port, ViewController client) throws IOException {
         this.socket = new Socket(host, port);
@@ -35,6 +38,7 @@ public class ServerHandler implements Runnable {
         this.incomingMessages = new LinkedBlockingQueue<Object>();
         this.sendThread = new SendThread();
         this.receiveThread = new ReceiveThread();
+        this.pingThread = new PingThread();
         this.closed = false;
         this.client = client;
         output.writeObject("Hello Server.");
@@ -51,6 +55,7 @@ public class ServerHandler implements Runnable {
     public void run() {
         this.sendThread.start();
         this.receiveThread.start();
+        this.pingThread.start();
     }
 
     public void send(Object message) {
@@ -61,6 +66,7 @@ public class ServerHandler implements Runnable {
         System.out.println("\nShutting down");
         sendThread.interrupt();
         receiveThread.interrupt();
+        pingThread.interrupt();
         try {
             socket.close();
         }
@@ -104,6 +110,21 @@ public class ServerHandler implements Runnable {
             } catch (Exception e) {
                 System.out.print(e.getMessage());
                 shutdown();
+            }
+        }
+    }
+
+    private class PingThread extends Thread {
+        @Override
+        public void run() {
+            try {
+                while(!closed){
+                    MessageToServer ping = new PingMessage();
+                    outgoingMessages.put(ping);
+                    sleep(5000);
+                }
+            } catch (InterruptedException e) {
+               e.printStackTrace();
             }
         }
     }

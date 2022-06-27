@@ -57,6 +57,7 @@ public class EriantysServer implements Runnable{
         while (!shutdown) {
             try {
                 Socket socket = serverSocket.accept();
+                socket.setSoTimeout(10000);
                 ClientHandler newClient = new ClientHandler(this, socket);
                 executor.submit(newClient);
                 clients.add(newClient);
