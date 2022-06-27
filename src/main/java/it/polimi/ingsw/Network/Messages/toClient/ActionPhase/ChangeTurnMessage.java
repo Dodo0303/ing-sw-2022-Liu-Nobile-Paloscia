@@ -54,12 +54,14 @@ public class ChangeTurnMessage extends MessageToClient {
             guiClient.setMyTurn(true);
             if (guiClient.getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 guiClient.setCurrPhase(Phase_GUI.Planning);
+                guiClient.setAssistantPicked(false);
                 guiClient.playAssistant("");
             } else if (guiClient.getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
                 guiClient.setCurrPhase(Phase_GUI.Action1);
                 guiClient.viewSchoolBoard("Move a student.", false);
             } else if (guiClient.getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
                 guiClient.setCurrPhase(Phase_GUI.Planning);
+                guiClient.setAssistantPicked(false);
                 guiClient.playAssistant("");
             }
         } else {

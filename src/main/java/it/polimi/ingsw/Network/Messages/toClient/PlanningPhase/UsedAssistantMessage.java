@@ -40,6 +40,8 @@ public class UsedAssistantMessage extends MessageToClient {
     public void processGUI(ServerHandler ch) {
         GUI guiClient = (GUI) ch.getClient();
         guiClient.getGame().setAssistantOfPlayer(playerID, guiClient.getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
-        guiClient.getAssistantPlayer().put(assistantValue, playerID);
+        if (!guiClient.isAssistantPicked()){
+            guiClient.getAssistantPlayer().put(assistantValue, playerID);
+        }
     }
 }

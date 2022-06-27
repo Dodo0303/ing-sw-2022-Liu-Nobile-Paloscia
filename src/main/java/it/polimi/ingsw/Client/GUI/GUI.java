@@ -55,6 +55,7 @@ public class GUI implements ViewController {
     private Rectangle2D bounds;
     private double scalingRatio;
     private boolean fullScreen;
+    private boolean assistantPicked;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -64,6 +65,7 @@ public class GUI implements ViewController {
         try {
             assistantPlayer = new HashMap<>();
             fullScreen = false;
+            assistantPicked = false;
             ap1Moves = 0;
             getScaleFactor();
             stage.getIcons().add(new Image("icon.png"));
@@ -845,6 +847,14 @@ public class GUI implements ViewController {
 
     public HashMap<Integer, String> getAssistantPlayer() {
         return assistantPlayer;
+    }
+
+    public boolean isAssistantPicked() {
+        return assistantPicked;
+    }
+
+    public void setAssistantPicked(boolean assistantPicked) {
+        this.assistantPicked = assistantPicked;
     }
 
 

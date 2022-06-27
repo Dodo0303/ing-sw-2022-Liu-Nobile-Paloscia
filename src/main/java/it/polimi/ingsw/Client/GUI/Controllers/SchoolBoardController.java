@@ -122,7 +122,7 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void otherBoards() {
-        gui.viewSchoolBoard("", true);
+        gui.viewSchoolBoard(messageLabel.getText(), true);
     }
 
     public void setUpOtherBoards() {
@@ -369,7 +369,7 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void back() {
-        gui.checkBoard("");
+        gui.checkBoard(messageLabel.getText());
     }
 
     private void initCoords() {

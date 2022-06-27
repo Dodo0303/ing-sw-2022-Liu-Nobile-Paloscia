@@ -66,7 +66,7 @@ public class GameBoardController implements Initializable {
     }
 
     public void viewSchoolBoard() {
-        gui.viewSchoolBoard("", false);
+        gui.viewSchoolBoard(messageLabel.getText(), false);
     }
 
     public void fullScreen() {
