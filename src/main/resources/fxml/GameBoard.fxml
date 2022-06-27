@@ -124,7 +124,7 @@
                   <Image url="@../assets/bag.png" />
                </image>
             </ImageView>
-            <Button mnemonicParsing="false" onAction="#fullScreen" text="Fullscreen" />
+            <Button disable="true" mnemonicParsing="false" onAction="#fullScreen" text="Fullscreen" visible="false" />
             </children>
         </AnchorPane>
    </left>
