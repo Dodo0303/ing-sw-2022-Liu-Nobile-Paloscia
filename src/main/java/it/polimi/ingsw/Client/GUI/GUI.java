@@ -76,6 +76,7 @@ public class GUI implements ViewController {
             LoginController loginController = fxmlLoader.getController();
             loginController.setGUI(this);
             Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
+            System.out.println(scalingRatio);
             Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("CSS/login.css")).toExternalForm());
@@ -832,6 +833,16 @@ public class GUI implements ViewController {
 
     private void getScaleFactor() {
         Screen screen = Screen.getPrimary();
+        double dpi = screen.getDpi();
+        double scaleX = screen.getOutputScaleX();
+        double scaleY = screen.getOutputScaleY();
+        double boundX = screen.getBounds().getWidth();
+        double boundY = screen.getBounds().getHeight();
+        double MAXboundX = screen.getBounds().getMaxX();
+        double MINboundY = screen.getBounds().getMaxY();
+        System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
+        System.out.println(" - boundX: " + boundX + " - boundY: " + boundY);
+        System.out.println(" - boundX: " + MAXboundX + " - boundY: " + MINboundY);
         this.scalingRatio = screen.getOutputScaleX();
     }
 
