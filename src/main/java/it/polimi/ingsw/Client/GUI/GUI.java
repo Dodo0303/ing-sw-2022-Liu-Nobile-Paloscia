@@ -268,7 +268,9 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 600, 402);
+            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
+            root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
