@@ -1,12 +1,13 @@
 package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Model.Wizard;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SendAvailableWizardsMessage extends MessageToClient {
@@ -30,12 +31,13 @@ public class SendAvailableWizardsMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        ch.getClient().setPhase(Phase.JoiningGame2);
+        CLI cliClient = (CLI) ch.getClient();
+        cliClient.setPhase(Phase.JoiningGame2);
         int i = 1;
-        ch.getClient().setWizards(this.wizards);
-        ch.getClient().setNumPlayers(this.numPlayers);
+        cliClient.setWizards(this.wizards);
+        cliClient.setNumPlayers(this.numPlayers);
         if (numPlayers == 4) {
-            ch.getClient().setNicknames(nicknames);
+            cliClient.setNicknames(nicknames);
             System.out.println("Players with WIZARD1 and WIZARD2 will be assigned to one team, players with WIZARD3 and WIZARD4 will be assigned to another team.");
             System.out.println("For the current round, ");
             for (int j = 0; j < 4; j++) {
@@ -48,18 +50,19 @@ public class SendAvailableWizardsMessage extends MessageToClient {
         for (Wizard w : wizards) {
             System.out.println(i++ + ". " + w);
         }
-        ch.getClient().chooseWizard();
+        cliClient.chooseWizard();
    }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
-        ch.getClient().setWizards(this.wizards);
-        ch.getClient().setNumPlayer(this.numPlayers);
+    public void processGUI(ServerHandler ch) {
+        GUI guiClient = (GUI) ch.getClient();
+        guiClient.setWizards(this.wizards);
+        guiClient.setNumPlayer(this.numPlayers);
         if (numPlayers == 4) {
-            ch.getClient().setNicknames(nicknames);
+            guiClient.setNicknames(nicknames);
         }
-        if (ch.getClient().getCurrPhase().equals(Phase_GUI.JoiningGame1)) {
-            ch.getClient().setCurrPhase(Phase_GUI.JoiningGame2);
-            ch.getClient().chooseWizard(false);
+        if (guiClient.getCurrPhase().equals(Phase_GUI.JoiningGame1)) {
+            guiClient.setCurrPhase(Phase_GUI.JoiningGame2);
+            guiClient.chooseWizard(false);
         }
     }
 }

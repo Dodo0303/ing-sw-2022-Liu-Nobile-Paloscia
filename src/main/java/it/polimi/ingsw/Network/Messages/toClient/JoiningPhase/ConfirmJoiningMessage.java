@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -28,40 +30,42 @@ public class ConfirmJoiningMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
+        CLI cliClient = (CLI) ch.getClient();
         if (result) {
-            ch.getClient().setExpert(expert);
+            cliClient.setExpert(expert);
             System.out.println("You've joined match " + matchID);
             if (message.equals("Game created")) {
-                ch.getClient().setPhase(Phase.GameJoined);
+                cliClient.setPhase(Phase.GameJoined);
             } else if (message.equals("You joined the game")){
-                ch.getClient().setPhase(Phase.GameJoined);
+                cliClient.setPhase(Phase.GameJoined);
             } else {
-                ch.getClient().setPhase(Phase.JoiningGame1);
+                cliClient.setPhase(Phase.JoiningGame1);
             }
         } else {
             System.out.println(this.message);
         }
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
+    public void processGUI(ServerHandler ch) {
+        GUI guiClient = (GUI) ch.getClient();
         if (result) {
-            ch.getClient().setExpert(expert);
+            guiClient.setExpert(expert);
             if (message.equals("Game created")) {
-                ch.getClient().showGameCreated("Match: " + matchID);
-                ch.getClient().setCurrPhase(Phase_GUI.GameJoined);
+                guiClient.showGameCreated("Match: " + matchID);
+                guiClient.setCurrPhase(Phase_GUI.GameJoined);
             } else if (message.equals("You joined the game")){
-                ch.getClient().setCurrPhase(Phase_GUI.GameJoined);
-                ch.getClient().showGameCreated("Match: " + matchID);
+                guiClient.setCurrPhase(Phase_GUI.GameJoined);
+                guiClient.showGameCreated("Match: " + matchID);
             } else {
-                ch.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
+                guiClient.setCurrPhase(Phase_GUI.JoiningGame1);
             }
         } else {
             System.out.println(this.message);
             if (message.equals("Wizard not available")) {
-                ch.getClient().setCurrPhase(Phase_GUI.JoiningGame2);
-                ch.getClient().chooseWizard(false);
+                guiClient.setCurrPhase(Phase_GUI.JoiningGame2);
+                guiClient.chooseWizard(false);
             } else {
-                ch.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
+                guiClient.setCurrPhase(Phase_GUI.JoiningGame1);
             }
         }
     }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Model.StudentColor;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -22,19 +24,21 @@ public class MoveProfessorMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
+        CLI cliClient = (CLI) client.getClient();
         if (!remove) {
-            client.getClient().getGame().getPlayerByNickname(playerID).addProfessor(color);
+            cliClient.getGame().getPlayerByNickname(playerID).addProfessor(color);
         } else {
-            client.getClient().getGame().getPlayerByNickname(playerID).removeProfessor(color);
+            cliClient.getGame().getPlayerByNickname(playerID).removeProfessor(color);
         }
 
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+    public void processGUI(ServerHandler client) {
+        GUI guiClient = (GUI) client.getClient();
         if (!remove) {
-            client.getClient().getGame().getPlayerByNickname(playerID).addProfessor(color);
+            guiClient.getGame().getPlayerByNickname(playerID).addProfessor(color);
         } else {
-            client.getClient().getGame().getPlayerByNickname(playerID).removeProfessor(color);
+            guiClient.getGame().getPlayerByNickname(playerID).removeProfessor(color);
         }
     }
 }

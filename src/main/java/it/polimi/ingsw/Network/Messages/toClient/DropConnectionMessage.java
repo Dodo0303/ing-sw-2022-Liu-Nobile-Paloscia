@@ -1,11 +1,10 @@
 package it.polimi.ingsw.Network.Messages.toClient;
 
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
-import it.polimi.ingsw.Model.Character.CharacterCard;
 
 public class DropConnectionMessage extends MessageToClient{
     String nickname;
@@ -19,6 +18,6 @@ public class DropConnectionMessage extends MessageToClient{
     }
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException, WrongEffectException, NotEnoughNoEntriesException {
-
+        //TODO Close the socket and shutdown
     }
 }

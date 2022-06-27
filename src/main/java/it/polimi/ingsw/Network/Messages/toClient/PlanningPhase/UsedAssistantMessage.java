@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.PlanningPhase;
 
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class UsedAssistantMessage extends MessageToClient {
@@ -22,12 +24,14 @@ public class UsedAssistantMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
+        CLI cliClient = (CLI) ch.getClient();
+        cliClient.getGame().setAssistantOfPlayer(playerID, cliClient.getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
         System.out.println(playerID + " has chosen " + assistantValue + "nd assistant.");
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
-        ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
-        ch.getClient().getAssistantPlayer().put(assistantValue, playerID);
+    public void processGUI(ServerHandler ch) {
+        GUI guiClient = (GUI) ch.getClient();
+        guiClient.getGame().setAssistantOfPlayer(playerID, guiClient.getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
+        guiClient.getAssistantPlayer().put(assistantValue, playerID);
     }
 }

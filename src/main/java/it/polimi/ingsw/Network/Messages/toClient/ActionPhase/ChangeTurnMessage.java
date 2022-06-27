@@ -1,12 +1,12 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Utilities;
-
-import java.util.ArrayList;
 
 public class ChangeTurnMessage extends MessageToClient {
     private String playerNickname;
@@ -27,42 +27,44 @@ public class ChangeTurnMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        if (this.playerNickname.equals(ch.getClient().getNickname())) {
-            ch.getClient().setMyTurn(true);
-            if (ch.getClient().getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
-                ch.getClient().setPhase(Phase.Planning);
-                ch.getClient().playAssistant();
-            } else if (ch.getClient().getCurrPhase().equals(Phase.Planning) && this.gamePhase.equals(Phase.Action1)) {
-                ch.getClient().setPhase(Phase.Action1);
-                ch.getClient().moveStudentsFromEntrance();
-            } else if (ch.getClient().getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
-                ch.getClient().setPhase(Phase.Planning);
-                ch.getClient().playAssistant();
+        CLI cliClient = (CLI) ch.getClient();
+        if (this.playerNickname.equals(cliClient.getNickname())) {
+            cliClient.setMyTurn(true);
+            if (cliClient.getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
+                cliClient.setPhase(Phase.Planning);
+                cliClient.playAssistant();
+            } else if (cliClient.getCurrPhase().equals(Phase.Planning) && this.gamePhase.equals(Phase.Action1)) {
+                cliClient.setPhase(Phase.Action1);
+                cliClient.moveStudentsFromEntrance();
+            } else if (cliClient.getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
+                cliClient.setPhase(Phase.Planning);
+                cliClient.playAssistant();
             }
         } else {
-            ch.getClient().setMyTurn(false);
-            ch.getClient().setCurrCharacter(-1);
+            cliClient.setMyTurn(false);
+            cliClient.setCurrCharacter(-1);
         }
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
-        ch.getClient().setCurrCharacter(-1);
-        if (this.playerNickname.equals(ch.getClient().getNickname())) {
-            ch.getClient().setChangeTurnNums(0);
-            ch.getClient().setMyTurn(true);
-            if (ch.getClient().getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
-                ch.getClient().setCurrPhase(Phase_GUI.Planning);
-                ch.getClient().playAssistant("");
-            } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
-                ch.getClient().setCurrPhase(Phase_GUI.Action1);
-                ch.getClient().viewSchoolBoard("Move a student.", false);
-            } else if (ch.getClient().getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
-                ch.getClient().setCurrPhase(Phase_GUI.Planning);
-                ch.getClient().playAssistant("");
+    public void processGUI(ServerHandler ch) {
+        GUI guiClient = (GUI) ch.getClient();
+        guiClient.setCurrCharacter(-1);
+        if (this.playerNickname.equals(guiClient.getNickname())) {
+            guiClient.setChangeTurnNums(0);
+            guiClient.setMyTurn(true);
+            if (guiClient.getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
+                guiClient.setCurrPhase(Phase_GUI.Planning);
+                guiClient.playAssistant("");
+            } else if (guiClient.getCurrPhase().equals(Phase_GUI.Planning) && this.gamePhase.equals(Phase.Action1)) {
+                guiClient.setCurrPhase(Phase_GUI.Action1);
+                guiClient.viewSchoolBoard("Move a student.", false);
+            } else if (guiClient.getCurrPhase().equals(Phase_GUI.Action3) && this.gamePhase.equals(Phase.Planning)) {
+                guiClient.setCurrPhase(Phase_GUI.Planning);
+                guiClient.playAssistant("");
             }
         } else {
-            ch.getClient().setMyTurn(false);
-            ch.getClient().checkBoard(playerNickname + "'s round.");
+            guiClient.setMyTurn(false);
+            guiClient.checkBoard(playerNickname + "'s round.");
         }
     }
 

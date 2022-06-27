@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Network.Messages.toClient;
 
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;

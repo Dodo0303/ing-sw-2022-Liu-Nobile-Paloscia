@@ -1,45 +1,49 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class DenyMovementMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) {
-        if (client.getClient().getCurrPhase().equals(Phase.Action2)) {
+        CLI cliClient = (CLI) client.getClient();
+        if (cliClient.getCurrPhase().equals(Phase.Action2)) {
             System.out.print("Your movement has been denied, please try again.\n");
-            client.getClient().moveMotherNature();
-        } else if (client.getClient().getCurrPhase().equals(Phase.Action3)) {
+            cliClient.moveMotherNature();
+        } else if (cliClient.getCurrPhase().equals(Phase.Action3)) {
             System.out.print("Your movement has been denied, please try again.\n");
-            client.getClient().chooseCloud();
-        } else if (client.getClient().getCurrPhase().equals(Phase.Planning)) {
+            cliClient.chooseCloud();
+        } else if (cliClient.getCurrPhase().equals(Phase.Planning)) {
             System.out.print("Your movement has been denied, please try again.\n");
-            client.getClient().playAssistant();
-        } else if (client.getClient().getCurrPhase().equals(Phase.Action1)) {
+            cliClient.playAssistant();
+        } else if (cliClient.getCurrPhase().equals(Phase.Action1)) {
             System.out.print("Your movement has been denied, please try again.\n");
-            client.getClient().moveStudentsFromEntrance();
+            cliClient.moveStudentsFromEntrance();
         } else {
-            client.getClient().setPhase(client.getClient().getPrevPhase());
-            client.getClient().setCurrCharacter(-1);
+            cliClient.setPhase(cliClient.getPrevPhase());
+            cliClient.setCurrCharacter(-1);
             System.out.println("Failed to use character cards.");
         }
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
-        if (!client.getClient().getCurrPhase().equals(Phase_GUI.Planning) &&
-                !client.getClient().getCurrPhase().equals(Phase_GUI.Action1) &&
-                !client.getClient().getCurrPhase().equals(Phase_GUI.Action2) &&
-                !client.getClient().getCurrPhase().equals(Phase_GUI.Action3)) {
-            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
-            client.getClient().setCurrCharacter(-1);
-            client.getClient().viewSchoolBoard("Character not available", false);
+    public void processGUI(ServerHandler client) {
+        GUI guiClient = (GUI) client.getClient();
+        if (!guiClient.getCurrPhase().equals(Phase_GUI.Planning) &&
+                !guiClient.getCurrPhase().equals(Phase_GUI.Action1) &&
+                !guiClient.getCurrPhase().equals(Phase_GUI.Action2) &&
+                !guiClient.getCurrPhase().equals(Phase_GUI.Action3)) {
+            guiClient.setCurrPhase(guiClient.getPrevPhase());
+            guiClient.setCurrCharacter(-1);
+            guiClient.viewSchoolBoard("Character not available", false);
         } else {
-            if (client.getClient().getCurrPhase().equals(Phase_GUI.Planning)) {
-                client.getClient().playAssistant("Assistant not available.");
+            if (guiClient.getCurrPhase().equals(Phase_GUI.Planning)) {
+                guiClient.playAssistant("Assistant not available.");
             } else {
-                client.getClient().viewSchoolBoard("Movement denied", false);
+                guiClient.viewSchoolBoard("Movement denied", false);
             }
         }
     }

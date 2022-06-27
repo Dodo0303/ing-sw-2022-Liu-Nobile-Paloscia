@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -25,7 +27,8 @@ public class EndMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
-        client.getClient().setPhase(Phase.Ending);
+        CLI cliClient = (CLI) client.getClient();
+        cliClient.setPhase(Phase.Ending);
         if (winnerID == null) {
             System.out.print("Game ended with a draw.\nGood bye.\n");
         } else {
@@ -35,16 +38,17 @@ public class EndMessage extends MessageToClient {
         System.exit(0);
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
-        client.getClient().setCurrPhase(Phase_GUI.Ending);
+    public void processGUI(ServerHandler client) {
+        GUI guiClient = (GUI) client.getClient();
+        guiClient.setCurrPhase(Phase_GUI.Ending);
         if (winnerID == null) {
-            client.getClient().gameOver("Game ended with a draw.\nGood bye.\n");
+            guiClient.gameOver("Game ended with a draw.\nGood bye.\n");
         } else {
-            if (client.getClient().getGame().getPlayers().size() == 4) {
-                String teamColor = client.getClient().getGame().getPlayerByNickname(winnerID).getColor().toString();
-                client.getClient().gameOver("Team " + teamColor + " won the game, for" + reason);
+            if (guiClient.getGame().getPlayers().size() == 4) {
+                String teamColor = guiClient.getGame().getPlayerByNickname(winnerID).getColor().toString();
+                guiClient.gameOver("Team " + teamColor + " won the game, for" + reason);
             } else {
-                client.getClient().gameOver("Player " + winnerID + " won the game, for" + reason);
+                guiClient.gameOver("Player " + winnerID + " won the game, for" + reason);
             }
 
         }

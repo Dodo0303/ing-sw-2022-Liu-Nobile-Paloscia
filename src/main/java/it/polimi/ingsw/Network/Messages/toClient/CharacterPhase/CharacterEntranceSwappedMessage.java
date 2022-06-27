@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
-import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -38,7 +38,8 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-        GameModel game = client.getClient().getGame();
+        CLI cliClient = (CLI) client.getClient();
+        GameModel game = cliClient.getGame();
         Player player = game.getPlayerByNickname(playerID);
         game.updateCharacterById(characterUpdated);
         player.clearEntrance();
@@ -46,13 +47,14 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
                 entranceUpdated) {
             player.addStudentToEntrance(color);
         }
-        if (client.getClient().getNickname().equals(playerID)) {
-            client.getClient().setPhase(client.getClient().getPrevPhase());
+        if (cliClient.getNickname().equals(playerID)) {
+            cliClient.setPhase(cliClient.getPrevPhase());
         }
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
-        GameModel game = client.getClient().getGame();
+    public void processGUI(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
+        GUI guiClient = (GUI) client.getClient();
+        GameModel game = guiClient.getGame();
         Player player = game.getPlayerByNickname(playerID);
         game.updateCharacterById(characterUpdated);
         player.clearEntrance();
@@ -60,9 +62,9 @@ public class CharacterEntranceSwappedMessage extends MessageToClient {
                 entranceUpdated) {
             player.addStudentToEntrance(color);
         }
-        if (client.getClient().getNickname().equals(playerID)) {
-            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+        if (guiClient.getNickname().equals(playerID)) {
+            guiClient.setCurrPhase(guiClient.getPrevPhase());
         }
-        client.getClient().viewSchoolBoard("", false);
+        guiClient.viewSchoolBoard("", false);
     }
 }

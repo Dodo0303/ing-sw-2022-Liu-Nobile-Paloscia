@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
-import it.polimi.ingsw.Client.CLI.ServerHandler;
-import it.polimi.ingsw.Exceptions.EmptyCloudException;
-import it.polimi.ingsw.Exceptions.FullTableException;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
@@ -19,24 +19,26 @@ public class CharacterUsedMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
-        if (client.getClient().getNickname().equals(playerID)) {
-            client.getClient().getGame().useEffectOfCharacter(characterID);
-            client.getClient().setPhase(client.getClient().getPrevPhase());
+        CLI cliClient = (CLI) client.getClient();
+        if (cliClient.getNickname().equals(playerID)) {
+            cliClient.getGame().useEffectOfCharacter(characterID);
+            cliClient.setPhase(cliClient.getPrevPhase());
         } else {
             System.out.println(playerID + " used character" + characterID);
         }
-        client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coins);
-        client.getClient().setCurrCharacter(characterID);
+        cliClient.getGame().getPlayerByNickname(playerID).setCoins(coins);
+        cliClient.setCurrCharacter(characterID);
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
-        if (client.getClient().getNickname().equals(playerID)) {
-            client.getClient().getGame().useEffectOfCharacter(characterID);
-            client.getClient().setCurrPhase(client.getClient().getPrevPhase());
+    public void processGUI(ServerHandler client) throws WrongEffectException, NotEnoughNoEntriesException {
+        GUI guiClient = (GUI) client.getClient();
+        if (guiClient.getNickname().equals(playerID)) {
+            guiClient.getGame().useEffectOfCharacter(characterID);
+            guiClient.setCurrPhase(guiClient.getPrevPhase());
         }
-        client.getClient().getGame().getPlayerByNickname(playerID).setCoins(coins);
-        client.getClient().setCurrCharacter(characterID);
-        client.getClient().viewSchoolBoard("", false);
+        guiClient.getGame().getPlayerByNickname(playerID).setCoins(coins);
+        guiClient.setCurrCharacter(characterID);
+        guiClient.viewSchoolBoard("", false);
     }
 
     public String getPlayerID() {

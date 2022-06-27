@@ -524,29 +524,53 @@ public class MatchController implements Runnable {
     private synchronized void controlIsland(int x) {
         Island island = this.game.getIslands().get(x);
         int influence;
+        int whiteInfluence = 0;
+        int blackInfluence = 0;
+        int greyInfluence = 0;
+        Color currentOwner = island.getTowerColor();
         int maxInfluence = 0;
-        Player maxInfluencer = null;
+        Color maxInfluencer = null;
         if (island.getNoEntries() == 0) {
             for (int i = 0; i < this.game.getPlayers().size(); i++) {
-                if (!island.getTowerColor().equals(Color.VOID) && this.game.getPlayers().get(i).getColor().equals(island.getTowerColor())) {
-                    for (int j = 0; j < island.getNumTower(); j++) {
-                        this.game.getPlayers().get(i).addTower();
-                    }
+                if (!island.getTowerColor().equals(Color.VOID)) {
+                    this.game.addTowersToColor(island.getNumTower(), island.getTowerColor());
                 }
                 influence = this.influenceCalculator.calculateInfluence(this.game.getPlayers().get(i), this.game.getIslands().get(x));
+                if (this.game.getPlayers().get(i).getColor().equals(Color.WHITE)) {
+                    whiteInfluence += influence;
+                    if ((whiteInfluence > maxInfluence) || (whiteInfluence == maxInfluence && currentOwner.equals(Color.WHITE))) {
+                        maxInfluence = whiteInfluence;
+                        maxInfluencer = Color.WHITE;
+                    }
+                } else if (this.game.getPlayers().get(i).getColor().equals(Color.GRAY)){
+                    greyInfluence += influence;
+                    if ((greyInfluence > maxInfluence) || (greyInfluence == maxInfluence && currentOwner.equals(Color.GRAY))) {
+                        maxInfluence = greyInfluence;
+                        maxInfluencer = Color.GRAY;
+                    }
+                } else {
+                    blackInfluence += influence;
+                    if ((blackInfluence > maxInfluence) || (blackInfluence == maxInfluence && currentOwner.equals(Color.BLACK))) {
+                        maxInfluence = blackInfluence;
+                        maxInfluencer = Color.BLACK;
+                    }
+                }
+                /*
                 if (influence > maxInfluence) {
                     maxInfluencer = this.game.getPlayers().get(i);
                     maxInfluence = influence;
                 }
+                 */
             }
+
             if (maxInfluencer != null) {
-                island.setTowerColor(maxInfluencer.getColor());
-                for (int i = 0; i < island.getNumTower(); i++) {
-                    maxInfluencer.removeTower();
-                }
-                System.out.println("Island " + x + " conquered by " + maxInfluencer.getColor());
+                island.setTowerColor(maxInfluencer);
+                this.game.removeTowersToColor(island.getNumTower(), maxInfluencer);
+                System.out.println("Island " + x + " conquered by " + maxInfluencer);
                 System.out.println("New color: " + this.game.getIslands().get(x).getTowerColor());
             }
+
+
         } else {
             System.out.println("The island " + x + " had a no-entry on it");
             island.removeNoEntry();

@@ -2,6 +2,8 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.GUI.Controllers.*;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
+import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.ViewController;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
@@ -31,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class GUI {
+public class GUI implements ViewController {
     private GameModel game;
     private final Stage stage;
     private ServerHandler serverHandler;

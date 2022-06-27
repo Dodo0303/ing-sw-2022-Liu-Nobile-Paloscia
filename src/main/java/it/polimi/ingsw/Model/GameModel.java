@@ -546,4 +546,33 @@ public class GameModel implements Serializable {
         this.characters = characters;
     }
 
+    /**
+     * Add towers to a player/team with a certain color
+     * @param numOfTowers number of towers to be added
+     * @param color color of the player/team
+     */
+    public void addTowersToColor(int numOfTowers, Color color) {
+        for (Player player :
+                _players) {
+            if (player.getColor().equals(color)) {
+                player.addTower(numOfTowers);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Remove towers to a player/team with a certain color
+     * @param numOfTowers number of towers to be removed
+     * @param color color of the player/team
+     */
+    public void removeTowersToColor(int numOfTowers, Color color) {
+        for (Player player :
+                _players) {
+            if (player.getColor().equals(color)) {
+                player.removeTower(numOfTowers);
+                return;
+            }
+        }
+    }
 }

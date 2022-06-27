@@ -1,9 +1,10 @@
 package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.CLI.Phase;
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.GUI.Phase_GUI;
-import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 import java.util.List;
@@ -34,10 +35,11 @@ public class SendMatchesMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
+        CLI cliClient = (CLI) client.getClient();
         if (matchesID.isEmpty()) {
             System.out.println("There is no available match.");
-            client.getClient().setPhase(Phase.ChoosingGameMode);
-            client.getClient().chooseGameMode();
+            cliClient.setPhase(Phase.ChoosingGameMode);
+            cliClient.chooseGameMode();
         } else {
             System.out.println("Available matches:");
             for (int i = 0; i < matchesID.size(); i++) {
@@ -46,18 +48,19 @@ public class SendMatchesMessage extends MessageToClient {
                     System.out.println("    Joined players: " + players.get(i)[j]);
                 }
             }
-            client.getClient().setPhase(Phase.JoiningGame1);
-            client.getClient().joinGame(matchesID);
+            cliClient.setPhase(Phase.JoiningGame1);
+            cliClient.joinGame(matchesID);
         }
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler client) {
+    public void processGUI(ServerHandler client) {
+        GUI guiClient = (GUI) client.getClient();
         if (matchesID.isEmpty()) {
-            client.getClient().setCurrPhase(Phase_GUI.ChoosingGameMode);
-            client.getClient().chooseGameMode("There is no available match. Please try again.");
+            guiClient.setCurrPhase(Phase_GUI.ChoosingGameMode);
+            guiClient.chooseGameMode("There is no available match. Please try again.");
         } else {
-            client.getClient().joinGame("", matchesID);
-            client.getClient().setCurrPhase(Phase_GUI.JoiningGame1);
+            guiClient.joinGame("", matchesID);
+            guiClient.setCurrPhase(Phase_GUI.JoiningGame1);
         }
     }
 }

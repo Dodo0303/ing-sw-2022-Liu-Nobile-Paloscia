@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.CLI;
+package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
@@ -25,9 +25,9 @@ public class ServerHandler implements Runnable {
     private SendThread sendThread;
     private ReceiveThread receiveThread;
     private ArrayList<ClientHandler> clients; //clients who are currently connected to the server.
-    private CLI client;
+    private ViewController client;
 
-    public ServerHandler(String host, int port, CLI client) throws IOException {
+    public ServerHandler(String host, int port, ViewController client) throws IOException {
         this.socket = new Socket(host, port);
         this.input = new ObjectInputStream(socket.getInputStream());
         this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -96,7 +96,7 @@ public class ServerHandler implements Runnable {
                         shutdown();
                     } else if (message instanceof DropConnectionMessage) {
                         System.out.println("Player " + ((DropConnectionMessage) message).getNickname() + " lost connection. Game over.");
-                        client.shutDown();
+                        client.gameOver("\nShutting down");
                         shutdown();
                     }
                     client.messageReceived(message);
@@ -128,12 +128,7 @@ public class ServerHandler implements Runnable {
         return clients;
     }
 
-    public CLI getClient() {
+    public ViewController getClient() {
         return client;
-    }
-
-
-    public void setNickName(String str) {
-        getClient().setNickName(str);
     }
 }

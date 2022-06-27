@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.ViewController;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
@@ -22,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-public class CLI {
+public class CLI implements ViewController {
     GameModel game;
     boolean closed;
     private String nickname;
@@ -424,7 +426,7 @@ public class CLI {
         send(new ChooseCloudMessage(num));
     }
 
-    public void shutDown() {
+    public void gameOver(String msg) {
         System.exit(0);
     }
 

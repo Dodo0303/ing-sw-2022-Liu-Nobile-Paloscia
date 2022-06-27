@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
-import it.polimi.ingsw.Client.CLI.ServerHandler;
+import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.GUI.GUI;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
@@ -17,10 +19,12 @@ public class GameModelUpdateMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler ch) {
-        ch.getClient().setGame(gameModel);
+        CLI cliClient = (CLI) ch.getClient();
+        cliClient.setGame(gameModel);
     }
 
-    public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
-        ch.getClient().setGame(gameModel);
+    public void processGUI(ServerHandler ch) {
+        GUI guiClient = (GUI) ch.getClient();
+        guiClient.setGame(gameModel);
     }
 }
