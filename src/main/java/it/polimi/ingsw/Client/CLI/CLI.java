@@ -316,7 +316,7 @@ public class CLI implements ViewController {
             int assis = -1;
             while(assis < 0 || assis > 9) {
                 for (int i = 1; i <= 10; i++) {
-                    Assistant assistant = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(i - 1);
+                    Assistant assistant = game.getPlayerByNickname(nickname).getAssistants().get(i - 1);
                     if (assistant != null) {
                         System.out.println(i + ". MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
                     }
@@ -326,12 +326,12 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
-                if (assis != -1 && game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(assis) == null) {
+                if (assis != -1 && game.getPlayerByNickname(nickname).getAssistants().get(assis) == null) {
                     System.out.print("You cannot choose this assistant card.\n");
                     assis = -1;
                 }
             }
-            send(new SendAssistantMessage(game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getAssistants().get(assis)));
+            send(new SendAssistantMessage(game.getPlayerByNickname(nickname).getAssistants().get(assis)));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.print("Something went wrong, please try again.\n");

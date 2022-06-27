@@ -63,13 +63,15 @@ public class ConfirmMovementFromEntranceMessage extends MessageToClient {
                 cliClient.getView().printIsland(destinationID);
             }
         }
-        cliClient.setAp1Moves(cliClient.getAp1Moves() + 1);
-        if (cliClient.getAp1Moves() == ((cliClient.getGame().getPlayers().size() == 3) ? 4 : 3)) {
-            cliClient.setPhase(Phase.Action2);
-            cliClient.setAp1Moves(0);
-            cliClient.moveMotherNature();
-        } else {
-            cliClient.moveStudentsFromEntrance();
+        if (playerID.equals(cliClient.getNickname())) {
+            cliClient.setAp1Moves(cliClient.getAp1Moves() + 1);
+            if (cliClient.getAp1Moves() == ((cliClient.getGame().getPlayers().size() == 3) ? 4 : 3)) {
+                cliClient.setPhase(Phase.Action2);
+                cliClient.setAp1Moves(0);
+                cliClient.moveMotherNature();
+            } else {
+                cliClient.moveStudentsFromEntrance();
+            }
         }
     }
 
