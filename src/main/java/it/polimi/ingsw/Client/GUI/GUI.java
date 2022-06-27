@@ -75,10 +75,7 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             LoginController loginController = fxmlLoader.getController();
             loginController.setGUI(this);
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            System.out.println(scalingRatio);
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("CSS/login.css")).toExternalForm());
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -114,9 +111,7 @@ public class GUI implements ViewController {
             if (reset) {
                 nicknameController.setMessage("Nickname has been taken.");
             }
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -137,9 +132,7 @@ public class GUI implements ViewController {
             if (msg != null) {
                 chooseGameModeController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -157,9 +150,7 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             NewgameController newgameController = fxmlLoader.getController();
             newgameController.setGUI(this);
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -181,9 +172,7 @@ public class GUI implements ViewController {
             if (msg != null) {
                 joinGameController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -229,9 +218,7 @@ public class GUI implements ViewController {
             if (numPlayer == 4) {
                 chooseWizardController.setFourPlayerGame(true);
             }
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -250,12 +237,7 @@ public class GUI implements ViewController {
             GameCreatedController gameCreatedController = fxmlLoader.getController();
             gameCreatedController.setGUI(this);
             gameCreatedController.setMessage(msg);
-            Scene scene = new Scene(root, 600/scalingRatio, 402/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -286,12 +268,7 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
-            root.getTransforms().add(scale);
+            Scene scene = new Scene(root, 600, 402);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     stage.setScene(scene);
@@ -317,11 +294,8 @@ public class GUI implements ViewController {
                 gameBoardController.setMessage(msg);
             }
             gameBoardController.setStudentIndex(studentIndex);
-            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
@@ -344,11 +318,8 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 gameOverController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -404,9 +375,9 @@ public class GUI implements ViewController {
                 gameBoardController.setMessage(msg);
             }
             Scene scene;
-            scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-                Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
-                root.getTransforms().add(scale);
+            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
+            root.getTransforms().add(scale);
 
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
@@ -481,11 +452,9 @@ public class GUI implements ViewController {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
             }
-            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scalingRatio, 1/scalingRatio, 0, 0);
+            Scene scene;
+            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
 
             getScaleFactor();//todo
@@ -517,11 +486,9 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseCharacterController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920/scalingRatio, 1080/scalingRatio);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene;
+            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
 
             Platform.runLater(new Runnable() {
@@ -541,11 +508,9 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             PickColorController pickColorController = fxmlLoader.getController();
             pickColorController.setGUI(this);
-            Scene scene = new Scene(root, 1920, 1080);
-            Screen screen = Screen.getPrimary();
-            double scaleX = screen.getOutputScaleX();
-            double scaleY = screen.getOutputScaleY();
-            Scale scale = new Scale(1/scaleX, 1/scaleY, 0, 0);
+            Scene scene;
+            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -833,6 +798,7 @@ public class GUI implements ViewController {
 
     private void getScaleFactor() {
         Screen screen = Screen.getPrimary();
+
         double dpi = screen.getDpi();
         double scaleX = screen.getOutputScaleX();
         double scaleY = screen.getOutputScaleY();
@@ -843,7 +809,11 @@ public class GUI implements ViewController {
         System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
         System.out.println(" - boundX: " + boundX + " - boundY: " + boundY);
         System.out.println(" - boundX: " + MAXboundX + " - boundY: " + MINboundY);
-        this.scalingRatio = screen.getOutputScaleX();
+        if (boundX >= 1920 && boundY >= 1080) {
+            scalingRatio = 1;
+        } else {
+            this.scalingRatio = Math.min(boundX / 1920, boundY / 1080);
+        }
     }
 
 
