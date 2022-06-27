@@ -23,7 +23,15 @@ public class UsedAssistantMessage extends MessageToClient {
     @Override
     public void process(ServerHandler ch) {
         ch.getClient().getGame().setAssistantOfPlayer(playerID, ch.getClient().getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
-        System.out.println(playerID + " has chosen " + assistantValue + "nd assistant.");
+        if(assistantValue == 1) {
+            System.out.println(playerID + " has chosen " + assistantValue + "st assistant.");
+        } else if (assistantValue == 2){
+            System.out.println(playerID + " has chosen " + assistantValue + "nd assistant.");
+        } else if (assistantValue == 3){
+            System.out.println(playerID + " has chosen " + assistantValue + "rd assistant.");
+        } else {
+            System.out.println(playerID + " has chosen " + assistantValue + "th assistant.");
+        }
     }
 
     public void processGUI(it.polimi.ingsw.Client.GUI.ServerHandler ch) {
