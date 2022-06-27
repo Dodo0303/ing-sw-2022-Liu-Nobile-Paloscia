@@ -63,9 +63,9 @@
                   </Button>
                </children>
             </StackPane>
-                <Label fx:id="messageLabel" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="117.0" prefWidth="329.0">
+                <Label fx:id="messageLabel" alignment="CENTER" layoutX="4.0" layoutY="58.0" prefHeight="117.0" prefWidth="339.0">
                     <font>
-                        <Font name="Papyrus" size="17.0" />
+                        <Font size="20.0" />
                     </font>
                 </Label>
          </children>
