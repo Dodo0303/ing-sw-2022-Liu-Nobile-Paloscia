@@ -8,6 +8,7 @@ import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.SendAvailableWizar
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
+import it.polimi.ingsw.Network.Messages.toServer.PingMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -128,6 +129,8 @@ public class ClientHandler implements Runnable {
                         objectOutputStream.flush();
                         server.clientDisconnected(client);
                         close();
+                    } else if (msg instanceof PingMessage) {
+                        System.out.println("Received ping");
                     } else {
                         incomingMessages.put(msg);
                         System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
