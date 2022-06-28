@@ -66,7 +66,9 @@ public class ChangeTurnMessage extends MessageToClient {
             }
         } else {
             guiClient.setMyTurn(false);
-            guiClient.checkBoard(playerNickname + "'s round.");
+            if (!guiClient.getCurrPhase().equals(Phase_GUI.Ending)) {
+                guiClient.checkBoard(playerNickname + "'s round.");
+            }
         }
     }
 
