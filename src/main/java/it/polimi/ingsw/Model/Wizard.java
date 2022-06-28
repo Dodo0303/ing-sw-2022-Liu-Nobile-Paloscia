@@ -2,6 +2,9 @@ package it.polimi.ingsw.Model;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration for wizards
+ */
 public enum Wizard implements Serializable {
     /**
      */

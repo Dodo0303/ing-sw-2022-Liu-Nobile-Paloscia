@@ -15,7 +15,7 @@ public class GameModel implements Serializable {
     /** All islands */
     private HashMap<Integer, Island> _islands;
 
-    /** The index of the island with mothernature */
+    /** The index of the island with Mother Nature */
     private int _motherNature;
 
 
@@ -25,7 +25,7 @@ public class GameModel implements Serializable {
     /** Students bag */
     private Bag _bag;
 
-    /** Clouds on board */
+    /** Clouds on the board */
     private ArrayList<Cloud> _clouds;
 
     /** Coins not obtained by any player. Initially set to 20 */
@@ -34,6 +34,9 @@ public class GameModel implements Serializable {
     /** Professors yet to be assigned to a player */
     private ArrayList<StudentColor> _professors;
 
+    /**
+     * Characters playable during this game
+     */
     private List<CharacterCard> characters;
 
 

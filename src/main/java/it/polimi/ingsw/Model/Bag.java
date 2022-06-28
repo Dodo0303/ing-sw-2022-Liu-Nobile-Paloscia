@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * Class for the bag.
+ */
 public class Bag implements Serializable {
     /**
      * The hashmap is used to memorize number of students of each color in bag.
@@ -22,6 +25,7 @@ public class Bag implements Serializable {
     }
 
     /**
+     * Extract a student from the bag
      * @throws EmptyBagException when the bag is empty and no student can be extracted
      * @return color of the student extracted
      */
@@ -39,6 +43,10 @@ public class Bag implements Serializable {
         }
     }
 
+    /**
+     * Checks whether the bag is empty or not
+     * @return true if the bag is empty, false if not.
+     */
     public Boolean isEmpty() {
         for (int numberOfOneColor :
                 students.values()) {
@@ -50,7 +58,7 @@ public class Bag implements Serializable {
 
 
     /**
-     *
+     * Get the number of remaining students in the bag
      * @return how many students are still in the bag
      */
     public int getRemainingNum() {
