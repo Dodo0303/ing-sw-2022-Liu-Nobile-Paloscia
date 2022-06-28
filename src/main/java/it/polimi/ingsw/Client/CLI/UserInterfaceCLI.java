@@ -39,7 +39,6 @@ public class UserInterfaceCLI{
         int num = -1;
         while ((cli.isExpert() && num!= 6) || (!cli.isExpert() && num != 5)) {
             System.out.println("\n\nMenu:\n ");
-            System.out.println("You have " + coins + " coins\n");
             System.out.println("1. Islands");
             System.out.println("2. Clouds");
             System.out.println("3. My school board");
@@ -176,9 +175,9 @@ public class UserInterfaceCLI{
             System.out.println(color + ": " + player.getDiningTables().get(color).getNumOfStudents());
         }
 
-        System.out.println("Professors: ");
+        System.out.print("Professors: ");
         if (player.getProfessors().size() == 0) {
-            System.out.print("none");
+            System.out.print("none\n");
         }
         for (int i = 0; i < player.getProfessors().size(); i++) {
             System.out.print(player.getProfessors().get(i) + " ");
@@ -186,7 +185,7 @@ public class UserInterfaceCLI{
         if (cli.getGame().getPlayers().size() == 4) {
             System.out.println("Towers of the team: " + player.getTowerNum()+ player.getColor().toString());
         } else {
-            System.out.println("Towers: " + player.getTowerNum()+ player.getColor().toString());
+            System.out.println("Towers: " + player.getTowerNum()+ " " + player.getColor().toString());
         }
         if (cli.isExpert()) {
             System.out.println("Coins: " + player.getCoins());

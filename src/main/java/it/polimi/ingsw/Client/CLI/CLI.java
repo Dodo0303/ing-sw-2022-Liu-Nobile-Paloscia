@@ -23,6 +23,8 @@ import it.polimi.ingsw.Utilities;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CLI implements ViewController {
     GameModel game;
@@ -30,7 +32,6 @@ public class CLI implements ViewController {
     private String nickname;
     private String host;
     private int port;
-    private Scanner input = new Scanner(System.in);
     private ServerHandler serverHandler;
     private Phase currPhase, prevPhase;
     private List<Wizard> wizards;
@@ -38,9 +39,7 @@ public class CLI implements ViewController {
     private boolean expert;
     private boolean myTurn;
     private UserInterfaceCLI view;
-    private int numPlayers;
-    private String[] nicknames;
-    private int currCharacter;
+    private ExecutorService executorService;
 
     public void start() {
         ap1Moves = 0;
@@ -51,6 +50,7 @@ public class CLI implements ViewController {
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
         startUI();
+        executorService = Executors.newFixedThreadPool(3);
         view.printTitle();
         requireNickname();
     }
@@ -62,6 +62,7 @@ public class CLI implements ViewController {
         view = new UserInterfaceCLI();
         view.setCli(this);
     }
+
     /**
      * Send message to the server.
      */
@@ -76,69 +77,9 @@ public class CLI implements ViewController {
      * Process received messages.
      */
     public void messageReceived(Object message) {
-        try {
-            if (message instanceof NickResponseMessage) {
-                if (currPhase.equals(Phase.PickingNickname)) {
-                    ((NickResponseMessage) message).process(this.serverHandler);
-                }
-            } else if (message instanceof SendMatchesMessage) {
-                if (currPhase.equals(Phase.ChoosingGameMode) || currPhase.equals(Phase.JoiningGame1)) {
-                    ((SendMatchesMessage) message).process(this.serverHandler);
-                }
-            } else if (message instanceof ConfirmJoiningMessage) {
-                if (currPhase.equals(Phase.CreatingGame) ||
-                        currPhase.equals(Phase.JoiningGame1) ||
-                        currPhase.equals(Phase.JoiningGame2)) {
-                    ((ConfirmJoiningMessage) message).process(this.serverHandler);
-                }
-            } else if (message instanceof SendAvailableWizardsMessage) {
-                if (currPhase.equals(Phase.JoiningGame1) ||
-                        currPhase.equals(Phase.JoiningGame2)) {
-                    ((SendAvailableWizardsMessage) message).process(this.serverHandler);
-                }
-            } else if (message instanceof ChangeTurnMessage) {
-                ((ChangeTurnMessage) message).process(this.serverHandler);
-            } else if (message instanceof ConfirmMovementFromEntranceMessage) {
-                ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
-            } else if (message instanceof MoveMothernatureMessage) {
-                ((MoveMothernatureMessage) message).process(this.serverHandler);
-            } else if (message instanceof MoveProfessorMessage) {
-                ((MoveProfessorMessage) message).process(this.serverHandler);
-            } else if (message instanceof DenyMovementMessage) {
-                ((DenyMovementMessage) message).process(this.serverHandler);
-            } else if (message instanceof ConfirmMovementMessage) {
-                ((ConfirmMovementMessage) message).process(this.serverHandler);
-            } else if (message instanceof ConfirmCloudMessage) {
-                ((ConfirmCloudMessage) message).process(this.serverHandler);
-            } else if(message instanceof EndMessage) {
-                ((EndMessage) message).process(this.serverHandler);
-            } else if (message instanceof GameModelUpdateMessage) {
-                ((GameModelUpdateMessage) message).process(this.serverHandler);
-            } else if (message instanceof CloudsUpdateMessage) {
-                ((CloudsUpdateMessage) message).process(this.serverHandler);
-            } else if (message instanceof UsedAssistantMessage) {
-                ((UsedAssistantMessage) message).process(this.serverHandler);
-            } else if (message instanceof CharacterUsedMessage) {
-                ((CharacterUsedMessage) message).process(this.serverHandler);
-            } else if (message instanceof CharacterEntranceSwappedMessage){
-                ((CharacterEntranceSwappedMessage) message).process(this.serverHandler);
-            } else if (message instanceof EntranceTableSwappedMessage){
-                ((EntranceTableSwappedMessage) message).process(this.serverHandler);
-            } else if (message instanceof IslandChosenMessage){
-                ((IslandChosenMessage) message).process(this.serverHandler);
-            } else if (message instanceof NoEntryMovedMessage){
-                ((NoEntryMovedMessage) message).process(this.serverHandler);
-            } else if (message instanceof StudentColorChosenMessage){
-                ((StudentColorChosenMessage) message).process(this.serverHandler);
-            } else if (message instanceof StudentMovedFromCharacterMessage){
-                ((StudentMovedFromCharacterMessage) message).process(this.serverHandler);
-            } else if (message instanceof StudentMovedToTableMessage){
-                ((StudentMovedToTableMessage) message).process(this.serverHandler);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        executorService.submit(new MessageTask(message, serverHandler, currPhase));
     }
+
     /**
      * Require user to input a nickname, then send it to the server.
      */
@@ -284,8 +225,8 @@ public class CLI implements ViewController {
      */
     public void playAssistant() {
         try {
-            while (!currPhase.equals(Phase.Planning)) {
-                currPhase = getCurrPhase();
+            while (game == null) {
+                getGame();
             }
             int assis = -1;
             while(assis < 0 || assis > 9) {
@@ -316,9 +257,6 @@ public class CLI implements ViewController {
      * Require user to input information about moving a student, then send it to the server.
      */
     public void moveStudentsFromEntrance() {
-        while (!currPhase.equals(Phase.Action1)) {
-            currPhase = getCurrPhase();
-        }
         int num = -1, islandID = -1, i, index = -1;
         List<StudentColor>  entrance = game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getEntranceStudents();
         int numIslands = game.getIslands().size();
@@ -465,7 +403,7 @@ public class CLI implements ViewController {
             System.out.print("Students: ");
             try {
                 for(StudentColor color : game.getCharacterById(1).getStudents()) {
-                    System.out.print(i + ") " + color.toString() + " ");
+                    System.out.print(i++ + ") " + color.toString() + " ");
                 }
                 System.out.println("");
             } catch (WrongEffectException e) {
@@ -742,7 +680,6 @@ public class CLI implements ViewController {
     }
 
     public void setCurrCharacter(int characterID) {
-        this.currCharacter = characterID;
     }
 
     public int getAp1Moves() {
@@ -754,11 +691,9 @@ public class CLI implements ViewController {
     }
 
     public void setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers;
     }
 
     public void setNicknames(String[] nicknames) {
-        this.nicknames = nicknames;
     }
 
 }

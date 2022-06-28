@@ -24,7 +24,7 @@ public class Player implements Serializable {
     private final int _maxTowerNum;
 
     /** Number of coins owned by the player */
-    private int _coins;
+    volatile private int _coins;
 
     /** The nickname set by the player */
     private String _nickName;

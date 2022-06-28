@@ -32,7 +32,6 @@ public class NoEntryMovedMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         CLI cliClient = (CLI) client.getClient();
-        System.out.println("Processing message");
         cliClient.getGame().updateCharacterById(characterUpdated);
         if (toIsland)
             cliClient.getGame().addNoEntry(cliClient.getGame().getIslands().get(islandID));

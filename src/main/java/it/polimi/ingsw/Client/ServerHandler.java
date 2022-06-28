@@ -1,9 +1,15 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.CLI.CLI;
+import it.polimi.ingsw.Client.CLI.Phase;
 import it.polimi.ingsw.Controller.ClientHandler;
+import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
+import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.CloudsUpdateMessage;
+import it.polimi.ingsw.Network.Messages.toClient.PlanningPhase.UsedAssistantMessage;
 import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 import it.polimi.ingsw.Network.Messages.toServer.PingMessage;
@@ -82,7 +88,7 @@ public class ServerHandler implements Runnable {
                     Object message = outgoingMessages.take();
                     output.writeObject(message);
                     output.flush();
-                    System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
+                    //System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
                 }
             } catch (Exception e) {
                 System.out.print(e.getMessage());

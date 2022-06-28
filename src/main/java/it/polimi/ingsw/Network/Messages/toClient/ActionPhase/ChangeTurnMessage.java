@@ -43,6 +43,7 @@ public class ChangeTurnMessage extends MessageToClient {
         } else {
             cliClient.setMyTurn(false);
             cliClient.setCurrCharacter(-1);
+            System.out.println("It's " + playerNickname + "'s turn.");
         }
     }
 

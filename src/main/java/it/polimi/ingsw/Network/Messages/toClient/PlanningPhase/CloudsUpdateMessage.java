@@ -18,8 +18,12 @@ public class CloudsUpdateMessage extends MessageToClient {
 
     @Override
     public void process(ServerHandler client) {
-        CLI cliClient = (CLI) client.getClient();
-        cliClient.getGame().set_clouds((ArrayList<Cloud>) clouds);
+        try {
+            CLI cliClient = (CLI) client.getClient();
+            cliClient.getGame().set_clouds((ArrayList<Cloud>) clouds);
+        } catch (NullPointerException e) {
+            process(client);
+        }
     }
 
     public void processGUI(ServerHandler client) {

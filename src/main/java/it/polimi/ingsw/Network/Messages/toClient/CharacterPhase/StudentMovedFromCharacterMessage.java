@@ -17,7 +17,7 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
     private CharacterCard characterUpdated;
     private HashMap<Integer, Island> islands;
 
-    public StudentMovedFromCharacterMessage(CharacterCard characterUpdated, HashMap<Integer, Island> islands) {//todo update coin!
+    public StudentMovedFromCharacterMessage(CharacterCard characterUpdated, HashMap<Integer, Island> islands) {
         this.characterUpdated = characterUpdated;
         this.islands = islands;
     }
@@ -37,8 +37,8 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
         cliClient.getGame().set_islands(islands);
         if (cliClient.getCurrPhase().equals(Phase.Character1)) {
             cliClient.setPhase(cliClient.getPrevPhase());
-            cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).setCoins(cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).getCoins() - 1);
         }
+        cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).setCoins(cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).getCoins() - 1);
     }
 
     public void processGUI(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
@@ -47,8 +47,8 @@ public class StudentMovedFromCharacterMessage extends MessageToClient {
         guiClient.getGame().set_islands(islands);
         if (guiClient.getCurrPhase().equals(Phase_GUI.Character1)) {
             guiClient.setCurrPhase(guiClient.getPrevPhase());
-            guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 1);
         }
+        guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 1);
         guiClient.viewSchoolBoard("Character used", false);
     }
 }
