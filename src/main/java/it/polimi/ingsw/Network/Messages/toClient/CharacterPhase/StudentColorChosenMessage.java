@@ -39,6 +39,7 @@ public class StudentColorChosenMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         CLI cliClient = (CLI) client.getClient();
+        cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).setCoins(cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).getCoins() - 3);
         if (!isCharacter12) {
             System.out.println("Color " + colorChosen.toString() + " is not considered for the influence in this turn");
             if (cliClient.getCurrPhase().equals(Phase.Character9)) {
@@ -47,14 +48,15 @@ public class StudentColorChosenMessage extends MessageToClient {
         } else {
             if (cliClient.getCurrPhase().equals(Phase.Character12)) {
                 cliClient.setPhase(cliClient.getPrevPhase());
+                System.out.println("Character12 is in use");
             }
             cliClient.getGame().set_players(playersUpdated);
         }
-        cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).setCoins(cliClient.getGame().getPlayerByNickname(cliClient.getNickname()).getCoins() - 3);
     }
 
     public void processGUI(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         GUI guiClient = (GUI) client.getClient();
+        guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 3);
         if (!isCharacter12) {
             if (guiClient.getCurrPhase().equals(Phase_GUI.Character9)) {
                 guiClient.setCurrPhase(guiClient.getPrevPhase());
@@ -65,8 +67,7 @@ public class StudentColorChosenMessage extends MessageToClient {
                 guiClient.setCurrPhase(guiClient.getPrevPhase());
             }
             guiClient.getGame().set_players(playersUpdated);
-            guiClient.viewSchoolBoard("Character12 used!", false);
+            guiClient.viewSchoolBoard("Character12 is in use!", false);
         }
-        guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 3);
     }
 }

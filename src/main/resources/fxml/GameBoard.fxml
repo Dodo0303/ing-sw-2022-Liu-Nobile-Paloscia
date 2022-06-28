@@ -68,6 +68,12 @@
                         <Font name="Papyrus" size="20.0" />
                     </font>
                 </Label>
+            <Label alignment="CENTER" layoutX="6.0" layoutY="1046.0" prefHeight="26.0" prefWidth="341.0" text="Tips: Hover your curser on islands or the bag to see details" />
+            <Label fx:id="phaseLabel" alignment="CENTER" layoutX="18.0" layoutY="6.0" prefHeight="37.0" prefWidth="319.0">
+               <font>
+                  <Font name="Papyrus" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </right>

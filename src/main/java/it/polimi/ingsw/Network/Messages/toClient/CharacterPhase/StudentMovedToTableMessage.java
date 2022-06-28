@@ -51,8 +51,8 @@ public class StudentMovedToTableMessage extends MessageToClient {
         guiClient.getGame().updateCharacterById(characterUpdated);
         if (guiClient.getCurrPhase().equals(Phase_GUI.Character11)) {
             guiClient.setCurrPhase(guiClient.getPrevPhase());
-            guiClient.viewSchoolBoard("Student moved successfully", false);
             guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 2);
+            guiClient.viewSchoolBoard("Student moved successfully", false);
         }
     }
 }

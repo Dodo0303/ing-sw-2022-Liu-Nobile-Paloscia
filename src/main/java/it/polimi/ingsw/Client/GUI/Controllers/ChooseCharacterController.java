@@ -60,153 +60,69 @@ public class ChooseCharacterController implements Initializable {
         gui.setPrevPhase(gui.getCurrPhase());
         if (radio1.isSelected()) {
             res = 1;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character1);
             gui.setCurrCharacter(1);
             gui.viewSchoolBoard("Move a student from card.", false);
         } else if (radio2.isSelected()) {
             res = 2;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character2);
             gui.setCurrCharacter(2);
         } else if (radio3.isSelected()) {
             res = 3;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character3);
             gui.setCurrCharacter(3);
             gui.checkBoard("Choose an island.");
         } else if (radio4.isSelected()) {
             res = 4;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character4);
             gui.setCurrCharacter(4);
         } else if (radio5.isSelected()) {
             res = 5;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character5);
             gui.setCurrCharacter(5);
             gui.viewSchoolBoard("Move a noEntry tile.", false);
         } else if (radio6.isSelected()) {
             res = 6;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character6);
             gui.setCurrCharacter(6);
         } else if (radio7.isSelected()) {
             res = 7;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character7);
             gui.setCurrCharacter(7);
-            gui.viewSchoolBoard("Move a student from card. ", false);
+            gui.viewSchoolBoard("Click a student on the card. ", false);
         } else if (radio8.isSelected()) {
             res = 8;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character8);
             gui.setCurrCharacter(8);
         } else if (radio9.isSelected()) {
             res = 9;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character9);
             gui.setCurrCharacter(9);
             gui.pickColor();
         } else if (radio10.isSelected()) {
             res = 10;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character10);
             gui.setCurrCharacter(10);
             gui.viewSchoolBoard("swap students", false);
         } else if (radio11.isSelected()) {
             res = 11;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character11);
             gui.setCurrCharacter(11);
             gui.viewSchoolBoard("take a student to dining room.", false);
         } else if (radio12.isSelected()) {
             res = 12;
-            if (!check(res)) {
-                setMessage("You cannot use this card.");
-                return;
-            }
-            if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
-                gui.viewSchoolBoard("Character too expensive..", false);
-                return;
-            }
+            checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character12);
             gui.setCurrCharacter(12);
             gui.pickColor();
@@ -229,6 +145,18 @@ public class ChooseCharacterController implements Initializable {
         ConfirmButton.setDisable(true);
         CheckBoardButton.setDisable(true);
         gui.send(new UseCharacterMessage(res));
+    }
+
+    public boolean checkValidity(int res) {
+        if (!check(res)) {
+            setMessage("You cannot use this card.");
+            return false;
+        }
+        if (gui.getGame().getPlayerByNickname(gui.getNickname()).getCoins() < gui.getGame().getCharacterById(res).getPrice()) {
+            gui.viewSchoolBoard("Character too expensive..", false);
+            return false;
+        }
+        return true;
     }
 
     public void showDetails() {

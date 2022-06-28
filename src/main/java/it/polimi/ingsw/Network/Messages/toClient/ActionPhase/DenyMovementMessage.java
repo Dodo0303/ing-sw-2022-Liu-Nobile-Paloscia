@@ -26,7 +26,7 @@ public class DenyMovementMessage extends MessageToClient {
         } else {
             cliClient.setPhase(cliClient.getPrevPhase());
             cliClient.setCurrCharacter(-1);
-            System.out.println("Failed to use character cards.");
+            System.out.println("Failed to use character card.");
         }
     }
 
@@ -38,7 +38,7 @@ public class DenyMovementMessage extends MessageToClient {
                 !guiClient.getCurrPhase().equals(Phase_GUI.Action3)) {//character phases
             guiClient.setCurrPhase(guiClient.getPrevPhase());
             guiClient.setCurrCharacter(-1);
-            guiClient.viewSchoolBoard("Character not available", false);
+            guiClient.viewSchoolBoard("Failed to use character card", false);
         } else {
             if (guiClient.getCurrPhase().equals(Phase_GUI.Planning)) {
                 guiClient.playAssistant("Assistant not available");

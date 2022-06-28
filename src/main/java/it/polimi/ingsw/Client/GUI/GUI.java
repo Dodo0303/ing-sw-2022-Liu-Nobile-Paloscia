@@ -38,6 +38,8 @@ public class GUI implements ViewController {
     private final Stage stage;
     private ServerHandler serverHandler;
     private Phase_GUI currPhase;
+    private Phase_GUI prevPhase;
+    private Phase_GUI currentOtherPlayerPhase;
     private String nickname;
     private String host;
     private int port;
@@ -46,21 +48,21 @@ public class GUI implements ViewController {
     private List<Wizard> wizards;
     private int ap1Moves, changeTurnNums;
     private boolean myTurn;
-    private Phase_GUI prevPhase;
     private int currCharacter;
     private ArrayList<String> playerPlayedAssistant;
     private String[] nicknames;
     private HashMap<Integer, String> assistantPlayer;
-    private Screen screen;
-    private Rectangle2D bounds;
     private double scalingRatio;
     private boolean fullScreen;
     private boolean assistantPicked;
+    private String currPlayer;
 
     public GUI(Stage stage) {
         this.stage = stage;
     }
 
+    /** Start GUI with login.fxml
+    */
     public void start() {
         try {
             assistantPlayer = new HashMap<>();
@@ -90,7 +92,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** establish connection with the server
+     */
     public boolean settingUpConnection(String host, int port) {
         try {
             serverHandler = new ServerHandler(host, port, this);
@@ -101,7 +104,8 @@ public class GUI implements ViewController {
         }
 
     }
-
+    /** render view of nickname.fxml
+     */
     public void requireNickname(boolean reset){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/nickname.fxml"));
@@ -122,7 +126,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of chooseGameMode.fxml
+     */
     public void chooseGameMode(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/chooseGameMode.fxml"));
@@ -143,7 +148,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of newgame.fxml
+     */
     public void newgame() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/newgame.fxml"));
@@ -161,7 +167,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of JoinGame.fxml
+     */
     public void joinGame(String msg, List<Integer> matches) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/JoinGame.fxml"));
@@ -183,13 +190,16 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /* set this.numPlayer and this.expert, then render view of ChooseWizard.fxml
+     */
     public void completeCreateNewGame(int numPlayer, boolean expert) {
         this.numPlayer = numPlayer;
         this.expert = expert;
         chooseWizard(true);
     }
-
+    /** render view of ChooseWizard.fxml, disabling ratio buttons of unavailable wizards
+     *
+     */
     public void chooseWizard(boolean newGame) {
         try {
             getScaleFactor();
@@ -229,7 +239,9 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of GameCreated.fxml
+     *
+     */
     public void showGameCreated(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameCreated.fxml"));
@@ -248,7 +260,9 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of ChooseAssistant.fxml, disabling ratio buttons of unavailable assistant cards
+     *
+     */
     public void playAssistant(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant.fxml"));
@@ -268,21 +282,16 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public void moveStudentToIsland(String msg, int studentIndex) {//this differs from checkBoard because of int studentIndex
+    /** render view of GameBoard.fxml.
+     * This method is called after players dragged a student from the entrance of the school board to islands.
+     * This method differs from checkBoard because of the other parameter studentIndex, which indicates the index of the student in the entrance.
+     */
+    public void moveStudentToIsland(String msg, int studentIndex) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
             Parent root = fxmlLoader.load();
@@ -310,7 +319,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of GameOver.fxml.
+     */
     public void gameOver(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameOver.fxml"));
@@ -320,26 +330,22 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 gameOverController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    /** render view of GameBoard.fxml.
+     * One of the two main views of the game.
+     * It enables/disables components based on the current phase of the game.
+     */
     public void checkBoard(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
             Parent root = fxmlLoader.load();
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
+            gameBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase_GUI.Planning)?"Planning Phase": "Action Phase"));
             if (!currPhase.equals(Phase_GUI.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
                 gameBoardController.disableBack(true);
             }
@@ -380,7 +386,6 @@ public class GUI implements ViewController {
             scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
             Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
-
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -394,13 +399,18 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of SchoolBoard.fxml.
+     * One of the two main views of the game.
+     * It enables/disables components based on the current phase of the game.
+     * If other == true, then display the other players' school boards(only if number of players > 2).
+     */
     public void viewSchoolBoard(String msg, boolean other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
             Parent root = fxmlLoader.load();
             SchoolBoardController schoolBoardController = fxmlLoader.getController();
             schoolBoardController.setGUI(this);
+            schoolBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase_GUI.Planning)?"Planning Phase": "Action Phase"));
             if (!Objects.equals(msg, "")) {
                 schoolBoardController.setMessage(msg);
             }
@@ -426,53 +436,40 @@ public class GUI implements ViewController {
                     schoolBoardController.enableCharacter1();
                 } else if (currPhase.equals(Phase_GUI.Character2) || currCharacter == 2) {
                     schoolBoardController.enableCharacter2();
-                } else if (currPhase.equals(Phase_GUI.Character3)|| currCharacter == 3) {
+                } else if (currPhase.equals(Phase_GUI.Character3)) {
                     schoolBoardController.enableCharacter3();
                 } else if (currPhase.equals(Phase_GUI.Character4) || currCharacter == 4) {
                     schoolBoardController.enableCharacter4();
-                } else if (currPhase.equals(Phase_GUI.Character5) || currCharacter == 5) {
+                } else if (currPhase.equals(Phase_GUI.Character5)) {
                     schoolBoardController.enableCharacter5();
                 } else if (currPhase.equals(Phase_GUI.Character6) || currCharacter == 6) {
                     schoolBoardController.enableCharacter6();
-                } else if (currPhase.equals(Phase_GUI.Character7) || currCharacter == 7) {
+                } else if (currPhase.equals(Phase_GUI.Character7)) {
                     schoolBoardController.enableCharacter7();
                 } else if (currPhase.equals(Phase_GUI.Character8) || currCharacter == 8) {
                     schoolBoardController.enableCharacter8();
-                } else if (currPhase.equals(Phase_GUI.Character9) || currCharacter == 9) {
+                } else if (currPhase.equals(Phase_GUI.Character9)) {
                     schoolBoardController.enableCharacter9();
-                } else if (currPhase.equals(Phase_GUI.Character10) || currCharacter == 10) {
+                } else if (currPhase.equals(Phase_GUI.Character10)) {
                     schoolBoardController.enableCharacter10();
-                } else if (currPhase.equals(Phase_GUI.Character11) || currCharacter == 11) {
+                } else if (currPhase.equals(Phase_GUI.Character11)) {
                     schoolBoardController.enableCharacter11();
-                } else if (currPhase.equals(Phase_GUI.Character12) || currCharacter == 12) {
+                } else if (currPhase.equals(Phase_GUI.Character12)) {
                     schoolBoardController.enableCharacter12();
                 }
-
             } else {
                 schoolBoardController.setUpOtherBoards();
                 for (int i = 2; i < players.size(); i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
             }
-            Scene scene;
-            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-
-            getScaleFactor();//todo
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.setX(0);
-                    stage.setY(0);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    /** render view of UseCharacterCard.fxml.
+     */
     public void showCharacter(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
@@ -488,43 +485,26 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseCharacterController.setMessage(msg);
             }
-            Scene scene;
-            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    /** render view of PickColor.fxml.
+     */
     public void pickColor() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/PickColor.fxml"));
             Parent root = fxmlLoader.load();
             PickColorController pickColorController = fxmlLoader.getController();
             pickColorController.setGUI(this);
-            Scene scene;
-            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    /** Send message to the server.
+     */
     public void send(Object message) {
         if (message == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.\n");
@@ -532,150 +512,120 @@ public class GUI implements ViewController {
             serverHandler.send(message);
         }
     }
-
+    /** Start the thread of my serverHandler.
+     */
     public void startServerHandler() {
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
     }
-
+    /** Process received messages.
+     */
     public void messageReceived(Object message) {
-        if (message instanceof NickResponseMessage) {
-            if (currPhase.equals(Phase_GUI.PickingNickname)) {
-                ((NickResponseMessage) message).GUIprocess(this.serverHandler);
-            }
-        } else if (message instanceof SendMatchesMessage) {
-            if (currPhase.equals(Phase_GUI.ChoosingGameMode) || currPhase.equals(Phase_GUI.JoiningGame1)) {
-                ((SendMatchesMessage) message).processGUI(this.serverHandler);
-            }
-        } else if (message instanceof ConfirmJoiningMessage) {
-            if (currPhase.equals(Phase_GUI.CreatingGame) ||
-                    currPhase.equals(Phase_GUI.JoiningGame1) ||
-                    currPhase.equals(Phase_GUI.JoiningGame2)) {
-                ((ConfirmJoiningMessage) message).processGUI(this.serverHandler);
-            }
-        } else if (message instanceof SendAvailableWizardsMessage) {
-            if (currPhase.equals(Phase_GUI.JoiningGame1) ||
-                    currPhase.equals(Phase_GUI.JoiningGame2)) {
-                ((SendAvailableWizardsMessage) message).processGUI(this.serverHandler);
-            }
-        } else if (message instanceof GameModelUpdateMessage) {
-            ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
-        }  else if (message instanceof ChangeTurnMessage) {
-            ((ChangeTurnMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof CloudsUpdateMessage) {
-            ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof UsedAssistantMessage) {
-            ((UsedAssistantMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof ConfirmMovementFromEntranceMessage) {
-            ((ConfirmMovementFromEntranceMessage) message).processGUI(this.serverHandler);
-            if (currPhase.equals(Phase_GUI.Action1)) {
-                ap1Moves++;
-                if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
-                    currPhase = Phase_GUI.Action2;
-                    ap1Moves = 0;
-                    checkBoard("Move the mother nature");
-                } else {
-                    viewSchoolBoard("move a student.", false);
+        try {
+            if (message instanceof NickResponseMessage) {
+                if (currPhase.equals(Phase_GUI.PickingNickname)) {
+                    ((NickResponseMessage) message).GUIprocess(this.serverHandler);
                 }
-            } else {
-                viewSchoolBoard("", false);
-            }
-        } else if (message instanceof DenyMovementMessage) {
-            ((DenyMovementMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof ConfirmMovementMessage) {
-            ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof ConfirmCloudMessage) {
-            try {
-                ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
-            } catch (EmptyCloudException e){
-                checkBoard("The cloud is empty");
-            }
-        } else if (message instanceof EndMessage) {
-            ((EndMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof MoveProfessorMessage) {
-            ((MoveProfessorMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof CharacterUsedMessage) {
-            try {
+            } else if (message instanceof SendMatchesMessage) {
+                if (currPhase.equals(Phase_GUI.ChoosingGameMode) || currPhase.equals(Phase_GUI.JoiningGame1)) {
+                    ((SendMatchesMessage) message).processGUI(this.serverHandler);
+                }
+            } else if (message instanceof ConfirmJoiningMessage) {
+                if (currPhase.equals(Phase_GUI.CreatingGame) ||
+                        currPhase.equals(Phase_GUI.JoiningGame1) ||
+                        currPhase.equals(Phase_GUI.JoiningGame2)) {
+                    ((ConfirmJoiningMessage) message).processGUI(this.serverHandler);
+                }
+            } else if (message instanceof SendAvailableWizardsMessage) {
+                if (currPhase.equals(Phase_GUI.JoiningGame1) ||
+                        currPhase.equals(Phase_GUI.JoiningGame2)) {
+                    ((SendAvailableWizardsMessage) message).processGUI(this.serverHandler);
+                }
+            } else if (message instanceof GameModelUpdateMessage) {
+                ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
+            }  else if (message instanceof ChangeTurnMessage) {
+                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof CloudsUpdateMessage) {
+                ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof UsedAssistantMessage) {
+                ((UsedAssistantMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof ConfirmMovementFromEntranceMessage) {
+                ((ConfirmMovementFromEntranceMessage) message).processGUI(this.serverHandler);
+                if (currPhase.equals(Phase_GUI.Action1)) {
+                    ap1Moves++;
+                    if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
+                        currPhase = Phase_GUI.Action2;
+                        ap1Moves = 0;
+                        checkBoard("Move the mother nature");
+                    } else {
+                        viewSchoolBoard("move a student.", false);
+                    }
+                } else {
+                    viewSchoolBoard("", false);
+                }
+            } else if (message instanceof DenyMovementMessage) {
+                ((DenyMovementMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof ConfirmMovementMessage) {
+                ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof ConfirmCloudMessage) {
+                try {
+                    ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
+                } catch (EmptyCloudException e){
+                    checkBoard("The cloud is empty");
+                }
+            } else if (message instanceof EndMessage) {
+                ((EndMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof MoveProfessorMessage) {
+                ((MoveProfessorMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof CharacterUsedMessage) {
                 ((CharacterUsedMessage) message).processGUI(this.serverHandler);
-            } catch (WrongEffectException e3) {
-                viewSchoolBoard("Wrong effect", false);
-            } catch (NotEnoughNoEntriesException e4) {
-                viewSchoolBoard("No enough no entries", false);
-            }
-        } else if (message instanceof CharacterEntranceSwappedMessage){
-            try {
+            } else if (message instanceof CharacterEntranceSwappedMessage){
                 ((CharacterEntranceSwappedMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-
-        } else if (message instanceof EntranceTableSwappedMessage){
-            try {
+            } else if (message instanceof EntranceTableSwappedMessage){
                 ((EntranceTableSwappedMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-
-        } else if (message instanceof IslandChosenMessage){
-            try {
+            } else if (message instanceof IslandChosenMessage){
                 ((IslandChosenMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-
-        } else if (message instanceof NoEntryMovedMessage){
-            try {
+            } else if (message instanceof NoEntryMovedMessage){
                 ((NoEntryMovedMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-        } else if (message instanceof StudentColorChosenMessage){
-            try {
+            } else if (message instanceof StudentColorChosenMessage){
                 ((StudentColorChosenMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-        } else if (message instanceof StudentMovedFromCharacterMessage){
-            try {
+            } else if (message instanceof StudentMovedFromCharacterMessage){
                 ((StudentMovedFromCharacterMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-        } else if (message instanceof StudentMovedToTableMessage){
-            try {
+            } else if (message instanceof StudentMovedToTableMessage){
                 ((StudentMovedToTableMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
             }
+        } catch (Exception e) {
+
         }
+
+    }
+
+    /**
+     * Calculate scale factor based on the scaled size of the screen (in the case of Retina screens, the screen is always scaled down by 2, so if the original resolution is 2560*1440, then the practical resolution is 1280*720),
+     * if the scaled screen is bigger than 1920*1080, do nothing; otherwise, scale down the game window to fit the scrren.
+     */
+    private void getScaleFactor() {
+        Screen screen = Screen.getPrimary();
+
+        double boundX = screen.getBounds().getWidth();
+        double boundY = screen.getBounds().getHeight();
+        if (boundX >= 1920 && boundY >= 1080) {
+            scalingRatio = 1;
+        } else {
+            this.scalingRatio = Math.min(boundX / 1920, boundY / 1080);
+        }
+    }
+
+    private void enableScalingAndShowScene(Parent root) {
+        Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+        Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
+        root.getTransforms().add(scale);
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
     }
 
     public Phase_GUI getCurrPhase() {
@@ -798,27 +748,6 @@ public class GUI implements ViewController {
         this.fullScreen = fullScreen;
     }
 
-    private void getScaleFactor() {
-        Screen screen = Screen.getPrimary();
-
-        double dpi = screen.getDpi();
-        double scaleX = screen.getOutputScaleX();
-        double scaleY = screen.getOutputScaleY();
-        double boundX = screen.getBounds().getWidth();
-        double boundY = screen.getBounds().getHeight();
-        double MAXboundX = screen.getBounds().getMaxX();
-        double MINboundY = screen.getBounds().getMaxY();
-        System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
-        System.out.println(" - boundX: " + boundX + " - boundY: " + boundY);
-        System.out.println(" - boundX: " + MAXboundX + " - boundY: " + MINboundY);
-        if (boundX >= 1920 && boundY >= 1080) {
-            scalingRatio = 1;
-        } else {
-            this.scalingRatio = Math.min(boundX / 1920, boundY / 1080);
-        }
-    }
-
-
     public String[] getNicknames() {
         return nicknames;
     }
@@ -838,6 +767,24 @@ public class GUI implements ViewController {
 
     public void setAssistantPicked(boolean assistantPicked) {
         this.assistantPicked = assistantPicked;
+    }
+
+
+    public Phase_GUI getCurrentOtherPlayerPhase() {
+        return currentOtherPlayerPhase;
+    }
+
+    public void setCurrentOtherPlayerPhase(Phase_GUI currentOtherPlayerPhase) {
+        this.currentOtherPlayerPhase = currentOtherPlayerPhase;
+    }
+
+
+    public String getCurrPlayer() {
+        return currPlayer;
+    }
+
+    public void setCurrPlayer(String currPlayer) {
+        this.currPlayer = currPlayer;
     }
 
 
