@@ -14,24 +14,64 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Class that manage the connection between the client and the match
+ */
 public class ClientHandler implements Runnable {
+    /**
+     * Socket used to communicate with the client
+     */
     private Socket socket;
+    /**
+     * Server instance
+     */
     private EriantysServer server;
+    /**
+     * Match instance, if it's been created
+     */
     private MatchController match;
+    /**
+     * Nickname of the client, if already set
+     */
     private String nickname;
+    /**
+     * Wizard chosen by the client
+     */
     private Wizard wizard;
+    /**
+     * Stream of objects coming from the client
+     */
     ObjectInputStream objectInputStream;
+    /**
+     * Stream of objects headed to the client
+     */
     ObjectOutputStream objectOutputStream;
+    /**
+     * Queue of messages received from the client
+     */
     private BlockingQueue<Object> incomingMessages;
+    /**
+     * Queue of messages to send to the client
+     */
     private LinkedBlockingQueue<Object> outgoingMessages;
+    /**
+     * Instance of the thread in charge of sending messages to the client
+     */
     private Thread sendThread;
+    /**
+     * Instance of the thread in charge of receiving messages from the client
+     */
     private volatile Thread receiveThread; // Created only after connection is open.
+    /**
+     * True if the communication with the client has to be closed
+     */
     boolean closed;
+    /**
+     * Phase of the connection with the client.
+     */
     private ClientHandlerPhase phase;
 
     public ClientHandler(EriantysServer server, Socket socket) throws IOException {
@@ -169,7 +209,9 @@ public class ClientHandler implements Runnable {
         close();
     }
 
-    /** Send message msg.
+    /**
+     * Send a message to the client
+     * @param msg message to be sent
      */
     public void send(Object msg) {
         if (msg == null) {
@@ -178,6 +220,12 @@ public class ClientHandler implements Runnable {
         while (!outgoingMessages.offer(msg));
     }
 
+    /**
+     * Creates the match controller that will manage the game created by this player.
+     * @param numOfPlayers number of player for this match
+     * @param wizard wizard chosen by the client
+     * @param expertMode true to turn on expert mode. False to play in normal mode.
+     */
     public void createMatchController(int numOfPlayers, Wizard wizard, boolean expertMode) {
         match = new MatchController(server.generateMatchID(), numOfPlayers, server);
         new Thread(match).start();
@@ -191,6 +239,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Send the list of wizards available to the client
+     * @throws IOException if any I/O error occurred
+     */
     public void sendAvailableWizards() throws IOException {
         if (!wizardAvailable()) {
             if (match.getTotalMatchPlayers() == 4) {
@@ -217,38 +269,78 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     *
+     * @return whether the client has chosen a wizard or not.
+     */
     public boolean wizardAvailable() {
         return wizard != null;
     }
 
+    /**
+     *
+     * @return the match played by this game
+     */
     public MatchController getMatch() {
         return this.match;
     }
 
+    /**
+     *
+     * @return the wizard chosen by the client
+     */
     public Wizard getWizard() { return this.wizard; }
 
+    /**
+     *
+     * @return the instance of the server
+     */
     public EriantysServer getServer() {
         return this.server;
     }
 
+    /**
+     *
+     * @return the nickname of the player
+     */
     public String getNickname() { return this.nickname; }
 
+    /**
+     * Set the wizard of the client
+     * @param wizard wizard to be set
+     */
     public void setWizard(Wizard wizard){
         this.wizard = wizard;
     }
 
+    /**
+     * Set the nickname of the client
+     * @param nickname nickname to be set
+     */
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
 
+    /**
+     * Set the match played by the client
+     * @param match match to be set
+     */
     public void setMatch(MatchController match){
         this.match = match;
     }
 
+    /**
+     *
+     * @return the phase of the connection with the client
+     */
     public ClientHandlerPhase getPhase() {
         return phase;
     }
 
+    /**
+     * Set the phase of the connection with the client
+     * @param phase phase to be set
+     */
     public void setPhase(ClientHandlerPhase phase) {
         this.phase = phase;
     }
