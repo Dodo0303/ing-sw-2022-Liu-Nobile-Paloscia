@@ -38,6 +38,8 @@ public class GUI implements ViewController {
     private final Stage stage;
     private ServerHandler serverHandler;
     private Phase_GUI currPhase;
+    private Phase_GUI prevPhase;
+    private Phase_GUI currentOtherPlayerPhase;
     private String nickname;
     private String host;
     private int port;
@@ -46,7 +48,6 @@ public class GUI implements ViewController {
     private List<Wizard> wizards;
     private int ap1Moves, changeTurnNums;
     private boolean myTurn;
-    private Phase_GUI prevPhase;
     private int currCharacter;
     private ArrayList<String> playerPlayedAssistant;
     private String[] nicknames;
@@ -54,6 +55,7 @@ public class GUI implements ViewController {
     private double scalingRatio;
     private boolean fullScreen;
     private boolean assistantPicked;
+    private String currPlayer;
 
     public GUI(Stage stage) {
         this.stage = stage;
@@ -280,15 +282,7 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseAssistantController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -336,15 +330,7 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 gameOverController.setMessage(msg);
             }
-            Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -399,7 +385,6 @@ public class GUI implements ViewController {
             scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
             Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
             root.getTransforms().add(scale);
-
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/GameBoard.css")).toExternalForm());
             Platform.runLater(new Runnable() {
                 @Override public void run() {
@@ -424,6 +409,7 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             SchoolBoardController schoolBoardController = fxmlLoader.getController();
             schoolBoardController.setGUI(this);
+            schoolBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase_GUI.Planning)?"Planning Phase": "Action Phase"));
             if (!Objects.equals(msg, "")) {
                 schoolBoardController.setMessage(msg);
             }
@@ -449,48 +435,34 @@ public class GUI implements ViewController {
                     schoolBoardController.enableCharacter1();
                 } else if (currPhase.equals(Phase_GUI.Character2) || currCharacter == 2) {
                     schoolBoardController.enableCharacter2();
-                } else if (currPhase.equals(Phase_GUI.Character3)|| currCharacter == 3) {
+                } else if (currPhase.equals(Phase_GUI.Character3)) {
                     schoolBoardController.enableCharacter3();
                 } else if (currPhase.equals(Phase_GUI.Character4) || currCharacter == 4) {
                     schoolBoardController.enableCharacter4();
-                } else if (currPhase.equals(Phase_GUI.Character5) || currCharacter == 5) {
+                } else if (currPhase.equals(Phase_GUI.Character5)) {
                     schoolBoardController.enableCharacter5();
                 } else if (currPhase.equals(Phase_GUI.Character6) || currCharacter == 6) {
                     schoolBoardController.enableCharacter6();
-                } else if (currPhase.equals(Phase_GUI.Character7) || currCharacter == 7) {
+                } else if (currPhase.equals(Phase_GUI.Character7)) {
                     schoolBoardController.enableCharacter7();
                 } else if (currPhase.equals(Phase_GUI.Character8) || currCharacter == 8) {
                     schoolBoardController.enableCharacter8();
-                } else if (currPhase.equals(Phase_GUI.Character9) || currCharacter == 9) {
+                } else if (currPhase.equals(Phase_GUI.Character9)) {
                     schoolBoardController.enableCharacter9();
-                } else if (currPhase.equals(Phase_GUI.Character10) || currCharacter == 10) {
+                } else if (currPhase.equals(Phase_GUI.Character10)) {
                     schoolBoardController.enableCharacter10();
-                } else if (currPhase.equals(Phase_GUI.Character11) || currCharacter == 11) {
+                } else if (currPhase.equals(Phase_GUI.Character11)) {
                     schoolBoardController.enableCharacter11();
-                } else if (currPhase.equals(Phase_GUI.Character12) || currCharacter == 12) {
+                } else if (currPhase.equals(Phase_GUI.Character12)) {
                     schoolBoardController.enableCharacter12();
                 }
-
             } else {
                 schoolBoardController.setUpOtherBoards();
                 for (int i = 2; i < players.size(); i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
             }
-            Scene scene;
-            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-
-            getScaleFactor();//todo
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.setX(0);
-                    stage.setY(0);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -512,17 +484,7 @@ public class GUI implements ViewController {
             if (!Objects.equals(msg, "")) {
                 chooseCharacterController.setMessage(msg);
             }
-            Scene scene;
-            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -535,16 +497,7 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             PickColorController pickColorController = fxmlLoader.getController();
             pickColorController.setGUI(this);
-            Scene scene;
-            scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
-            Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
-            root.getTransforms().add(scale);
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    stage.setScene(scene);
-                    stage.show();
-                }
-            });
+            enableScalingAndShowScene(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -567,143 +520,83 @@ public class GUI implements ViewController {
     /** Process received messages.
      */
     public void messageReceived(Object message) {
-        if (message instanceof NickResponseMessage) {
-            if (currPhase.equals(Phase_GUI.PickingNickname)) {
-                ((NickResponseMessage) message).GUIprocess(this.serverHandler);
-            }
-        } else if (message instanceof SendMatchesMessage) {
-            if (currPhase.equals(Phase_GUI.ChoosingGameMode) || currPhase.equals(Phase_GUI.JoiningGame1)) {
-                ((SendMatchesMessage) message).processGUI(this.serverHandler);
-            }
-        } else if (message instanceof ConfirmJoiningMessage) {
-            if (currPhase.equals(Phase_GUI.CreatingGame) ||
-                    currPhase.equals(Phase_GUI.JoiningGame1) ||
-                    currPhase.equals(Phase_GUI.JoiningGame2)) {
-                ((ConfirmJoiningMessage) message).processGUI(this.serverHandler);
-            }
-        } else if (message instanceof SendAvailableWizardsMessage) {
-            if (currPhase.equals(Phase_GUI.JoiningGame1) ||
-                    currPhase.equals(Phase_GUI.JoiningGame2)) {
-                ((SendAvailableWizardsMessage) message).processGUI(this.serverHandler);
-            }
-        } else if (message instanceof GameModelUpdateMessage) {
-            ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
-        }  else if (message instanceof ChangeTurnMessage) {
-            ((ChangeTurnMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof CloudsUpdateMessage) {
-            ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof UsedAssistantMessage) {
-            ((UsedAssistantMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof ConfirmMovementFromEntranceMessage) {
-            ((ConfirmMovementFromEntranceMessage) message).processGUI(this.serverHandler);
-            if (currPhase.equals(Phase_GUI.Action1)) {
-                ap1Moves++;
-                if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
-                    currPhase = Phase_GUI.Action2;
-                    ap1Moves = 0;
-                    checkBoard("Move the mother nature");
-                } else {
-                    viewSchoolBoard("move a student.", false);
+        try {
+            if (message instanceof NickResponseMessage) {
+                if (currPhase.equals(Phase_GUI.PickingNickname)) {
+                    ((NickResponseMessage) message).GUIprocess(this.serverHandler);
                 }
-            } else {
-                viewSchoolBoard("", false);
-            }
-        } else if (message instanceof DenyMovementMessage) {
-            ((DenyMovementMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof ConfirmMovementMessage) {
-            ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof ConfirmCloudMessage) {
-            try {
-                ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
-            } catch (EmptyCloudException e){
-                checkBoard("The cloud is empty");
-            }
-        } else if (message instanceof EndMessage) {
-            ((EndMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof MoveProfessorMessage) {
-            ((MoveProfessorMessage) message).processGUI(this.serverHandler);
-        } else if (message instanceof CharacterUsedMessage) {
-            try {
+            } else if (message instanceof SendMatchesMessage) {
+                if (currPhase.equals(Phase_GUI.ChoosingGameMode) || currPhase.equals(Phase_GUI.JoiningGame1)) {
+                    ((SendMatchesMessage) message).processGUI(this.serverHandler);
+                }
+            } else if (message instanceof ConfirmJoiningMessage) {
+                if (currPhase.equals(Phase_GUI.CreatingGame) ||
+                        currPhase.equals(Phase_GUI.JoiningGame1) ||
+                        currPhase.equals(Phase_GUI.JoiningGame2)) {
+                    ((ConfirmJoiningMessage) message).processGUI(this.serverHandler);
+                }
+            } else if (message instanceof SendAvailableWizardsMessage) {
+                if (currPhase.equals(Phase_GUI.JoiningGame1) ||
+                        currPhase.equals(Phase_GUI.JoiningGame2)) {
+                    ((SendAvailableWizardsMessage) message).processGUI(this.serverHandler);
+                }
+            } else if (message instanceof GameModelUpdateMessage) {
+                ((GameModelUpdateMessage) message).processGUI(this.serverHandler);
+            }  else if (message instanceof ChangeTurnMessage) {
+                ((ChangeTurnMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof CloudsUpdateMessage) {
+                ((CloudsUpdateMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof UsedAssistantMessage) {
+                ((UsedAssistantMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof ConfirmMovementFromEntranceMessage) {
+                ((ConfirmMovementFromEntranceMessage) message).processGUI(this.serverHandler);
+                if (currPhase.equals(Phase_GUI.Action1)) {
+                    ap1Moves++;
+                    if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
+                        currPhase = Phase_GUI.Action2;
+                        ap1Moves = 0;
+                        checkBoard("Move the mother nature");
+                    } else {
+                        viewSchoolBoard("move a student.", false);
+                    }
+                } else {
+                    viewSchoolBoard("", false);
+                }
+            } else if (message instanceof DenyMovementMessage) {
+                ((DenyMovementMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof ConfirmMovementMessage) {
+                ((ConfirmMovementMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof ConfirmCloudMessage) {
+                try {
+                    ((ConfirmCloudMessage) message).processGUI(this.serverHandler);
+                } catch (EmptyCloudException e){
+                    checkBoard("The cloud is empty");
+                }
+            } else if (message instanceof EndMessage) {
+                ((EndMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof MoveProfessorMessage) {
+                ((MoveProfessorMessage) message).processGUI(this.serverHandler);
+            } else if (message instanceof CharacterUsedMessage) {
                 ((CharacterUsedMessage) message).processGUI(this.serverHandler);
-            } catch (WrongEffectException e3) {
-                viewSchoolBoard("Wrong effect", false);
-            } catch (NotEnoughNoEntriesException e4) {
-                viewSchoolBoard("No enough no entries", false);
-            }
-        } else if (message instanceof CharacterEntranceSwappedMessage){
-            try {
+            } else if (message instanceof CharacterEntranceSwappedMessage){
                 ((CharacterEntranceSwappedMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-
-        } else if (message instanceof EntranceTableSwappedMessage){
-            try {
+            } else if (message instanceof EntranceTableSwappedMessage){
                 ((EntranceTableSwappedMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-
-        } else if (message instanceof IslandChosenMessage){
-            try {
+            } else if (message instanceof IslandChosenMessage){
                 ((IslandChosenMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-
-        } else if (message instanceof NoEntryMovedMessage){
-            try {
+            } else if (message instanceof NoEntryMovedMessage){
                 ((NoEntryMovedMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-        } else if (message instanceof StudentColorChosenMessage){
-            try {
+            } else if (message instanceof StudentColorChosenMessage){
                 ((StudentColorChosenMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-        } else if (message instanceof StudentMovedFromCharacterMessage){
-            try {
+            } else if (message instanceof StudentMovedFromCharacterMessage){
                 ((StudentMovedFromCharacterMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
-            }
-        } else if (message instanceof StudentMovedToTableMessage){
-            try {
+            } else if (message instanceof StudentMovedToTableMessage){
                 ((StudentMovedToTableMessage) message).processGUI(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException e1) {
-                checkBoard("The cloud is empty");
-            } catch (FullTableException e2) {
-                viewSchoolBoard("The table is full.", false);
             }
+        } catch (Exception e) {
+
         }
+
     }
 
     /**
@@ -722,6 +615,17 @@ public class GUI implements ViewController {
         }
     }
 
+    private void enableScalingAndShowScene(Parent root) {
+        Scene scene = new Scene(root, 1920*scalingRatio, 1080*scalingRatio);
+        Scale scale = new Scale(1*scalingRatio, 1*scalingRatio, 0, 0);
+        root.getTransforms().add(scale);
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+    }
 
     public Phase_GUI getCurrPhase() {
         return this.currPhase;
@@ -862,6 +766,24 @@ public class GUI implements ViewController {
 
     public void setAssistantPicked(boolean assistantPicked) {
         this.assistantPicked = assistantPicked;
+    }
+
+
+    public Phase_GUI getCurrentOtherPlayerPhase() {
+        return currentOtherPlayerPhase;
+    }
+
+    public void setCurrentOtherPlayerPhase(Phase_GUI currentOtherPlayerPhase) {
+        this.currentOtherPlayerPhase = currentOtherPlayerPhase;
+    }
+
+
+    public String getCurrPlayer() {
+        return currPlayer;
+    }
+
+    public void setCurrPlayer(String currPlayer) {
+        this.currPlayer = currPlayer;
     }
 
 

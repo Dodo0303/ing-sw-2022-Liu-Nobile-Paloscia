@@ -31,7 +31,7 @@ public class SchoolBoardController implements Initializable {
     @FXML
     private Button otherBoardButton, backButton, useCharacterButton;
     @FXML
-    private Label MyNickname, OpponentNickname, messageLabel, backLabel, opponentCoin, myCoin;
+    private Label MyNickname, OpponentNickname, messageLabel, backLabel, opponentCoin, myCoin, phaseLabel;
     @FXML
     private ImageView MyCard, OpponentCard, opponentCoinImage, myCoinImage, characterCardImage;
     private GUI gui;
@@ -218,7 +218,8 @@ public class SchoolBoardController implements Initializable {
                         }
                     }
                 });
-            } else if (players.size() == 3 || !gui.getCurrPhase().equals(Phase_GUI.Action1)){
+            } else if (players.size() == 3 ||
+                    (!gui.getCurrPhase().equals(Phase_GUI.Action1) && !gui.getCurrPhase().equals(Phase_GUI.Character11))){
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
             }
@@ -799,8 +800,8 @@ public class SchoolBoardController implements Initializable {
                     stuImage = new Image("/assets/Students/blue.png");
                     imageView1.setImage(stuImage);
                 }
-                imageView1.setFitHeight(25);
-                imageView1.setFitWidth(25);
+                imageView1.setFitHeight(35);
+                imageView1.setFitWidth(35);
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
@@ -841,6 +842,10 @@ public class SchoolBoardController implements Initializable {
 
     public void setMessage(String msg) {
         messageLabel.setText(msg);
+    }
+
+    public void setPhaseLabel(String msg) {
+        phaseLabel.setText(msg);
     }
 
     public void setBackMessage(String msg) {

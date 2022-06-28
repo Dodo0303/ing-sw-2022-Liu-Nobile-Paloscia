@@ -49,6 +49,12 @@ public class ChangeTurnMessage extends MessageToClient {
     public void processGUI(ServerHandler ch) {
         GUI guiClient = (GUI) ch.getClient();
         guiClient.setCurrCharacter(-1);
+        guiClient.setCurrPlayer(playerNickname);
+        if (gamePhase.equals(Phase.Planning)) {
+            guiClient.setCurrentOtherPlayerPhase(Phase_GUI.Planning);
+        } else {
+            guiClient.setCurrentOtherPlayerPhase(Phase_GUI.Action1);
+        }
         if (this.playerNickname.equals(guiClient.getNickname())) {
             guiClient.setChangeTurnNums(0);
             guiClient.setMyTurn(true);
@@ -67,7 +73,7 @@ public class ChangeTurnMessage extends MessageToClient {
         } else {
             guiClient.setMyTurn(false);
             if (!guiClient.getCurrPhase().equals(Phase_GUI.Ending)) {
-                guiClient.checkBoard(playerNickname + "'s round.");
+                guiClient.checkBoard("");
             }
         }
     }

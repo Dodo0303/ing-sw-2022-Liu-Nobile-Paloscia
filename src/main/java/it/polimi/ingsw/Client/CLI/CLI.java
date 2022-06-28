@@ -75,113 +75,68 @@ public class CLI implements ViewController {
     /**
      * Process received messages.
      */
-    public void messageReceived(Object message) throws InterruptedException, EmptyCloudException{
-        if (message instanceof NickResponseMessage) {
-            if (currPhase.equals(Phase.PickingNickname)) {
-                ((NickResponseMessage) message).process(this.serverHandler);
-            }
-        } else if (message instanceof SendMatchesMessage) {
-            if (currPhase.equals(Phase.ChoosingGameMode) || currPhase.equals(Phase.JoiningGame1)) {
-                ((SendMatchesMessage) message).process(this.serverHandler);
-            }
-        } else if (message instanceof ConfirmJoiningMessage) {
-            if (currPhase.equals(Phase.CreatingGame) ||
-                    currPhase.equals(Phase.JoiningGame1) ||
-                    currPhase.equals(Phase.JoiningGame2)) {
-                ((ConfirmJoiningMessage) message).process(this.serverHandler);
-            }
-        } else if (message instanceof SendAvailableWizardsMessage) {
-            if (currPhase.equals(Phase.JoiningGame1) ||
-                    currPhase.equals(Phase.JoiningGame2)) {
-                ((SendAvailableWizardsMessage) message).process(this.serverHandler);
-            }
-        } else if (message instanceof ChangeTurnMessage) {
-            ((ChangeTurnMessage) message).process(this.serverHandler);
-        } else if (message instanceof ConfirmMovementFromEntranceMessage) {
-            ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
-        } else if (message instanceof MoveMothernatureMessage) {
-            ((MoveMothernatureMessage) message).process(this.serverHandler);
-        } else if (message instanceof MoveProfessorMessage) {
-            ((MoveProfessorMessage) message).process(this.serverHandler);
-        } else if (message instanceof DenyMovementMessage) {
-            ((DenyMovementMessage) message).process(this.serverHandler);
-        } else if (message instanceof ConfirmMovementMessage) {
-            ((ConfirmMovementMessage) message).process(this.serverHandler);
-        } else if (message instanceof ConfirmCloudMessage) {
-            ((ConfirmCloudMessage) message).process(this.serverHandler);
-        } else if(message instanceof EndMessage) {
-            ((EndMessage) message).process(this.serverHandler);
-        } else if (message instanceof GameModelUpdateMessage) {
-            ((GameModelUpdateMessage) message).process(this.serverHandler);
-        } else if (message instanceof CloudsUpdateMessage) {
-            ((CloudsUpdateMessage) message).process(this.serverHandler);
-        } else if (message instanceof UsedAssistantMessage) {
-            ((UsedAssistantMessage) message).process(this.serverHandler);
-        } else if (message instanceof CharacterUsedMessage) {
-            try {
+    public void messageReceived(Object message) {
+        try {
+            if (message instanceof NickResponseMessage) {
+                if (currPhase.equals(Phase.PickingNickname)) {
+                    ((NickResponseMessage) message).process(this.serverHandler);
+                }
+            } else if (message instanceof SendMatchesMessage) {
+                if (currPhase.equals(Phase.ChoosingGameMode) || currPhase.equals(Phase.JoiningGame1)) {
+                    ((SendMatchesMessage) message).process(this.serverHandler);
+                }
+            } else if (message instanceof ConfirmJoiningMessage) {
+                if (currPhase.equals(Phase.CreatingGame) ||
+                        currPhase.equals(Phase.JoiningGame1) ||
+                        currPhase.equals(Phase.JoiningGame2)) {
+                    ((ConfirmJoiningMessage) message).process(this.serverHandler);
+                }
+            } else if (message instanceof SendAvailableWizardsMessage) {
+                if (currPhase.equals(Phase.JoiningGame1) ||
+                        currPhase.equals(Phase.JoiningGame2)) {
+                    ((SendAvailableWizardsMessage) message).process(this.serverHandler);
+                }
+            } else if (message instanceof ChangeTurnMessage) {
+                ((ChangeTurnMessage) message).process(this.serverHandler);
+            } else if (message instanceof ConfirmMovementFromEntranceMessage) {
+                ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
+            } else if (message instanceof MoveMothernatureMessage) {
+                ((MoveMothernatureMessage) message).process(this.serverHandler);
+            } else if (message instanceof MoveProfessorMessage) {
+                ((MoveProfessorMessage) message).process(this.serverHandler);
+            } else if (message instanceof DenyMovementMessage) {
+                ((DenyMovementMessage) message).process(this.serverHandler);
+            } else if (message instanceof ConfirmMovementMessage) {
+                ((ConfirmMovementMessage) message).process(this.serverHandler);
+            } else if (message instanceof ConfirmCloudMessage) {
+                ((ConfirmCloudMessage) message).process(this.serverHandler);
+            } else if(message instanceof EndMessage) {
+                ((EndMessage) message).process(this.serverHandler);
+            } else if (message instanceof GameModelUpdateMessage) {
+                ((GameModelUpdateMessage) message).process(this.serverHandler);
+            } else if (message instanceof CloudsUpdateMessage) {
+                ((CloudsUpdateMessage) message).process(this.serverHandler);
+            } else if (message instanceof UsedAssistantMessage) {
+                ((UsedAssistantMessage) message).process(this.serverHandler);
+            } else if (message instanceof CharacterUsedMessage) {
                 ((CharacterUsedMessage) message).process(this.serverHandler);
-            } catch (WrongEffectException | NotEnoughNoEntriesException e3) {
-                System.out.println(e3.getMessage());
-            }
-        } else if (message instanceof CharacterEntranceSwappedMessage){
-            try {
+            } else if (message instanceof CharacterEntranceSwappedMessage){
                 ((CharacterEntranceSwappedMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
-            }
-
-        } else if (message instanceof EntranceTableSwappedMessage){
-            try {
+            } else if (message instanceof EntranceTableSwappedMessage){
                 ((EntranceTableSwappedMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
-            }
-
-        } else if (message instanceof IslandChosenMessage){
-            try {
+            } else if (message instanceof IslandChosenMessage){
                 ((IslandChosenMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
-            }
-
-        } else if (message instanceof NoEntryMovedMessage){
-            try {
+            } else if (message instanceof NoEntryMovedMessage){
                 ((NoEntryMovedMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
-            }
-        } else if (message instanceof StudentColorChosenMessage){
-            try {
+            } else if (message instanceof StudentColorChosenMessage){
                 ((StudentColorChosenMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
-            }
-        } else if (message instanceof StudentMovedFromCharacterMessage){
-            try {
+            } else if (message instanceof StudentMovedFromCharacterMessage){
                 ((StudentMovedFromCharacterMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
-            }
-        } else if (message instanceof StudentMovedToTableMessage){
-            try {
+            } else if (message instanceof StudentMovedToTableMessage){
                 ((StudentMovedToTableMessage) message).process(this.serverHandler);
-            } catch (InterruptedException ignored){
-
-            } catch (EmptyCloudException | FullTableException e1) {
-                System.out.println(e1.getMessage());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     /**

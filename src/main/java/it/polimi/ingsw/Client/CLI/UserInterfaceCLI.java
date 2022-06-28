@@ -183,7 +183,11 @@ public class UserInterfaceCLI{
         for (int i = 0; i < player.getProfessors().size(); i++) {
             System.out.print(player.getProfessors().get(i) + " ");
         }
-        System.out.println("Towers: " + player.getTowerNum()+ player.getColor().toString());
+        if (cli.getGame().getPlayers().size() == 4) {
+            System.out.println("Towers of the team: " + player.getTowerNum()+ player.getColor().toString());
+        } else {
+            System.out.println("Towers: " + player.getTowerNum()+ player.getColor().toString());
+        }
         if (cli.isExpert()) {
             System.out.println("Coins: " + player.getCoins());
         }
