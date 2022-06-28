@@ -13,10 +13,12 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 public class NoEntryMovedMessage extends MessageToClient {
     private int islandID;
     private CharacterCard characterUpdated;
+    private boolean toIsland;
 
-    public NoEntryMovedMessage(int islandID, CharacterCard characterUpdated) {
+    public NoEntryMovedMessage(int islandID, CharacterCard characterUpdated, boolean toIsland) {
         this.islandID = islandID;
         this.characterUpdated = characterUpdated;
+        this.toIsland = toIsland;
     }
 
     public int getIslandID() {
@@ -30,8 +32,10 @@ public class NoEntryMovedMessage extends MessageToClient {
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         CLI cliClient = (CLI) client.getClient();
+        System.out.println("Processing message");
         cliClient.getGame().updateCharacterById(characterUpdated);
-        cliClient.getGame().addNoEntry(cliClient.getGame().getIslands().get(islandID));
+        if (toIsland)
+            cliClient.getGame().addNoEntry(cliClient.getGame().getIslands().get(islandID));
         if (cliClient.getCurrPhase().equals(Phase.Character5)) {
             cliClient.setPhase(cliClient.getPrevPhase());
             cliClient.setCurrCharacter(-1);
@@ -41,7 +45,8 @@ public class NoEntryMovedMessage extends MessageToClient {
     public void processGUI(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException {
         GUI guiClient = (GUI) client.getClient();
         guiClient.getGame().updateCharacterById(characterUpdated);
-        guiClient.getGame().addNoEntry(guiClient.getGame().getIslands().get(islandID));
+        if (toIsland)
+            guiClient.getGame().addNoEntry(guiClient.getGame().getIslands().get(islandID));
         if (guiClient.getCurrPhase().equals(Phase_GUI.Character5)) {
             guiClient.setCurrPhase(guiClient.getPrevPhase());
             guiClient.setCurrCharacter(-1);

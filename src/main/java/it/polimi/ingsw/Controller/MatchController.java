@@ -10,6 +10,7 @@ import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Character.CharacterCard;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
+import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.NoEntryMovedMessage;
 import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
 import it.polimi.ingsw.Network.Messages.toClient.JoiningPhase.GameModelUpdateMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
@@ -353,14 +354,9 @@ public class MatchController implements Runnable {
 
     public void addNoEntryToIsland(int islandID) throws GameException, NotEnoughNoEntriesException {
         CharacterCard character = game.getCharacterById(5);
-        try {
-            character.useEffect();
-            game.addNoEntry(game.getIslands().get(islandID));
-        } catch (NotEnoughNoEntriesException e) {
-            throw new NotEnoughNoEntriesException();
-        } catch (WrongEffectException e) {
-            e.printStackTrace();
-        }
+
+        game.addNoEntry(game.getIslands().get(islandID));
+
     }
 
     /**
@@ -580,6 +576,14 @@ public class MatchController implements Runnable {
             System.out.println("The island " + x + " had a no-entry on it");
             island.removeNoEntry();
             System.out.println("The island has now " + island.getNoEntries() + " no-entry tiles.");
+            try {
+                game.getCharacterById(5).addNoEntries();
+                System.out.println(game.getCharacterById(5).getNumberOfNoEntries());
+                MessageToClient msg = new NoEntryMovedMessage(1, game.getCharacterById(5), false);
+                broadcastMessage(msg);
+            } catch (WrongEffectException e) {
+                e.printStackTrace();
+            }
         }
     }
 

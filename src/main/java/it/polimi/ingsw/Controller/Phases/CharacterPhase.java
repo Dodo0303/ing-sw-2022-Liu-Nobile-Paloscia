@@ -32,7 +32,7 @@ public class CharacterPhase extends Phase{
                 try {
                     match.useCharacter(ch.getNickname(), expectedCharacterID);
                     match.addNoEntryToIsland(((MoveNoEntryMessage) msg).getIslandID());
-                    match.broadcastMessage(new NoEntryMovedMessage(((MoveNoEntryMessage) msg).getIslandID(), match.getGame().getCharacterById(expectedCharacterID)));
+                    match.broadcastMessage(new NoEntryMovedMessage(((MoveNoEntryMessage) msg).getIslandID(), match.getGame().getCharacterById(expectedCharacterID), true));
                 } catch (NotEnoughNoEntriesException | WrongEffectException e) {
                     match.denyMovement(ch);
                 }
