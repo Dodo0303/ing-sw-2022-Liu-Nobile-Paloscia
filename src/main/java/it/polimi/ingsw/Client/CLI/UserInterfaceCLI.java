@@ -19,7 +19,7 @@ public class UserInterfaceCLI{
     private CLI cli;
     private BufferedReader input;
 
-    public UserInterfaceCLI(String callMethod) {
+    public UserInterfaceCLI() {
         input = new BufferedReader(new InputStreamReader(System.in));
     }
 

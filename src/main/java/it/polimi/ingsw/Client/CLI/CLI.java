@@ -50,16 +50,21 @@ public class CLI implements ViewController {
         buildConnection();
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
-        startUI("");
+        startUI();
         view.printTitle();
         requireNickname();
     }
 
-    public void startUI(String str) {
-        view = new UserInterfaceCLI(str);
+    /**
+     * Creat a new UserInterfaceCLI to read future user inputs and print out outputs.
+     */
+    public void startUI() {
+        view = new UserInterfaceCLI();
         view.setCli(this);
     }
-
+    /**
+     * Send message to the server.
+     */
     public void send(Object message) {
         if (message == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.\n");
@@ -67,7 +72,9 @@ public class CLI implements ViewController {
             serverHandler.send(message);
         }
     }
-
+    /**
+     * Process received messages.
+     */
     public void messageReceived(Object message) throws InterruptedException, EmptyCloudException{
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase.PickingNickname)) {
@@ -89,7 +96,6 @@ public class CLI implements ViewController {
                 ((SendAvailableWizardsMessage) message).process(this.serverHandler);
             }
         } else if (message instanceof ChangeTurnMessage) {
-            System.out.println(currPhase.toString() + " to " + ((ChangeTurnMessage) message).getPhase().toString());//TODO DELETE AFTER TESTS
             ((ChangeTurnMessage) message).process(this.serverHandler);
         } else if (message instanceof ConfirmMovementFromEntranceMessage) {
             ((ConfirmMovementFromEntranceMessage) message).process(this.serverHandler);
@@ -178,16 +184,20 @@ public class CLI implements ViewController {
             }
         }
     }
-
+    /**
+     * Require user to input a nickname, then send it to the server.
+     */
     public void requireNickname() {
         System.out.print("Nickname?\n");
         String temp = view.requireUserInput();
         send(new SendNickMessage(temp));
     }
-
+    /**
+     * Require user to input host and port, then establish connection. If the establishment fails, print  "Server not found." and continue to require host and port.
+     */
     private void buildConnection() {
         try {
-            while(serverHandler == null) {
+            while(serverHandler == null) {//todo check this before july 1st
                 //System.out.print("Host?\n");
                 //host = view.requireUserInput();
                 host = "localhost";
@@ -199,13 +209,12 @@ public class CLI implements ViewController {
                     in = view.requireUserInput();
                     port = Integer.parseInt(in);
                 }
-
                  */
                 try {
                     serverHandler = new ServerHandler(host,port, this);
                 } catch (Exception e) {
                     System.out.print("Server not found.\n");
-                    System.exit(1);
+                    buildConnection();
                 }
             }
             currPhase = Phase.PickingNickname;
@@ -214,7 +223,9 @@ public class CLI implements ViewController {
             buildConnection();
         }
     }
-
+    /**
+     * Require user to input game mode, then send message to the server.
+     */
     public void chooseGameMode() {
         int temp = 0;
         while(temp != 1 && temp != 2) {
@@ -232,7 +243,9 @@ public class CLI implements ViewController {
             send(new CreateMatchMessage(false));
         }
     }
-
+    /**
+     * Require user to input information about creating a new game, then send them to the server.
+     */
     private void newgame() {
         try {
             int numPlayer = 0, wiz = -1;
@@ -267,7 +280,9 @@ public class CLI implements ViewController {
             newgame();
         }
     }
-
+    /**
+     * Require user to input information about joining a new game, then send them to the server.
+     */
     public void joinGame(List<Integer> matchIDs) {
         try {
             int match = -1;
@@ -285,7 +300,9 @@ public class CLI implements ViewController {
             joinGame(matchIDs);
         }
     }
-
+    /**
+     * Require user to input information about choosing a wizard, then send it to the server.
+     */
     public void chooseWizard() {
         try {
             int wiz = -1;
@@ -307,7 +324,9 @@ public class CLI implements ViewController {
             chooseWizard();
         }
     }
-
+    /**
+     * Require user to choose an assistant card, if the input number is not valid, tell user to re-choose a card, then send the message to the server.
+     */
     public void playAssistant() {
         try {
             while (!currPhase.equals(Phase.Planning)) {
@@ -338,7 +357,9 @@ public class CLI implements ViewController {
             playAssistant();
         }
     }
-
+    /**
+     * Require user to input information about moving a student, then send it to the server.
+     */
     public void moveStudentsFromEntrance() {
         while (!currPhase.equals(Phase.Action1)) {
             currPhase = getCurrPhase();
@@ -387,7 +408,9 @@ public class CLI implements ViewController {
         }
         send(new MoveStudentFromEntranceMessage(index, num, islandID));
     }
-
+    /**
+     * Require user to input information about moving the mother nature, then send it to the server.
+     */
     public void moveMotherNature() {
         while (!currPhase.equals(Phase.Action2)) {
             currPhase = getCurrPhase();
@@ -406,7 +429,9 @@ public class CLI implements ViewController {
         }
         send(new MoveMotherNatureMessage(num));
     }
-
+    /**
+     * Require user to choose a cloud, then send it to the server.
+     */
     public void chooseCloud() {
         while (!currPhase.equals(Phase.Action3)) {
             currPhase = getCurrPhase();
@@ -425,11 +450,15 @@ public class CLI implements ViewController {
         }
         send(new ChooseCloudMessage(num));
     }
-
+    /**
+     * Shut down the program when the game is over.
+     */
     public void gameOver(String msg) {
         System.exit(0);
     }
-
+    /**
+     * Check if the player can use the character card, if not, go back to the menu, otherwise send the message to the server and change current phase to the correspondent phase.
+     */
     void useCharacter(int characterIndex) {
         int realCharacterIndex = game.getCharacters().get(characterIndex).getID();
         if (game.getPlayerByNickname(nickname).getCoins() < game.getCharacterById(realCharacterIndex).getPrice()) {
@@ -471,7 +500,9 @@ public class CLI implements ViewController {
             character12();
         }
     }
-
+    /**
+     * Require user to input information about using character card 1, then send it to the server.
+     */
     private void character1() {
         int numStudent = -1;
         int i = 1;
@@ -507,7 +538,9 @@ public class CLI implements ViewController {
         }
         send(new MoveStudentFromCharacterMessage(numStudent, numIsland));
     }
-
+    /**
+     * Require user to input information about using character card 3, then send it to the server.
+     */
     private void character3() {
         int numIsland = -1;
         while (numIsland < 0 || numIsland >= game.getIslands().size()) {
@@ -523,6 +556,9 @@ public class CLI implements ViewController {
         }
         send(new ChooseIslandMessage(numIsland));
     }
+    /**
+     * Require user to input information about using character card 5, then send it to the server.
+     */
     private void character5() {
         int numIsland = -1;
         while (numIsland < 0 || numIsland >= game.getIslands().size()) {
@@ -538,7 +574,9 @@ public class CLI implements ViewController {
         }
         send(new MoveNoEntryMessage(numIsland));
     }
-
+    /**
+     * Require user to input information about using character card 7, then send it to the server.
+     */
     private void character7() {
         int i = 1;
         int[] characterStudents = new int[3];
@@ -581,6 +619,9 @@ public class CLI implements ViewController {
         }
         send(new SwapStudentsCharacterEntranceMessage(characterStudents, entranceStudents));
     }
+    /**
+     * Require user to input information about using character card 9, then send it to the server.
+     */
     private void character9() {
         StudentColor res;
         while (true) {
@@ -597,6 +638,9 @@ public class CLI implements ViewController {
         }
 
     }
+    /**
+     * Require user to input information about using character card 10, then send it to the server.
+     */
     private void character10() {
         int i = 1;
         StudentColor[] colors = new StudentColor[2];
@@ -637,6 +681,9 @@ public class CLI implements ViewController {
         }
         send(new SwapStudentsTableEntranceMessage(colors, entranceStudents));
     }
+    /**
+     * Require user to input information about using character card 11, then send it to the server.
+     */
     private void character11() {
         int numStudent = -1;
         int i = 1;
@@ -660,6 +707,9 @@ public class CLI implements ViewController {
         }
         send(new MoveStudentsToTableMessage(numStudent));
     }
+    /**
+     * Require user to input information about using character card 12, then send it to the server.
+     */
     private void character12() {
         StudentColor res;
         while (true) {
@@ -748,18 +798,8 @@ public class CLI implements ViewController {
         this.ap1Moves = ap1Moves;
     }
 
-
-    public int getNumPlayers() {
-        return numPlayers;
-    }
-
     public void setNumPlayers(int numPlayers) {
         this.numPlayers = numPlayers;
-    }
-
-
-    public String[] getNicknames() {
-        return nicknames;
     }
 
     public void setNicknames(String[] nicknames) {
