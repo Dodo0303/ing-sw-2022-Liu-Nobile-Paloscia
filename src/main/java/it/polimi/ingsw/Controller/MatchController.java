@@ -541,18 +541,24 @@ public class MatchController implements Runnable {
                     if ((whiteInfluence > maxInfluence) || (whiteInfluence == maxInfluence && currentOwner.equals(Color.WHITE))) {
                         maxInfluence = whiteInfluence;
                         maxInfluencer = Color.WHITE;
+                    } else if (whiteInfluence == maxInfluence && currentOwner.equals(Color.VOID)) {
+                        maxInfluencer = null;
                     }
                 } else if (this.game.getPlayers().get(i).getColor().equals(Color.GRAY)){
                     greyInfluence += influence;
                     if ((greyInfluence > maxInfluence) || (greyInfluence == maxInfluence && currentOwner.equals(Color.GRAY))) {
                         maxInfluence = greyInfluence;
                         maxInfluencer = Color.GRAY;
+                    } else if (greyInfluence == maxInfluence && currentOwner.equals(Color.VOID)) {
+                        maxInfluencer = null;
                     }
                 } else {
                     blackInfluence += influence;
                     if ((blackInfluence > maxInfluence) || (blackInfluence == maxInfluence && currentOwner.equals(Color.BLACK))) {
                         maxInfluence = blackInfluence;
                         maxInfluencer = Color.BLACK;
+                    } else if (blackInfluence == maxInfluence && currentOwner.equals(Color.VOID)) {
+                        maxInfluencer = null;
                     }
                 }
                 /*

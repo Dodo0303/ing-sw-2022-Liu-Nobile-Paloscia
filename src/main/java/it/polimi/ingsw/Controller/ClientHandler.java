@@ -130,7 +130,7 @@ public class ClientHandler implements Runnable {
                         server.clientDisconnected(client);
                         close();
                     } else if (msg instanceof PingMessage) {
-                        System.out.println("Received ping");
+                        //System.out.println("Received ping");
                     } else {
                         incomingMessages.put(msg);
                         System.out.print(msg.getClass().toString() + " received by server" + "\n"); //TODO delete after tests
