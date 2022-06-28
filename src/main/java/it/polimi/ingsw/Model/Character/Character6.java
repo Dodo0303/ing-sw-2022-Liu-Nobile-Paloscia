@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * When resolving a conquering on an island, towers do not count towards influence.
+ */
 public class Character6 extends CharacterCard {
 
     public Character6() {

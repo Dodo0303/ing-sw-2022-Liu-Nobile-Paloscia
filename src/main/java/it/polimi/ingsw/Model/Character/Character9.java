@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * Choose a color of student: during the influence calculation this turn, that color adds no influence.
+ */
 public class Character9 extends CharacterCard {
 
     public Character9() {

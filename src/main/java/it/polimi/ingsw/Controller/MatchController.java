@@ -338,7 +338,6 @@ public class MatchController implements Runnable {
      * @param removeCoins true if the method should remove the coins from the player
      * @param studentToAdd student that will replace the one extracted
      * @return the color of the student extracted
-     * @throws EmptyBagException if there are no more students in the bag and the character can't be filled again
      * @throws WrongEffectException if the method is trying to call the wrong effect
      */
     public StudentColor useCharacter (String nickname, int characterId, int studentIndex, boolean removeCoins, StudentColor studentToAdd) throws WrongEffectException {
@@ -541,18 +540,24 @@ public class MatchController implements Runnable {
                     if ((whiteInfluence > maxInfluence) || (whiteInfluence == maxInfluence && currentOwner.equals(Color.WHITE))) {
                         maxInfluence = whiteInfluence;
                         maxInfluencer = Color.WHITE;
+                    } else if (whiteInfluence == maxInfluence && currentOwner.equals(Color.VOID)) {
+                        maxInfluencer = null;
                     }
                 } else if (this.game.getPlayers().get(i).getColor().equals(Color.GRAY)){
                     greyInfluence += influence;
                     if ((greyInfluence > maxInfluence) || (greyInfluence == maxInfluence && currentOwner.equals(Color.GRAY))) {
                         maxInfluence = greyInfluence;
                         maxInfluencer = Color.GRAY;
+                    } else if (greyInfluence == maxInfluence && currentOwner.equals(Color.VOID)) {
+                        maxInfluencer = null;
                     }
                 } else {
                     blackInfluence += influence;
                     if ((blackInfluence > maxInfluence) || (blackInfluence == maxInfluence && currentOwner.equals(Color.BLACK))) {
                         maxInfluence = blackInfluence;
                         maxInfluencer = Color.BLACK;
+                    } else if (blackInfluence == maxInfluence && currentOwner.equals(Color.VOID)) {
+                        maxInfluencer = null;
                     }
                 }
                 /*

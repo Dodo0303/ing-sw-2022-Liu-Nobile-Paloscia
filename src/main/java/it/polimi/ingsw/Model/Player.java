@@ -10,57 +10,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-/**  A new player. */
+/**  Class for the player */
 
 public class Player implements Serializable {
 
-    /** My current color. */
+    /** Color of the player */
     private Color _color;
 
-    /** Number of towers owned by THIS PLAYER. */
+    /** Number of towers owned by the player */
     private int _towerNum;
 
     /** Maximum amount of towers that the player can hold */
     private final int _maxTowerNum;
 
-    /** Number of coins owned by THIS PLAYER. */
+    /** Number of coins owned by the player */
     private int _coins;
 
-    /** The nickname set by THIS PLAYER */
+    /** The nickname set by the player */
     private String _nickName;
 
-    /** The numbers of professors of each color. */
+    /** The number of professors of each color. */
     private List<StudentColor> _professors;
 
-    /** The numbers of students in entrance of each color. */
+    /** The number of students in the entrance of each color. */
     private List<StudentColor> _entranceStudents;
 
     /** Max amount of students in the entrance */
     private final int _maxEntranceStudents;
 
-    /** Assistant cards of THIS player. Assistant[] is being used because the index of each card represents their maxStep.*/
+    /** Assistant cards of the player */
     private final ArrayList<Assistant> _assistants = new ArrayList<>(10);
 
     /** Last used assistant. */
     private Assistant _lastUsedAssistant;
 
-    /** Dining tables of THIS player. */
+    /** Dining tables of the player */
     private HashMap<StudentColor, DiningTable> _diningTable;
 
-    /** First player of my team. */
+    /** Player of the team that controls the towers */
     private Player captain;
 
 
 
     // CONSTRUCTOR
 
-    /** A Player in GAME, initially playing COLOR. */
+    
     Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
         this._nickName = nickname;
         this._color = color;
         this._coins = 12;//todo =0 after tested
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
-            this._towerNum = 8; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
+            this._towerNum = 8; 
             this._maxTowerNum = 8;
             this._maxEntranceStudents = 7;
         } else if (numOfPlayers == 3 && color != Color.VOID) {
@@ -70,8 +70,8 @@ public class Player implements Serializable {
         } else {
             throw new IllegalArgumentException();
         }
-        initEntranceStudents();
-        initProfessors();
+        this._entranceStudents = new ArrayList<>();
+        this._professors = new ArrayList<>();
         initAssistant(wizard);
         initDiningTable();
     }
@@ -82,7 +82,7 @@ public class Player implements Serializable {
         this._coins = 12;//todo =0 after tested
         this.captain = captain;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
-            this._towerNum = 0; //0 towers because in the case of 4 players, one player of the team has 8 towers while the other player has 0 towers.
+            this._towerNum = 0; 
             this._maxTowerNum = 0;
             this._maxEntranceStudents = 7;
         } else if (numOfPlayers == 3 && color != Color.VOID) {
@@ -92,25 +92,15 @@ public class Player implements Serializable {
         } else {
             throw new IllegalArgumentException();
         }
-        initEntranceStudents();
-        initProfessors();
+        this._entranceStudents = new ArrayList<>();
+        this._professors = new ArrayList<>();        
         initAssistant(wizard);
         initDiningTable();
     }
 
     // INITIALIZATION
-
-    /** Initialize _entranceStudents */
-    private void initEntranceStudents() {
-        this._entranceStudents = new ArrayList<>();
-        //TODO Someone (controller) has to draw the students and put them here when the match starts
-    }
-    /** Initialize _professors */
-    private void initProfessors() {
-        this._professors = new ArrayList<>();
-    }
-
-    /** Initialize _assistant */
+    
+    /** Initialize the assistants of this player */
     private void initAssistant(Wizard wizard) {
         int index = 0;
         for (int maxSteps = 1; maxSteps <= 5; maxSteps++) {
@@ -120,7 +110,7 @@ public class Player implements Serializable {
         }
     }
 
-    /** Initialize _diningTable */
+    /** Initialize the dining tables of this player */
     private void initDiningTable() {
         this._diningTable = new HashMap<>();
         for(StudentColor color : StudentColor.values()) {
@@ -130,18 +120,24 @@ public class Player implements Serializable {
 
     // ADD AND REMOVE TOWERS
 
-    /** Add x towers to THIS PLAYER. */
-    public void addTower(int x) {
+    /**
+     * Add towers to this player
+     * @param toAdd amount of towers to be added
+     */
+    public void addTower(int toAdd) {
         if (captain != null) {
-            captain.addTower(x);
+            captain.addTower(toAdd);
         } else {
             if (_towerNum < _maxTowerNum)
-                this._towerNum+=x;
+                this._towerNum+=toAdd;
             else
                 throw new GameException("Too many towers");
         }
     }
 
+    /**
+     * Add one tower to this player
+     */
     public void addTower() {
         if (captain != null) {
             captain.addTower();
@@ -153,19 +149,25 @@ public class Player implements Serializable {
         }
     }
 
-    /** Remove x towers from THIS PLAYER. */
-    public void removeTower(int x) {
+    /**
+     * Remove towers from this player
+     * @param toRemove amount of towers to be removed
+     */
+    public void removeTower(int toRemove) {
         if (captain != null) {
-            captain.removeTower(x);
+            captain.removeTower(toRemove);
         } else {
             if (this._towerNum > 0) {
-                this._towerNum -= x;
+                this._towerNum -= toRemove;
             } else {
                 throw new GameException("Invalid operation.");
             }
         }
     }
 
+    /**
+     * Remove one tower from this player
+     */
     public void removeTower() {
         if (captain != null) {
             captain.removeTower();
@@ -182,12 +184,12 @@ public class Player implements Serializable {
 
     // ADD AND REMOVE COINS
 
-    /** Add 1 coin to THIS PLAYER. */
+    /** Add 1 coin to this player */
     void addCoin() {
         this._coins++;
     }
 
-    /** Remove x coins from THIS PLAYER. */
+    /** Remove x coins from this player */
     void removeCoins(int x) {
         if (x < 0)
             throw new GameException("Can't remove a negative number of coins");
@@ -201,13 +203,19 @@ public class Player implements Serializable {
 
     // ADD AND REMOVE PROFESSORS
 
-    /** 1 professor of StudentCOLOR color to THIS PLAYER. */
+    /**
+     * Add a professor to this player
+     * @param color color of the professor to be added
+     */
     public void addProfessor(StudentColor color) {
         if (!this._professors.contains(color))
             this._professors.add(color);
     }
 
-    /** Remove 1 professor of StudentCOLOR color from THIS PLAYER. */
+    /**
+     * Remove a professor from this player
+     * @param color color of the professor to be removed
+     */
     public void removeProfessor(StudentColor color) {
             this._professors.remove(color);
     }
@@ -246,7 +254,8 @@ public class Player implements Serializable {
     // ASSISTANT
 
     /** Use an assistant card.
-     * @return the assistant card chosen by THIS player. */
+     * @param assistant assistant to be used
+     * @return the assistant card chosen by the player */
     public Assistant useAssistant(Assistant assistant) {
         int index = assistant.getValue()-1;
         Assistant res = _assistants.get(index);
@@ -259,12 +268,16 @@ public class Player implements Serializable {
 
     // ADD AND REMOVE FROM DINING TABLE
 
-    /** Add student to the correspondent dining table. */
+    /** Add a student to the correspondent dining table. 
+     * @param color color of the student
+     */
     public void addToDiningTable(StudentColor color) throws FullTableException {
         this._diningTable.get(color).addStudent();
     }
 
-    /** Remove a student from the correspondent dining table. */
+    /** Remove a student from the correspondent dining table. 
+     * @param color color of the student
+     */
     void removeFromDiningTable(StudentColor color) throws EmptyTableException {
         this._diningTable.get(color).removeStudent();
     }
@@ -286,6 +299,11 @@ public class Player implements Serializable {
         return Objects.hash(_nickName);
     }
 
+    /**
+     * Checks whether the player has a certain professor
+     * @param color color of the professor
+     * @return true if the player has that professor, false if not
+     */
     public boolean hasProfessor(StudentColor color) {
         return this._professors.contains(color);
     }
@@ -294,13 +312,16 @@ public class Player implements Serializable {
 
     // GETTERS
 
-    /** Return the color I am currently playing. */
+    /**
+     * 
+     * @return the color of the player
+     */
     public Color getColor() {
         return this._color;
     }
 
-    /**The getter of _towerNum
-     * @return number of towers owned by THIS PLAYER. */
+    /**
+     * @return number of towers owned by the player */
     public int getTowerNum() {
         if (captain != null) {
             return captain.getTowerNum();
@@ -309,44 +330,44 @@ public class Player implements Serializable {
         }
     }
 
-    /** The getter of coins.
-     * @return number of coins owned by THIS PLAYER.*/
+    /** 
+     * @return number of coins owned by the player*/
     public int getCoins() {
         return this._coins;
     }
 
 
-    /** The getter of nickname.
-     * @return the nickname of THIS PLAYER. */
+    /**
+     * @return the nickname of the player */
     public String getNickName() {
         return this._nickName;
     }
 
-    /** The getter of _professors
+    /**
      * @return the numbers of professors of each color. */
     public List<StudentColor> getProfessors() {
         return new ArrayList<>(this._professors);
     }
 
-    /** The getter of _entranceStudents
+    /**
+     * @return unused assistants of the player */
+    public ArrayList<Assistant> getAssistants() {
+        return this._assistants;
+    }
+
+    /**
      * @return the numbers of students in entrance of each color.*/
     public List<StudentColor> getEntranceStudents() {
         return this._entranceStudents;
     }
 
-    /** The getter of _assistant.
-     * @return unused assistants of THIS player. */
-    public ArrayList<Assistant> getAssistants() {
-        return this._assistants;
-    }
-
-    /** The getter of _usedAssistant.
+    /**
      * @return last used assistant */
     public Assistant getUsedAssistant() {
         return this._lastUsedAssistant;
     }
 
-    /** The getter of DiningTables.
+    /**
     * @return the dining tables. */
     public HashMap<StudentColor, DiningTable> getDiningTables() {
         return new HashMap<>(this._diningTable);
@@ -371,8 +392,7 @@ public class Player implements Serializable {
      * @return true if the player has only one character. false if not.
      */
     public boolean lastAssistant() {
-        if (assistantsLeft() == 1) return true;
-        return false;
+        return assistantsLeft() == 1;
     }
 
 
@@ -390,10 +410,18 @@ public class Player implements Serializable {
         return res;
     }
 
+    /**
+     * Set the amount of coins owned by the player
+     * @param coin amount of coins
+     */
     public void setCoins(int coin) {
         this._coins = coin;
     }
 
+    /**
+     * Set the amount of towers owned by this player
+     * @param tower amount of towers
+     */
     public void setTowers(int tower) {
         this._towerNum = tower;
     }
@@ -407,6 +435,10 @@ public class Player implements Serializable {
         this._lastUsedAssistant = this._assistants.remove(value-1);
     }
 
+    /**
+     *
+     * @return the Player of the team that controls the towers
+     */
     public Player getCaptain() {
         return this.captain;
     }

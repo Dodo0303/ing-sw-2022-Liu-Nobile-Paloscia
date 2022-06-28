@@ -3,9 +3,21 @@ package it.polimi.ingsw.Model;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Class for the assistant card.
+ */
 public class Assistant implements Serializable {
+    /**
+     * Value of the assistant
+     */
     private int value;
+    /**
+     * Maximum amount of steps that Mother Nature can do when this assistant is used
+     */
     private int maxSteps;
+    /**
+     * Back of the card
+     */
     private Wizard wizard;
 
     /**
@@ -20,14 +32,26 @@ public class Assistant implements Serializable {
         this.wizard = wizard;
     }
 
+    /**
+     *
+     * @return the value of this assistant
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     *
+     * @return the maximum amount of steps allowed by this assistant
+     */
     public int getMaxSteps() {
         return maxSteps;
     }
 
+    /**
+     *
+     * @return the back of this card
+     */
     public Wizard getWizard() {
         return wizard;
     }

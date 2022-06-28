@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Take 1 student from this card and place it in your dining room.
+ * Then, draw a new student from the bag and place it on this card.
+ */
 public class Character11 extends CharacterCard {
 
     public Character11(StudentColor[] students) {

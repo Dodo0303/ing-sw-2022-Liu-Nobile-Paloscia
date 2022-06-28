@@ -7,14 +7,30 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Abstract class for the characters
+ */
 public abstract class CharacterCard implements Serializable {
+    /**
+     * ID of the character
+     */
     private int _ID;
+    /**
+     * Current price of the character
+     */
     protected int _price;
+    /**
+     * Tells whether the character has been already used or not
+     */
     protected boolean used = false;
-    //protected int _currentPrice;
+    /**
+     * Students on the character card, if the character allows them
+     */
     protected List<StudentColor> students;
+    /**
+     * Number of no-entry tiles, if the character allows them
+     */
     protected int noEntries = 0;
-    //!students, noEntries and _price are protected because some concrete characters should be able to directly access them, for example in the initializer and in useEffect()
 
     public CharacterCard(int ID, int initialPrice){
         _ID = ID;
@@ -29,11 +45,6 @@ public abstract class CharacterCard implements Serializable {
         return _price;
     }
 
-    /*
-    public int getCurrentPrice() {
-        return _currentPrice;
-    }
-    */
     /**
      * Add a new-entry tile if the character allows it
      * @throws WrongEffectException the character doesn't expect to have no-entry tiles
@@ -77,17 +88,10 @@ public abstract class CharacterCard implements Serializable {
 
     /**
      *
-     * @return wether the card has already been used or not
+     * @return whether the card has already been used or not
      */
     public boolean isUsed() {
         return used;
     }
 
-    /**
-     *
-     * @return wether the card can be used or not
-     */
-    public boolean usable() {
-        return true;
-    }
 }

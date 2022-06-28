@@ -6,6 +6,12 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+
+/**
+ * Place a no-entry tile on an island of your choice.
+ * The first time Mother Nature ends her movement there, put the no-entry tile back onto this card.
+ * DO NOT calculate influence on that island, or place any Towers.
+ */
 public class Character5 extends CharacterCard {
 
     public Character5() {
@@ -43,10 +49,4 @@ public class Character5 extends CharacterCard {
         return noEntries;
     }
 
-    @Override
-    public boolean usable() {
-        if (noEntries > 0)
-            return true;
-        return false;
-    }
 }

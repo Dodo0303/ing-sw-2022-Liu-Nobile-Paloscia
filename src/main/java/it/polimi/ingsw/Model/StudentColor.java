@@ -2,14 +2,20 @@ package it.polimi.ingsw.Model;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration for the color of the tiles
+ */
 public enum StudentColor implements Serializable {
-    /** Possible student colors. */
+    /** Possible tiles color. */
     GREEN("\uD83D\uDFE2"),
     BLUE("\uD83D\uDD35"),
     YELLOW("\uD83D\uDFE1"),
     RED("\uD83D\uDD34"),
     PINK("\uD83D\uDFE3");
 
+    /**
+     * Code of the color
+     */
     private String color;
 
     StudentColor(String color) {
@@ -18,16 +24,17 @@ public enum StudentColor implements Serializable {
 
     @Override
     public String toString() {
-        if (color.equals("\uD83D\uDFE2")) {
-            return "Green";
-        } else if (color.equals("\uD83D\uDD35")) {
-            return "Blue";
-        }  else if (color.equals("\uD83D\uDD34")) {
-            return "Red";
-        } else if (color.equals("\uD83D\uDFE1")) {
-            return "Yellow";
-        } else {
-            return "Pink";
+        switch (color) {
+            case "\uD83D\uDFE2":
+                return "Green";
+            case "\uD83D\uDD35":
+                return "Blue";
+            case "\uD83D\uDD34":
+                return "Red";
+            case "\uD83D\uDFE1":
+                return "Yellow";
+            default:
+                return "Pink";
         }
     }
 }

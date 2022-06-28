@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * You may take up to 3 students from this card and replace them with the same number of students from your entrance.
+ */
 public class Character7 extends CharacterCard {
 
     public Character7(StudentColor[] students) {
