@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Model.GameModel;
 import it.polimi.ingsw.Model.StudentColor;
 
+/**
+ * Class used to generate characters, based on their ID
+ */
 public class CharacterFactory {
     private GameModel gameModel;
 
@@ -17,6 +20,11 @@ public class CharacterFactory {
     }
 
 
+    /**
+     * Draws a certain amount of students from the bag in order to put them on a character
+     * @param quantity number of students to be taken
+     * @return students to put on the character card
+     */
     private StudentColor[] generateStudents(int quantity){
         StudentColor[] students = new StudentColor[quantity];
         for (int i = 0; i < quantity; i++) {

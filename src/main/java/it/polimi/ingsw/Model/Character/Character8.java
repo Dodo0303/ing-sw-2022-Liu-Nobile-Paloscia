@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * During the influence calculation this turn, you count as having 2 more influence.
+ */
 public class Character8 extends CharacterCard {
 
     public Character8() {

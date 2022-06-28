@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * You may exchange up to 2 students between tour entrance and your dining room.
+ */
 public class Character10 extends CharacterCard {
 
     public Character10() {

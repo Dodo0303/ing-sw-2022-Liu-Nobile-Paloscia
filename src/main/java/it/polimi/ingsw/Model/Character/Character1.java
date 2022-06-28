@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Take 1 student from this card and place it on an Island of your choice.
+ * Then, draw a new student from the bag and place it on this card.
+ */
 public class Character1 extends CharacterCard {
 
     public Character1(StudentColor[] students) {

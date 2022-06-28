@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * You may move Mother Nature up to 2 additional islands than is indicated by the assistant card you've played
+ */
 public class Character4 extends CharacterCard {
 
     public Character4() {

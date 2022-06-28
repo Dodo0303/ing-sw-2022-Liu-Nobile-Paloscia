@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * During this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them.
+ */
 public class Character2 extends CharacterCard {
 
     public Character2() {

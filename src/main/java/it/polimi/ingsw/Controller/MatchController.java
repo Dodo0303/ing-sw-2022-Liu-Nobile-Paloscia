@@ -338,7 +338,6 @@ public class MatchController implements Runnable {
      * @param removeCoins true if the method should remove the coins from the player
      * @param studentToAdd student that will replace the one extracted
      * @return the color of the student extracted
-     * @throws EmptyBagException if there are no more students in the bag and the character can't be filled again
      * @throws WrongEffectException if the method is trying to call the wrong effect
      */
     public StudentColor useCharacter (String nickname, int characterId, int studentIndex, boolean removeCoins, StudentColor studentToAdd) throws WrongEffectException {

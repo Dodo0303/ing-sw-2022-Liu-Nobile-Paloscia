@@ -5,6 +5,10 @@ import it.polimi.ingsw.Exceptions.WrongEffectException;
 
 import java.util.List;
 
+/**
+ * Choose an island and resolve the island as if Mother Nature had ended her movement there.
+ * Mother Nature will still move and the island where she ends her movement will also be resolved.
+ */
 public class Character3 extends CharacterCard {
 
     public Character3() {
