@@ -96,7 +96,7 @@ public class ChooseCharacterController implements Initializable {
             checkValidity(res);
             gui.setCurrPhase(Phase_GUI.Character7);
             gui.setCurrCharacter(7);
-            gui.viewSchoolBoard("Move a student from card. ", false);
+            gui.viewSchoolBoard("Click a student on the card. ", false);
         } else if (radio8.isSelected()) {
             res = 8;
             checkValidity(res);

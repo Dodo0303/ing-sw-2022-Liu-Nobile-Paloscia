@@ -33,7 +33,7 @@ public class GameBoardController implements Initializable {
     @FXML
     private StackPane cloud0, cloud1, cloud2, cloud3;
     @FXML
-    private Label messageLabel;
+    private Label messageLabel, phaseLabel;
     @FXML
     private Button backButton;
     @FXML
@@ -258,8 +258,8 @@ public class GameBoardController implements Initializable {
                 ImageView noEntryImageView = new ImageView(noEntryImage);
                 noEntryImageView.setFitHeight(30);
                 noEntryImageView.setFitWidth(30);
-                noEntryImageView.setTranslateX(100);
-                noEntryImageView.setTranslateY(100);
+                noEntryImageView.setTranslateX(85);
+                noEntryImageView.setTranslateY(85);
                 imageViews.add(noEntryImageView);
                 stackPane.getChildren().add(noEntryImageView);
             }
@@ -363,6 +363,10 @@ public class GameBoardController implements Initializable {
         messageLabel.setText(msg);
     }
 
+    public void setPhaseLabel(String msg) {
+        phaseLabel.setText(msg);
+    }
+
     public void setMoveStudent(boolean moveStudent) {
         this.moveStudent = moveStudent;
     }
@@ -382,5 +386,6 @@ public class GameBoardController implements Initializable {
     public void setStudentIndex(int studentIndex) {
         this.studentIndex = studentIndex;
     }
+
 
 }
