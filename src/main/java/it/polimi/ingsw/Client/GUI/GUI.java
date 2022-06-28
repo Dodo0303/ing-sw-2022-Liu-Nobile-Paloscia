@@ -51,8 +51,6 @@ public class GUI implements ViewController {
     private ArrayList<String> playerPlayedAssistant;
     private String[] nicknames;
     private HashMap<Integer, String> assistantPlayer;
-    private Screen screen;
-    private Rectangle2D bounds;
     private double scalingRatio;
     private boolean fullScreen;
     private boolean assistantPicked;
@@ -61,6 +59,8 @@ public class GUI implements ViewController {
         this.stage = stage;
     }
 
+    /** Start GUI with login.fxml
+    */
     public void start() {
         try {
             assistantPlayer = new HashMap<>();
@@ -90,7 +90,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** establish connection with the server
+     */
     public boolean settingUpConnection(String host, int port) {
         try {
             serverHandler = new ServerHandler(host, port, this);
@@ -101,7 +102,8 @@ public class GUI implements ViewController {
         }
 
     }
-
+    /** render view of nickname.fxml
+     */
     public void requireNickname(boolean reset){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/nickname.fxml"));
@@ -122,7 +124,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of chooseGameMode.fxml
+     */
     public void chooseGameMode(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/chooseGameMode.fxml"));
@@ -143,7 +146,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of newgame.fxml
+     */
     public void newgame() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/newgame.fxml"));
@@ -161,7 +165,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of JoinGame.fxml
+     */
     public void joinGame(String msg, List<Integer> matches) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/JoinGame.fxml"));
@@ -183,13 +188,16 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /* set this.numPlayer and this.expert, then render view of ChooseWizard.fxml
+     */
     public void completeCreateNewGame(int numPlayer, boolean expert) {
         this.numPlayer = numPlayer;
         this.expert = expert;
         chooseWizard(true);
     }
-
+    /** render view of ChooseWizard.fxml, disabling ratio buttons of unavailable wizards
+     *
+     */
     public void chooseWizard(boolean newGame) {
         try {
             getScaleFactor();
@@ -229,7 +237,9 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of GameCreated.fxml
+     *
+     */
     public void showGameCreated(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameCreated.fxml"));
@@ -248,7 +258,9 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of ChooseAssistant.fxml, disabling ratio buttons of unavailable assistant cards
+     *
+     */
     public void playAssistant(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseAssistant.fxml"));
@@ -281,8 +293,11 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
-    public void moveStudentToIsland(String msg, int studentIndex) {//this differs from checkBoard because of int studentIndex
+    /** render view of GameBoard.fxml.
+     * This method is called after players dragged a student from the entrance of the school board to islands.
+     * This method differs from checkBoard because of the other parameter studentIndex, which indicates the index of the student in the entrance.
+     */
+    public void moveStudentToIsland(String msg, int studentIndex) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
             Parent root = fxmlLoader.load();
@@ -310,7 +325,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of GameOver.fxml.
+     */
     public void gameOver(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameOver.fxml"));
@@ -333,7 +349,10 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of GameBoard.fxml.
+     * One of the two main views of the game.
+     * It enables/disables components based on the current phase of the game.
+     */
     public void checkBoard(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameBoard.fxml"));
@@ -394,7 +413,11 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of SchoolBoard.fxml.
+     * One of the two main views of the game.
+     * It enables/disables components based on the current phase of the game.
+     * If other == true, then display the other players' school boards(only if number of players > 2).
+     */
     public void viewSchoolBoard(String msg, boolean other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SchoolBoard.fxml"));
@@ -472,7 +495,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of UseCharacterCard.fxml.
+     */
     public void showCharacter(String msg) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
@@ -503,10 +527,11 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** render view of PickColor.fxml.
+     */
     public void pickColor() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UseCharacterCard.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/PickColor.fxml"));
             Parent root = fxmlLoader.load();
             PickColorController pickColorController = fxmlLoader.getController();
             pickColorController.setGUI(this);
@@ -524,7 +549,8 @@ public class GUI implements ViewController {
             e.printStackTrace();
         }
     }
-
+    /** Send message to the server.
+     */
     public void send(Object message) {
         if (message == null) {
             throw new IllegalArgumentException("Null cannot be sent as a message.\n");
@@ -532,12 +558,14 @@ public class GUI implements ViewController {
             serverHandler.send(message);
         }
     }
-
+    /** Start the thread of my serverHandler.
+     */
     public void startServerHandler() {
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
     }
-
+    /** Process received messages.
+     */
     public void messageReceived(Object message) {
         if (message instanceof NickResponseMessage) {
             if (currPhase.equals(Phase_GUI.PickingNickname)) {
@@ -678,6 +706,23 @@ public class GUI implements ViewController {
         }
     }
 
+    /**
+     * Calculate scale factor based on the scaled size of the screen (in the case of Retina screens, the screen is always scaled down by 2, so if the original resolution is 2560*1440, then the practical resolution is 1280*720),
+     * if the scaled screen is bigger than 1920*1080, do nothing; otherwise, scale down the game window to fit the scrren.
+     */
+    private void getScaleFactor() {
+        Screen screen = Screen.getPrimary();
+
+        double boundX = screen.getBounds().getWidth();
+        double boundY = screen.getBounds().getHeight();
+        if (boundX >= 1920 && boundY >= 1080) {
+            scalingRatio = 1;
+        } else {
+            this.scalingRatio = Math.min(boundX / 1920, boundY / 1080);
+        }
+    }
+
+
     public Phase_GUI getCurrPhase() {
         return this.currPhase;
     }
@@ -797,27 +842,6 @@ public class GUI implements ViewController {
     public void setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
     }
-
-    private void getScaleFactor() {
-        Screen screen = Screen.getPrimary();
-
-        double dpi = screen.getDpi();
-        double scaleX = screen.getOutputScaleX();
-        double scaleY = screen.getOutputScaleY();
-        double boundX = screen.getBounds().getWidth();
-        double boundY = screen.getBounds().getHeight();
-        double MAXboundX = screen.getBounds().getMaxX();
-        double MINboundY = screen.getBounds().getMaxY();
-        System.out.println("DPI: " + dpi + " - scaleX: " + scaleX + " - scaleY: " + scaleY);
-        System.out.println(" - boundX: " + boundX + " - boundY: " + boundY);
-        System.out.println(" - boundX: " + MAXboundX + " - boundY: " + MINboundY);
-        if (boundX >= 1920 && boundY >= 1080) {
-            scalingRatio = 1;
-        } else {
-            this.scalingRatio = Math.min(boundX / 1920, boundY / 1080);
-        }
-    }
-
 
     public String[] getNicknames() {
         return nicknames;
