@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * This class is the controller of the Command Line Interface
+ */
 public class CLI implements ViewController {
     GameModel game;
     boolean closed;
@@ -70,6 +73,7 @@ public class CLI implements ViewController {
     }
     /**
      * Send message to the server.
+     * @param message message to be sent
      */
     public void send(Object message) {
         if (message == null) {
@@ -80,6 +84,7 @@ public class CLI implements ViewController {
     }
     /**
      * Process received messages.
+     * @param message message received
      */
     public void messageReceived(Object message) {
         try {
@@ -698,94 +703,173 @@ public class CLI implements ViewController {
         }
     }
 
+    /**
+     *
+     * @return nickname of the player
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     *
+     * @return the current phase of the game
+     */
     public Phase getCurrPhase() {
         return this.currPhase;
     }
 
+    /**
+     *
+     * @return instance of the ServerHandler that is handling the communication with the server
+     */
     public ServerHandler getServerHandler() {
         return serverHandler;
     }
 
+    /**
+     * Set the nickname of the player.
+     * @param str nickname to be set
+     */
     public void setNickName(String str) {
         this.nickname = str;
     }
 
+    /**
+     * Changes the phase of the game
+     * @param phase phase to be set
+     */
     public void setPhase(Phase phase) {
         this.currPhase = phase;
     }
 
+    /**
+     * Set the wizards chosen by the players
+     * @param wizards wizards to be set
+     */
     public void setWizards(List<Wizard> wizards) {
         this.wizards = wizards;
     }
 
+    /**
+     * Set the Game Model for the game
+     * @param game instance of GameModel to be set
+     */
     public void setGame(GameModel game) {
         this.game = game;
     }
 
+    /**
+     *
+     * @return the instance of the GameModel of the match
+     */
     public GameModel getGame() {
         return game;
     }
 
+    /**
+     *
+     * @return whether the match is in expert mode or not
+     */
     public boolean isExpert() {
         return expert;
     }
 
+    /**
+     * Set the expert mode
+     * @param expert true to play in expert mode. False to play in normal mode
+     */
     public void setExpert(boolean expert) {
         this.expert = expert;
     }
 
+    /**
+     *
+     * @return whether the player has to play or not
+     */
     public boolean isMyTurn() {
         return myTurn;
     }
 
+    /**
+     * Set the state of the turn
+     * @param myTurn true if it's the player' turn. False if not
+     */
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
 
+    /**
+     *
+     * @return the previous phase of the game
+     */
     public Phase getPrevPhase() {
         return prevPhase;
     }
 
+    /**
+     * Set the previous phase of the game
+     * @param prevPhase phase to be set as previous
+     */
     public void setPrevPhase(Phase prevPhase) {
         this.prevPhase = prevPhase;
     }
 
+    /**
+     *
+     * @return the instance of the UserInterfaceCLI that is used by this controller
+     */
     public UserInterfaceCLI getView() {
         return view;
     }
 
+    /**
+     * Set the character that is currently being used
+     * @param characterID ID of the character to be set
+     */
     public void setCurrCharacter(int characterID) {
         this.currCharacter = characterID;
     }
 
+    /**
+     *
+     * @return the number of moves done during the Action Phase 1
+     */
     public int getAp1Moves() {
         return ap1Moves;
     }
 
+    /**
+     * Set the number of moves done during the Action Phase 1
+     * @param ap1Moves amount of moves to be set
+     */
     public void setAp1Moves(int ap1Moves) {
         this.ap1Moves = ap1Moves;
     }
 
+    /**
+     * Set the nicknames of the players that are playing the match
+     * @param nicknames nicknames to be set
+     */
     public void setNicknames(String[] nicknames) {
         this.nicknames = nicknames;
     }
-
+    /**
+     * Return assistantPlayer
+     */
     public ArrayList<Integer> getAssistantPlayer() {
         return assistantPlayer;
     }
-
-    public void setAssistantPlayer(ArrayList<Integer> assistantPlayer) {
-        this.assistantPlayer = assistantPlayer;
-    }
-
+    /**
+     * Return assistantPicked
+     */
     public boolean isAssistantPicked() {
         return assistantPicked;
     }
-
+    /**
+     * Set assistantPicked
+     * @param assistantPicked true if I already picked assistant card for the current round
+     */
     public void setAssistantPicked(boolean assistantPicked) {
         this.assistantPicked = assistantPicked;
     }

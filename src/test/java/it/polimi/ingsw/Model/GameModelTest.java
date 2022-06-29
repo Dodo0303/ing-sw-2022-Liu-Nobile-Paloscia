@@ -133,6 +133,13 @@ class GameModelTest {
     }
 
     @Test
+    public void testGetPlayerByNickname_WrongNickname_ShouldThrowException() {
+        assertThrows(GameException.class, ()->{
+            game2.getPlayerByNickname("unexisting");
+        });
+    }
+
+    @Test
     public void testRemoveStudentFromEntrance(){
         Player player = game2.getPlayers().get(0);
         StudentColor colorToBeRemoved = player.getEntranceStudents().get(0);
@@ -388,5 +395,22 @@ class GameModelTest {
         game2.set_clouds(newClouds);
 
         assertSame(newCloud, game2.getClouds().get(0));
+    }
+
+    @Test
+    public void testRemoveAndAddTowersToColor() {
+        game2.removeTowersToColor(1, Color.BLACK);
+        for (Player player :
+                game2.getPlayers()) {
+            if (player.getColor().equals(Color.BLACK))
+                assertEquals(player.getMaxTowerNum()-1, player.getTowerNum());;
+        }
+
+        game2.addTowersToColor(1, Color.BLACK);
+        for (Player player :
+                game2.getPlayers()) {
+            if (player.getColor().equals(Color.BLACK))
+                assertEquals(player.getMaxTowerNum(), player.getTowerNum());;
+        }
     }
 }

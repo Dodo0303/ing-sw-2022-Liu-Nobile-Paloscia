@@ -83,7 +83,7 @@ public class Player implements Serializable {
         this.captain = captain;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 0; 
-            this._maxTowerNum = 0;
+            this._maxTowerNum = 8;
             this._maxEntranceStudents = 7;
         } else if (numOfPlayers == 3 && color != Color.VOID) {
             this._towerNum = 6;

@@ -11,8 +11,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class contains utilities methods used to interact with the user through the CLI
+ */
 public class UserInterfaceCLI{
 
+    /**
+     * CLI controller instance
+     */
     private CLI cli;
     private BufferedReader input;
 
@@ -20,6 +26,10 @@ public class UserInterfaceCLI{
         input = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    /**
+     * This method is used when the controller requires to read an input from the user
+     * @return the String read from the input
+     */
     public String requireUserInput() {
         String str = "";
         try {
@@ -30,6 +40,9 @@ public class UserInterfaceCLI{
         return str;
     }
 
+    /**
+     * This method is used to print on the screen the menu of the game
+     */
     public void menu() {
         clearScreen();
         int num = -1;
@@ -119,7 +132,9 @@ public class UserInterfaceCLI{
         clearScreen();
     }
 
-
+    /**
+     * This method is used to print the islands and their information during the game
+     */
     void printIslands() {
         int numIslands = cli.getGame().getIslands().size();
         for (int i = 0; i < numIslands; i++) {
@@ -128,7 +143,10 @@ public class UserInterfaceCLI{
         System.out.println("The mother nature is on island " + cli.getGame().getMotherNatureIndex());
     }
 
-
+    /**
+     * This method is used to print information about one specific island
+     * @param index index of the island to be printed
+     */
     public void printIsland(int index){
         System.out.println("Island " + index);
         if (cli.getGame().getIslands().get(index).getTowerColor().equals(Color.VOID)) {
@@ -150,6 +168,9 @@ public class UserInterfaceCLI{
         System.out.println("\uD83D\uDFE3: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.PINK));
     }
 
+    /**
+     * This method prints information about the clouds during the game
+     */
     public void printClouds() {
         for (int i = 0; i < cli.getGame().getClouds().size(); i++) {
             System.out.print("cloud " + i + " :\n");
@@ -160,6 +181,10 @@ public class UserInterfaceCLI{
         }
     }
 
+    /**
+     * This method prints information about the School Board of a player
+     * @param player target player
+     */
     public void printSchoolBoard(Player player) {
         System.out.println("\n" + player.getNickName().toUpperCase() + "'S school board:\n");
         System.out.println("Entrance: ");
@@ -198,6 +223,9 @@ public class UserInterfaceCLI{
         }
     }
 
+    /**
+     * This method prints the list of available characters, and their status
+     */
     public void printCharacters()  {
         try {
             for (int i = 1; i <= cli.getGame().getCharacters().size(); i++) {
@@ -250,6 +278,9 @@ public class UserInterfaceCLI{
 
     }
 
+    /**
+     * This method is used to print the title of the game when Eriantys is opened
+     */
     public void printTitle(){
         System.out.println(
                 "███████╗██████╗░██╗░█████╗░███╗░░██╗████████╗██╗░░░██╗░██████╗\n" +
@@ -260,11 +291,18 @@ public class UserInterfaceCLI{
                         "╚══════╝╚═╝░░╚═╝╚═╝╚═╝░░╚═╝╚═╝░░╚══╝░░░╚═╝░░░░░░╚═╝░░░╚═════╝░");
     }
 
+    /**
+     * This method is used to clear the screen, before printing something else
+     */
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    /**
+     * Set the controller
+     * @param cli controller to be set
+     */
     public void setCli(CLI cli) {
         this.cli = cli;
     }

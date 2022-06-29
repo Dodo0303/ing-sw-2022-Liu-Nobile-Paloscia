@@ -119,6 +119,21 @@ class PlayerTest {
     }
 
     @Test
+    public void createPlayerWithCaptain_ThreePlayers() {
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 3, null);
+        assertEquals(6, p.getTowerNum());
+        assertEquals(6, p.getMaxTowerNum());
+        assertEquals(9, p.getMaxEntranceStudents());
+    }
+
+    @Test
+    public void createPlayerWithCaptain_InvalidArgument_ShouldThrowException(){
+        assertThrows(IllegalArgumentException.class, ()->{
+            new Player("Test", Color.BLACK, Wizard.WIZARD1, 5, null);
+        });
+    }
+
+    @Test
     public void testRemoveTower(){
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 3);
         p.removeTower();
@@ -145,6 +160,31 @@ class PlayerTest {
         assertEquals(towers + 1, p.getTowerNum());
         p.addTower();
         assertEquals(towers+2, p.getTowerNum());
+
+    }
+
+    @Test
+    public void testAddTowerWithCaptain() {
+        Player captain = new Player("Cap", Color.BLACK, Wizard.WIZARD4, 4, null);
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 4, captain);
+        int towers = p.getTowerNum();
+        p.addTower(1);
+        assertEquals(towers + 1, p.getTowerNum());
+        p.addTower();
+        assertEquals(towers + 2, p.getTowerNum());
+
+    }
+
+    @Test
+    public void removeTowerWithCaptain() {
+        Player captain = new Player("Cap", Color.BLACK, Wizard.WIZARD4, 4, null);
+        Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 4, captain);
+        p.addTower(p.getMaxTowerNum());
+        p.removeTower();
+        assertEquals(p.getMaxTowerNum()-1, p.getTowerNum());
+        p.removeTower(1);
+        assertEquals(p.getMaxTowerNum()-2, p.getTowerNum());
+        assertEquals(p.getMaxTowerNum()-2, p.getCaptain().getTowerNum());
 
     }
 
