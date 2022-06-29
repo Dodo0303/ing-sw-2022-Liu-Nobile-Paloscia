@@ -601,7 +601,7 @@ public class GUI implements ViewController {
 
     /**
      * Calculate scale factor based on the scaled size of the screen (in the case of Retina screens, the screen is always scaled down by 2, so if the original resolution is 2560*1440, then the practical resolution is 1280*720),
-     * if the scaled screen is bigger than 1920*1080, do nothing; otherwise, scale down the game window to fit the scrren.
+     * if the scaled screen is bigger than 1920*1080, do nothing; otherwise, scale down the game window to fit the screen.
      */
     private void getScaleFactor() {
         Screen screen = Screen.getPrimary();
@@ -627,34 +627,66 @@ public class GUI implements ViewController {
         });
     }
 
+    /**
+     *
+     * @return the current phase of the game
+     */
     public Phase_GUI getCurrPhase() {
         return this.currPhase;
     }
 
+    /**
+     *
+     * @return the current stage
+     */
     public Stage getStage() {
         return this.stage;
     }
 
+    /**
+     *
+     * @return the instance of the Server Handler that is managing the connection with the server
+     */
     public ServerHandler getServerHandler() {
         return serverHandler;
     }
 
+    /**
+     * Set the server handler
+     * @param serverHandler ServerHandler to be set
+     */
     public void setServerHandler(ServerHandler serverHandler) {
         this.serverHandler = serverHandler;
     }
 
+    /**
+     * Set the current phase of the game
+     * @param currPhase phase to be set as current
+     */
     public void setCurrPhase(Phase_GUI currPhase) {
         this.currPhase = currPhase;
     }
 
+    /**
+     *
+     * @return the previous phase of the game
+     */
     public Phase_GUI getPrevPhase() {
         return this.prevPhase;
     }
 
+    /**
+     *
+     * @return the nickname of the player
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * Set the nickname of the player
+     * @param nickname nickname to be set
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -679,34 +711,66 @@ public class GUI implements ViewController {
         return numPlayer;
     }
 
+    /**
+     *
+     * @return whether the match is in expert mode or not
+     */
     public boolean isExpert() {
         return expert;
     }
 
+    /**
+     *
+     * @param expert true if the match must be in expert mode. False if not
+     */
     public void setExpert(boolean expert) {
         this.expert = expert;
     }
 
+    /**
+     * Set the wizards chosen by the players
+     * @param wizards wizards to be set
+     */
     public void setWizards(List<Wizard> wizards) {
         this.wizards = wizards;
     }
 
+    /**
+     *
+     * @return the instance of the Game Model that keeps the status of the game
+     */
     public GameModel getGame() {
         return game;
     }
 
+    /**
+     * Set the instance of Game Model that keeps the status of the game
+     * @param game GameModel to be set
+     */
     public void setGame(GameModel game) {
         this.game = game;
     }
 
+    /**
+     * Set the state of the turn
+     * @param myTurn true if it's the player' turn. False if not
+     */
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
 
+    /**
+     *
+     * @return whether is the turn of the player or not
+     */
     public boolean isMyTurn() {
         return myTurn;
     }
 
+    /**
+     * Set the previous phase of the game
+     * @param phase phase to be set as previous
+     */
     public void setPrevPhase(Phase_GUI phase) {
         this.prevPhase = phase;
     }
@@ -715,6 +779,10 @@ public class GUI implements ViewController {
         return currCharacter;
     }
 
+    /**
+     * Set the character that is currently being used
+     * @param currCharacter ID of the character to be set
+     */
     public void setCurrCharacter(int currCharacter) {
         this.currCharacter = currCharacter;
     }
@@ -722,10 +790,19 @@ public class GUI implements ViewController {
     public int getChangeTurnNums() {
         return this.changeTurnNums;
     }
+
+    /**
+     * TODO
+     * @param changeTurnNums
+     */
     public void setChangeTurnNums(int changeTurnNums){
         this.changeTurnNums = changeTurnNums;
     }
 
+    /**
+     * Set the number of players that will play this match
+     * @param numPlayer amount of players to be set
+     */
     public void setNumPlayer(int numPlayer) {
         this.numPlayer = numPlayer;
     }
@@ -735,27 +812,51 @@ public class GUI implements ViewController {
         return fullScreen;
     }
 
+    /**
+     * Set the status of the fullscreen
+     * @param fullScreen true to turn on the fullscreen. False to turn it off.
+     */
     public void setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
     }
 
+    /**
+     *
+     * @return the nicknames of the players playing the match
+     */
     public String[] getNicknames() {
         return nicknames;
     }
 
+    /**
+     * Set the nicknames of the players playing the match
+     * @param nicknames nicknames to be set
+     */
     public void setNicknames(String[] nicknames) {
         this.nicknames = nicknames;
     }
 
 
+    /**
+     *
+     * @return the assistant chosen by the players
+     */
     public HashMap<Integer, String> getAssistantPlayer() {
         return assistantPlayer;
     }
 
+    /**
+     *
+     * @return whether the player has chosen the assistant or not
+     */
     public boolean isAssistantPicked() {
         return assistantPicked;
     }
 
+    /**
+     * Set whether the player has chosen an assistant or not
+     * @param assistantPicked true if the players has chosen an assistant. False if not
+     */
     public void setAssistantPicked(boolean assistantPicked) {
         this.assistantPicked = assistantPicked;
     }
@@ -765,6 +866,10 @@ public class GUI implements ViewController {
         return currentOtherPlayerPhase;
     }
 
+    /**
+     * TODO
+     * @param currentOtherPlayerPhase
+     */
     public void setCurrentOtherPlayerPhase(Phase_GUI currentOtherPlayerPhase) {
         this.currentOtherPlayerPhase = currentOtherPlayerPhase;
     }
@@ -774,6 +879,10 @@ public class GUI implements ViewController {
         return currPlayer;
     }
 
+    /**
+     * Set the player currently playing
+     * @param currPlayer nickname of the player to be set
+     */
     public void setCurrPlayer(String currPlayer) {
         this.currPlayer = currPlayer;
     }

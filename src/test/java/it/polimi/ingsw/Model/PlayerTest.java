@@ -165,8 +165,9 @@ class PlayerTest {
 
     @Test
     public void testAddTowerWithCaptain() {
-        Player captain = new Player("Cap", Color.BLACK, Wizard.WIZARD4, 4, null);
+        Player captain = new Player("Cap", Color.BLACK, Wizard.WIZARD4, 4);
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 4, captain);
+        p.removeTower(2);
         int towers = p.getTowerNum();
         p.addTower(1);
         assertEquals(towers + 1, p.getTowerNum());
@@ -177,14 +178,13 @@ class PlayerTest {
 
     @Test
     public void removeTowerWithCaptain() {
-        Player captain = new Player("Cap", Color.BLACK, Wizard.WIZARD4, 4, null);
+        Player captain = new Player("Cap", Color.BLACK, Wizard.WIZARD4, 4);
         Player p = new Player("Test", Color.BLACK, Wizard.WIZARD1, 4, captain);
-        p.addTower(p.getMaxTowerNum());
         p.removeTower();
-        assertEquals(p.getMaxTowerNum()-1, p.getTowerNum());
+        assertEquals(captain.getMaxTowerNum()-1, p.getTowerNum());
         p.removeTower(1);
-        assertEquals(p.getMaxTowerNum()-2, p.getTowerNum());
-        assertEquals(p.getMaxTowerNum()-2, p.getCaptain().getTowerNum());
+        assertEquals(captain.getMaxTowerNum()-2, p.getTowerNum());
+        assertEquals(captain.getMaxTowerNum()-2, p.getCaptain().getTowerNum());
 
     }
 
