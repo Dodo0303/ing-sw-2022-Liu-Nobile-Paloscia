@@ -162,11 +162,11 @@ public class UserInterfaceCLI{
             System.out.println("Mother nature is here");
         }
         System.out.println("Students:");
-        System.out.println("\uD83D\uDD34: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.RED));
-        System.out.println("\uD83D\uDFE1: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.YELLOW));
-        System.out.println("\uD83D\uDFE2: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.GREEN));
-        System.out.println("\uD83D\uDD35: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.BLUE));
-        System.out.println("\uD83D\uDFE3: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.PINK));
+        System.out.println("Red: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.RED));
+        System.out.println("Yellow: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.YELLOW));
+        System.out.println("Green: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.GREEN));
+        System.out.println("Blue: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.BLUE));
+        System.out.println("Pink: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.PINK));
     }
 
     /**

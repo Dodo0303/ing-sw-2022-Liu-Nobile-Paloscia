@@ -1059,7 +1059,7 @@ public class MatchController implements Runnable {
     public int endedAtPhase2() {
         this.game.calculateNumIslandsForPlayers();
         for (Player player : game.getPlayers()) {
-            if (player.getTowerNum() == 0) {
+            if (player.getTowerNum() <= 0) {
                 return 1;
             }
         }
