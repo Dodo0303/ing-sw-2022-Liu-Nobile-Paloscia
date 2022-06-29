@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Player;
@@ -58,12 +57,12 @@ public class StudentColorChosenMessage extends MessageToClient {
         GUI guiClient = (GUI) client.getClient();
         guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 3);
         if (!isCharacter12) {
-            if (guiClient.getCurrPhase().equals(Phase_GUI.Character9)) {
+            if (guiClient.getCurrPhase().equals(Phase.Character9)) {
                 guiClient.setCurrPhase(guiClient.getPrevPhase());
                 guiClient.viewSchoolBoard("Color " + colorChosen.toString() + " is not considered for the influence in this turn", false);
             }
         } else {
-            if (guiClient.getCurrPhase().equals(Phase_GUI.Character12)) {
+            if (guiClient.getCurrPhase().equals(Phase.Character12)) {
                 guiClient.setCurrPhase(guiClient.getPrevPhase());
             }
             guiClient.getGame().set_players(playersUpdated);

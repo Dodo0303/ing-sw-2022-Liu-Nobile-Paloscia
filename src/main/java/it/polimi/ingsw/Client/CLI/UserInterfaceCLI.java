@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.*;

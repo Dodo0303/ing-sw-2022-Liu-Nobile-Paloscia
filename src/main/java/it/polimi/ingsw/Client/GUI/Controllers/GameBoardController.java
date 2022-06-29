@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMessage;
@@ -9,8 +9,6 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntr
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.ChooseIslandMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveNoEntryMessage;
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.MoveStudentFromCharacterMessage;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,11 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
-import java.lang.reflect.Field;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -58,7 +54,7 @@ public class GameBoardController implements Initializable {
     public void back() {
         if (moveStudent) {
             gui.viewSchoolBoard("Move a student", false);
-        } else if (gui.getCurrPhase().equals(Phase_GUI.Character9) || gui.getCurrPhase().equals(Phase_GUI.Character12)) {
+        } else if (gui.getCurrPhase().equals(Phase.Character9) || gui.getCurrPhase().equals(Phase.Character12)) {
             gui.pickColor();
         } else {
             gui.playAssistant("");
@@ -220,11 +216,11 @@ public class GameBoardController implements Initializable {
             if (moveStudent || character) {
                 imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     int islandChosen = islandImageViews.indexOf(imageView);
-                    if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
+                    if (gui.getCurrPhase().equals(Phase.Character1)) {
                         gui.send(new MoveStudentFromCharacterMessage(studentIndex, islandChosen));
-                    } else if (gui.getCurrPhase().equals(Phase_GUI.Character3)) {
+                    } else if (gui.getCurrPhase().equals(Phase.Character3)) {
                         gui.send(new ChooseIslandMessage(islandChosen));
-                    } else if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
+                    } else if (gui.getCurrPhase().equals(Phase.Character5)) {
                         gui.send(new MoveNoEntryMessage(islandChosen));
                     } else {
                         gui.send(new MoveStudentFromEntranceMessage(studentIndex, 1, islandChosen));

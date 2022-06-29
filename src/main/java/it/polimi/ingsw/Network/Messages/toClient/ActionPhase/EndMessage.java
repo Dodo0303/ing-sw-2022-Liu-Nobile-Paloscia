@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class EndMessage extends MessageToClient {
@@ -40,7 +39,7 @@ public class EndMessage extends MessageToClient {
 
     public void processGUI(ServerHandler client) {
         GUI guiClient = (GUI) client.getClient();
-        guiClient.setCurrPhase(Phase_GUI.Ending);
+        guiClient.setCurrPhase(Phase.Ending);
         if (winnerID == null) {
             guiClient.gameOver("Game ended with a draw.\nGood bye.\n");
         } else {

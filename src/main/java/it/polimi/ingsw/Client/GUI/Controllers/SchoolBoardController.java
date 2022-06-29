@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client.GUI.Controllers;
 
 import it.polimi.ingsw.Client.GUI.GUI;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.Color;
 import it.polimi.ingsw.Model.Player;
@@ -24,7 +24,6 @@ import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class SchoolBoardController implements Initializable {
@@ -83,7 +82,7 @@ public class SchoolBoardController implements Initializable {
         MyBoard.setDisable(true);
         backButton.setDisable(true);
         otherBoardButton.setDisable(true);
-        if (gui.getCurrPhase().equals(Phase_GUI.Character11)) {
+        if (gui.getCurrPhase().equals(Phase.Character11)) {
             gui.send(new MoveStudentsToTableMessage(studentIndex));
         } else {
             gui.send(new MoveStudentFromEntranceMessage(studentIndex, 0, -1));
@@ -92,35 +91,35 @@ public class SchoolBoardController implements Initializable {
     }
 
     public void handleRedDrop(DragEvent dragEvent) {
-         if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+         if (gui.getCurrPhase().equals(Phase.Character10)) {
             colors.add(StudentColor.RED);
             storeAndSendSwapStudents();
         }
     }
 
     public void handlePinkDrop(DragEvent dragEvent) {
-        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+        if (gui.getCurrPhase().equals(Phase.Character10)) {
             colors.add(StudentColor.PINK);
             storeAndSendSwapStudents();
         }
     }
 
     public void handleYellowDrop(DragEvent dragEvent) {
-        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+        if (gui.getCurrPhase().equals(Phase.Character10)) {
             colors.add(StudentColor.YELLOW);
             storeAndSendSwapStudents();
         }
     }
 
     public void handleGreenDrop(DragEvent dragEvent) {
-        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+        if (gui.getCurrPhase().equals(Phase.Character10)) {
             colors.add(StudentColor.GREEN);
             storeAndSendSwapStudents();
         }
     }
 
     public void handleBlueDrop(DragEvent dragEvent) {
-        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+        if (gui.getCurrPhase().equals(Phase.Character10)) {
             colors.add(StudentColor.BLUE);
             storeAndSendSwapStudents();
         }
@@ -228,7 +227,7 @@ public class SchoolBoardController implements Initializable {
             imageView1.setTranslateX(temp.getX());
             imageView1.setTranslateY(temp.getY());
             Image finalStuImage = stuImage;
-            if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Action1)) {
+            if (players.size() == 1 && gui.getCurrPhase().equals(Phase.Action1)) {
                 imageView1.setOnDragDetected(evt -> {
                     Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
                     ClipboardContent content = new ClipboardContent();
@@ -241,11 +240,11 @@ public class SchoolBoardController implements Initializable {
                     }
                 });
             } else if (players.size() == 3 ||
-                    (!gui.getCurrPhase().equals(Phase_GUI.Action1) && !gui.getCurrPhase().equals(Phase_GUI.Character11))){
+                    (!gui.getCurrPhase().equals(Phase.Action1) && !gui.getCurrPhase().equals(Phase.Character11))){
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
             }
-            if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character7)) {
+            if (players.size() == 1 && gui.getCurrPhase().equals(Phase.Character7)) {
                 imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     for (Point point : entrance) {
                         if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
@@ -266,7 +265,7 @@ public class SchoolBoardController implements Initializable {
                     }
                 });
             }
-            if (players.size() == 1 && gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+            if (players.size() == 1 && gui.getCurrPhase().equals(Phase.Character10)) {
                 imageView1.setOnDragDetected(evt -> {
                     Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
                     ClipboardContent content = new ClipboardContent();
@@ -517,7 +516,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
+                if (gui.getCurrPhase().equals(Phase.Character1)) {
                     Image finalStuImage = stuImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
@@ -533,7 +532,7 @@ public class SchoolBoardController implements Initializable {
                 }
                 characterPane.getChildren().add(imageView1);
             }
-            if (gui.getCurrPhase().equals(Phase_GUI.Character1)) {
+            if (gui.getCurrPhase().equals(Phase.Character1)) {
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
                 enableMoveToIslandPane(true);
@@ -578,7 +577,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
+                if (gui.getCurrPhase().equals(Phase.Character5)) {
                     Image finalStuImage = noEntryImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);
@@ -594,7 +593,7 @@ public class SchoolBoardController implements Initializable {
                 }
                 characterPane.getChildren().add(imageView1);
             }
-            if (gui.getCurrPhase().equals(Phase_GUI.Character5)) {
+            if (gui.getCurrPhase().equals(Phase.Character5)) {
                 tableArea.setDisable(true);
                 enableMoveToIslandPane(true);
             }
@@ -648,7 +647,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.getCurrPhase().equals(Phase_GUI.Character7)) {
+                if (gui.getCurrPhase().equals(Phase.Character7)) {
                     imageView1.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                         for (Point point : character1) {
                             if (point.getX() == imageView1.getTranslateX() && point.getY() == imageView1.getTranslateY()) {
@@ -670,7 +669,7 @@ public class SchoolBoardController implements Initializable {
                 characterPane.getChildren().add(imageView1);
             }
             //create done button
-            if (gui.getCurrPhase().equals(Phase_GUI.Character7)) {
+            if (gui.getCurrPhase().equals(Phase.Character7)) {
                 tableArea.setDisable(true);
                 tableArea.setVisible(false);
                 Button done = new Button();
@@ -727,7 +726,7 @@ public class SchoolBoardController implements Initializable {
         entranceStudentsIndex = new ArrayList<>();
         colors = new ArrayList<StudentColor>();
         disableCharacter10(false);
-        if (gui.getCurrPhase().equals(Phase_GUI.Character10)) {
+        if (gui.getCurrPhase().equals(Phase.Character10)) {
             tableArea.setDisable(true);
             tableArea.setVisible(false);
             Button done = new Button();
@@ -821,7 +820,7 @@ public class SchoolBoardController implements Initializable {
                 Point temp = character1.get(i);
                 imageView1.setTranslateX(temp.getX());
                 imageView1.setTranslateY(temp.getY());
-                if (gui.getCurrPhase().equals(Phase_GUI.Character11)) {
+                if (gui.getCurrPhase().equals(Phase.Character11)) {
                     Image finalStuImage = stuImage;
                     imageView1.setOnDragDetected(evt -> {
                         Dragboard dragboard = imageView1.startDragAndDrop(TransferMode.COPY);

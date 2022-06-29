@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.ViewController;
-import it.polimi.ingsw.Exceptions.EmptyCloudException;
-import it.polimi.ingsw.Exceptions.FullTableException;
-import it.polimi.ingsw.Exceptions.NotEnoughNoEntriesException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
@@ -20,8 +18,7 @@ import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
-import java.io.IOException;
-import java.net.Socket;
+
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;

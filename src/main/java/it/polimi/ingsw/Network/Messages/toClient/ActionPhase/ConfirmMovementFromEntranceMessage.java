@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Network.Messages.toClient.ActionPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Exceptions.FullTableException;

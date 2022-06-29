@@ -1,14 +1,10 @@
 package it.polimi.ingsw.Client.GUI.Controllers.Joining;
 
 import it.polimi.ingsw.Client.GUI.GUI;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.CreateMatchMessage;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -23,13 +19,13 @@ public class ChooseGameModeController{
     GUI gui;
     public void newgame(ActionEvent actionEvent) {
         gui.send(new CreateMatchMessage(true));
-        gui.setCurrPhase(Phase_GUI.CreatingGame);
+        gui.setCurrPhase(Phase.CreatingGame);
         gui.newgame();
     }
 
     public void joingame(ActionEvent actionEvent) {
         gui.send(new CreateMatchMessage(false));
-        gui.setCurrPhase(Phase_GUI.JoiningGame1);
+        gui.setCurrPhase(Phase.JoiningGame1);
     }
 
     public void setGUI(GUI gui) {

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.GUI.Controllers.*;
 import it.polimi.ingsw.Client.GUI.Controllers.Joining.*;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.ViewController;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
@@ -37,9 +38,9 @@ public class GUI implements ViewController {
     private GameModel game;
     private final Stage stage;
     private ServerHandler serverHandler;
-    private Phase_GUI currPhase;
-    private Phase_GUI prevPhase;
-    private Phase_GUI currentOtherPlayerPhase;
+    private Phase currPhase;
+    private Phase prevPhase;
+    private Phase currentOtherPlayerPhase;
     private String nickname;
     private String host;
     private int port;
@@ -344,34 +345,34 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
-            gameBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase_GUI.Planning)?"Planning Phase": "Action Phase"));
-            if (!currPhase.equals(Phase_GUI.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
+            gameBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase.Planning)?"Planning Phase": "Action Phase"));
+            if (!currPhase.equals(Phase.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
                 gameBoardController.disableBack(true);
             }
             if (myTurn) {
-                if (currPhase.equals(Phase_GUI.Action1)) {
+                if (currPhase.equals(Phase.Action1)) {
                     gameBoardController.setMoveStudent(true);
                 }
-                if (currPhase.equals(Phase_GUI.Action2)) {
+                if (currPhase.equals(Phase.Action2)) {
                     gameBoardController.setMoveMotherNature(true);
                     gameBoardController.disableBack(true);
                 }
-                if (currPhase.equals(Phase_GUI.Action3)) {
+                if (currPhase.equals(Phase.Action3)) {
                     gameBoardController.setChooseCloud(true);
                     gameBoardController.disableBack(true);
                 }
-                if (currPhase.equals(Phase_GUI.Character3)) {
+                if (currPhase.equals(Phase.Character3)) {
                     gameBoardController.setCharacter(true);
                     gameBoardController.disableBack(true);
                 }
-                if (currPhase.equals(Phase_GUI.Character5)) {
+                if (currPhase.equals(Phase.Character5)) {
                     gameBoardController.setCharacter(true);
                     gameBoardController.disableBack(true);
                 }
-                if (currPhase.equals(Phase_GUI.Character9)) {
+                if (currPhase.equals(Phase.Character9)) {
                     gameBoardController.disableBack(false);
                 }
-                if (currPhase.equals(Phase_GUI.Character12)) {
+                if (currPhase.equals(Phase.Character12)) {
                     gameBoardController.disableBack(false);
                 }
             }
@@ -409,7 +410,7 @@ public class GUI implements ViewController {
             Parent root = fxmlLoader.load();
             SchoolBoardController schoolBoardController = fxmlLoader.getController();
             schoolBoardController.setGUI(this);
-            schoolBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase_GUI.Planning)?"Planning Phase": "Action Phase"));
+            schoolBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase.Planning)?"Planning Phase": "Action Phase"));
             if (!Objects.equals(msg, "")) {
                 schoolBoardController.setMessage(msg);
             }
@@ -424,36 +425,36 @@ public class GUI implements ViewController {
                 for (int i = 0; i < 2; i++) {
                     schoolBoardController.drawSchoolBoard(players.get(i));
                 }
-                if (expert && ((currPhase.equals(Phase_GUI.Action1)) || currPhase.equals(Phase_GUI.Action2) || currPhase.equals(Phase_GUI.Action3) || !myTurn)) {
+                if (expert && ((currPhase.equals(Phase.Action1)) || currPhase.equals(Phase.Action2) || currPhase.equals(Phase.Action3) || !myTurn)) {
                     schoolBoardController.enableCharacterButton();
                 }
-                if (myTurn && currPhase.equals(Phase_GUI.Action1)) {
+                if (myTurn && currPhase.equals(Phase.Action1)) {
                     schoolBoardController.enableMoveToIslandPane(true);
                     schoolBoardController.setBackMessage("View game board");
                 }
-                if (currPhase.equals(Phase_GUI.Character1)|| currCharacter == 1) {
+                if (currPhase.equals(Phase.Character1)|| currCharacter == 1) {
                     schoolBoardController.enableCharacter1();
-                } else if (currPhase.equals(Phase_GUI.Character2) || currCharacter == 2) {
+                } else if (currPhase.equals(Phase.Character2) || currCharacter == 2) {
                     schoolBoardController.enableCharacter2();
-                } else if (currPhase.equals(Phase_GUI.Character3)) {
+                } else if (currPhase.equals(Phase.Character3)) {
                     schoolBoardController.enableCharacter3();
-                } else if (currPhase.equals(Phase_GUI.Character4) || currCharacter == 4) {
+                } else if (currPhase.equals(Phase.Character4) || currCharacter == 4) {
                     schoolBoardController.enableCharacter4();
-                } else if (currPhase.equals(Phase_GUI.Character5)) {
+                } else if (currPhase.equals(Phase.Character5)) {
                     schoolBoardController.enableCharacter5();
-                } else if (currPhase.equals(Phase_GUI.Character6) || currCharacter == 6) {
+                } else if (currPhase.equals(Phase.Character6) || currCharacter == 6) {
                     schoolBoardController.enableCharacter6();
-                } else if (currPhase.equals(Phase_GUI.Character7)) {
+                } else if (currPhase.equals(Phase.Character7)) {
                     schoolBoardController.enableCharacter7();
-                } else if (currPhase.equals(Phase_GUI.Character8) || currCharacter == 8) {
+                } else if (currPhase.equals(Phase.Character8) || currCharacter == 8) {
                     schoolBoardController.enableCharacter8();
-                } else if (currPhase.equals(Phase_GUI.Character9)) {
+                } else if (currPhase.equals(Phase.Character9)) {
                     schoolBoardController.enableCharacter9();
-                } else if (currPhase.equals(Phase_GUI.Character10)) {
+                } else if (currPhase.equals(Phase.Character10)) {
                     schoolBoardController.enableCharacter10();
-                } else if (currPhase.equals(Phase_GUI.Character11)) {
+                } else if (currPhase.equals(Phase.Character11)) {
                     schoolBoardController.enableCharacter11();
-                } else if (currPhase.equals(Phase_GUI.Character12)) {
+                } else if (currPhase.equals(Phase.Character12)) {
                     schoolBoardController.enableCharacter12();
                 }
             } else {
@@ -522,22 +523,22 @@ public class GUI implements ViewController {
     public void messageReceived(Object message) {
         try {
             if (message instanceof NickResponseMessage) {
-                if (currPhase.equals(Phase_GUI.PickingNickname)) {
+                if (currPhase.equals(Phase.PickingNickname)) {
                     ((NickResponseMessage) message).GUIprocess(this.serverHandler);
                 }
             } else if (message instanceof SendMatchesMessage) {
-                if (currPhase.equals(Phase_GUI.ChoosingGameMode) || currPhase.equals(Phase_GUI.JoiningGame1)) {
+                if (currPhase.equals(Phase.ChoosingGameMode) || currPhase.equals(Phase.JoiningGame1)) {
                     ((SendMatchesMessage) message).processGUI(this.serverHandler);
                 }
             } else if (message instanceof ConfirmJoiningMessage) {
-                if (currPhase.equals(Phase_GUI.CreatingGame) ||
-                        currPhase.equals(Phase_GUI.JoiningGame1) ||
-                        currPhase.equals(Phase_GUI.JoiningGame2)) {
+                if (currPhase.equals(Phase.CreatingGame) ||
+                        currPhase.equals(Phase.JoiningGame1) ||
+                        currPhase.equals(Phase.JoiningGame2)) {
                     ((ConfirmJoiningMessage) message).processGUI(this.serverHandler);
                 }
             } else if (message instanceof SendAvailableWizardsMessage) {
-                if (currPhase.equals(Phase_GUI.JoiningGame1) ||
-                        currPhase.equals(Phase_GUI.JoiningGame2)) {
+                if (currPhase.equals(Phase.JoiningGame1) ||
+                        currPhase.equals(Phase.JoiningGame2)) {
                     ((SendAvailableWizardsMessage) message).processGUI(this.serverHandler);
                 }
             } else if (message instanceof GameModelUpdateMessage) {
@@ -550,10 +551,10 @@ public class GUI implements ViewController {
                 ((UsedAssistantMessage) message).processGUI(this.serverHandler);
             } else if (message instanceof ConfirmMovementFromEntranceMessage) {
                 ((ConfirmMovementFromEntranceMessage) message).processGUI(this.serverHandler);
-                if (currPhase.equals(Phase_GUI.Action1)) {
+                if (currPhase.equals(Phase.Action1)) {
                     ap1Moves++;
                     if (ap1Moves == ((getGame().getPlayers().size() == 3)? 4 : 3)) {
-                        currPhase = Phase_GUI.Action2;
+                        currPhase = Phase.Action2;
                         ap1Moves = 0;
                         checkBoard("Move the mother nature");
                     } else {
@@ -631,7 +632,7 @@ public class GUI implements ViewController {
      *
      * @return the current phase of the game
      */
-    public Phase_GUI getCurrPhase() {
+    public Phase getCurrPhase() {
         return this.currPhase;
     }
 
@@ -663,7 +664,7 @@ public class GUI implements ViewController {
      * Set the current phase of the game
      * @param currPhase phase to be set as current
      */
-    public void setCurrPhase(Phase_GUI currPhase) {
+    public void setCurrPhase(Phase currPhase) {
         this.currPhase = currPhase;
     }
 
@@ -671,7 +672,7 @@ public class GUI implements ViewController {
      *
      * @return the previous phase of the game
      */
-    public Phase_GUI getPrevPhase() {
+    public Phase getPrevPhase() {
         return this.prevPhase;
     }
 
@@ -751,7 +752,7 @@ public class GUI implements ViewController {
      * Set the previous phase of the game
      * @param phase phase to be set as previous
      */
-    public void setPrevPhase(Phase_GUI phase) {
+    public void setPrevPhase(Phase phase) {
         this.prevPhase = phase;
     }
 
@@ -824,7 +825,7 @@ public class GUI implements ViewController {
      * Set the phase of the current player when the current player is not ME.
      * @param currentOtherPlayerPhase the phase of the current player when the current player is not ME.
      */
-    public void setCurrentOtherPlayerPhase(Phase_GUI currentOtherPlayerPhase) {
+    public void setCurrentOtherPlayerPhase(Phase currentOtherPlayerPhase) {
         this.currentOtherPlayerPhase = currentOtherPlayerPhase;
     }
 

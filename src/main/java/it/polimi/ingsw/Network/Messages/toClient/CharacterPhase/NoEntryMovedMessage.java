@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -47,7 +46,7 @@ public class NoEntryMovedMessage extends MessageToClient {
         guiClient.getGame().updateCharacterById(characterUpdated);
         if (toIsland)
             guiClient.getGame().addNoEntry(guiClient.getGame().getIslands().get(islandID));
-        if (guiClient.getCurrPhase().equals(Phase_GUI.Character5)) {
+        if (guiClient.getCurrPhase().equals(Phase.Character5)) {
             guiClient.setCurrPhase(guiClient.getPrevPhase());
             guiClient.setCurrCharacter(-1);
             guiClient.viewSchoolBoard("", false);

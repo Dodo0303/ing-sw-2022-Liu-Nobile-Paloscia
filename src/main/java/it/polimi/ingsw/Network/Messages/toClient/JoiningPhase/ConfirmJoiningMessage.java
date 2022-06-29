@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.JoiningPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 public class ConfirmJoiningMessage extends MessageToClient {
@@ -52,20 +51,20 @@ public class ConfirmJoiningMessage extends MessageToClient {
             guiClient.setExpert(expert);
             if (message.equals("Game created")) {
                 guiClient.showGameCreated("Match: " + matchID);
-                guiClient.setCurrPhase(Phase_GUI.GameJoined);
+                guiClient.setCurrPhase(Phase.GameJoined);
             } else if (message.equals("You joined the game")){
-                guiClient.setCurrPhase(Phase_GUI.GameJoined);
+                guiClient.setCurrPhase(Phase.GameJoined);
                 guiClient.showGameCreated("Match: " + matchID);
             } else {
-                guiClient.setCurrPhase(Phase_GUI.JoiningGame1);
+                guiClient.setCurrPhase(Phase.JoiningGame1);
             }
         } else {
             System.out.println(this.message);
             if (message.equals("Wizard not available")) {
-                guiClient.setCurrPhase(Phase_GUI.JoiningGame2);
+                guiClient.setCurrPhase(Phase.JoiningGame2);
                 guiClient.chooseWizard(false);
             } else {
-                guiClient.setCurrPhase(Phase_GUI.JoiningGame1);
+                guiClient.setCurrPhase(Phase.JoiningGame1);
             }
         }
     }

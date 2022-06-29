@@ -1,18 +1,10 @@
 package it.polimi.ingsw.Client.GUI.Controllers.Joining;
 
 import it.polimi.ingsw.Client.GUI.GUI;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
-import javafx.application.Platform;
+import it.polimi.ingsw.Client.Phase;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.ConnectException;
 
 public class LoginController {
     @FXML
@@ -35,9 +27,9 @@ public class LoginController {
             host = hostField.getText();
             port = Integer.parseInt(portField.getText());
             setMessage("Connecting...");
-            gui.setCurrPhase(Phase_GUI.BuildingConnection);
+            gui.setCurrPhase(Phase.BuildingConnection);
             if (gui.settingUpConnection(host, port)) {
-                gui.setCurrPhase(Phase_GUI.PickingNickname);
+                gui.setCurrPhase(Phase.PickingNickname);
                 gui.startServerHandler();
                 gui.requireNickname(false);
             } else {

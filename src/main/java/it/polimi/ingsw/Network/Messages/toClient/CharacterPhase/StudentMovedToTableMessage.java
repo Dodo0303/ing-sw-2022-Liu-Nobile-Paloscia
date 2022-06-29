@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Network.Messages.toClient.CharacterPhase;
 
 import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Client.CLI.Phase;
+import it.polimi.ingsw.Client.Phase;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.GUI.Phase_GUI;
 import it.polimi.ingsw.Exceptions.EmptyCloudException;
 import it.polimi.ingsw.Exceptions.FullTableException;
 import it.polimi.ingsw.Model.Character.CharacterCard;
@@ -49,7 +48,7 @@ public class StudentMovedToTableMessage extends MessageToClient {
         GUI guiClient = (GUI) client.getClient();
         guiClient.getGame().getPlayerByNickname(playerID).addToDiningTable(tableColor);
         guiClient.getGame().updateCharacterById(characterUpdated);
-        if (guiClient.getCurrPhase().equals(Phase_GUI.Character11)) {
+        if (guiClient.getCurrPhase().equals(Phase.Character11)) {
             guiClient.setCurrPhase(guiClient.getPrevPhase());
             guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).setCoins(guiClient.getGame().getPlayerByNickname(guiClient.getNickname()).getCoins() - 2);
             guiClient.viewSchoolBoard("Student moved successfully", false);
