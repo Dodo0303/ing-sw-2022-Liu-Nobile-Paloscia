@@ -26,7 +26,7 @@ public class UsedAssistantMessage extends MessageToClient {
     public void process(ServerHandler ch) {
         CLI cliClient = (CLI) ch.getClient();
         cliClient.getGame().setAssistantOfPlayer(playerID, cliClient.getGame().getPlayerByNickname(playerID).getAssistants().get(assistantValue - 1));
-        if(assistantValue == 1) {
+        if (assistantValue == 1) {
             System.out.println(playerID + " has chosen " + assistantValue + "st assistant.");
         } else if (assistantValue == 2){
             System.out.println(playerID + " has chosen " + assistantValue + "nd assistant.");
@@ -34,6 +34,13 @@ public class UsedAssistantMessage extends MessageToClient {
             System.out.println(playerID + " has chosen " + assistantValue + "rd assistant.");
         } else {
             System.out.println(playerID + " has chosen " + assistantValue + "th assistant.");
+        }
+        if (cliClient.getNickname().equals(playerID)) {
+            cliClient.setAssistantPicked(true);
+            cliClient.getAssistantPlayer().clear();
+        }
+        if (!cliClient.isAssistantPicked()){
+            cliClient.getAssistantPlayer().add(assistantValue);
         }
     }
 

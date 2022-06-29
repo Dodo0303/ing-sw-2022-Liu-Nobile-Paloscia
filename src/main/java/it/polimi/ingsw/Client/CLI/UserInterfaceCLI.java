@@ -70,7 +70,7 @@ public class UserInterfaceCLI{
                     int playerChosen = -1;
                     List<Player> playersToShow = new ArrayList<>(cli.getGame().getPlayers());
                     playersToShow.remove(cli.getGame().getPlayerByNickname(cli.getNickname()));
-                    System.out.println("\nAvailable players: ");
+                    System.out.println("\nCurrent players: ");
                     for (int i = 0; i < playersToShow.size(); i++) {
                         Player player = playersToShow.get(i);
                         System.out.println(index + ". " + player.getNickName());
@@ -80,8 +80,7 @@ public class UserInterfaceCLI{
                     if (Utilities.isNumeric(temp)) {
                         playerChosen = Integer.parseInt(temp) - 1;
                         if (playerChosen < cli.getGame().getPlayers().size()) {
-                            System.out.println("Hai inserito " + playerChosen + ": " + cli.getGame().getPlayers().get(playerChosen).getNickName());
-                            printSchoolBoard(cli.getGame().getPlayers().get(playerChosen));
+                            printSchoolBoard(playersToShow.get(playerChosen));
                         } else {
                             System.out.println("No such player.");
                         }
@@ -126,20 +125,23 @@ public class UserInterfaceCLI{
         for (int i = 0; i < numIslands; i++) {
             printIsland(i);
         }
+        System.out.println("The mother nature is on island " + cli.getGame().getMotherNatureIndex());
     }
 
 
     public void printIsland(int index){
         System.out.println("Island " + index);
-        if (cli.getGame().getIslands().get(index).getTowerColor().equals(Color.VOID))
+        if (cli.getGame().getIslands().get(index).getTowerColor().equals(Color.VOID)) {
             System.out.println("No ♜ on this island");
-        else
+        } else {
             System.out.println(cli.getGame().getIslands().get(index).getTowerColor() + " owns " + cli.getGame().getIslands().get(index).getNumTower() + " ♜");
+        }
         if (cli.isExpert()) {
             System.out.println("No Entries: " + cli.getGame().getIslands().get(index).getNoEntries());
         }
-        if (cli.getGame().getMotherNatureIndex() == index)
+        if (cli.getGame().getMotherNatureIndex() == index) {
             System.out.println("Mother nature is here");
+        }
         System.out.println("Students:");
         System.out.println("\uD83D\uDD34: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.RED));
         System.out.println("\uD83D\uDFE1: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.YELLOW));
@@ -164,7 +166,7 @@ public class UserInterfaceCLI{
         for (int i = 0; i < player.getEntranceStudents().size(); i++) {
             System.out.print(i + ")" + player.getEntranceStudents().get(i) + " ");
         }
-        System.out.println("\n");
+        System.out.println(" ");
 
         System.out.println("Dining room:");
         for (StudentColor color: player.getDiningTables().keySet()) {
@@ -178,6 +180,7 @@ public class UserInterfaceCLI{
         for (int i = 0; i < player.getProfessors().size(); i++) {
             System.out.print(player.getProfessors().get(i) + " ");
         }
+        System.out.println(" ");
         if (cli.getGame().getPlayers().size() == 4) {
             System.out.println("Towers of the team: " + player.getTowerNum()+ player.getColor().toString());
         } else {

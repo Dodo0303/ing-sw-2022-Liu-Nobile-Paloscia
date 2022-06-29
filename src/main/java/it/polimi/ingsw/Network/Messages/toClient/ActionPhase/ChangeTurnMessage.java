@@ -32,17 +32,20 @@ public class ChangeTurnMessage extends MessageToClient {
             cliClient.setMyTurn(true);
             if (cliClient.getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 cliClient.setPhase(Phase.Planning);
+                cliClient.setAssistantPicked(false);
                 cliClient.playAssistant();
             } else if (cliClient.getCurrPhase().equals(Phase.Planning) && this.gamePhase.equals(Phase.Action1)) {
                 cliClient.setPhase(Phase.Action1);
                 cliClient.moveStudentsFromEntrance();
             } else if (cliClient.getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
                 cliClient.setPhase(Phase.Planning);
+                cliClient.setAssistantPicked(false);
                 cliClient.playAssistant();
             }
         } else {
             cliClient.setMyTurn(false);
             cliClient.setCurrCharacter(-1);
+            System.out.println("It's " + playerNickname + "'s turn.");
         }
     }
 

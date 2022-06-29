@@ -21,6 +21,9 @@ import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMessage;
 import it.polimi.ingsw.Utilities;
 import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,30 +31,33 @@ public class CLI implements ViewController {
     GameModel game;
     boolean closed;
     private String nickname;
-    private String host;
-    private int port;
+    private String DEFAULT_HOST = "localhost";
+    private int DEFAULT_PORT = 12345;
     private Scanner input = new Scanner(System.in);
     private ServerHandler serverHandler;
     private Phase currPhase, prevPhase;
     private List<Wizard> wizards;
     private int ap1Moves;
     private boolean expert;
+    private boolean assistantPicked;
     private boolean myTurn;
     private UserInterfaceCLI view;
-    private int numPlayers;
     private String[] nicknames;
     private int currCharacter;
+    private ArrayList<Integer> assistantPlayer;
 
     public void start() {
         ap1Moves = 0;
         closed = false;
+        assistantPicked = false;
         currPhase = Phase.BuildingConnection;
         myTurn = true;
+        assistantPlayer = new ArrayList<>();
+        startUI();
+        view.printTitle();
         buildConnection();
         Thread serverHandlerThread  = new Thread(this.serverHandler);
         serverHandlerThread.start();
-        startUI();
-        view.printTitle();
         requireNickname();
     }
 
@@ -151,23 +157,28 @@ public class CLI implements ViewController {
      * Require user to input host and port, then establish connection. If the establishment fails, print  "Server not found." and continue to require host and port.
      */
     private void buildConnection() {
+        String host = DEFAULT_HOST;
+        int port = DEFAULT_PORT;
         try {
-            while(serverHandler == null) {//todo check this before july 1st
-                //System.out.print("Host?\n");
-                //host = view.requireUserInput();
-                host = "localhost";
-                port = 12345;
-                /*
-                String in = "";
-                while (!Utilities.isNumeric(in)) {
-                    System.out.print("Port?\n");
-                    in = view.requireUserInput();
-                    port = Integer.parseInt(in);
+            while(serverHandler == null) {
+                String mode = "";
+                while(!mode.equals("true") && !mode.equals("false")) {
+                    System.out.print("Establish connection automatically? Respond with true or false.\n");
+                    mode = view.requireUserInput().toLowerCase();
+                    if (mode.equals("false")) {
+                        System.out.print("Host?\n");
+                        host = view.requireUserInput();
+                        String in = "";
+                        while (!Utilities.isNumeric(in)) {
+                            System.out.print("Port?\n");
+                            in = view.requireUserInput();
+                            port = Integer.parseInt(in);
+                        }
+                    }
                 }
-                 */
                 try {
                     serverHandler = new ServerHandler(host,port, this);
-                } catch (Exception e) {
+                } catch (SocketException e) {
                     System.out.print("Server not found.\n");
                     buildConnection();
                 }
@@ -300,16 +311,14 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
-                if (assis != -1 ) {
-                    if (game.getPlayerByNickname(nickname).getAssistants().get(assis) == null) {
-                        System.out.print("You cannot choose this assistant card.\n");
+                if (assis != -1) {
+                    if (assis > 10) {
+                        System.out.print("No such card.\n");
                         assis = -1;
                     }
-                    for (int i = 0; i < game.getPlayers().size(); i++) {
-                        if (game.getPlayers().get(i).getUsedAssistant() != null && game.getPlayers().get(i).getUsedAssistant().getValue() == assis + 1) {
-                            System.out.print("You cannot choose this assistant card.\n");
-                            assis = -1;
-                        }
+                    if (assis != -1 && game.getPlayerByNickname(nickname).getAssistants().get(assis) == null || assistantPlayer.contains(assis + 1)) {
+                        System.out.print("You cannot choose this assistant card.\n");
+                        assis = -1;
                     }
                 }
             }
@@ -761,12 +770,25 @@ public class CLI implements ViewController {
         this.ap1Moves = ap1Moves;
     }
 
-    public void setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers;
-    }
-
     public void setNicknames(String[] nicknames) {
         this.nicknames = nicknames;
     }
+
+    public ArrayList<Integer> getAssistantPlayer() {
+        return assistantPlayer;
+    }
+
+    public void setAssistantPlayer(ArrayList<Integer> assistantPlayer) {
+        this.assistantPlayer = assistantPlayer;
+    }
+
+    public boolean isAssistantPicked() {
+        return assistantPicked;
+    }
+
+    public void setAssistantPicked(boolean assistantPicked) {
+        this.assistantPicked = assistantPicked;
+    }
+
 
 }

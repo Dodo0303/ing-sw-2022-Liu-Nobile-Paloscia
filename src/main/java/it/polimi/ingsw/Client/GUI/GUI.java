@@ -49,7 +49,6 @@ public class GUI implements ViewController {
     private int ap1Moves, changeTurnNums;
     private boolean myTurn;
     private int currCharacter;
-    private ArrayList<String> playerPlayedAssistant;
     private String[] nicknames;
     private HashMap<Integer, String> assistantPlayer;
     private double scalingRatio;
@@ -725,14 +724,6 @@ public class GUI implements ViewController {
     }
     public void setChangeTurnNums(int changeTurnNums){
         this.changeTurnNums = changeTurnNums;
-    }
-
-    public ArrayList<String> getPlayerPlayedAssistant() {
-        return playerPlayedAssistant;
-    }
-
-    public void setPlayerPlayedAssistant(ArrayList<String> playerPlayedAssistant) {
-        this.playerPlayedAssistant = playerPlayedAssistant;
     }
 
     public void setNumPlayer(int numPlayer) {

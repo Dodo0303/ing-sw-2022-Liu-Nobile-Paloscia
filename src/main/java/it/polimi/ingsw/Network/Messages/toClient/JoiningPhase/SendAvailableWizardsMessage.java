@@ -35,7 +35,6 @@ public class SendAvailableWizardsMessage extends MessageToClient {
         cliClient.setPhase(Phase.JoiningGame2);
         int i = 1;
         cliClient.setWizards(this.wizards);
-        cliClient.setNumPlayers(this.numPlayers);
         if (numPlayers == 4) {
             cliClient.setNicknames(nicknames);
             System.out.println("Players with WIZARD1 and WIZARD2 will be assigned to one team, players with WIZARD3 and WIZARD4 will be assigned to another team.");

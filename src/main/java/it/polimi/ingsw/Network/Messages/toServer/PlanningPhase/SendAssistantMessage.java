@@ -17,6 +17,5 @@ public class SendAssistantMessage extends MessageToServer {
 
     @Override
     public void process(ClientHandler ch) {
-        //TODO
     }
 }
