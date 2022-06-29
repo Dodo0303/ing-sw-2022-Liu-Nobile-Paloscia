@@ -26,29 +26,85 @@ import java.util.Random;
 
 import static it.polimi.ingsw.Exceptions.GameException.error;
 
+/**
+ * This class controls a whole match
+ */
 public class MatchController implements Runnable {
+    /**
+     * ID of the match
+     */
     private final int ID;
 
+    /**
+     * Status of the match
+     */
     private MatchStatus matchStatus;
+
+    /**
+     * Amount of players that will play this match
+     */
     private final int totalMatchPlayers;
+
+    /**
+     * Number of players currently in the match
+     */
     private int currentPlayersNumber;
+
+    /**
+     * Nickname of the current player
+     */
     private String currentPlayerID;
+
+    /**
+     * Nickname of the first player of the turn
+     */
     private String firstOfTurn;
+
+    /**
+     * List of clients connected to this match
+     */
     private final ArrayList<ClientHandler> clients;
+
+    /**
+     * Wizards chosen in this match
+     */
     private Wizard[] wizards;
+
+    /**
+     * Phase of the match
+     */
     private Phase gamePhase;
+
+    /**
+     * True if the match is in expert mode. False if not.
+     */
     private boolean expert;
+
+    /**
+     * Instance of the server
+     */
     private EriantysServer server;
 
+    /**
+     * Instance of the GameModel of this match
+     */
     private GameModel game;
 
     //NEEDED FOR CHARACTER USAGE
+    /**
+     * Instance of the influence calculator to be used
+     */
     private InfluenceCalculator influenceCalculator;
+
+    /**
+     * Instance of the professor checker to be used
+     */
     private ProfessorChecker professorChecker;
+
+    /**
+     * Additional moves that the current player is allowed to take during this turn
+     */
     private int additionalMoves;
-
-
-    private boolean lastRound;
 
 
     public MatchController(int ID, int totalMatchPlayers, EriantysServer server) {
@@ -58,7 +114,6 @@ public class MatchController implements Runnable {
         this.wizards = new Wizard[this.totalMatchPlayers];
         this.matchStatus = MatchStatus.MATCHMAKING;
         this.currentPlayersNumber = 0;
-        this.lastRound = false;
         this.influenceCalculator = new StandardInfluenceCalculator();
         this.professorChecker = new StandardProfessorChecker();
         this.additionalMoves = 0;
@@ -67,22 +122,46 @@ public class MatchController implements Runnable {
 
     // GETTERS AND SETTERS
 
+    /**
+     *
+     * @return the status of the match
+     */
     public MatchStatus getStatus() { return this.matchStatus; }
 
+    /**
+     *
+     * @return the wizards chosen by the players
+     */
     public Wizard[] getWizards() { return this.wizards.clone(); }
 
+    /**
+     *
+     * @return the instance of the game model of this match
+     */
     public GameModel getGame() {
         return this.game;
     }
 
+    /**
+     *
+     * @return amount of players that will play this match
+     */
     public int getTotalMatchPlayers() {
         return this.totalMatchPlayers;
     }
 
+    /**
+     *
+     * @return nickname of the current player
+     */
     public String getCurrentPlayerID() {
         return currentPlayerID;
     }
 
+    /**
+     *
+     * @return instance of the current player
+     */
     Player getCurrentPlayer() {
         for (Player p : this.game.getPlayers()) {
             if (p.getNickName().equals(this.currentPlayerID)) return p;
@@ -90,48 +169,91 @@ public class MatchController implements Runnable {
         throw new MatchException("No current player.");
     }
 
+    /**
+     *
+     * @return ID of the match
+     */
     public int getID(){
         return ID;
     }
 
+    /**
+     *
+     * @return the list of clients connected to this match
+     */
     public List<ClientHandler> getClients() {
         return new ArrayList<>(clients);
     }
 
+    /**
+     *
+     * @return the current phase of the match
+     */
     public Phase getGamePhase() {
         return gamePhase;
     }
 
+    /**
+     * Set a new phase for this match
+     * @param gamePhase phase to be set
+     */
     public void setGamePhase(Phase gamePhase) {
         this.gamePhase = gamePhase;
     }
 
+    /**
+     *
+     * @return nickname of the first player of the current turn
+     */
     public String getFirstOfTurn() {
         return firstOfTurn;
     }
 
+    /**
+     * Set the instance of influence calculator to be used
+     * @param influenceCalculator influence calculator to be set
+     */
     public void setInfluenceCalculator(InfluenceCalculator influenceCalculator){
         this.influenceCalculator = influenceCalculator;
     }
 
+    /**
+     * Set the instance of professor checker to be used
+     * @param professorChecker professor checker to be set
+     */
     public void setProfessorChecker(ProfessorChecker professorChecker){
         this.professorChecker = professorChecker;
     }
 
+    /**
+     * Set the number of additional moves to 1
+     */
     public void setAdditionalMoves() {
         this.additionalMoves = 1;
     }
 
+    /**
+     * Reset the attributes of the match related to character' effects to their default value.
+     * This method is called every time a turn ends.
+     */
     public void resetCharacterAttributes() {
         this.influenceCalculator = new StandardInfluenceCalculator();
         this.additionalMoves = 0;
         this.professorChecker = new StandardProfessorChecker();
     }
 
+    /**
+     * Checks whether the match is in expert mode or not.
+     * @return true if the match is in expert mode. False if not.
+     */
     public boolean isExpert() {
         return expert;
     }
 
+    /**
+     * Set the expert mode for this match
+     * @param expert true if the match should be in expert mode. False if not.
+     */
     public void setExpert(boolean expert) {
         this.expert = expert;
     }
@@ -155,12 +277,6 @@ public class MatchController implements Runnable {
         }
 
     }
-
-    public void removePlayer(ClientHandler client) throws MatchMakingException {
-        if (this.currentPlayersNumber == 0) throw new MatchMakingException("Match has no players."); //!Public invariant issue: should minimum number of players be 0 or 1?
-        if (!clients.remove(client)) throw new MatchMakingException("Match has no player named " + client.getNickname());
-    }
-
 
     // GAME SETUP
 
@@ -251,8 +367,10 @@ public class MatchController implements Runnable {
     }
 
 
-    /** This is a method for the Action phase.
-     * The player PLAYER moves a student to the correspondent dining room.
+    /**
+     * Moves a student to the dining table of the current player
+     * @param studentIndex index of the player to be taken
+     * @throws FullTableException if the table is already full
      */
     public void moveStudentToDiningRoom(int studentIndex) throws FullTableException {
 
@@ -269,6 +387,11 @@ public class MatchController implements Runnable {
 
     }
 
+    /**
+     * Checks whether a professor should be moved from its current owner
+     * @param p player to be checked
+     * @param color color fo the professor to check
+     */
     private void moveProfessorIfNeeded(Player p, StudentColor color) {
 
         if (this.game.getProfessors().contains(color)) {
@@ -348,19 +471,27 @@ public class MatchController implements Runnable {
     }
 
 
+    /**
+     * Add coins to a player
+     * @param nickname nickname of the player that will receive the coins
+     * @param coins amount of coins to be added
+     */
     public void addCoinsToPlayer(String nickname, int coins){
         game.addCoinsToPlayer(nickname, coins);
     }
 
-    public void addNoEntryToIsland(int islandID) throws GameException, NotEnoughNoEntriesException {
-        CharacterCard character = game.getCharacterById(5);
+    /**
+     * Add a no-entry tile to an island
+     * @param islandID island that will receive the no-entry tile
+     */
+    public void addNoEntryToIsland(int islandID) {
 
         game.addNoEntry(game.getIslands().get(islandID));
 
     }
 
     /**
-     * Methods used by the 3nd character. Computes the influence on an island without moving mother nature
+     * Methods used by the 3rd character. Computes the influence on an island without moving mother nature
      * @param islandID island in which computing the influence
      */
     public void conquerAndJoinIslands(int islandID) {
@@ -424,10 +555,21 @@ public class MatchController implements Runnable {
         return game.removeStudentFromEntrance(game.getPlayerByNickname(nickname), entrancePosition);
     }
 
+    /**
+     * Add a student to the entrance of the player
+     * @param nickname nickname of the player that will receive the student
+     * @param student student to be added
+     */
     public void addStudentToEntrance(String nickname, StudentColor student){
         game.addStudentToEntrance(game.getPlayerByNickname(nickname), student);
     }
 
+    /**
+     * Add a student to a table
+     * @param nickname nickname of the player that will receive the student
+     * @param student student to be added
+     * @throws FullTableException if the table is already full
+     */
     public void addStudentToTable(String nickname, StudentColor student) throws FullTableException {
         game.addToDiningTable(game.getPlayerByNickname(nickname), student);
     }
@@ -448,8 +590,11 @@ public class MatchController implements Runnable {
         }
     }
 
-    /** This is a method for the Action phase.
-     * The player PLAYER moves a student to the island ISLAND.
+    /**
+     * Move a student from the entrance of the current player to an island
+     * @param islandID ID of the island that will receive the student
+     * @param studentIndex index of the student to be moved
+     * @throws IllegalArgumentException if the island ID is not valid
      */
     public void moveStudentFromEntranceToIsland(int islandID, int studentIndex) throws IllegalArgumentException {
 
@@ -464,14 +609,21 @@ public class MatchController implements Runnable {
         game.addStudentToIsland(color, island);
     }
 
+    /**
+     * Move a student to an island
+     * @param islandID ID of the island that will receive the student
+     * @param color color of the student to be moved
+     */
     public void moveStudentToIsland(int islandID, StudentColor color) {
         Island island = this.game.getIslands().get(islandID);
         game.addStudentToIsland(color, island);
     }
 
 
-    /** This is a method for the Action phase.
-     * Player PLAYER moves mothernature to xth island and tries to control/conquer the xth island. */
+    /**
+     * Move Mother Nature  to an island
+     * @param x index of the island that will receive mother nature
+     */
     public void moveMotherNature(int x) {
         int distance;
         Player p = this.getCurrentPlayer();
@@ -495,8 +647,9 @@ public class MatchController implements Runnable {
         }
     }
 
-    /** This is a method for the Action phase.
-     * The player PLAYER takes 3/4 students from the cloud CLOUD, and then place them on his entrance.
+    /**
+     * Take the students from a cloud and add them to the entrance of the current player
+     * @param cloudID id of the cloud
      */
     public void takeStudentsFromCloud(int cloudID) {
 
@@ -513,9 +666,10 @@ public class MatchController implements Runnable {
         }
     }
 
-    /** First, check if the xth island can be controlled/conquered.
-     * If positive, then the color with most influence controls the island ISLAND.
-     * If negative, do nothing. */
+    /**
+     * Checks if an island can be owned by a player/team and set the tower color of the island.
+     * @param x index of the island to be checked
+     */
     private synchronized void controlIsland(int x) {
         Island island = this.game.getIslands().get(x);
         int influence;
@@ -556,12 +710,6 @@ public class MatchController implements Runnable {
                         maxInfluencer = null;
                     }
                 }
-                /*
-                if (influence > maxInfluence) {
-                    maxInfluencer = this.game.getPlayers().get(i);
-                    maxInfluence = influence;
-                }
-                 */
             }
 
             if (maxInfluencer != null) {
@@ -587,9 +735,10 @@ public class MatchController implements Runnable {
         }
     }
 
-    /** First, check if the xth island can merge any adjacent island.
-     * If positive, then call mergeIslands().
-     * If negative, do nothing. */
+    /**
+     * Checks if the island can be merged with the adjacent ones
+     * @param islandIndex index of the island to be checked
+     */
     private synchronized void unifyIslands(int islandIndex) {
         Island island = this.game.getIslands().get(islandIndex);
         int left = (islandIndex > 0) ? islandIndex - 1 : this.game.getNumIslands() - 1;
@@ -604,7 +753,7 @@ public class MatchController implements Runnable {
         }
     }
 
-    /** In the case that x == numIslands - 1 (e.g. x = 11, y = 0), use the yth island to merge the xth island, just like deleting the tail node of a linked list.
+    /** Merge two adjacent islands
      * @param x the index of one of the islands to be merged.
      * @param y the index of one of the islands to be merged.
      */
@@ -628,8 +777,10 @@ public class MatchController implements Runnable {
         this.game.getIslands().remove(this.game.getNumIslands() - 1);
     }
 
-    /** This is a method for the Planning phase.
-     * Player PLAYER plays the assistant card ASSISTANT when other players are not playing the same card.
+    /**
+     * Set the assistant chosen by the current player
+     * @param assistant asisstant chosen by the current player
+     * @throws GameException if the card was already used during the turn
      */
     public void setAssistantOfCurrentPlayer(Assistant assistant) throws GameException {
 
@@ -643,18 +794,29 @@ public class MatchController implements Runnable {
         game.setAssistantOfPlayer(this.currentPlayerID, assistant);
     }
 
+    /**
+     * Broadcast the updated clouds
+     */
     public void broadcastClouds() {
         for (ClientHandler client : this.clients) {
             client.send(new CloudsUpdateMessage(new ArrayList<>(this.game.getClouds())));
         }
     }
 
+    /**
+     * Broadcast the change of turn
+     * @param playerNickname nickname of the new current player
+     * @param nextPhase phase that will follow
+     */
     public void broadcastTurnChange(String playerNickname, String nextPhase) {
         for (ClientHandler client : this.clients) {
             client.send(new ChangeTurnMessage(playerNickname, nextPhase));
         }
     }
 
+    /**
+     * Broadcast the updated game model
+     */
     private void broadcastGameModel(){
         MessageToClient gameModelMessage = new GameModelUpdateMessage(this.game);
         for (ClientHandler client :
@@ -663,26 +825,47 @@ public class MatchController implements Runnable {
         }
     }
 
+    /**
+     * Broadcast a professor change
+     * @param playerID nickname of the target player
+     * @param color color of the professor
+     * @param remove true if the professor has to be removed from the target player. False if it has to be added
+     */
     public void broadCastProfessorsChange(String playerID, StudentColor color, boolean remove) {
         for (ClientHandler client : this.clients) {
             client.send(new MoveProfessorMessage(color, remove, playerID));
         }
     }
 
+    /**
+     * Broadcast the disconnection of a player from the game
+     * @param nickname nickname of the disconnected player
+     */
     public void broadCastDisconnection(String nickname) {
         for (ClientHandler client : this.clients) {
             if (!nickname.equals(client.getNickname())) {
                 client.send(new DropConnectionMessage(nickname));
             }
         }
+        //TODO Delete the match from the server. Look at EndGame
     }
 
+    /**
+     *
+     * @return the list of available wizards
+     */
     public List<Wizard> getAvailableWizards(){
         List<Wizard> availableWizards = new ArrayList<>(Arrays.asList(Wizard.values()));
         availableWizards.removeAll(Arrays.asList(wizards));
         return availableWizards;
     }
 
+    /**
+     * Set a wizard to a player
+     * @param player target player
+     * @param wizard wizard to be set
+     * @throws GameException if the wizard chosen is not available
+     */
     public void setWizardOfPlayer(ClientHandler player, Wizard wizard) throws GameException{
         if (isWizardAvailable(wizard)) {
             int index = clients.indexOf(player);
@@ -702,18 +885,33 @@ public class MatchController implements Runnable {
         }
     }
 
+    /**
+     * Broadcast the movement of a student from the entrance to an island/table
+     * @param studentIndex index of the student ot be moved
+     * @param playerID nickname of the player that has moved the student
+     * @param destination '0' if the student has been moved to a table. '1' if it has been moved to an island
+     * @param destinationID ID of the island chosen
+     */
     public void broadcastMovementFromEntrance(int studentIndex, String playerID, int destination, int destinationID) {
         for (ClientHandler client : this.clients) {
             client.send(new ConfirmMovementFromEntranceMessage(studentIndex, playerID, destination, destinationID, game.getPlayerByNickname(playerID).getCoins()));
         }
     }
 
+    /**
+     * Broadcast the assistant chosen by a player
+     * @param playerID nickname of the player that has chosen the assistant
+     * @param assistantValue value of the chosen assistant
+     */
     public void broadcastAssistant(String playerID, int assistantValue) {
         for (ClientHandler client : this.clients) {
             client.send(new UsedAssistantMessage(playerID, assistantValue));
         }
     }
 
+    /**
+     * This method handles the changing of the turn
+     */
     public void nextTurn() {
         int nextPlayerIndex = (this.game.getPlayerIndexFromNickname(this.currentPlayerID) + 1) % this.totalMatchPlayers;
         this.currentPlayerID = this.game.getPlayers().get(nextPlayerIndex).getNickName();
@@ -734,6 +932,10 @@ public class MatchController implements Runnable {
 
     // UTILS
 
+    /**
+     *
+     * @return true if all the players have successfully chosen a wizard. False if not
+     */
     private boolean allWizardsAvailable(){
         for (Wizard wizard :
                 wizards) {
@@ -743,6 +945,11 @@ public class MatchController implements Runnable {
         return true;
     }
 
+    /**
+     *
+     * @param wizard wizard to be checked
+     * @return true if the chosen wizard is available. False if not
+     */
     public boolean isWizardAvailable(Wizard wizard) {
         for (Wizard wizardChecked : wizards) {
             if (wizardChecked == wizard) {
@@ -761,8 +968,10 @@ public class MatchController implements Runnable {
         return ch.getNickname().equals(this.currentPlayerID);
     }
 
-    /** This is a method for the Planning phase.
-     * Draw 3/4 students from _bag and then place them on ONLY ONE cloud tile. Repeat this method for the other cloud tiles.
+    /**
+     * Draw and add 3/4 students from the bag and add them to the cloud
+     * @param cloud cloud that will receive the students
+     * @param numOfPlayers number of players playing this match
      */
     protected void addStudentsToCloud(Cloud cloud, int numOfPlayers){
         int x = (numOfPlayers == 3)? 4 : 3;
@@ -777,18 +986,29 @@ public class MatchController implements Runnable {
         }
     }
 
+    /**
+     * Sort the players based on the last assistant used
+     */
     public void sortPlayers() {
         this.game.sortPlayers();
         this.currentPlayerID = game.getPlayers().get(0).getNickName();
         this.firstOfTurn = this.game.getPlayers().get(0).getNickName();
     }
 
+    /**
+     * Broadcast the movement of mother nature
+     * @param islandIndex index of the island that has received mother nature
+     */
     public void broadcastMovement(int islandIndex) {
         for (ClientHandler client : this.clients) {
             client.send(new ConfirmMovementMessage(islandIndex, game.getIslands(), currentPlayerID, getCurrentPlayer().getTowerNum()));
         }
     }
 
+    /**
+     * Broadcast the cloud chosen by the player
+     * @param cloudID id of the cloud chosen
+     */
     public void broadCastCloudChoice(int cloudID) {
         for (ClientHandler client : this.clients) {
             client.send(new ConfirmCloudMessage(this.currentPlayerID, cloudID));
@@ -806,6 +1026,10 @@ public class MatchController implements Runnable {
         }
     }
 
+    /**
+     * Get the winner of this match, if exists
+     * @return the player that won the game. Null if there is no winner
+     */
     public Player getWinner() {
 
         Player winner = null;
@@ -828,6 +1052,10 @@ public class MatchController implements Runnable {
         return winner;
     }
 
+    /**
+     *
+     * @return whether the game has ended during the phase 2 of the match
+     */
     public int endedAtPhase2() {
         this.game.calculateNumIslandsForPlayers();
         for (Player player : game.getPlayers()) {
@@ -839,6 +1067,10 @@ public class MatchController implements Runnable {
         return 0;
     }
 
+    /**
+     * Broadcast the end of the game and the reason
+     * @param reason reason that ended the game
+     */
     public void endGame(String reason) {
         Player winner = this.getWinner();
 
@@ -849,10 +1081,18 @@ public class MatchController implements Runnable {
         server.removeMatch(this);
     }
 
+    /**
+     *
+     * @return whether there are no students left in the bag
+     */
     public boolean noMoreStudents() {
         return this.game.getBag().isEmpty();
     }
 
+    /**
+     *
+     * @return whether there are no more assistants left
+     */
     public boolean noMoreAssistants() {
         for (Player p : this.game.getPlayers()) {
             if (p.assistantsLeft() == 0) return true;
