@@ -59,7 +59,6 @@ public class ChangeTurnMessage extends MessageToClient {
             guiClient.setCurrentOtherPlayerPhase(Phase_GUI.Action1);
         }
         if (this.playerNickname.equals(guiClient.getNickname())) {
-            guiClient.setChangeTurnNums(0);
             guiClient.setMyTurn(true);
             if (guiClient.getCurrPhase().equals(Phase_GUI.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 guiClient.setCurrPhase(Phase_GUI.Planning);

@@ -46,7 +46,7 @@ public class GUI implements ViewController {
     private int numPlayer;
     private boolean expert;
     private List<Wizard> wizards;
-    private int ap1Moves, changeTurnNums;
+    private int ap1Moves;
     private boolean myTurn;
     private int currCharacter;
     private String[] nicknames;
@@ -691,26 +691,6 @@ public class GUI implements ViewController {
         this.nickname = nickname;
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public int getNumPlayer() {
-        return numPlayer;
-    }
-
     /**
      *
      * @return whether the match is in expert mode or not
@@ -775,10 +755,6 @@ public class GUI implements ViewController {
         this.prevPhase = phase;
     }
 
-    public int getCurrCharacter() {
-        return currCharacter;
-    }
-
     /**
      * Set the character that is currently being used
      * @param currCharacter ID of the character to be set
@@ -787,29 +763,12 @@ public class GUI implements ViewController {
         this.currCharacter = currCharacter;
     }
 
-    public int getChangeTurnNums() {
-        return this.changeTurnNums;
-    }
-
-    /**
-     * TODO
-     * @param changeTurnNums
-     */
-    public void setChangeTurnNums(int changeTurnNums){
-        this.changeTurnNums = changeTurnNums;
-    }
-
     /**
      * Set the number of players that will play this match
      * @param numPlayer amount of players to be set
      */
     public void setNumPlayer(int numPlayer) {
         this.numPlayer = numPlayer;
-    }
-
-
-    public boolean isFullScreen() {
-        return fullScreen;
     }
 
     /**
@@ -836,7 +795,6 @@ public class GUI implements ViewController {
         this.nicknames = nicknames;
     }
 
-
     /**
      *
      * @return the assistant chosen by the players
@@ -862,21 +820,12 @@ public class GUI implements ViewController {
     }
 
 
-    public Phase_GUI getCurrentOtherPlayerPhase() {
-        return currentOtherPlayerPhase;
-    }
-
     /**
-     * TODO
-     * @param currentOtherPlayerPhase
+     * Set the phase of the current player when the current player is not ME.
+     * @param currentOtherPlayerPhase the phase of the current player when the current player is not ME.
      */
     public void setCurrentOtherPlayerPhase(Phase_GUI currentOtherPlayerPhase) {
         this.currentOtherPlayerPhase = currentOtherPlayerPhase;
-    }
-
-
-    public String getCurrPlayer() {
-        return currPlayer;
     }
 
     /**
