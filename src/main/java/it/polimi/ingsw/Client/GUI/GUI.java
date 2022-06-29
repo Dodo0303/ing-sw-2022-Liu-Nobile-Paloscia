@@ -346,7 +346,7 @@ public class GUI implements ViewController {
             GameBoardController gameBoardController = fxmlLoader.getController();
             gameBoardController.setGUI(this);
             gameBoardController.setPhaseLabel(currPlayer + ": " + (currentOtherPlayerPhase.equals(Phase.Planning)?"Planning Phase": "Action Phase"));
-            if (!currPhase.equals(Phase.Planning) || game.getPlayers().get(game.getPlayerIndexFromNickname(nickname)).getUsedAssistant() != null) {
+            if (!currPhase.equals(Phase.Planning) || assistantPicked) {
                 gameBoardController.disableBack(true);
             }
             if (myTurn) {

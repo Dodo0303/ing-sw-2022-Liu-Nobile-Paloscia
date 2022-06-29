@@ -127,7 +127,6 @@ public class GameModel implements Serializable {
         CharacterFactory factory = new CharacterFactory(this);
         List<Integer> characterIDs = new ArrayList<>();
 
-        /*
         Random rnd = new Random();
         int id;
         for (int i = 0; i < 3; i++) {
@@ -141,13 +140,12 @@ public class GameModel implements Serializable {
             characters.add(factory.createCharacter(id));
         }
 
-         */
-        //todo I NEED TO TEST EVERY CHARACTER CARD, KEEP THIS PART OF CODE, I WILL DELETE THIS PART AND UNCOMMENT THE ABOVE PART AFTER THE FEATURE IS FULLY TESTED
+        /*
         for (int i = 0; i < 12; i++) {
             characterIDs.add(i, i + 1);
             characters.add(factory.createCharacter(i + 1));
         }
-
+        */
 
     }
 

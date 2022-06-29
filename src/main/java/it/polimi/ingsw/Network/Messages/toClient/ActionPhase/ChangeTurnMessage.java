@@ -44,6 +44,9 @@ public class ChangeTurnMessage extends MessageToClient {
         } else {
             cliClient.setMyTurn(false);
             cliClient.setCurrCharacter(-1);
+            if (cliClient.getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
+                cliClient.setAssistantPicked(false);
+            }
             System.out.println("It's " + playerNickname + "'s turn.");
         }
     }
@@ -58,7 +61,7 @@ public class ChangeTurnMessage extends MessageToClient {
             guiClient.setCurrentOtherPlayerPhase(Phase.Action1);
         }
         if (this.playerNickname.equals(guiClient.getNickname())) {
-            guiClient.setMyTurn(true);
+             guiClient.setMyTurn(true);
             if (guiClient.getCurrPhase().equals(Phase.GameJoined) && this.gamePhase.equals(Phase.Planning)) {
                 guiClient.setCurrPhase(Phase.Planning);
                 guiClient.setAssistantPicked(false);
@@ -73,6 +76,9 @@ public class ChangeTurnMessage extends MessageToClient {
             }
         } else {
             guiClient.setMyTurn(false);
+            if (guiClient.getCurrPhase().equals(Phase.Action3) && this.gamePhase.equals(Phase.Planning)) {
+                guiClient.setAssistantPicked(false);
+            }
             if (!guiClient.getCurrPhase().equals(Phase.Ending)) {
                 guiClient.checkBoard("");
             }

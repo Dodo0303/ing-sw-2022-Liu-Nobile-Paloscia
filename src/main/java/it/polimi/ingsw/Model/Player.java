@@ -58,7 +58,7 @@ public class Player implements Serializable {
     Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
         this._nickName = nickname;
         this._color = color;
-        this._coins = 12;//todo =0 after tested
+        this._coins = 0;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 8; 
             this._maxTowerNum = 8;
@@ -79,7 +79,7 @@ public class Player implements Serializable {
     Player(String nickname, Color color, Wizard wizard, int numOfPlayers, Player captain) {
         this._nickName = nickname;
         this._color = color;
-        this._coins = 12;//todo =0 after tested
+        this._coins = 0;
         this.captain = captain;
         if ((numOfPlayers == 2 || numOfPlayers == 4) && (color != Color.GRAY && color != Color.VOID)) {
             this._towerNum = 0; 
