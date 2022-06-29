@@ -300,9 +300,17 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
-                if (assis != -1 && game.getPlayerByNickname(nickname).getAssistants().get(assis) == null) {
-                    System.out.print("You cannot choose this assistant card.\n");
-                    assis = -1;
+                if (assis != -1 ) {
+                    if (game.getPlayerByNickname(nickname).getAssistants().get(assis) == null) {
+                        System.out.print("You cannot choose this assistant card.\n");
+                        assis = -1;
+                    }
+                    for (int i = 0; i < game.getPlayers().size(); i++) {
+                        if (game.getPlayers().get(i).getUsedAssistant() != null && game.getPlayers().get(i).getUsedAssistant().getValue() == assis + 1) {
+                            System.out.print("You cannot choose this assistant card.\n");
+                            assis = -1;
+                        }
+                    }
                 }
             }
             send(new SendAssistantMessage(game.getPlayerByNickname(nickname).getAssistants().get(assis)));

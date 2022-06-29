@@ -2,10 +2,7 @@ package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Exceptions.WrongEffectException;
-import it.polimi.ingsw.Model.Color;
-import it.polimi.ingsw.Model.GameModel;
-import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Model.StudentColor;
+import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Utilities;
 
 import java.io.BufferedReader;
@@ -35,23 +32,21 @@ public class UserInterfaceCLI{
 
     public void menu() {
         clearScreen();
-        int coins = cli.getGame().getPlayerByNickname(cli.getNickname()).getCoins();
         int num = -1;
         while ((cli.isExpert() && num!= 6) || (!cli.isExpert() && num != 5)) {
             System.out.println("\n\nMenu:\n ");
-            System.out.println("You have " + coins + " coins\n");
             System.out.println("1. Islands");
             System.out.println("2. Clouds");
             System.out.println("3. My school board");
             System.out.println("4. Others' school boards");;
             if (cli.isExpert() && cli.isMyTurn()) {
                 System.out.println("5. Use character card");
-                System.out.println("6. Continue/Refresh\n");
+                System.out.println("6. Continue");
             } else if ((cli.isExpert() && !cli.isMyTurn())|| (cli.getCurrPhase().equals(Phase.Character1)) || cli.getCurrPhase().equals(Phase.Character5)|| cli.getCurrPhase().equals(Phase.Character7)|| cli.getCurrPhase().equals(Phase.Character11)){
                 System.out.println("5. See character cards");
-                System.out.println("6. Continue/Refresh\n");
+                System.out.println("6. Continue");
             } else {
-                System.out.println("5. Continue/Refresh\n");
+                System.out.println("5. Continue");
             }
             String in = requireUserInput();
             if (Utilities.isNumeric(in)) {
@@ -176,9 +171,9 @@ public class UserInterfaceCLI{
             System.out.println(color + ": " + player.getDiningTables().get(color).getNumOfStudents());
         }
 
-        System.out.println("Professors: ");
+        System.out.print("Professors: ");
         if (player.getProfessors().size() == 0) {
-            System.out.print("none");
+            System.out.print("none\n");
         }
         for (int i = 0; i < player.getProfessors().size(); i++) {
             System.out.print(player.getProfessors().get(i) + " ");
@@ -186,7 +181,14 @@ public class UserInterfaceCLI{
         if (cli.getGame().getPlayers().size() == 4) {
             System.out.println("Towers of the team: " + player.getTowerNum()+ player.getColor().toString());
         } else {
-            System.out.println("Towers: " + player.getTowerNum()+ player.getColor().toString());
+            System.out.println("Towers: " + player.getTowerNum()+ " " + player.getColor().toString());
+        }
+        System.out.print("Assistant card: ");
+        Assistant assistant;
+        if ((assistant = cli.getGame().getPlayerByNickname(cli.getNickname()).getUsedAssistant()) != null) {
+            System.out.println("MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
+        } else {
+            System.out.print("none\n");
         }
         if (cli.isExpert()) {
             System.out.println("Coins: " + player.getCoins());
