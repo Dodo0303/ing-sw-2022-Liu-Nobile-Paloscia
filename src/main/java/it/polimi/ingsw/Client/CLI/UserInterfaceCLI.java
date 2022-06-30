@@ -106,7 +106,7 @@ public class UserInterfaceCLI{
                         int characterIndex = -1;
                         printCharacters();
                         if (cli.isMyTurn()) {
-                            System.out.println("Choose a character, or enter 'e' to go back.");
+                            System.out.println("\nChoose a character, or enter 'e' to go back.");
                             String temp = requireUserInput();
                             if (temp.equals("e")) {
                                 break;
@@ -137,11 +137,12 @@ public class UserInterfaceCLI{
      * This method is used to print the islands and their information during the game
      */
     void printIslands() {
+        clearScreen();
         int numIslands = cli.getGame().getIslands().size();
         for (int i = 0; i < numIslands; i++) {
             printIsland(i);
         }
-        System.out.println("The mother nature is on island " + cli.getGame().getMotherNatureIndex());
+        System.out.println("\nThe mother nature is on island " + cli.getGame().getMotherNatureIndex());
     }
 
     /**
@@ -149,7 +150,7 @@ public class UserInterfaceCLI{
      * @param index index of the island to be printed
      */
     public void printIsland(int index){
-        System.out.println("Island " + index);
+        System.out.println("\n\nIsland " + index);
         if (cli.getGame().getIslands().get(index).getTowerColor().equals(Color.VOID)) {
             System.out.println("No ♜ on this island");
         } else {
@@ -161,7 +162,7 @@ public class UserInterfaceCLI{
         if (cli.getGame().getMotherNatureIndex() == index) {
             System.out.println("Mother nature is here");
         }
-        System.out.println("Students:");
+        System.out.println("\nStudents:");
         System.out.println("Red: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.RED));
         System.out.println("Yellow: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.YELLOW));
         System.out.println("Green: " + cli.getGame().getIslands().get(index).getStudents().get(StudentColor.GREEN));
@@ -173,9 +174,9 @@ public class UserInterfaceCLI{
      * This method prints information about the clouds during the game
      */
     public void printClouds() {
+        clearScreen();
         for (int i = 0; i < cli.getGame().getClouds().size(); i++) {
-            System.out.print("cloud " + i + " :\n");
-            System.out.print("Students:\n");
+            System.out.print("\n\nCloud " + i + " :\n");
             for (StudentColor color: cli.getGame().getClouds().get(i).getStudents()) {
                 System.out.println(color + "  ");
             }
@@ -187,6 +188,7 @@ public class UserInterfaceCLI{
      * @param player target player
      */
     public void printSchoolBoard(Player player) {
+        clearScreen();
         System.out.println("\n" + player.getNickName().toUpperCase() + "'S school board:\n");
         System.out.println("Entrance: ");
         for (int i = 0; i < player.getEntranceStudents().size(); i++) {
@@ -194,12 +196,12 @@ public class UserInterfaceCLI{
         }
         System.out.println(" ");
 
-        System.out.println("Dining room:");
+        System.out.println("\nDining room:");
         for (StudentColor color: player.getDiningTables().keySet()) {
             System.out.println(color + ": " + player.getDiningTables().get(color).getNumOfStudents());
         }
 
-        System.out.print("Professors: ");
+        System.out.print("\nProfessors: ");
         if (player.getProfessors().size() == 0) {
             System.out.print("none\n");
         }
@@ -208,11 +210,11 @@ public class UserInterfaceCLI{
         }
         System.out.println(" ");
         if (cli.getGame().getPlayers().size() == 4) {
-            System.out.println("Towers of the team: " + player.getTowerNum()+ player.getColor().toString());
+            System.out.println("\nTowers of the team: " + player.getTowerNum()+ player.getColor().toString());
         } else {
-            System.out.println("Towers: " + player.getTowerNum()+ " " + player.getColor().toString());
+            System.out.println("\nTowers: " + player.getTowerNum()+ " " + player.getColor().toString());
         }
-        System.out.print("Assistant card: ");
+        System.out.print("\nAssistant card: ");
         Assistant assistant;
         if ((assistant = cli.getGame().getPlayerByNickname(cli.getNickname()).getUsedAssistant()) != null) {
             System.out.println("MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
@@ -220,7 +222,7 @@ public class UserInterfaceCLI{
             System.out.print("none\n");
         }
         if (cli.isExpert()) {
-            System.out.println("Coins: " + player.getCoins());
+            System.out.println("\nCoins: " + player.getCoins());
         }
     }
 
@@ -228,6 +230,7 @@ public class UserInterfaceCLI{
      * This method prints the list of available characters, and their status
      */
     public void printCharacters()  {
+        clearScreen();
         try {
             for (int i = 1; i <= cli.getGame().getCharacters().size(); i++) {
                 if (cli.getGame().getCharacters().get(i - 1) == null) {
@@ -283,6 +286,7 @@ public class UserInterfaceCLI{
      * This method is used to print the title of the game when Eriantys is opened
      */
     public void printTitle(){
+        clearScreen();
         System.out.println(
                 "███████╗██████╗░██╗░█████╗░███╗░░██╗████████╗██╗░░░██╗░██████╗\n" +
                         "██╔════╝██╔══██╗██║██╔══██╗████╗░██║╚══██╔══╝╚██╗░██╔╝██╔════╝\n" +
@@ -295,7 +299,7 @@ public class UserInterfaceCLI{
     /**
      * This method is used to clear the screen, before printing something else
      */
-    private void clearScreen() {
+    public void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

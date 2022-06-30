@@ -6,10 +6,10 @@ import it.polimi.ingsw.Network.Messages.ConnectionStatusMessage;
 import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -59,6 +59,21 @@ public class EriantysServer implements Runnable{
     public void run() {
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
+        try {
+            Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
+            System.out.println("\n\nNetwork interfaces:\n");
+            while (networks.hasMoreElements()){
+                NetworkInterface network = networks.nextElement();
+                System.out.println(network.getName() + ":\n");
+                Enumeration<InetAddress> addresses = network.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress ip = addresses.nextElement();
+                    System.out.println("\t" + ip + "\n");
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
         try {
             serverSocket = new ServerSocket(this.port);
         } catch (IOException e) {

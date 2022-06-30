@@ -184,6 +184,7 @@ public class CLI implements ViewController {
                     System.out.print("Server not found.\n");
                     buildConnection();
                 }
+                view.clearScreen();
             }
             currPhase = Phase.PickingNickname;
         } catch (Exception e) {
@@ -203,6 +204,7 @@ public class CLI implements ViewController {
                 temp = Integer.parseInt(in);
             }
         }
+        view.clearScreen();
         if (temp == 1) {
             send(new CreateMatchMessage(true));
             currPhase = Phase.CreatingGame;
@@ -224,6 +226,7 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     numPlayer = Integer.parseInt(in);
                 }
+                view.clearScreen();
             }
             while(!mode.equals("true") && !mode.equals("false")) {
                 System.out.print("turn on expert mode? Respond with true or false.\n");
@@ -233,6 +236,7 @@ public class CLI implements ViewController {
                 } else {
                     this.expert = false;
                 }
+                view.clearScreen();
             }
             while(wiz > 3 || wiz < 0) {
                 System.out.print("Choose a wizard for yourself. Type in 1,2,3, or 4.\n");
@@ -240,6 +244,7 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     wiz = Integer.parseInt(in) - 1;
                 }
+                view.clearScreen();
             }
             send(new SendStartInfoMessage(numPlayer, Boolean.parseBoolean(mode), Wizard.values()[wiz]));
 
@@ -260,6 +265,7 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     match = Integer.parseInt(in);
                 }
+                view.clearScreen();
             }
             send(new MatchChosenMessage(matchIDs.get(match - 1)));
         } catch (Exception e) {
@@ -283,6 +289,7 @@ public class CLI implements ViewController {
                 if (Utilities.isNumeric(in)) {
                     wiz = Integer.parseInt(in) - 1;
                 }
+                view.clearScreen();
             }
             setPhase(Phase.JoiningGame2);
             send(new SendChosenWizardMessage(wizards.get(wiz)));
@@ -308,11 +315,12 @@ public class CLI implements ViewController {
                         System.out.println(i + ". MaxStep: " +  assistant.getMaxSteps() + ", Value: "+ assistant.getValue());
                     }
                 }
-                System.out.print("Choose assistant card.\n");
+                System.out.print("\nChoose assistant card.\n");
                 String in = view.requireUserInput();
                 if (Utilities.isNumeric(in)) {
                     assis = Integer.parseInt(in) - 1;
                 }
+                view.clearScreen();
                 if (assis != -1) {
                     if (assis > 10) {
                         System.out.print("No such card.\n");
@@ -349,7 +357,7 @@ public class CLI implements ViewController {
                 System.out.print(i + ")" + color + " ");
                 i++;
             }
-            System.out.print("Which student would you like to move?(Write the index). Press 'm' to check menu.\n");
+            System.out.print("\n\nWhich student would you like to move?(Write the index). Press 'm' to check menu.\n");
             String in = view.requireUserInput();
             if (in.equals("m")){
                 view.menu();
@@ -413,7 +421,7 @@ public class CLI implements ViewController {
         int num = -1;
         while (num < 0 || num >= game.getIslands().size() - 1) {
             view.printClouds();
-            System.out.print("Which cloud would you like to take students from? Press 'm' to check menu.\n");
+            System.out.print("\nFrom which cloud would you like to take students from? Press 'm' to check menu.\n");
             String in = view.requireUserInput();
             if (in.equals("m")){
                 view.menu();
