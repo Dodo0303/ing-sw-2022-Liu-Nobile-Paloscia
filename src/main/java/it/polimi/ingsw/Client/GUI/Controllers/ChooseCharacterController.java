@@ -174,29 +174,29 @@ public class ChooseCharacterController implements Initializable {
                     e.printStackTrace();
                 }
             } else if (gui.getGame().getCharacters().get(h).getID() == 2) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip2 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: During this turn, you take control of any number of professors,\neven if you have the same number of students as the player who currently controls them.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip2.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip2);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }  else if (gui.getGame().getCharacters().get(h).getID() == 3) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip3 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: Choose an island and resolve the island as if the mother nature had ended her movement there.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip3.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip3);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }  else if (gui.getGame().getCharacters().get(h).getID() == 4) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip4 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: You may move the mother nature up to 2 additional islands than is indicated by the assistant card.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip4.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip4);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -213,11 +213,11 @@ public class ChooseCharacterController implements Initializable {
                     e.printStackTrace();
                 }
             } else if (gui.getGame().getCharacters().get(h).getID() == 6) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip6 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: When resolving a conquering on an island, towers do not count towards influence.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip6.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip6);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -236,29 +236,29 @@ public class ChooseCharacterController implements Initializable {
                     e.printStackTrace();
                 }
             } else if (gui.getGame().getCharacters().get(h).getID() == 8) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip8 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: During the influence calculation, you count as having 2 more influence.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip8.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip8);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (gui.getGame().getCharacters().get(h).getID() == 9) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip9 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: Choose a color of student, during the influence calculation, that color won't be taken into consideration.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip9.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip9);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }  else if (gui.getGame().getCharacters().get(h).getID() == 10) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip10 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: You may exchange up to 2 students between your entrance and your dining room.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip10.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip10);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -277,11 +277,11 @@ public class ChooseCharacterController implements Initializable {
                     e.printStackTrace();
                 }
             } else if (gui.getGame().getCharacters().get(h).getID() == 12) {
-                Tooltip tooltip11 = new Tooltip();
+                Tooltip tooltip12 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: Choose a type of student, every player must return 3 students of that type from the dining room to the bag.\nIf any player has fewer than 3 students of that type, return as many as they have.\n");
-                    tooltip11.setText(stringBuilder.toString());
-                    Tooltip.install(pic11, tooltip11);
+                    tooltip12.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip12);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
