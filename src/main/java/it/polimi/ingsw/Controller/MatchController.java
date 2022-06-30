@@ -1033,12 +1033,12 @@ public class MatchController implements Runnable {
     public Player getWinner() {
 
         Player winner = null;
-        int maxTow = 0;
+        int maxTow = 10;
         int maxProf = 0;
 
         for (Player p : this.game.getPlayers()) {
-            if (p.getTowerNum() > maxTow) {
-                maxTow = p.getMaxTowerNum();
+            if (p.getTowerNum() < maxTow) {
+                maxTow = p.getTowerNum();
                 maxProf = p.getProfessors().size();
                 winner = p;
             } else if (p.getTowerNum() == maxTow) {
