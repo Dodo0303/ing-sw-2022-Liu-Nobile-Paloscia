@@ -25,13 +25,14 @@ public class CharacterFactory {
      * @param quantity number of students to be taken
      * @return students to put on the character card
      */
-    private StudentColor[] generateStudents(int quantity){
+    private StudentColor[] generateStudents(int quantity) throws GameException{
         StudentColor[] students = new StudentColor[quantity];
         for (int i = 0; i < quantity; i++) {
             try {
                 students[i] = gameModel.drawStudentFromBag();
             } catch (EmptyBagException e) {
                 e.printStackTrace();
+                throw new GameException("Bag is empty");
             }
         }
         return students;
@@ -42,7 +43,7 @@ public class CharacterFactory {
      * @param ID ID of the character
      * @return return the character chosen
      */
-    public CharacterCard createCharacter(int ID){
+    public CharacterCard createCharacter(int ID) throws GameException{
         CharacterCard res;
         switch (ID){
             case 1:
