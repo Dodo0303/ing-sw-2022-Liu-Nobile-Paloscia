@@ -162,41 +162,124 @@ public class ChooseCharacterController implements Initializable {
             if (gui.getGame().getCharacters().get(h).getID() == 1) {
                 Tooltip tooltip1 = new Tooltip();
                 try {
+                    stringBuilder.append("Effect: Take 1 student from this card and place it on an island of your choice.\n");
+                    stringBuilder.append("Students: ");
                     for (int i = 0; i < gui.getGame().getCharacterById(1).getStudents().size(); i++) {
                         stringBuilder.append(gui.getGame().getCharacterById(1).getStudents().get(i).toString()).append(" ");
                     }
+                    stringBuilder.append("\n");
                     tooltip1.setText(stringBuilder.toString());
                     Tooltip.install(pic1, tooltip1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (gui.getGame().getCharacters().get(h).getID() == 5) {
+            } else if (gui.getGame().getCharacters().get(h).getID() == 2) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: During this turn, you take control of any number of professors,\neven if you have the same number of students as the player who currently controls them.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }  else if (gui.getGame().getCharacters().get(h).getID() == 3) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: Choose an island and resolve the island as if the mother nature had ended her movement there.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }  else if (gui.getGame().getCharacters().get(h).getID() == 4) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: You may move the mother nature up to 2 additional islands than is indicated by the assistant card.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }  else if (gui.getGame().getCharacters().get(h).getID() == 5) {
                 Tooltip tooltip5 = new Tooltip();
                 try {
-                    stringBuilder.append("No entries: ");
+                    stringBuilder.append("Effect: During your turn, you take control of any number of professors, \neven if you have the same number of students as the player who currently controls them.\n");
+                    stringBuilder.append("Number of entries: ");
                     stringBuilder.append(gui.getGame().getCharacterById(5).getNumberOfNoEntries()).append(" ");
+                    stringBuilder.append("\n");
                     tooltip5.setText(stringBuilder.toString());
                     Tooltip.install(pic5, tooltip5);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (gui.getGame().getCharacters().get(h).getID() == 7) {
+            } else if (gui.getGame().getCharacters().get(h).getID() == 6) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: When resolving a conquering on an island, towers do not count towards influence.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }  else if (gui.getGame().getCharacters().get(h).getID() == 7) {
                 Tooltip tooltip7 = new Tooltip();
                 try {
+                    stringBuilder.append("Effect: You may take up to 3 students from this card, \nand replace them with the same number of students from your entrance.\n");
+                    stringBuilder.append("Students: ");
                     for (int i = 0; i < gui.getGame().getCharacterById(7).getStudents().size(); i++) {
                         stringBuilder.append(gui.getGame().getCharacterById(7).getStudents().get(i).toString()).append(" ");
                     }
+                    stringBuilder.append("\n");
                     tooltip7.setText(stringBuilder.toString());
                     Tooltip.install(pic7, tooltip7);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (gui.getGame().getCharacters().get(h).getID() == 8) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: During the influence calculation, you count as having 2 more influence.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (gui.getGame().getCharacters().get(h).getID() == 9) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: Choose a color of student, during the influence calculation, that color won't be taken into consideration.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }  else if (gui.getGame().getCharacters().get(h).getID() == 10) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: You may exchange up to 2 students between your entrance and your dining room.\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (gui.getGame().getCharacters().get(h).getID() == 11) {
                 Tooltip tooltip11 = new Tooltip();
                 try {
+                    stringBuilder.append("Effect: Take 1 student from this card and place it on your dining room.\n");
+                    stringBuilder.append("Students: ");
                     for (int i = 0; i < gui.getGame().getCharacterById(11).getStudents().size(); i++) {
                         stringBuilder.append(gui.getGame().getCharacterById(11).getStudents().get(i).toString()).append(" ");
                     }
+                    stringBuilder.append("\n");
+                    tooltip11.setText(stringBuilder.toString());
+                    Tooltip.install(pic11, tooltip11);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (gui.getGame().getCharacters().get(h).getID() == 12) {
+                Tooltip tooltip11 = new Tooltip();
+                try {
+                    stringBuilder.append("Effect: Choose a type of student, every player must return 3 students of that type from the dining room to the bag.\nIf any player has fewer than 3 students of that type, return as many as they have.\n");
                     tooltip11.setText(stringBuilder.toString());
                     Tooltip.install(pic11, tooltip11);
                 } catch (Exception e) {
