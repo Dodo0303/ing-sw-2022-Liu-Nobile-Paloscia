@@ -67,67 +67,40 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.5.5</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
-
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>it.polimi.ingsw.App</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
+      <!-- Compiler plugin, sets the Java version -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.10.1</version>
         <configuration>
+          <!-- Version of the Java language to use -->
           <source>11</source>
+          <!-- Minimum JRE version the JAR will be compatible with -->
           <target>11</target>
         </configuration>
       </plugin>
+      <!-- Surefire plugin, responsible for running tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.1</version>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.1</version>
-        <configuration>
-          <goals>install</goals>
-          <preparationGoals>install</preparationGoals>
-        </configuration>
+      <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> <version>3.2.4</version>
+        <executions>
+          <execution> <id>main-jar</id> <phase>package</phase> <goals>
+            <goal>shade</goal>
+          </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation= "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>it.polimi.ingsw.App</mainClass> </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
-
     </plugins>
-
   </build>
 
 </project>
