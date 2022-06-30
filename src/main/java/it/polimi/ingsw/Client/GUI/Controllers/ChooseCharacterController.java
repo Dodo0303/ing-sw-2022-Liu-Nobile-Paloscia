@@ -57,72 +57,87 @@ public class ChooseCharacterController implements Initializable {
         gui.setPrevPhase(gui.getCurrPhase());
         if (radio1.isSelected()) {
             res = 1;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character1);
-            gui.setCurrCharacter(1);
-            gui.viewSchoolBoard("Move a student from card.", false);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character1);
+                gui.setCurrCharacter(1);
+                gui.viewSchoolBoard("Move a student from card.", false);
+            }
         } else if (radio2.isSelected()) {
             res = 2;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character2);
-            gui.setCurrCharacter(2);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character2);
+                gui.setCurrCharacter(2);
+            }
         } else if (radio3.isSelected()) {
             res = 3;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character3);
-            gui.setCurrCharacter(3);
-            gui.checkBoard("Choose an island.");
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character3);
+                gui.setCurrCharacter(3);
+                gui.checkBoard("Choose an island.");
+            }
         } else if (radio4.isSelected()) {
             res = 4;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character4);
-            gui.setCurrCharacter(4);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character4);
+                gui.setCurrCharacter(4);
+            }
         } else if (radio5.isSelected()) {
             res = 5;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character5);
-            gui.setCurrCharacter(5);
-            gui.viewSchoolBoard("Move a noEntry tile.", false);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character5);
+                gui.setCurrCharacter(5);
+                gui.viewSchoolBoard("Move a noEntry tile.", false);
+            }
         } else if (radio6.isSelected()) {
             res = 6;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character6);
-            gui.setCurrCharacter(6);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character6);
+                gui.setCurrCharacter(6);
+            }
         } else if (radio7.isSelected()) {
             res = 7;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character7);
-            gui.setCurrCharacter(7);
-            gui.viewSchoolBoard("Click a student on the card. ", false);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character7);
+                gui.setCurrCharacter(7);
+                gui.viewSchoolBoard("Click a student on the card. ", false);
+            }
         } else if (radio8.isSelected()) {
             res = 8;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character8);
-            gui.setCurrCharacter(8);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character8);
+                gui.setCurrCharacter(8);
+            }
         } else if (radio9.isSelected()) {
             res = 9;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character9);
-            gui.setCurrCharacter(9);
-            gui.pickColor();
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character9);
+                gui.setCurrCharacter(9);
+                gui.pickColor();
+            }
+
         } else if (radio10.isSelected()) {
             res = 10;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character10);
-            gui.setCurrCharacter(10);
-            gui.viewSchoolBoard("swap students", false);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character10);
+                gui.setCurrCharacter(10);
+                gui.viewSchoolBoard("swap students", false);
+            }
+
         } else if (radio11.isSelected()) {
             res = 11;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character11);
-            gui.setCurrCharacter(11);
-            gui.viewSchoolBoard("take a student to dining room.", false);
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character11);
+                gui.setCurrCharacter(11);
+                gui.viewSchoolBoard("take a student to dining room.", false);
+            }
+
         } else if (radio12.isSelected()) {
             res = 12;
-            checkValidity(res);
-            gui.setCurrPhase(Phase.Character12);
-            gui.setCurrCharacter(12);
-            gui.pickColor();
+            if (checkValidity(res)) {
+                gui.setCurrPhase(Phase.Character12);
+                gui.setCurrCharacter(12);
+                gui.pickColor();
+            }
         } else {
             setMessage("Please choose a card.");
             return;
@@ -144,7 +159,7 @@ public class ChooseCharacterController implements Initializable {
         gui.send(new UseCharacterMessage(res));
     }
 
-    public boolean checkValidity(int res) {
+    private boolean checkValidity(int res) {
         if (!check(res)) {
             setMessage("You cannot use this card.");
             return false;
@@ -167,7 +182,8 @@ public class ChooseCharacterController implements Initializable {
                     for (int i = 0; i < gui.getGame().getCharacterById(1).getStudents().size(); i++) {
                         stringBuilder.append(gui.getGame().getCharacterById(1).getStudents().get(i).toString()).append(" ");
                     }
-                    stringBuilder.append("\n");
+                    stringBuilder.append("\nPrice: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(1).getPrice());
                     tooltip1.setText(stringBuilder.toString());
                     Tooltip.install(pic1, tooltip1);
                 } catch (Exception e) {
@@ -177,6 +193,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip2 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: During this turn, you take control of any number of professors,\neven if you have the same number of students as the player who currently controls them.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(2).getPrice());
                     tooltip2.setText(stringBuilder.toString());
                     Tooltip.install(pic2, tooltip2);
                 } catch (Exception e) {
@@ -186,6 +204,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip3 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: Choose an island and resolve the island as if the mother nature had ended her movement there.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(3).getPrice());
                     tooltip3.setText(stringBuilder.toString());
                     Tooltip.install(pic3, tooltip3);
                 } catch (Exception e) {
@@ -195,6 +215,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip4 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: You may move the mother nature up to 2 additional islands than is indicated by the assistant card.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(4).getPrice());
                     tooltip4.setText(stringBuilder.toString());
                     Tooltip.install(pic4, tooltip4);
                 } catch (Exception e) {
@@ -207,6 +229,8 @@ public class ChooseCharacterController implements Initializable {
                     stringBuilder.append("Number of entries: ");
                     stringBuilder.append(gui.getGame().getCharacterById(5).getNumberOfNoEntries()).append(" ");
                     stringBuilder.append("\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(5).getPrice());
                     tooltip5.setText(stringBuilder.toString());
                     Tooltip.install(pic5, tooltip5);
                 } catch (Exception e) {
@@ -216,6 +240,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip6 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: When resolving a conquering on an island, towers do not count towards influence.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(6).getPrice());
                     tooltip6.setText(stringBuilder.toString());
                     Tooltip.install(pic6, tooltip6);
                 } catch (Exception e) {
@@ -230,6 +256,8 @@ public class ChooseCharacterController implements Initializable {
                         stringBuilder.append(gui.getGame().getCharacterById(7).getStudents().get(i).toString()).append(" ");
                     }
                     stringBuilder.append("\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(7).getPrice());
                     tooltip7.setText(stringBuilder.toString());
                     Tooltip.install(pic7, tooltip7);
                 } catch (Exception e) {
@@ -239,6 +267,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip8 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: During the influence calculation, you count as having 2 more influence.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(8).getPrice());
                     tooltip8.setText(stringBuilder.toString());
                     Tooltip.install(pic8, tooltip8);
                 } catch (Exception e) {
@@ -248,6 +278,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip9 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: Choose a color of student, during the influence calculation, that color won't be taken into consideration.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(9).getPrice());
                     tooltip9.setText(stringBuilder.toString());
                     Tooltip.install(pic9, tooltip9);
                 } catch (Exception e) {
@@ -257,6 +289,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip10 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: You may exchange up to 2 students between your entrance and your dining room.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(10).getPrice());
                     tooltip10.setText(stringBuilder.toString());
                     Tooltip.install(pic10, tooltip10);
                 } catch (Exception e) {
@@ -271,6 +305,8 @@ public class ChooseCharacterController implements Initializable {
                         stringBuilder.append(gui.getGame().getCharacterById(11).getStudents().get(i).toString()).append(" ");
                     }
                     stringBuilder.append("\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(11).getPrice());
                     tooltip11.setText(stringBuilder.toString());
                     Tooltip.install(pic11, tooltip11);
                 } catch (Exception e) {
@@ -280,6 +316,8 @@ public class ChooseCharacterController implements Initializable {
                 Tooltip tooltip12 = new Tooltip();
                 try {
                     stringBuilder.append("Effect: Choose a type of student, every player must return 3 students of that type from the dining room to the bag.\nIf any player has fewer than 3 students of that type, return as many as they have.\n");
+                    stringBuilder.append("Price: ");
+                    stringBuilder.append(gui.getGame().getCharacterById(12).getPrice());
                     tooltip12.setText(stringBuilder.toString());
                     Tooltip.install(pic12, tooltip12);
                 } catch (Exception e) {
