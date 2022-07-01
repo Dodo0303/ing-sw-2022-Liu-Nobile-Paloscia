@@ -5,6 +5,9 @@ import it.polimi.ingsw.Exceptions.GameException;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.CreateMatchMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+/**
+ * This phase is set when the player must choose between creating a new match, or joining an existing one.
+ */
 public class ReceiveMatchTypePhase extends ClientHandlerPhase{
     public ReceiveMatchTypePhase(ClientHandler ch) {
         super(ch);

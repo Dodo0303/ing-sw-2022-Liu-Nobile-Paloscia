@@ -10,6 +10,9 @@ import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
 import java.io.IOException;
 
+/**
+ * This phase is set when the player is requested to choose a wizard for the game.
+ */
 public class ReceiveWizardPhase extends ClientHandlerPhase{
     public ReceiveWizardPhase(ClientHandler ch) {
         super(ch);

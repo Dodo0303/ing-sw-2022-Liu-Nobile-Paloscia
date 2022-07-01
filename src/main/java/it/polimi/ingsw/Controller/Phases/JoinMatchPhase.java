@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This phase is set when the player has chosen to join a match. It requires a MatchChosenMessage message with information about the match chosen.
+ */
 public class JoinMatchPhase extends ClientHandlerPhase{
     public JoinMatchPhase(ClientHandler ch) {
         super(ch);

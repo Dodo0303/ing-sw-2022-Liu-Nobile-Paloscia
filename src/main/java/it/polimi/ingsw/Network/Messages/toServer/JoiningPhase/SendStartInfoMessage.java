@@ -27,8 +27,4 @@ public class SendStartInfoMessage extends MessageToServer {
         return wizard;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-        //TODO
-    }
 }

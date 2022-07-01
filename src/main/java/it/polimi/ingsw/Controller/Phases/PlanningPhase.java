@@ -10,6 +10,9 @@ import it.polimi.ingsw.Network.Messages.toServer.PlanningPhase.SendAssistantMess
 
 import java.util.ArrayList;
 
+/**
+ * First phase of a round. During this phase every player must choose a valid assistant.
+ */
 public class PlanningPhase extends Phase {
 
     public PlanningPhase(MatchController match) {

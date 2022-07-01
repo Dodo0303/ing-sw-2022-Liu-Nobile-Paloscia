@@ -15,8 +15,4 @@ public class SendChosenWizardMessage extends MessageToServer {
         return wizard;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-        //TODO
-    }
 }

@@ -15,7 +15,4 @@ public class SendAssistantMessage extends MessageToServer {
         return assistant;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-    }
 }

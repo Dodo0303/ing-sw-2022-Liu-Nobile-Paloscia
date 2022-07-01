@@ -26,7 +26,4 @@ public class MoveStudentFromEntranceMessage extends MessageToServer {
         return destinationID;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-    }
 }

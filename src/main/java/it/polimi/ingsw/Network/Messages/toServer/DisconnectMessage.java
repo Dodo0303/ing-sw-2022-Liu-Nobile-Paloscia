@@ -10,8 +10,4 @@ public class DisconnectMessage extends MessageToServer {
 
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

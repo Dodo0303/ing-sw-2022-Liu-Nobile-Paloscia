@@ -14,8 +14,4 @@ public class SendNickMessage extends MessageToServer {
         return nickname;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-        //ch.isNickAvailable(nickname);
-    }
 }

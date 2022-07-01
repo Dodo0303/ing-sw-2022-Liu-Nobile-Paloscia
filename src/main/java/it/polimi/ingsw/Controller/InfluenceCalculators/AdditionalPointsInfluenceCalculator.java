@@ -3,6 +3,9 @@ package it.polimi.ingsw.Controller.InfluenceCalculators;
 import it.polimi.ingsw.Model.Island;
 import it.polimi.ingsw.Model.Player;
 
+/**
+ * This Influence Calculator computes the influence adding two additional points to the player that used the character
+ */
 public class AdditionalPointsInfluenceCalculator implements  InfluenceCalculator{
     /**
      * Player nickname that will get 2 additional points

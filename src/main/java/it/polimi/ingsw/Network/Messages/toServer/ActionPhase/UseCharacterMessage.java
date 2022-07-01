@@ -14,8 +14,4 @@ public class UseCharacterMessage extends MessageToServer {
         return characterID;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

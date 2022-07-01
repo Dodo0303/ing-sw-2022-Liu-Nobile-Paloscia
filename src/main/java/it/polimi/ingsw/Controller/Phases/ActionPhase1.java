@@ -9,6 +9,10 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveStudentFromEntr
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+/**
+ * First phase of the Action Phase. During this phase the player must move three students from the entrance to a table/island.
+ * He can also play a character card, if the game is in expert mode.
+ */
 public class ActionPhase1 extends Phase {
 
     private int moves;

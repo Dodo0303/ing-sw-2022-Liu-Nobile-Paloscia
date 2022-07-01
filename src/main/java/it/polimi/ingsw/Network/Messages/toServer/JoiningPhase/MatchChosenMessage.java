@@ -14,8 +14,4 @@ public class MatchChosenMessage extends MessageToServer {
         return matchID;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-        //TODO
-    }
 }

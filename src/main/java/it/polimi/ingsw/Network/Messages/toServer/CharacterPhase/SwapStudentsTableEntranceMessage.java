@@ -21,8 +21,4 @@ public class SwapStudentsTableEntranceMessage extends MessageToServer {
         return entrancePosition;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

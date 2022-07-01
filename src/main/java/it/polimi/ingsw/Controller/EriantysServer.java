@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Singleton containing server information, i.e. its port and current matches.
+ * It receives incoming connections.
  */
 public class EriantysServer implements Runnable{
 

@@ -7,6 +7,10 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.ChooseCloudMessage;
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+/**
+ * Last phase of the Action phase. The player must choose a valid cloud.
+ * He can also use a character card, if the game is in expert mode.
+ */
 public class ActionPhase3 extends Phase {
     public ActionPhase3(MatchController match) {
         super(match);

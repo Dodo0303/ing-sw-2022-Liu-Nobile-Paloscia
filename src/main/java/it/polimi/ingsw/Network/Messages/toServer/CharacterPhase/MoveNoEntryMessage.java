@@ -14,8 +14,4 @@ public class MoveNoEntryMessage extends MessageToServer {
         return islandID;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

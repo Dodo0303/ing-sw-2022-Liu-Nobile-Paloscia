@@ -20,8 +20,4 @@ public class MoveStudentFromCharacterMessage extends MessageToServer {
         return islandID;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

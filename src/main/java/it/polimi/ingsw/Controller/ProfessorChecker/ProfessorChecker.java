@@ -6,6 +6,9 @@ import it.polimi.ingsw.Model.StudentColor;
 
 import java.util.List;
 
+/**
+ * Interface that manages the assignment of a professor to a player
+ */
 public interface ProfessorChecker {
     /**
      * Given two players, checks if they should swap the professor.

@@ -14,8 +14,4 @@ public class CreateMatchMessage extends MessageToServer {
         return newMatch;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-        //TODO
-    }
 }

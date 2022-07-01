@@ -18,7 +18,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Class that manage the connection between the client and the match
+ * Class that manages the connection between the client and the match
  */
 public class ClientHandler implements Runnable {
     /**
@@ -200,13 +200,6 @@ public class ClientHandler implements Runnable {
         catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /** Shut down THIS clientHandler and announce the disconnection to other clients.
-     */
-    void closeWithError(String err) {
-        //TODO announce to other clients.
-        close();
     }
 
     /**

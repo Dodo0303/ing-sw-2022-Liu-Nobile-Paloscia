@@ -13,6 +13,9 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage
 import it.polimi.ingsw.Network.Messages.toServer.CharacterPhase.*;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+/**
+ * This phase is called when a player has requested to use a character.
+ */
 public class CharacterPhase extends Phase{
     private Phase previousPhase;
     private int expectedCharacterID;
@@ -200,7 +203,7 @@ public class CharacterPhase extends Phase{
         } else {
             match.denyMovement(ch);
             System.out.println("Character message expected, received: " + msg.getClass());
-        }//TODO process of ack messages
+        }
         nextPhase();
     }
 

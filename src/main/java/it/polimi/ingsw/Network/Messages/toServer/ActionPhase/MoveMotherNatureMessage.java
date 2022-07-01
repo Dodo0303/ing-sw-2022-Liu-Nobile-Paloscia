@@ -14,8 +14,4 @@ public class MoveMotherNatureMessage extends MessageToServer {
         return this.islandIndex;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

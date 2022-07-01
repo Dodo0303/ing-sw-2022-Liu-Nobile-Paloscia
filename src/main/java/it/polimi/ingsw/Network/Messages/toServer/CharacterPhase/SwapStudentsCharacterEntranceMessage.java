@@ -20,8 +20,4 @@ public class SwapStudentsCharacterEntranceMessage extends MessageToServer {
         return entranceIndexes;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

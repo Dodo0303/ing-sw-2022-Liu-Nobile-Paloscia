@@ -8,7 +8,6 @@ import it.polimi.ingsw.Controller.ProfessorChecker.ProfessorChecker;
 import it.polimi.ingsw.Controller.ProfessorChecker.StandardProfessorChecker;
 import it.polimi.ingsw.Exceptions.*;
 import it.polimi.ingsw.Model.*;
-import it.polimi.ingsw.Model.Character.CharacterCard;
 import it.polimi.ingsw.Network.Messages.toClient.ActionPhase.*;
 import it.polimi.ingsw.Network.Messages.toClient.CharacterPhase.NoEntryMovedMessage;
 import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;

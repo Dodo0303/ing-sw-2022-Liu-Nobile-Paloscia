@@ -14,7 +14,4 @@ public class ChooseCloudMessage extends MessageToServer {
         return cloudID;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-    }
 }

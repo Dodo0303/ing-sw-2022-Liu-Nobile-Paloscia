@@ -6,6 +6,9 @@ import it.polimi.ingsw.Model.StudentColor;
 
 import java.util.List;
 
+/**
+ * If this Professor Checker is used, the owner of the professor will be the player with most students of that color in its dining table.
+ */
 public class StandardProfessorChecker implements ProfessorChecker{
     @Override
     public boolean shouldSwapProfessor(GameModel game, Player noProfessor, Player withProfessor, StudentColor color) {

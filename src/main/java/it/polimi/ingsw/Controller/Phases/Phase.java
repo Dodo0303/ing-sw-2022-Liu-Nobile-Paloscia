@@ -9,6 +9,7 @@ import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
  * states inside the states themselves, instead of MatchController. This facilitates the validation of messages from
  * client to server, because each message received is checked by a specific phase class. After validation, the class
  * calls specific methods of MatchController to go on with the game.
+ * The Phase class represents only phases of a game already started.
  */
 public abstract class Phase {
     protected MatchController match;
@@ -17,7 +18,15 @@ public abstract class Phase {
         this.match = match;
     }
 
+    /**
+     * This method implements the action that follow the receiving of a specific message during a certain phase of the game.
+     * @param msg message received
+     * @param ch Client Handler of the player
+     */
     public abstract void process(MessageToServer msg, ClientHandler ch);
 
+    /**
+     * This method is used to get the game phase that follows the current one.
+     */
     public abstract void nextPhase();
 }

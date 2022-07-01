@@ -6,6 +6,9 @@ import it.polimi.ingsw.Model.StudentColor;
 
 import java.util.List;
 
+/**
+ * If this Professor Checker is used, the professor is swapped even if a player has the same amount of students of the current owner.
+ */
 public class SpecialProfessorChecker implements ProfessorChecker{
     @Override
     public boolean shouldSwapProfessor(GameModel game, Player noProfessor, Player withProfessor, StudentColor color) {

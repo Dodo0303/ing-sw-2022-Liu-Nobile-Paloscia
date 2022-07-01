@@ -9,6 +9,10 @@ import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.MoveMotherNatureMes
 import it.polimi.ingsw.Network.Messages.toServer.ActionPhase.UseCharacterMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+/**
+ * Second phase of the Action phase. During this phase the player must move Mother Nature to a valid Island.
+ * He can also play a character card, if the game is in expert mode.
+ */
 public class ActionPhase2 extends Phase {
     public ActionPhase2(MatchController match) {
         super(match);

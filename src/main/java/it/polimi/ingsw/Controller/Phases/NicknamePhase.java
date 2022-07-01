@@ -6,6 +6,9 @@ import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toServer.JoiningPhase.SendNickMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 
+/**
+ * This phase is set when  the player must send the nickname chosen.
+ */
 public class NicknamePhase extends ClientHandlerPhase{
 
     public NicknamePhase(ClientHandler ch) {

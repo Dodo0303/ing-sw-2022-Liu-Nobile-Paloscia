@@ -15,8 +15,4 @@ public class ChooseStudentColorMessage extends MessageToServer {
         return studentColor;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }

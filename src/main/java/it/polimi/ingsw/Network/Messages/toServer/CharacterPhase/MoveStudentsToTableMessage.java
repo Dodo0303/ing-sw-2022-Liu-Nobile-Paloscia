@@ -15,8 +15,4 @@ public class MoveStudentsToTableMessage extends MessageToServer {
         return studentIndex;
     }
 
-    @Override
-    public void process(ClientHandler ch) {
-
-    }
 }
