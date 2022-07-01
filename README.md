@@ -37,7 +37,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 ## Instructions
 
-Into *deliveries/jars* folder can be found two files .jar:
+Into *deliverables/jar* folder can be found two files .jar:
 + Eriantys.jar
 + Eriantys_M1.jar
 
