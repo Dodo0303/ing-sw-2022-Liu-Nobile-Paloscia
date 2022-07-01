@@ -7,35 +7,6 @@ import java.io.*;
 import java.util.Locale;
 
 public class Utilities {
-    /** Print the contents of the resource named NAME on System.out.
-     *  */
-    static void printUsage(String name) {
-        try {
-            BufferedReader str =
-                    new BufferedReader(new FileReader(name));
-            for (String s = str.readLine(); s != null; s = str.readLine())  {
-                System.out.println(s);
-            }
-            str.close();
-            System.out.flush();
-        } catch (IOException excp) {
-            System.out.printf("No help found.");
-            System.out.flush();
-        }
-    }
-
-    /** Return an object of type T read from InputStream, casting it to EXPECTEDCLASS.
-     *  Throws IllegalArgumentException in case of problems. */
-    static <T extends Serializable> T readObject(Class<T> expectedClass, ObjectInputStream in) {
-        try {
-            T result = expectedClass.cast(in.readObject());
-            in.close();
-            return result;
-        } catch (IOException | ClassCastException
-                | ClassNotFoundException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-    }
 
     public static Boolean existInStudentColor(String str) {
         str = str.toUpperCase(Locale.ROOT);
@@ -80,20 +51,6 @@ public class Utilities {
         return null;
     }
 
-    public static Phase getPhaseGUI(Phase phase) {
-        if (phase.equals(Phase.Planning)) {
-            return Phase.Planning;
-        } else if (phase.equals(Phase.Action1)) {
-            return Phase.Action1;
-        } else if (phase.equals(Phase.Action2)) {
-            return Phase.Action2;
-        } else if (phase.equals(Phase.Action3)) {
-            return Phase.Action3;
-        } else if (phase.equals(Phase.Ending)) {
-            return Phase.Ending;
-        }
-        return null;
-    }
     public static boolean isNumeric(String str) {
         return str.matches("^[0-9]\\d*$");
     }
