@@ -197,7 +197,7 @@ public class EriantysServer implements Runnable{
      * @return the instance of the match requested
      * @throws NoSuchMatchException if there is no match with the given ID
      */
-    public MatchController getMatchById(int ID) throws NoSuchMatchException {//TODO why ID differs by match.getID by 1?
+    public MatchController getMatchById(int ID) throws NoSuchMatchException {
         for (MatchController match :
                 currentMatches) {
             if (match.getID() == ID)
