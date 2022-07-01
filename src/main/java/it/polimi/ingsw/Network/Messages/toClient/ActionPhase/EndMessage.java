@@ -45,9 +45,9 @@ public class EndMessage extends MessageToClient {
         } else {
             if (guiClient.getGame().getPlayers().size() == 4) {
                 String teamColor = guiClient.getGame().getPlayerByNickname(winnerID).getColor().toString();
-                guiClient.gameOver("Team " + teamColor + " won the game, for" + reason);
+                guiClient.gameOver("Team " + teamColor + " won the game: " + reason);
             } else {
-                guiClient.gameOver("Player " + winnerID + " won the game, for" + reason);
+                guiClient.gameOver("Player " + winnerID + " won the game: " + reason);
             }
 
         }

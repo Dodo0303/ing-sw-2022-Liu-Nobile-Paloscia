@@ -34,7 +34,7 @@ public class ActionPhase2 extends Phase {
             match.broadcastMovement(match.getGame().getMotherNatureIndex());
 
             if (match.endedAtPhase2() == 1) {
-                match.endGame("Player built all towers.");
+                match.endGame("Player built all the towers.");
             } else if (match.endedAtPhase2() == 2) {
                 match.endGame("Only three or less islands remain.");
             } else {

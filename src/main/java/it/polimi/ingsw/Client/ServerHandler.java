@@ -1,9 +1,7 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Controller.ClientHandler;
 import it.polimi.ingsw.Network.Messages.toClient.DropConnectionMessage;
-import it.polimi.ingsw.Network.Messages.toClient.MessageToClient;
 import it.polimi.ingsw.Network.Messages.toServer.DisconnectMessage;
 import it.polimi.ingsw.Network.Messages.toServer.MessageToServer;
 import it.polimi.ingsw.Network.Messages.toServer.PingMessage;
@@ -13,7 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ServerHandler implements Runnable {
@@ -34,8 +31,8 @@ public class ServerHandler implements Runnable {
         this.socket = new Socket(host, port);
         this.input = new ObjectInputStream(socket.getInputStream());
         this.output = new ObjectOutputStream(socket.getOutputStream());
-        this.outgoingMessages = new LinkedBlockingQueue<Object>();
-        this.incomingMessages = new LinkedBlockingQueue<Object>();
+        this.outgoingMessages = new LinkedBlockingQueue<>();
+        this.incomingMessages = new LinkedBlockingQueue<>();
         this.sendThread = new SendThread();
         this.receiveThread = new ReceiveThread();
         this.pingThread = new PingThread();
