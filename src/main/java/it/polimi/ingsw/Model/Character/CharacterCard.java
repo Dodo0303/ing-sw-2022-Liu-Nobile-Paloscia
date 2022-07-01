@@ -94,4 +94,10 @@ public abstract class CharacterCard implements Serializable {
         return used;
     }
 
+    /**
+     *
+     * @return a description of the effect of the character
+     */
+    public abstract String getDescription();
+
 }

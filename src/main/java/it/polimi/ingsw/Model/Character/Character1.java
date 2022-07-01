@@ -51,4 +51,12 @@ public class Character1 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "Take 1 student from this card and place it on an Island of your choice.\n" +
+                "\tThen, draw a new student from the bag and place it on this card.";
+    }
+
+
 }

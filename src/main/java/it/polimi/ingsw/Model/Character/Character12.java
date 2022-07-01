@@ -34,4 +34,10 @@ public class Character12 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "Choose a type of student: every player (including yourself) must return 3 students of that type from their dining room to the bag.\n" +
+                "\tIf any player has fewer than 3 students of that type, return as many students as they have.";
+    }
 }

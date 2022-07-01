@@ -34,4 +34,9 @@ public class Character2 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "During this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them.";
+    }
 }

@@ -33,4 +33,9 @@ public class Character9 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "Choose a color of student: during the influence calculation this turn, that color adds no influence.";
+    }
 }

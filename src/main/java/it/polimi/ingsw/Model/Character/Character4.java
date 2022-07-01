@@ -33,4 +33,9 @@ public class Character4 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "You may move Mother Nature up to 2 additional islands than is indicated by the assistant card you've played";
+    }
 }

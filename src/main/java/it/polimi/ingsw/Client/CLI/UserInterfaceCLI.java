@@ -275,6 +275,8 @@ public class UserInterfaceCLI{
                 } else {
                     System.out.println(i + ". character" + cli.getGame().getCharacters().get(i - 1).getID() + ": cost: " + cli.getGame().getCharacters().get(i - 1).getPrice());
                 }
+
+                System.out.println("\t" + cli.getGame().getCharacters().get(i-1).getDescription() + "\n");
             }
         } catch (GameException e) {
             e.printStackTrace();

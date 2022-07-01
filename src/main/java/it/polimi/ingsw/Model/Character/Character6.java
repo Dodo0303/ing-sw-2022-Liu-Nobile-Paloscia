@@ -34,4 +34,9 @@ public class Character6 extends CharacterCard {
         throw new WrongEffectException("This card can't have no-entries");
     }
 
+    @Override
+    public String getDescription() {
+        return "When resolving a conquering on an island, towers do not count towards influence.";
+    }
+
 }

@@ -33,4 +33,9 @@ public class Character10 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "You may exchange up to 2 students between tour entrance and your dining room.";
+    }
 }

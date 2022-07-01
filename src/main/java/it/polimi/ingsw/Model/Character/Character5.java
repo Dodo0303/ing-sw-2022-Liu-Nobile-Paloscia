@@ -49,4 +49,11 @@ public class Character5 extends CharacterCard {
         return noEntries;
     }
 
+    @Override
+    public String getDescription() {
+        return "Place a no-entry tile on an island of your choice.\n" +
+                "\tThe first time Mother Nature ends her movement there, put the no-entry tile back onto this card.\n" +
+                "\tDO NOT calculate influence on that island, or place any Towers.";
+    }
+
 }

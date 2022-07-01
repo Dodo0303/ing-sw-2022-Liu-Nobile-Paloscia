@@ -34,4 +34,10 @@ public class Character3 extends CharacterCard {
     public int getNumberOfNoEntries() throws WrongEffectException {
         throw new WrongEffectException("This card can't have no-entries");
     }
+
+    @Override
+    public String getDescription() {
+        return "Choose an island and resolve the island as if Mother Nature had ended her movement there.\n" +
+                "\tMother Nature will still move and the island where she ends her movement will also be resolved.";
+    }
 }
