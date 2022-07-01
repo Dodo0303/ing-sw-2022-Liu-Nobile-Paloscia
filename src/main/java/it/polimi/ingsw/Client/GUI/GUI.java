@@ -202,7 +202,6 @@ public class GUI implements ViewController {
      */
     public void chooseWizard(boolean newGame) {
         try {
-            getScaleFactor();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ChooseWizard.fxml"));
             Parent root = fxmlLoader.load();
             ChooseWizardController chooseWizardController = fxmlLoader.getController();

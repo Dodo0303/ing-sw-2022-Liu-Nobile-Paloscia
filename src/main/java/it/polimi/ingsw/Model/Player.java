@@ -54,7 +54,7 @@ public class Player implements Serializable {
 
     // CONSTRUCTOR
 
-    
+
     Player(String nickname, Color color, Wizard wizard, int numOfPlayers) {
         this._nickName = nickname;
         this._color = color;

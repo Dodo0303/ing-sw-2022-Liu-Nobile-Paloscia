@@ -332,13 +332,7 @@ public class ChooseCharacterController implements Initializable {
     }
 
     private boolean check(int x) {
-        try {
-            gui.getGame().canAffordCharacter(gui.getNickname(),x);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return true;
+        return gui.getGame().canAffordCharacter(gui.getNickname(),x);
     }
 
     public void setAvailableCharacters() {

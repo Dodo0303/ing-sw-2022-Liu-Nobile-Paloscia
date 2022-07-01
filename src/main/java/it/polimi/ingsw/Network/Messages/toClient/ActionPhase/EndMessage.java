@@ -31,7 +31,7 @@ public class EndMessage extends MessageToClient {
         if (winnerID == null) {
             System.out.print("Game ended with a draw.\nGood bye.\n");
         } else {
-            System.out.print("Player " + winnerID + " won the game. For" + reason);
+            System.out.print("Player " + winnerID + " won the game. For " + reason);
             System.out.print("\nGood bye.\n");
         }
         System.exit(0);
