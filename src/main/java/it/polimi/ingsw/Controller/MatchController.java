@@ -267,7 +267,7 @@ public class MatchController implements Runnable {
      * @throws MatchMakingException in case match is full.
      */
     public synchronized void addPlayer(ClientHandler client) throws MatchMakingException {
-        if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException(); //TODO: should we add "|| this.status != MATCHMAKING"? Notice that if a player disconnects he should be the only one able to enter the match again.
+        if (this.currentPlayersNumber >= this.totalMatchPlayers) throw new MatchMakingException();
         clients.add(client);
         this.currentPlayersNumber++;
         if (this.currentPlayersNumber == this.totalMatchPlayers) {
@@ -846,7 +846,7 @@ public class MatchController implements Runnable {
                 client.send(new DropConnectionMessage(nickname));
             }
         }
-        //TODO Delete the match from the server. Look at EndGame
+        server.removeMatch(this);
     }
 
     /**

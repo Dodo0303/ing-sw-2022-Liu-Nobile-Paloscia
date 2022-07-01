@@ -18,6 +18,5 @@ public class DropConnectionMessage extends MessageToClient{
     }
     @Override
     public void process(ServerHandler client) throws FullTableException, InterruptedException, EmptyCloudException, WrongEffectException, NotEnoughNoEntriesException {
-        //TODO Close the socket and shutdown
     }
 }

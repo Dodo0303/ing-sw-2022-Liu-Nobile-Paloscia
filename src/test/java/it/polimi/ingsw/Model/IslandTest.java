@@ -13,7 +13,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class IslandTest {
-    //TODO Check influences when implemented
 
     @Test
     public void testCreateIsland() {

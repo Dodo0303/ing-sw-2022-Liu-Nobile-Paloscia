@@ -19,7 +19,7 @@ public class JoinGameController {
             if (matchBox.getValue() == null) {
                 setMessage("Please select a match.");
             } else {
-                gui.send(new MatchChosenMessage(Integer.parseInt(matchBox.getValue()))); //todo why minus one to get to correct match id
+                gui.send(new MatchChosenMessage(Integer.parseInt(matchBox.getValue())));
             }
         } catch (Exception e) {
             e.printStackTrace();
