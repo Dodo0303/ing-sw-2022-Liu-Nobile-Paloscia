@@ -8,6 +8,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 * [Group Components](#Group-Components)
 * [Features](#features)
+* [Instructions](#instructions)
 
 
 ---
@@ -15,7 +16,7 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 
 | Surname | Name | E-mail | Student number |
 |:--------|:-----|:-------|:---------------|
-| Liu | Yixin | TODO | TODO |
+| Liu | Yixin | yixin.liu@mail.polimi.it | 940625 |
 | Nobile | Domenico | domenico.nobile@mail.polimi.it | 937096|
 | Paloscia | Claudio | claudio.paloscia@mail.polimi.it | 932505|
 
@@ -43,9 +44,13 @@ Into *deliveries/jars* folder can be found two files .jar:
 The only requirement to run the game is to have installed JDK17.
 
 The file "Eriantys.jar" can be executed in any OS different from MacOS with M1:
->java -jar Eriantys.jar
+```sh
+java -jar Eriantys.jar
+```
 
 The file "Eriantys_M1.jar" can be executed from MacOS with M1:
->java -jar Eriantys_M1.jar
+```sh
+java -jar Eriantys_M1.jar
+```
 
 The game will begin and the user will be asked to select between server, CLI and GUI.
