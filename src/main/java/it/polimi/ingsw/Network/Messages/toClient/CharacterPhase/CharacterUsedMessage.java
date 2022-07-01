@@ -24,6 +24,7 @@ public class CharacterUsedMessage extends MessageToClient {
             cliClient.getGame().useEffectOfCharacter(characterID);
             cliClient.setPhase(cliClient.getPrevPhase());
         } else {
+            cliClient.getGame().useEffectOfCharacter(characterID);
             System.out.println(playerID + " used character" + characterID);
         }
         cliClient.getGame().getPlayerByNickname(playerID).setCoins(coins);
