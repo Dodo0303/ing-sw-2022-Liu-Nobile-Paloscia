@@ -1,16 +1,23 @@
-# ing-sw-2022-Liu-Nobile-Paloscia
+# **Eriantys**
 
 <div style="text-align: center;">
-  
+
 The repository is dedicated to the final project of "Ingegneria del Software (2021/2022)", which requires a java implementation of the game [Eriantys](https://www.craniocreations.it/prodotto/eriantys/).
-  
+
 </div>
 
-
+* [Group Components](#Group-Components)
 * [Features](#features)
-* [Game Rules](#Game-Rules)
+
 
 ---
+## Group Components
+
+| Surname | Name | E-mail | Student number |
+|:--------|:-----|:-------|:---------------|
+| Liu | Yixin | TODO | TODO |
+| Nobile | Domenico | domenico.nobile@mail.polimi.it | 937096|
+| Paloscia | Claudio | claudio.paloscia@mail.polimi.it | 932505|
 
 ## Features
 
@@ -27,20 +34,18 @@ The repository is dedicated to the final project of "Ingegneria del Software (20
 | Persistence | 🔴 |
 | Resilience to disconnections | 🔴 |
 
-## Game Rules
+## Instructions
 
-* The game is played over a number of rounds until 
-  * one player has placed all of their towers (thus win the game);
-  * there are no more students left;
-  * only 3 groups of Islands remain on the table.
-* Each round has two phases : 
-  * Planning phase
-    * Add new students to cloud tiles. 
-    * In turn order, choose and play an assistant card. 
-  * Action phase (starting with the player with the **lowest** value assistant card and proceeding in **ascending order**) 
-    * Move **3 students** to either your Dining Room or a Island.
-    * Move **Mother Nature** to an Island. At the end of the movement, there are 2 things will happen 
-      * Controlling an Island if the Island does not have a tower on it, otherwise
-      * Conquering an Island.
-    * Unify adjacent Islands with same color of towers. Once unified, the Islands will be considered as a single Island.
-    * Choose a cloud tile and take 3 new students. 
+Into *deliveries/jars* folder can be found two files .jar:
++ Eriantys.jar
++ Eriantys_M1.jar
+
+The only requirement to run the game is to have installed JDK17.
+
+The file "Eriantys.jar" can be executed in any OS different from MacOS with M1:
+>java -jar Eriantys.jar
+
+The file "Eriantys_M1.jar" can be executed from MacOS with M1:
+>java -jar Eriantys_M1.jar
+
+The game will begin and the user will be asked to select between server, CLI and GUI.

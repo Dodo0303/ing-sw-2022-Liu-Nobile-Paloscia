@@ -165,7 +165,7 @@ public class CLI implements ViewController {
             while(serverHandler == null) {
                 String mode = "";
                 while(!mode.equals("true") && !mode.equals("false")) {
-                    System.out.print("Establish connection automatically? Respond with true or false.\n");
+                    System.out.print("Establish connection automatically (ip = \"localhost\")? Respond with true or false.\n");
                     mode = view.requireUserInput().toLowerCase();
                     if (mode.equals("false")) {
                         System.out.print("Host?\n");
