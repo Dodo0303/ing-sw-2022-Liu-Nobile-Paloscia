@@ -125,4 +125,11 @@ public class CharactersTest {
             character.useEffect(0, StudentColor.BLUE);
         });
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1,2,3,4,5,6,7,8,9,10,11,12})
+    public void testGetDescription(int id) {
+        CharacterCard character = factory.createCharacter(id);
+        assertNotNull(character.getDescription());
+    }
 }
