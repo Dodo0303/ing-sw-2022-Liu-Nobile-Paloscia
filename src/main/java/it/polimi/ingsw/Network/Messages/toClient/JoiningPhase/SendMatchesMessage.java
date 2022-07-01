@@ -21,13 +21,6 @@ public class SendMatchesMessage extends MessageToClient {
         return matchesID;
     }
 
-    /*
-    public List<String> getPlayersByMatchId(int id) {
-        return players.get(id);
-    }
-
-     */
-
     public List<String[]> getPlayers() {
         return players;
     }

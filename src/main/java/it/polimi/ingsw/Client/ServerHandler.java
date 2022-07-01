@@ -79,7 +79,6 @@ public class ServerHandler implements Runnable {
                     Object message = outgoingMessages.take();
                     output.writeObject(message);
                     output.flush();
-                    //System.out.print(message.getClass().toString() + " sent by client" + "\n"); //TODO delete after tests
                 }
             } catch (Exception e) {
                 System.out.print(e.getMessage());
@@ -94,7 +93,6 @@ public class ServerHandler implements Runnable {
             try {
                 while(!closed) {
                     Object message = input.readObject();
-                    //System.out.print(message.getClass().toString() + " received from server" + "\n"); //TODO delete after tests
                     if (message instanceof DisconnectMessage) {
                         shutdown();
                     } else if (message instanceof DropConnectionMessage) {
