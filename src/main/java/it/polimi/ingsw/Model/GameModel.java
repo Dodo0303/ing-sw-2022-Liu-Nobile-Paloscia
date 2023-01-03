@@ -152,7 +152,7 @@ public class GameModel implements Serializable {
                 try {
                     player.addStudentToEntrance(_bag.extractStudent());
                 } catch (EmptyBagException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         }
@@ -246,7 +246,7 @@ public class GameModel implements Serializable {
                 }
             }
         } catch (GameException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         }
 

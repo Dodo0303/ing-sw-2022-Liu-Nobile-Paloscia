@@ -31,7 +31,7 @@ public class CharacterFactory {
             try {
                 students[i] = gameModel.drawStudentFromBag();
             } catch (EmptyBagException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 throw new GameException("Bag is empty");
             }
         }
